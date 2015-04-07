@@ -3,37 +3,35 @@ using fanr::Repo as FanrRepo
 using fanr
 using fandoc
 
-const class MongoRepo : FanrRepo {
+const class MongoRepo {
 	
 	@Inject private const RepoPodDao		podDao
 	@Inject private const RepoPodFileDao	podFileDao
 	
-	override const Uri uri := ``
-	
-	override const Str:Str ping := [
+	const Str:Str ping := [
 			"fanr.type":    MongoRepo#.pod.name,
 			"fanr.version": Pod.find("fanr").version.toStr
 		]
 
 	new make(|This|in) { in(this) }
 	
-	override PodSpec publish(File file) {
+	PodSpec publish(File file, RepoUser user) {
 		// do this first as it throws an Err if meta.props does not exist
 		podSpec := PodSpec.load(file)
-		pod 	:= podDao.create(RepoPod(file))
+		pod 	:= podDao.create(RepoPod(file, user))
 		podFile	:= podFileDao.create(RepoPodFile(pod, file))
 		return podSpec
 	}
 
-	override InStream read(PodSpec pod) {
+	InStream read(PodSpec pod) {
 		throw Err("Not implemented")
 	}
 
-	override PodSpec? find(Str podName, Version? version, Bool checked := true) {
+	PodSpec? find(Str podName, Version? version, Bool checked := true) {
 		throw UnknownPodErr()
 	}
 
-	override PodSpec[] query(Str query, Int numVersions := 1) {
+	PodSpec[] query(Str query, Int numVersions := 1) {
 		[,]
 	}
 }

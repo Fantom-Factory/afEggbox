@@ -12,7 +12,7 @@ class RepoRunner : FancordionRunner {
 
     override Void suiteSetup() {
         super.suiteSetup
-        server = BedServer(PodRepoModule#).addModule(WebTestModule#).startup		
+        server = BedServer(AppModule#).addModule(WebTestModule#).startup		
     }
 
     override Void suiteTearDown(Type:FixtureResult resultsCache) {
