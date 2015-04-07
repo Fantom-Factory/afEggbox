@@ -9,7 +9,7 @@ class Build : BuildPod {
 
 		meta = [
 			"proj.name"		: "Fantom Pod Repository",
-			"afIoc.module"	: "afPodRepo::PodRepoModule",
+			"afIoc.module"	: "afPodRepo::AppModule",
 			"internal"		: "true",
 			"tags"			: "app",
 			"repo.private"	: "true"
@@ -39,10 +39,11 @@ class Build : BuildPod {
 
 			// ---- Test ------------------------
 			"afBounce     1.0.20 - 1.0",
+			"afButter     1.1.2  - 1.1",
 			"afFancordion 1.0.0  - 1.0"
 		]
 
-		srcDirs = [`test-spec/`, `test-spec/fanr/`, `fan/`, `fan/web/`, `fan/fanr/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`]
-		resDirs = [,]
+		srcDirs = [`test-spec/`, `test-spec/res/`, `test-spec/fanr/`, `fan/`, `fan/web/`, `fan/fanr/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`]
+		resDirs = [`test-spec/res/`]
 	}
 }

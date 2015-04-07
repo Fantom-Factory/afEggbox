@@ -10,4 +10,4 @@
 ** 
 **  - [Publishing a Pod]`run:TestFanrPodPublish#`
 ** 
-class BushmasterTests : RepoFixture { }
+class RepoTests : RepoFixture { }

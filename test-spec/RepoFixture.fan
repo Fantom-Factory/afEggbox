@@ -71,10 +71,8 @@ abstract class RepoFixture : FixtureTest {
 	}
 
 	RepoUser newUser(Str userName := "Wotever") {
-		RepoUser {
-			it.userName		= userName
+		RepoUser(userName, "password") {
 			it.realName		= "Wot Ever"
-			it.passwordHash	= "wotever"
 			it.email		= `wotever@wotever.com`
 		}
 	}	

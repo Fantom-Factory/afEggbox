@@ -4,7 +4,7 @@ using afMorphia
 const mixin RepoPodFileDao : EntityDao {
 
 	@Operator
-	abstract RepoPod?		get(Str name, Bool checked := true)
+	abstract RepoPodFile?	get(Str name, Bool checked := true)
 }
 
 internal const class RepoPodFileDaoImpl : RepoPodFileDao {
@@ -17,7 +17,7 @@ internal const class RepoPodFileDaoImpl : RepoPodFileDao {
 
 	new make(|This| in) { in(this) }
 	
-	override RepoPod? get(Str name, Bool checked := true) {
+	override RepoPodFile? get(Str name, Bool checked := true) {
 		datastore.query(field("_id").eq(name)).findOne(checked)
 	}
 
@@ -25,7 +25,7 @@ internal const class RepoPodFileDaoImpl : RepoPodFileDao {
 //		throw UnsupportedErr("No, I am NOT fetching ALL the pod files!")
 //	}
 	
-	override RepoPod create(Obj entity) {
+	override RepoPodFile create(Obj entity) {
 		return datastore.insert(entity)
 	}
 }

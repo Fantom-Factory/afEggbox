@@ -1,13 +1,30 @@
+using afIoc
 using fanr
 
 const class MongoRepoAuth : WebRepoAuth {
-	override Obj? user(Str username) { null }
-	override Str? salt(Obj? user) { publicSalt }
-	override Buf secret(Obj? user, Str algorithm) { Buf() }
-	override Str[] secretAlgorithms() { ["PASSWORD", "SALTED-HMAC-SHA1"] }
+
+	@Inject private const RepoUserDao	userDao
+			override const Str[]		secretAlgorithms	:= ["SALTED-HMAC-SHA1"]
+
+	new make(|This|in) { in(this) }
+	
+	override Obj? user(Str username) {
+		userDao.get(username, false)
+	}
+	
+	override Str? salt(Obj? userObj) {
+		((RepoUser?) userObj)?.userSalt
+	}
+
+	override Buf secret(Obj? userObj, Str algorithm) {
+		if (algorithm != "SALTED-HMAC-SHA1")
+			throw Err("Unexpected secret algorithm: $algorithm")
+		return Buf.fromBase64(((RepoUser?) userObj).userSecretB64)
+	}
+
+
 	override Bool allowQuery(Obj? u, PodSpec? p) { true }
 	override Bool allowRead(Obj? u, PodSpec? p)   { true }
 	override Bool allowPublish(Obj? u, PodSpec? p) { true }
 
-	private const Str publicSalt := Buf.random(16).toHex
 }

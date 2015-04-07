@@ -3,17 +3,18 @@ using afIocEnv
 using afIocConfig
 using afMorphia
 
-@SubModule { modules=[PodRepoFanrModule#, PodRepoWebModule#] }
-class PodRepoModule {
+@SubModule { modules=[FanrModule#, WebModule#] }
+class AppModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
 		defs.add(RepoPodDao#)
+		defs.add(RepoPodFileDao#)
 		defs.add(RepoUserDao#)
 	}
 
 	@Contribute { serviceType=Converters# }
 	static Void contributeConverters(Configuration config) {		
-		config[RepoPodMeta#] = config.autobuild(RepoPodMetaConverter#)
+		config[RepoPodMeta#] = config.createProxy(Converter#, RepoPodMetaConverter#)
 	}
 
 	@Contribute { serviceType=ApplicationDefaults# }

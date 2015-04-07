@@ -14,7 +14,7 @@ class RepoPod {
 
 	new make(|This|f) { f(this) }
 	
-	static new fromFile(File podFile) {
+	static new fromFile(File podFile, RepoUser user) {
 		zip	:= Zip.open(podFile)
 		try {
 			meta 	:= zip.contents[`/meta.props`].readProps
@@ -26,6 +26,7 @@ class RepoPod {
 				it.meta			= RepoPodMeta(zip.contents[`/meta.props`].readProps)
 				it.aboutFandoc	= findAboutFandoc(zip)
 				it.isPublic		= false	// FIXME: isPublic
+				it.ownerId		= user.userName
 			}
 
 		} finally {
