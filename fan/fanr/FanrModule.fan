@@ -9,14 +9,6 @@ class FanrModule {
 		defs.add(MongoRepoAuth#)
 	}
 
-	@Build
-	static WebRepoMod buildWebRepoMod(Registry reg) {
-		WebRepoMod {
-			it.repo = reg.serviceById(MongoRepo#.qname)
-			it.auth = reg.serviceById(MongoRepoAuth#.qname)
-		}		
-	}
-	
 	@Contribute { serviceType=Routes# }
 	static Void contributeRoutes(Configuration config) {
 		

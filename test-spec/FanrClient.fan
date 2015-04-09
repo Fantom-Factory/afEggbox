@@ -21,7 +21,7 @@ class FanrClient {
 //		c.headers["Expect"]		= "100-continue"
 		c.body.buf = podFile.readAllBuf
 		res := client.sendRequest(c)
-		
+
 		// parse json response
 		jsonRes  := res.body.jsonMap
 		jsonSpec := jsonRes["published"] ?: throw Err("Missing 'published' in JSON response")
