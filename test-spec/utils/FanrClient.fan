@@ -1,6 +1,7 @@
 using fanr
 using afButter
 
+** A simple fanr client for testing the WebMod
 ** Shamelessly ripped and adapted from fanr::WebRepo
 class FanrClient {
 			Str?		username		// user name

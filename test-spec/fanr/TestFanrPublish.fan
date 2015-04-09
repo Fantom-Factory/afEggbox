@@ -1,34 +1,54 @@
 using fanr
+using util
 
 ** Publish
 ** #######
 ** The "publish" URI is used to upload a new pod to the repository.
 ** 
-** Server side permission for the "publish" URI is controlled by the WebRepoAuth.allowPublish method.
+** Publication is performed by POSTing a pod file to the '/publish' URI. 
+** If the publication is successful, then a JSON data structure representing the pod is returned.
 ** 
-** Publication is performed by POSTing a pod file to the "publish" URI. 
-** If the publication is successful, then a JSON data structure is returned.
+** Pods may only be published by authenticated registered users. 
 ** 
 **  
 ** Example
 ** -------
-** Given I'm a [registered user]`exe:createUser`, 
-** when I publish [afTest01.pod]`exe:publish(#TEXT)`
-** then I should receive a PodSpec with name [afTest01]`eq:podSpec.name` and version [1.6.9]`eq:podSpec.version`. 
+** Given I'm a [registered user]`exe:createUser` and have a pod with the following attributes:
 ** 
-** {"published": {
-**    "pod.name":"acmeWidgets",
-**    "pod.version":"1.3.68",
-**    "pod.depends":"sys 1.0, gfx 1.0, fwt 1.0",
+**   table:
+**   row+exe:meta[#COL[0]] = #COL[1]
+** 
+**   name         value
+**   -----        ----
+**   pod.name     acmeWidgets
+**   pod.version  1.3.68
+**   pod.summary  Widgets for everyone!
+**   pod.depends  sys 1.0; gfx 1.0; fwt 1.0
+** 
+** When I [publish]`exe:publish` it
+** then I should receive the following JSON:
+** 
+**   exe:verifyPodJson(#TEXT)
+**   {
+**       "published" : {
+**           "pod.name"    : "acmeWidgets",
+**           "pod.version" : "1.3.68",
+**           "pod.summary" : "Widgets for everyone!",
+**           "pod.depends" : "sys 1.0; gfx 1.0; fwt 1.0"
+**       }
 **   }
-** }
+** 
+** The database should then hold an entry for an [acmeWidgets 1.3.68]`exe:findPod(#TEXT)` pod.
+** 
 ** 
 ** Further Details
 ** ===============
 ** - [What if I supply the wrong authentication details?]`run:TestFanrPublishNotAuthenticated#`
 ** - [What if I'm not a registered user?]`run:TestFanrPublishNotRegistered#`
+** 
 class TestFanrPublish : RepoFixture {
 	FanrClient? fanrClient
+	Str:Str		meta := Str:Str[:] { ordered = true }
 	PodSpec?	podSpec
 	
 	override Void setupFixture() {
@@ -42,8 +62,22 @@ class TestFanrPublish : RepoFixture {
 		fanrClient.password = "password"
 	}
 
+	Void publish() {
+		podFile := File.createTemp("afPodRepo_", ".pod").deleteOnExit
+		
+		zip := Zip.write(podFile.out)
+		zip.writeNext(`meta.props`).writeProps(meta)
+		zip.close
+		
+		podSpec = fanrClient.publish(podFile)
+	}
 	
-	Void publish(Str fileName) {
-		podSpec = fanrClient.publish(`test-spec/res/${fileName}`.toFile)
+	Void verifyPodJson(Str json) {
+		jsonObj := JsonInStream(json.in).readJson
+		verifyEq(jsonObj.toStr, ["published":podSpec.meta].toStr)	// don't compare Map types
+	}
+	
+	Obj findPod(Str podName) {
+		podDao[podName]
 	}
 }
