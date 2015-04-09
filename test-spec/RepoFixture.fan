@@ -70,7 +70,7 @@ abstract class RepoFixture : FixtureTest {
 		FormInput(css)
 	}
 
-	RepoUser newUser(Str userName := "Wotever") {
+	RepoUser newUser(Str userName := "Wotever", Str password := "password") {
 		RepoUser(userName, "password") {
 			it.realName		= "Wot Ever"
 			it.email		= `wotever@wotever.com`

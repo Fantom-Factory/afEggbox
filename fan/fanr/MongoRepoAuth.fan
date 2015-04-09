@@ -19,12 +19,15 @@ const class MongoRepoAuth : WebRepoAuth {
 	override Buf secret(Obj? userObj, Str algorithm) {
 		if (algorithm != "SALTED-HMAC-SHA1")
 			throw Err("Unexpected secret algorithm: $algorithm")
-		return Buf.fromBase64(((RepoUser?) userObj).userSecretB64)
+		user := (RepoUser?) userObj
+		return Buf.fromBase64(user.userSecret)
 	}
 
 
 	override Bool allowQuery(Obj? u, PodSpec? p) { true }
 	override Bool allowRead(Obj? u, PodSpec? p)   { true }
-	override Bool allowPublish(Obj? u, PodSpec? p) { true }
+	
+	
+	override Bool allowPublish(Obj? user, PodSpec? podSpec) { user is RepoUser }
 
 }

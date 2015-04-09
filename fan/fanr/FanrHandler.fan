@@ -2,6 +2,7 @@ using afIoc
 using afBedSheet
 using fanr
 
+// from fanr::WebRepoMod
 const class FanrHandler {
 	@Inject private const MongoRepo		repo
 	@Inject private const MongoRepoAuth	auth
