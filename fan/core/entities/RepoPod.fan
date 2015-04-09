@@ -1,3 +1,4 @@
+using afIoc
 using afMorphia
 using fandoc
 
@@ -12,6 +13,7 @@ class RepoPod {
 	@Property	Str			aboutFandoc
 	@Property	RepoPodMeta	meta
 
+	@Inject
 	new make(|This|f) { f(this) }
 	
 	static new fromFile(File podFile, RepoUser user) {

@@ -38,12 +38,13 @@ class Build : BuildPod {
 //			"afPillow     1.0.22 - 1.0",
 
 			// ---- Test ------------------------
+			"util         1.0.67 - 1.0",
 			"afBounce     1.0.20 - 1.0",
 			"afButter     1.1.2  - 1.1",
 			"afFancordion 1.0.0  - 1.0"
 		]
 
-		srcDirs = [`test-spec/`, `test-spec/res/`, `test-spec/fanr/`, `fan/`, `fan/web/`, `fan/fanr/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`]
-		resDirs = [`test-spec/res/`]
+		srcDirs = [`test-spec/`, `test-spec/utils/`, `test-spec/fanr/`, `fan/`, `fan/web/`, `fan/fanr/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`]
+		resDirs = [,]
 	}
 }

@@ -1,6 +1,6 @@
 
-** fanr REST API
-** #############
+** fanr
+** ####
 ** Fantom ships with the command line tool *fanr* which allows you to query and download pods from a remote repository.
 ** 
 ** Alien-Factory's Pod Repository aims to be compatible with *fanr* and so should support the HTTP REST protocol as outlined 
