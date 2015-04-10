@@ -3,30 +3,39 @@ using afButter
 
 ** Not Registered
 ** ##############
+** Only registered can publish to the repository. 
+** Users authenticate themselves by suppling a username and password to the 'fanr' application.
 **
-** Only registered and authenticated users should be able to publish to the repository. 
-** They authenticate themselves by suppling a username and password to the 'fanr' application.
-**  
+** If no credentials are supplied when publishing a pod, the repo should respond with a
+** HTTP status code of '401 - Unauthorised'.
+** 
 ** Example
 ** -------
-** Given I'm not registered on the system 
-** when I publish [afTest01.pod]`exe:publish(#TEXT)`
-** then I should receive a http status err of [401]`eq:statusCode`. 
-** 
+** Given my username is [steve.eynon]`set:username` and my password is [password]`set:password`
+**  
+** When I try to [publish a pod]`exe:publish` with no credentials
+**  
+** Then I should receive a HTTP status err of [401 - Unauthorized]`eq:httpStatus`. 
+**
 class TestFanrPublishNotRegistered : RepoFixture {
 	FanrClient? fanrClient
-	Int?		statusCode
+	Str?		username
+	Str?		password
+	Str?		httpStatus
 	
 	override Void setupFixture() {
 		super.setupFixture
 		fanrClient = FanrClient() { it.client = this.client }
 	}
 	
-	Void publish(Str fileName) {
+	Void publish() {
+		userDao.create(newUser(username, password))
+
+		podFile := File.createTemp("afPodRepo_", ".pod").deleteOnExit
 		try {
-			fanrClient.publish(`test-spec/res/${fileName}`.toFile)
+			fanrClient.publish(podFile)
 		} catch (BadStatusErr err) {
-			statusCode = err.statusCode
+			httpStatus = "${err.statusCode} - ${err.statusMsg}"
 		}
 	}
 }
