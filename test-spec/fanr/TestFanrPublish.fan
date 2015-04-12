@@ -46,15 +46,9 @@ using util
 ** - [What if I supply the wrong authentication details?]`run:TestFanrPublishNotAuthenticated#`
 ** - [What if I'm not a registered user?]`run:TestFanrPublishNotRegistered#`
 ** 
-class TestFanrPublish : RepoFixture {
-	FanrClient? fanrClient
+class TestFanrPublish : FanrFixture {
 	Str:Str		meta := Str:Str[:] { ordered = true }
 	PodSpec?	podSpec
-	
-	override Void setupFixture() {
-		super.setupFixture
-		fanrClient = FanrClient() { it.client = this.client }
-	}
 	
 	Void createUser() {
 		userDao.create(newUser("steve.eynon", "password"))

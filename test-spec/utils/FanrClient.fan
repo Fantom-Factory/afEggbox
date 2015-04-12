@@ -15,6 +15,10 @@ class FanrClient {
 	
 	new make(|This|in) { in(this) }
 
+	Str:Obj? ping() {
+		client.sendRequest(prepare("GET", `ping`)).body.jsonObj
+	}
+	
 	PodSpec publish(File podFile) {
 		c := prepare("POST", `publish`)
 		c.headers.contentType	= MimeType("application/zip")
