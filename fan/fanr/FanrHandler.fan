@@ -8,11 +8,20 @@ const class FanrHandler {
 	@Inject private const MongoRepoAuth	auth
 	@Inject private const HttpRequest	req
 	@Inject private const HttpResponse	res
+			private const Str:Str		pingMeta := [
+		"fanr.type"		: MongoRepo#.qname,
+		"fanr.version"	: MongoRepo#.pod.version.toStr
+	]
 
 	** Dir to store temp files, defaults to 'Env.tempDir'
 	const File tempDir := Env.cur.tempDir
 
 	new make(|This|in) { in(this) }
+	
+	Text onPing() {
+		authenticate
+		return Text(pingMeta)
+	}
 	
 	Text onPublish() {
 		user := authenticate

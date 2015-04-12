@@ -21,7 +21,7 @@
 ** The following sections details the various features of the protocol:
 ** 
 **  - Authentication: authentication and digital signatures
-**  - Ping: ping a server's meta-data
+**  - [Ping]`run:TestFanrPing`: ping a server's meta-data
 **  - Find: find exact match for pod name/version
 **  - Query: query the repository for set of pods
 **  - Read: download a pod for installation
@@ -29,3 +29,12 @@
 **  - Errors: error handling
 ** 
 class TestFanr : RepoFixture { }
+
+class FanrFixture : RepoFixture {
+	FanrClient? fanrClient
+	
+	override Void setupFixture() {
+		super.setupFixture
+		fanrClient = FanrClient() { it.client = this.client }
+	}
+}

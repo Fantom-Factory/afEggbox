@@ -24,7 +24,7 @@ class FanrModule {
 		//    POST     {base}/publish            publish pod
 		//    GET      {base}/auth?{username}    authentication info
 		
-//		config.add(Route(`/ping`,		FanrHandler#onPing))
+		config.add(Route(`/ping`,		FanrHandler#onPing))
 //		config.add(Route(`/find/**`,	FanrHandler#onFind))
 //		config.add(Route(`/query`,		FanrHandler#onQuery, "GET POST"))
 //		config.add(Route(`/pod/*/*`,	FanrHandler#onPod))
