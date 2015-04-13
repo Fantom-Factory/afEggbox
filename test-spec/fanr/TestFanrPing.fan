@@ -12,7 +12,7 @@ using util
 ** When I [ping]`exe:ping` the repository it
 ** should return the following JSON:
 ** 
-**   exe:verifyPodJson(#TEXT)
+**   exe:verifyJson(#TEXT, #FIXTURE.pingRes)
 **   {
 **       "fanr.version" : "0.0.1",
 **       "fanr.type"    : "afPodRepo::MongoRepo"
@@ -28,10 +28,5 @@ class TestFanrPing : FanrFixture {
 	
 	Void ping() {
 		pingRes = fanrClient.ping()
-	}
-	
-	Void verifyPodJson(Str json) {
-		jsonObj := JsonInStream(json.in).readJson
-		verifyEq(jsonObj.toStr, pingRes.toStr)	// don't compare Map types
 	}
 }

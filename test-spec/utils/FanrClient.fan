@@ -15,8 +15,16 @@ class FanrClient {
 	
 	new make(|This|in) { in(this) }
 
+	Str:Obj? auth() {
+		client.get(uri + `auth?$username`).body.jsonMap
+	}
+
+	Str:Obj? find(Str podName, Str podVersion) {
+		client.get(uri + `find/${podName}/${podVersion}`).body.jsonMap
+	}
+
 	Str:Obj? ping() {
-		client.sendRequest(prepare("GET", `ping`)).body.jsonObj
+		client.sendRequest(prepare("GET", `ping`)).body.jsonMap
 	}
 	
 	PodSpec publish(File podFile) {

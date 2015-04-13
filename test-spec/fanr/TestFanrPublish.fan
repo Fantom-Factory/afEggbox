@@ -28,7 +28,7 @@ using util
 ** When I [publish]`exe:publish` it
 ** then I should receive the following JSON:
 ** 
-**   exe:verifyPodJson(#TEXT)
+**   exe:verifyJson(#TEXT, ["published":#FIXTURE.podSpec.meta])
 **   {
 **       "published" : {
 **           "pod.name"    : "acmeWidgets",
@@ -64,11 +64,6 @@ class TestFanrPublish : FanrFixture {
 		zip.close
 		
 		podSpec = fanrClient.publish(podFile)
-	}
-	
-	Void verifyPodJson(Str json) {
-		jsonObj := JsonInStream(json.in).readJson
-		verifyEq(jsonObj.toStr, ["published":podSpec.meta].toStr)	// don't compare Map types
 	}
 	
 	Obj findPod(Str podName) {
