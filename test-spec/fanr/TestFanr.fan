@@ -1,3 +1,4 @@
+using util
 
 ** fanr
 ** ####
@@ -20,13 +21,12 @@
 ** 
 ** The following sections details the various features of the protocol:
 ** 
-**  - Authentication: authentication and digital signatures
-**  - [Ping]`run:TestFanrPing`: ping a server's meta-data
-**  - Find: find exact match for pod name/version
+**  - [Authentication]`run:TestFanrAuth#`: authentication and digital signatures
+**  - [Ping]`run:TestFanrPing#`: ping a server's meta-data
+**  - [Find]`run:TestFanrFind#`: find exact match for pod name/version
 **  - Query: query the repository for set of pods
 **  - Read: download a pod for installation
 **  - [Publish]`run:TestFanrPublish#`: upload a pod to add to the repository
-**  - Errors: error handling
 ** 
 class TestFanr : RepoFixture { }
 
@@ -36,5 +36,10 @@ class FanrFixture : RepoFixture {
 	override Void setupFixture() {
 		super.setupFixture
 		fanrClient = FanrClient() { it.client = this.client }
+	}
+	
+	virtual Void verifyJson(Str json, Str:Obj? actualJsonObj) {
+		expectedJsonObj := JsonInStream(json.in).readJson
+		verifyEq(expectedJsonObj.toStr, actualJsonObj.toStr)	// don't compare Map types
 	}
 }

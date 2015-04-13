@@ -1,7 +1,7 @@
 using afButter
 
-** Ping
-** ####
+** Not Authenticated
+** #################
 ** The "ping" URI is used to query the server to check that is alive, test credentials, and query server metadata.
 ** 
 ** If the 'Fanr-Username' HTTP header is specified then authentication will be checked and an error returned if the credentials are invalid.
