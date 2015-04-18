@@ -22,7 +22,7 @@ class Build : BuildPod {
 			"fandoc       1.0.67 - 1.0",
 
 			// ---- Core ------------------------
-//			"afBeanUtils  1.0.4  - 1.0", 
+			"afBeanUtils  1.0.4  - 1.0", 
 //			"afConcurrent 1.0.8  - 1.0", 
 			"afIoc        2.0.6  - 2.0", 
 			"afIocConfig  1.0.16 - 1.0", 

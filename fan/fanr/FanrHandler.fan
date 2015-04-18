@@ -8,10 +8,6 @@ const class FanrHandler {
 	@Inject private const MongoRepoAuth	auth
 	@Inject private const HttpRequest	req
 	@Inject private const HttpResponse	res
-			private const Str:Str		pingMeta := [
-		"fanr.type"		: MongoRepo#.qname,
-		"fanr.version"	: MongoRepo#.pod.version.toStr
-	]
 
 	** Dir to store temp files, defaults to 'Env.tempDir'
 	const File tempDir := Env.cur.tempDir
@@ -20,8 +16,27 @@ const class FanrHandler {
 	
 	Text onPing() {
 		authenticate
-		return Text(pingMeta)
+		return Text.fromJsonObj(repo.ping)
 	}
+	
+	Text onFind(Str podName, Version version) {
+		user := authenticate
+		
+		// if user can't read any pods, immediately bail
+		if (!auth.allowQuery(user, null))
+			sendForbiddenErr(user)
+		
+		spec := repo.find(podName, version, false)
+
+		if (spec == null)
+			sendErr(404, "Pod not found: $podName-$version")
+
+		// verify permissions
+		if (!auth.allowQuery(user, null))
+			sendForbiddenErr(user)
+
+		return Text.fromJsonObj(spec.meta)
+    }
 	
 	Text onPublish() {
 		user := authenticate

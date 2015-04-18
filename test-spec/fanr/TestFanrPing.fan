@@ -14,7 +14,7 @@ using util
 ** 
 **   exe:verifyJson(#TEXT, #FIXTURE.pingRes)
 **   {
-**       "fanr.version" : "0.0.1",
+**       "fanr.version" : "1.0.67",
 **       "fanr.type"    : "afPodRepo::MongoRepo"
 **   }
 ** 
