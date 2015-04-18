@@ -1,6 +1,7 @@
 using afIoc
 using afMorphia
 using fandoc
+using fanr
 
 @Entity { name = "pod" }
 class RepoPod {
@@ -19,13 +20,14 @@ class RepoPod {
 	static new fromFile(File podFile, RepoUser user) {
 		zip	:= Zip.open(podFile)
 		try {
-			meta 	:= zip.contents[`/meta.props`].readProps
+			props 	:= zip.contents[`/meta.props`].readProps
+			meta	:= RepoPodMeta(podFile.name, props)
 
 			return RepoPod() {
 				it.name			= meta["pod.name"]
 				it.fileSize		= podFile.size
 				it.version		= Version(meta["pod.version"])
-				it.meta			= RepoPodMeta(zip.contents[`/meta.props`].readProps)
+				it.meta			= meta
 				it.aboutFandoc	= findAboutFandoc(zip)
 				it.isPublic		= false	// FIXME: isPublic
 				it.ownerId		= user.userName
@@ -34,6 +36,10 @@ class RepoPod {
 		} finally {
 			zip.close
 		}
+	}
+	
+	PodSpec toPodSpec() {
+		PodSpec(meta.meta, null)
 	}
 	
 	private Str findAboutFandoc(Zip zip) {
@@ -70,13 +76,28 @@ class RepoPod {
 		
 		meta := zip.contents[`/meta.props`].readProps
 		return meta["summary"] ?: (meta["podName"] ?: "")
-	}
+	}	
 }
 
 class RepoPodMeta {	
-	internal	Str:Str		meta
+	static const	
+	private 	Str[] 	specialKeys	:= ["pod.name", "pod.version", "pod.depends", "pod.summary"]
+	internal	Str:Str	meta
 	
-	new make(Str:Str meta) { this.meta = meta }
+	new make(Str:Str meta) {
+		specialKeys.each { assertKeyExists(null, meta, it) }
+		this.meta = meta
+	}
+
+	new makeAndSort(Str fileName, Str:Str meta) {
+		specialKeys.each { assertKeyExists(fileName, meta, it) }
+
+		m := Str:Str[:] { ordered = true }
+		specialKeys.each { m[it] = meta[it] }
+		meta.keys.exclude { specialKeys.contains(it) }.sort.each { m[it] = meta[it] }
+		
+		this.meta = m
+	}
 	
 	@Operator
 	Str get(Str key) {
@@ -86,5 +107,11 @@ class RepoPodMeta {
 	@Operator
 	Void set(Str key, Str val) {
 		meta[key] = val
+	}
+	
+	private static Void assertKeyExists(Str? fileName, Str:Str meta, Str key) {
+		name := fileName != null ? "from '${fileName}' " : ""
+		if (!meta.containsKey(key))
+			throw Err("Pod meta ${name}should contain the key '${key}' - ${meta}")
 	}
 }

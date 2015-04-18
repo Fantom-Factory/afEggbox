@@ -8,9 +8,12 @@ using afIoc
 abstract class RepoFixture : FixtureTest {
     BedClient? client
 
-	@Inject RepoPodDao?			podDao
-	@Inject RepoPodFileDao?		podFileDao
-	@Inject RepoUserDao?		userDao
+	@Inject 
+	RepoPodDao?			podDao
+	@Inject 
+	RepoPodFileDao?		podFileDao
+	@Inject 
+	RepoUserDao?		userDao
 
     virtual Void setupFixture() {
 		podDao.dropAll
