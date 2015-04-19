@@ -19,8 +19,11 @@ class FanrClient {
 		client.get(uri + `auth?$username`).body.jsonMap
 	}
 
-	ButterResponse find(Str podName, Str podVersion) {
-		client.sendRequest(prepare("GET", `find/${podName}/${podVersion}`))
+	ButterResponse find(Str name, Str? version) {
+		if (version == null)
+			return client.sendRequest(prepare("GET", `find/${name}`))
+		else
+			return client.sendRequest(prepare("GET", `find/${name}/${version}`))
 	}
 
 	Str:Obj? ping() {
