@@ -6,7 +6,7 @@ const mixin RepoPodDao : EntityDao {
 	@Operator
 	abstract RepoPod?		get(Str name, Bool checked := true)
 	abstract RepoPod[]		findAll()
-	abstract RepoPod 		find(Str name, Version? version, Bool checked := true)
+	abstract RepoPod? 		find(Str name, Version? version, Bool checked := true)
 }
 
 internal const class RepoPodDaoImpl : RepoPodDao {
@@ -27,9 +27,9 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		datastore.query.orderBy("_id").findAll
 	}
 	
-	override RepoPod find(Str name, Version? version, Bool checked := true) {
+	override RepoPod? find(Str name, Version? version, Bool checked := true) {
 		if (version != null)
-			return get(_id(name, version))
+			return get(_id(name, version), checked)
 	
 //    // if version null, then find latest one
 //    if (ver == null) return dir.cur

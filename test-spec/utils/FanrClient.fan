@@ -6,7 +6,7 @@ using afButter
 class FanrClient {
 			Str?		username		// user name
 			Str?		password		// plain text password
-			Butter		client
+			ButterDish	client
 
 	private Uri			uri				:= `/`
 	private Str?		secret			// base64 string
@@ -19,8 +19,8 @@ class FanrClient {
 		client.get(uri + `auth?$username`).body.jsonMap
 	}
 
-	Str:Obj? find(Str podName, Str podVersion) {
-		client.get(uri + `find/${podName}/${podVersion}`).body.jsonMap
+	ButterResponse find(Str podName, Str podVersion) {
+		client.sendRequest(prepare("GET", `find/${podName}/${podVersion}`))
 	}
 
 	Str:Obj? ping() {

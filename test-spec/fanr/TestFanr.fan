@@ -30,7 +30,7 @@ using util
 ** 
 class TestFanr : RepoFixture { }
 
-class FanrFixture : RepoFixture {
+abstract class FanrFixture : RepoFixture {
 	FanrClient? fanrClient
 	
 	override Void setupFixture() {

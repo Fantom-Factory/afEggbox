@@ -17,7 +17,7 @@ const class MongoRepo {
 	new make(|This|in) { in(this) }
 
 	PodSpec? find(Str podName, Version? podVersion, Bool checked := true) {
-		podDao.find(podName, podVersion, checked).toPodSpec
+		podDao.find(podName, podVersion, checked)?.toPodSpec
 	}
 
 	PodSpec publish(File file, RepoUser user) {
