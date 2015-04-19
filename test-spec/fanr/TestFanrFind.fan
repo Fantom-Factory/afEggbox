@@ -1,4 +1,5 @@
 using afIoc
+using afButter
 using util
 
 ** Find
@@ -9,8 +10,8 @@ using util
 ** 
 ** Example
 ** -------
-** When I query the find URI for the pod [xml]`set:podName` and version [1.0.67]`set:podVersion`
-** it should [return]`exe:find` the following JSON:
+** Given the repository has a pod called [xml]`set:podName` with a version of [1.0.67]`set:podVersion`, 
+** when I query the [find URI]`exe:makePod; #FIXTURE.findPod` for the pod it should return the following JSON:
 ** 
 **   exe:verifyJson(#TEXT, #FIXTURE.jsonObj)
 **   {
@@ -26,14 +27,17 @@ using util
 ** 
 ** Example
 ** -------
-** When I query the find URI for a non-existent pod named [missing]`set:podName` it should return a [404]`eq:findPod` status code.
+** When I query the find URI for a non-existent pod named [missing]`set:podName` it should [return]`exe:findPod` a [404]`eq:httpStatus` status code.
 ** 
+** Find Latest Pod
+** ===============
 class TestFanrFind : FanrFixture {
-	Str?		podName
-	Str? 		podVersion
-	[Str:Obj?]?	jsonObj
-	
-	Void find() {
+	Str?			podName
+	Str? 			podVersion
+	[Str:Obj?]?		jsonObj
+	Int?			httpStatus
+
+	Void makePod() {
 		podFile := File.createTemp("afPodRepo_", ".pod").deleteOnExit
 		
 		zip := Zip.write(podFile.out)
@@ -46,7 +50,17 @@ class TestFanrFind : FanrFixture {
 		zip.close
 
 		podDao.create(RepoPod(podFile, newUser))
-
-		jsonObj = fanrClient.find(podName, podVersion)
+	}
+	
+	Void findPod() {
+		try {
+			jsonObj = fanrClient.find(podName, podVersion).body.jsonMap
+		} catch (BadStatusErr err) {
+			httpStatus = err.statusCode
+		}
+	}
+	
+	Int findPodStatus() {
+		fanrClient.find(podName, podVersion).statusCode		
 	}
 }
