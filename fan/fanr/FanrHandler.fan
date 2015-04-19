@@ -19,7 +19,7 @@ const class FanrHandler {
 		return Text.fromJsonObj(repo.ping)
 	}
 	
-	Text onFind(Str podName, Version version) {
+	Text onFind(Str podName, Version? version := null) {
 		user := authenticate
 		
 		// if user can't read any pods, immediately bail
@@ -29,7 +29,10 @@ const class FanrHandler {
 		spec := repo.find(podName, version, false)
 
 		if (spec == null)
-			sendErr(404, "Pod not found: $podName-$version")
+			if (version == null)
+				sendErr(404, "Pod not found: $podName")
+			else
+				sendErr(404, "Pod not found: $podName $version")
 
 		// verify permissions
 		if (!auth.allowQuery(user, null))
