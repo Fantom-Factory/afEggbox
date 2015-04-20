@@ -6,6 +6,7 @@ const mixin RepoUserDao : EntityDao {
 	abstract RepoUser?		get(Str name, Bool checked := true)
 	abstract RepoUser[]		findAll()
 	abstract RepoUser?		findByEmail(Uri email)
+	abstract RepoUser?		findByUsername(Str username)
 }
 
 internal const class RepoUserDaoImpl : RepoUserDao {
@@ -27,7 +28,12 @@ internal const class RepoUserDaoImpl : RepoUserDao {
 	}
 
 	override RepoUser? findByEmail(Uri email) {
-		datastore.query(field("email").eqIgnoreCase(email.toStr)).findOne(false)
+		datastore.query(field(RepoUser#email.name).eqIgnoreCase(email.toStr)).findOne(false)
+	}
+
+	override RepoUser? findByUsername(Str username) {
+//		datastore.query(field(RepoUser#userName.name).eqIgnoreCase(username)).findOne(false)
+		datastore.query(field("_id").eqIgnoreCase(username)).findOne(false)
 	}
 
 	override RepoUser create(Obj user) {
