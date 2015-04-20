@@ -20,15 +20,8 @@ using afButter
 class TestFanrPublishNotAuthenticated : FanrFixture {
 	
 	Void publish(Str wrongPassword) {
-		userDao.create(newUser(username, password))
-		fanrClient.username = username
 		fanrClient.password = wrongPassword
 
-		podFile := File.createTemp("afPodRepo_", ".pod").deleteOnExit
-		try {
-			fanrClient.publish(podFile)
-		} catch (BadStatusErr err) {
-			httpStatus = "${err.statusCode} - ${err.statusMsg}"
-		}
+		super.publishPod
 	}
 }

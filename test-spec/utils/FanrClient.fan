@@ -4,7 +4,7 @@ using afButter
 ** A simple fanr client for testing the WebMod
 ** Shamelessly ripped and adapted from fanr::WebRepo
 class FanrClient {
-			Str?		username		// user name
+			Str?		username
 			Str?		password		:= "password"
 			ButterDish	client
 
@@ -26,18 +26,13 @@ class FanrClient {
 			return client.sendRequest(prepare("GET", `find/${name}/${version}`))
 	}
 
-	PodSpec publish(File podFile) {
+	ButterResponse publish(File podFile) {
 		c := prepare("POST", `publish`)
 		c.headers.contentType	= MimeType("application/zip")
 		c.headers.contentLength	= podFile.size
 //		c.headers["Expect"]		= "100-continue"
 		c.body.buf = podFile.readAllBuf
-		res := client.sendRequest(c)
-
-		// parse json response
-		jsonRes  := res.body.jsonMap
-		jsonSpec := jsonRes["published"] ?: throw Err("Missing 'published' in JSON response")
-		return PodSpec(jsonSpec, null)
+		return client.sendRequest(c)
 	}
 
 	private ButterRequest prepare(Str method, Uri path) {
