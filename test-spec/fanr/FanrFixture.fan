@@ -27,13 +27,16 @@ abstract class FanrFixture : RepoFixture {
 		fanrClient = FanrClient() { it.client = this.client }
 	}
 
-	Void createPod() {
+	File podFile() {
 		podFile := File.createTemp("afPodRepo_", ".pod").deleteOnExit
-		
 		zip := Zip.write(podFile.out)
 		zip.writeNext(`meta.props`).writeProps(meta)
 		zip.close
-
+		return podFile
+	}
+	
+	Void createPod() {
+		podFile := podFile
 		podDao.create(RepoPod(podFile, newUser))
 		podFile.delete
 	}
@@ -46,6 +49,20 @@ abstract class FanrFixture : RepoFixture {
 			
 		} catch (BadStatusErr err) {
 			httpStatus = "${err.statusCode} - ${err.statusMsg}"
+		}
+	}
+
+	Void publishPod() {
+		podFile	:= podFile
+		try {
+			response	:= fanrClient.publish(podFile)
+			httpStatus	= "${response.statusCode} - ${response.statusMsg}"
+			jsonObj		= response.body.jsonMap
+			
+		} catch (BadStatusErr err) {
+			httpStatus = "${err.statusCode} - ${err.statusMsg}"
+		} finally {
+			podFile.delete
 		}
 	}
 

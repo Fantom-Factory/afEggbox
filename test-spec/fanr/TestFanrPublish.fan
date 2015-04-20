@@ -25,7 +25,7 @@ using util
 **   pod.summary  Widgets for everyone!
 **   pod.depends  sys 1.0; gfx 1.0; fwt 1.0
 ** 
-** When I [publish]`exe:publish` it
+** When I [publish]`exe:publishPod` it
 ** then I should receive the following JSON:
 ** 
 **   exe:verifyJson(#TEXT)
@@ -47,16 +47,9 @@ using util
 ** - [What if I'm not a registered user?]`run:TestFanrPublishNotRegistered#`
 ** 
 class TestFanrPublish : FanrFixture {
-	PodSpec?	podSpec
 	
-	Void publish() {
-		podFile := File.createTemp("afPodRepo_", ".pod").deleteOnExit
-		
-		zip := Zip.write(podFile.out)
-		zip.writeNext(`meta.props`).writeProps(meta)
-		zip.close
-		
-		podSpec = fanrClient.publish(podFile)
+	Void createUser() {
+		username = "steve.eynon"
 	}
 	
 	Obj findPod(Str podName) {
