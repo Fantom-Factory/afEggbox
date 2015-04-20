@@ -3,7 +3,7 @@ using util
 
 ** Publish
 ** #######
-** The "publish" URI is used to upload a new pod to the repository.
+** The *publish* URL is used to upload a new pod to the repository.
 ** 
 ** Publication is performed by POSTing a pod file to the '/publish' URI. 
 ** If the publication is successful, then a JSON data structure representing the pod is returned.
@@ -28,7 +28,7 @@ using util
 ** When I [publish]`exe:publish` it
 ** then I should receive the following JSON:
 ** 
-**   exe:verifyJson(#TEXT, ["published":#FIXTURE.podSpec.meta])
+**   exe:verifyJson(#TEXT)
 **   {
 **       "published" : {
 **           "pod.name"    : "acmeWidgets",
@@ -47,15 +47,8 @@ using util
 ** - [What if I'm not a registered user?]`run:TestFanrPublishNotRegistered#`
 ** 
 class TestFanrPublish : FanrFixture {
-	Str:Str		meta := Str:Str[:] { ordered = true }
 	PodSpec?	podSpec
 	
-	Void createUser() {
-		userDao.create(newUser("steve.eynon", "password"))
-		fanrClient.username = "steve.eynon"
-		fanrClient.password = "password"
-	}
-
 	Void publish() {
 		podFile := File.createTemp("afPodRepo_", ".pod").deleteOnExit
 		

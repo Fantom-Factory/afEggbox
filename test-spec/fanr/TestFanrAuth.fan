@@ -2,17 +2,18 @@ using util
 
 ** Auth
 ** ####
-** The "auth" URI is used to discover which algorithms are supported by the server and to acquire the public salt for the user.
+** The *auth* URL is used to discover which algorithms are supported by the server and to acquire the public salt for the user.
 ** 
-** The "auth" URI takes a username as a query string. The response will be a JSON data structure with a map of name/value pairs.
+** It takes a username as a query string and responds with a JSON data structure of authentication information.
 ** 
 ** 
 ** Example
 ** -------
-** When I query the auth URI with the username [someone]`exe:auth(#TEXT)`
-** it should return the following JSON:
+** Given the repository has a user named [someone]`set:username`, 
+** when I query the repository with the URL [/auth?someone]`exe:queryRepo(#TEXT)` 
+** then it should return the following JSON:
 ** 
-**   exe:verifyJson(#TEXT, #FIXTURE.jsonObj)
+**   exe:verifyJson(#TEXT)
 **   {
 **       "username"            : "someone",
 **       "ts"                  : "2011-07-13T14:50:01.865Z UTC",
@@ -22,22 +23,13 @@ using util
 **   }
 ** 
 class TestFanrAuth : FanrFixture {
-	[Str:Obj?]?	jsonObj
-	
-	Void auth(Str username) {
-		userDao.create(newUser(username, "password"))
-		fanrClient.username = username
-		fanrClient.password = "password"
-		jsonObj = fanrClient.auth()
-	}
-	
-	override Void verifyJson(Str json, Str:Obj? actualJsonObj) {
-		expectedJsonObj := (Str:Obj?) JsonInStream(json.in).readJson
-		expectedJsonObj["salt"] = "salt"
-		actualJsonObj  ["salt"] = "salt"
-		expectedJsonObj["ts"]   = "timestamp"
-		actualJsonObj  ["ts"]   = "timestamp"
-		verifyEq(expectedJsonObj.toStr, actualJsonObj.toStr)	// don't compare Map types
 
+	override Void verifyJson(Str json) {
+		expectedJsonObj := (Str:Obj?) JsonInStream(json.in).readJson
+		expectedJsonObj	["salt"] = "salt"
+		jsonObj  		["salt"] = "salt"
+		expectedJsonObj	["ts"]   = "timestamp"
+		jsonObj  		["ts"]   = "timestamp"
+		verifyEq(expectedJsonObj.toStr, jsonObj.toStr)	// don't compare Map types
 	}
 }

@@ -1,4 +1,5 @@
 using util
+using afButter
 
 ** fanr
 ** ####
@@ -19,7 +20,7 @@ using util
 ** GET      {base}/auth?{username}    authentication info
 ** <pre
 ** 
-** The following sections details the various features of the protocol:
+** The following sections detail the various features of the protocol:
 ** 
 **  - [Authentication]`run:TestFanrAuth#`: authentication and digital signatures
 **  - [Ping]`run:TestFanrPing#`: ping a server's meta-data
@@ -29,17 +30,3 @@ using util
 **  - [Publish]`run:TestFanrPublish#`: upload a pod to add to the repository
 ** 
 class TestFanr : RepoFixture { }
-
-abstract class FanrFixture : RepoFixture {
-	FanrClient? fanrClient
-	
-	override Void setupFixture() {
-		super.setupFixture
-		fanrClient = FanrClient() { it.client = this.client }
-	}
-	
-	virtual Void verifyJson(Str json, Str:Obj? actualJsonObj) {
-		expectedJsonObj := JsonInStream(json.in).readJson
-		verifyEq(expectedJsonObj.toStr, actualJsonObj.toStr)	// don't compare Map types
-	}
-}

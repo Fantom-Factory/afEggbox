@@ -18,9 +18,6 @@ using afButter
 ** Then I should receive a HTTP status err of [401 - Unauthorized]`eq:httpStatus`. 
 **
 class TestFanrPublishNotRegistered : FanrFixture {
-	Str?		username
-	Str?		password
-	Str?		httpStatus
 	
 	Void publish() {
 		userDao.create(newUser(username, password))

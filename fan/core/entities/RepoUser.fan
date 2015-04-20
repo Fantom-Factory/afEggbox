@@ -5,10 +5,10 @@ using afMorphia
 class RepoUser {
 	
 	@Property { name="_id" } Str	userName
-	@Property { }	Str					realName
-	@Property { }	Uri					email
-	@Property { }	Str					userSalt
-	@Property { }	Str					userSecret
+	@Property { }	Str				realName
+	@Property { }	Uri				email
+	@Property { }	Str				userSalt
+	@Property { }	Str				userSecret
 
 	@Inject
 	new make(|This| in) { in(this) }

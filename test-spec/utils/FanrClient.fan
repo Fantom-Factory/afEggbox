@@ -5,7 +5,7 @@ using afButter
 ** Shamelessly ripped and adapted from fanr::WebRepo
 class FanrClient {
 			Str?		username		// user name
-			Str?		password		// plain text password
+			Str?		password		:= "password"
 			ButterDish	client
 
 	private Uri			uri				:= `/`
@@ -15,8 +15,8 @@ class FanrClient {
 	
 	new make(|This|in) { in(this) }
 
-	Str:Obj? auth() {
-		client.get(uri + `auth?$username`).body.jsonMap
+	ButterResponse query(Uri url) {
+		client.sendRequest(prepare("GET", url))
 	}
 
 	ButterResponse find(Str name, Str? version) {
@@ -26,10 +26,6 @@ class FanrClient {
 			return client.sendRequest(prepare("GET", `find/${name}/${version}`))
 	}
 
-	Str:Obj? ping() {
-		client.sendRequest(prepare("GET", `ping`)).body.jsonMap
-	}
-	
 	PodSpec publish(File podFile) {
 		c := prepare("POST", `publish`)
 		c.headers.contentType	= MimeType("application/zip")
@@ -68,7 +64,7 @@ class FanrClient {
 		c.headers["Fanr-Signature"] = s.hmac("SHA1", secret).toBase64
 	}
 
-	internal static Buf toSignatureBody(Str method, Uri uri, Str:Str headers) {
+	private static Buf toSignatureBody(Str method, Uri uri, Str:Str headers) {
 		s := Buf()
 		s.printLine(method.upper)
 		s.printLine(uri.relToAuth.encode.lower)
