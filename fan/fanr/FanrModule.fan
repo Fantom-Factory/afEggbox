@@ -6,7 +6,6 @@ class FanrModule {
 
 	static Void defineServices(ServiceDefinitions defs) {
 		defs.add(MongoRepo#)
-		defs.add(MongoRepoAuth#)
 	}
 
 	@Contribute { serviceType=Routes# }

@@ -4,8 +4,10 @@ using fanr
 
 // from fanr::WebRepoMod
 const class FanrHandler {
+			private const Str[]			secretAlgorithms	:= ["SALTED-HMAC-SHA1"]
+			private const Str[] 		signatureAlgorithms	:= ["HMAC-SHA1"]
 	@Inject private const MongoRepo		repo
-	@Inject private const MongoRepoAuth	auth
+	@Inject private const RepoUserDao	userDao
 	@Inject private const HttpRequest	req
 	@Inject private const HttpResponse	res
 
@@ -16,10 +18,10 @@ const class FanrHandler {
 	
 	Text onAuth() {
 		username	:= req.url.queryStr ?: "*"
-		user		:= auth.user(username)
-		salt		:= auth.salt(user)
-		secrets		:= auth.secretAlgorithms.join(",")
-		signatures	:= auth.signatureAlgorithms.join(",")
+		user		:= userDao.get(username, false)
+		salt		:= user?.userSalt
+		secrets		:= secretAlgorithms.join(",")
+		signatures	:= signatureAlgorithms.join(",")
 		json 		:= [
 			"username"				: username,
 			"salt"					: salt,
@@ -68,8 +70,8 @@ const class FanrHandler {
 	Text onPublish() {
 		user := authenticate
 
-		// if user can't publish any pods, immediately bail
-		if (!auth.allowPublish(user, null))
+		// only registered users can publish pods, so immediately bail
+		if (user == null)
 			sendForbiddenErr(user)
 
 		// allocate temp file
@@ -120,7 +122,7 @@ const class FanrHandler {
 		if (username == null) return null
 
 		// check that user name is valid
-		user := auth.user(username)
+		user := userDao.get(username, false)
 		if (user == null) 
 			sendUnauthErr("Invalid username: $username")
 
@@ -141,7 +143,10 @@ const class FanrHandler {
 
 		// verify signature which in effect is the password verification
 		s := toSignatureBody(req.httpMethod, req.urlAbs, req.headers.map)
-		secret := auth.secret(user, secretAlgorithm)
+		if (secretAlgorithm != "SALTED-HMAC-SHA1")
+			throw Err("Unexpected secret algorithm: $secretAlgorithm")
+		secret := Buf.fromBase64(user.userSecret)
+
 		expectedSignature := s.hmac("SHA-1", secret).toBase64
 		if (expectedSignature != signature)
 			sendUnauthErr("Invalid password (invalid signature)")
