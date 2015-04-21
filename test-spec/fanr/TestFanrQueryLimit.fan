@@ -82,6 +82,7 @@ class TestFanrQueryLimit : FanrFixture {
 		jsonObj = null
 		httpStatus = null
 		if (numVersions != null)
+			// see http://fantom.org/forum/topic/2411
 			client.stickyHeaders.stickyHeaders["Fan-NumVersions"] = numVersions
 		super.queryRepo(url)
 	}
