@@ -16,8 +16,8 @@ const class MongoRepo {
 
 	new make(|This|in) { in(this) }
 
-	PodSpec? find(Str podName, Version? podVersion, Bool checked := true) {
-		podDao.find(podName, podVersion)?.toPodSpec ?: (checked ? throw Err("Could not find pod with name $podName") : null)
+	PodSpec? find(Str name, Version? version, Bool checked := true) {
+		podDao.find(name, version)?.toPodSpec ?: (checked ? throw Err("Could not find pod with name $name") : null)
 	}
 
 	PodSpec publish(File file, RepoUser user) {
@@ -29,7 +29,7 @@ const class MongoRepo {
 	}
 
 	InStream read(PodSpec pod) {
-		throw Err("Not implemented")
+		podFileDao.find(pod.name, pod.version, true).data.in
 	}
 
 	PodSpec[] query(Str query, Int numVersions := 1) {

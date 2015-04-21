@@ -25,7 +25,7 @@ using util
 **   pod.summary  Widgets for everyone!
 **   pod.depends  sys 1.0; gfx 1.0; fwt 1.0
 ** 
-** When I [publish]`exe:publishPod` it
+** When I [publish]`exe:publishToRepo` it
 ** then I should receive the following JSON:
 ** 
 **   exe:verifyJson(#TEXT)

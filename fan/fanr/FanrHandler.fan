@@ -19,20 +19,20 @@ const class FanrHandler {
 		return Text.fromJsonObj(repo.ping)
 	}
 	
-	Text onFind(Str podName, Version? version := null) {
+	Text onFind(Str podName, Version? podVersion := null) {
 		user := authenticate
 		
 		// if user can't read any pods, immediately bail
 		if (!auth.allowQuery(user, null))
 			sendForbiddenErr(user)
 		
-		spec := repo.find(podName, version, false)
+		spec := repo.find(podName, podVersion, false)
 
 		if (spec == null)
-			if (version == null)
+			if (podVersion == null)
 				sendErr(404, "Pod not found: $podName")
 			else
-				sendErr(404, "Pod not found: $podName $version")
+				sendErr(404, "Pod not found: $podName $podVersion")
 
 		// verify permissions
 		if (!auth.allowQuery(user, null))
@@ -40,7 +40,29 @@ const class FanrHandler {
 
 		return Text.fromJsonObj(spec.meta)
     }
-	
+
+	InStream onPod(Str podName, Version podVersion) {
+		user := authenticate
+		
+		// if user can't read any pods, immediately bail
+		if (!auth.allowRead(user, null))
+			sendForbiddenErr(user)
+		
+		spec := repo.find(podName, podVersion, false)
+
+		if (spec == null)
+			sendErr(404, "Pod not found: $podName $podVersion")
+
+		// verify permissions
+		if (!auth.allowRead(user, spec))
+			sendForbiddenErr(user)
+
+	    res.headers["Content-Type"] = "application/zip"
+	    if (spec.size != null) res.headers["Content-Length"] = spec.size.toStr
+
+	    return repo.read(spec)
+	}
+
 	Text onPublish() {
 		user := authenticate
 

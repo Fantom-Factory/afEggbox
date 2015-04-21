@@ -13,7 +13,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 
 	@Inject { type=RepoPod# }
 	override const Datastore datastore
-	
+
 	@Inject
 	override const IntSequences	intSeqs
 
@@ -35,7 +35,6 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		.findAll.sort |RepoPod p1, RepoPod p2->Int| { p2.version <=> p1.version }.first 
 	}
 
-	
 	override RepoPod create(Obj entity) {
 		repoPod := (RepoPod) entity
 		if (repoPod._id == null)
