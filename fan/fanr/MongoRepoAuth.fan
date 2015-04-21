@@ -23,10 +23,9 @@ const class MongoRepoAuth : WebRepoAuth {
 		return Buf.fromBase64(user.userSecret)
 	}
 
-
 	override Bool allowQuery(Obj? u, PodSpec? p) { true }
-	override Bool allowRead(Obj? u, PodSpec? p)   { true }
 	
+	override Bool allowRead	(Obj? u, PodSpec? p) { true }
 	
 	override Bool allowPublish(Obj? user, PodSpec? podSpec) { user is RepoUser }
 

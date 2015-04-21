@@ -37,7 +37,9 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			return get(_id(name, version), false)
 	
 		return datastore.query(field("name").eqIgnoreCase(name))
-		.findAll.sort |RepoPod p1, RepoPod p2->Int| { p2.version <=> p1.version }.first 
+			.findAll
+			.sort |RepoPod p1, RepoPod p2->Int| { p2.version <=> p1.version }
+			.first 
 	}
 
 	override Void query(|Cursor->Obj?| f) {

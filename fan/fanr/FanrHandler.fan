@@ -14,118 +14,6 @@ const class FanrHandler {
 
 	new make(|This|in) { in(this) }
 	
-	Text onPing() {
-		authenticate
-		return Text.fromJsonObj(repo.ping)
-	}
-	
-	Text onFind(Str podName, Version? podVersion := null) {
-		user := authenticate
-		
-		// if user can't read any pods, immediately bail
-		if (!auth.allowQuery(user, null))
-			sendForbiddenErr(user)
-		
-		spec := repo.find(podName, podVersion, false)
-
-		if (spec == null)
-			if (podVersion == null)
-				sendErr(404, "Pod not found: $podName")
-			else
-				sendErr(404, "Pod not found: $podName $podVersion")
-
-		// verify permissions
-		if (!auth.allowQuery(user, spec))
-			sendForbiddenErr(user)
-
-		return Text.fromJsonObj(spec.meta)
-    }
-
-	Text onQuery() {
-		user := authenticate
-
-		// if user can't query any pods, immediately bail
-		if (!auth.allowQuery(user, null))
-			sendForbiddenErr(user)
-
-		// query can be GET query part or POST body
-		query := (req.httpMethod == "GET" ? req.url.queryStr : req.body.str) ?: sendErr(400, "Missing '?query' in URL")
-
-		// get options
-		numVersions := Int.fromStr(req.headers["Fan-NumVersions"] ?: "3", 10, false) ?: 3
-
-		// do the query
-		PodSpec[]? pods := null
-		try {
-			pods = repo.query(query, numVersions)
-		} catch (ParseErr e) {
-			sendErr(400, e.toStr)
-		}
-
-		// filter out any pods the user is not allowed to query
-		pods = pods.findAll |pod| { auth.allowQuery(user, pod) }
-
-		// return JSON response
-		return Text.fromJsonObj(["pods":pods.map { it.meta }])
-	}
-
-	InStream onPod(Str podName, Version podVersion) {
-		user := authenticate
-		
-		// if user can't read any pods, immediately bail
-		if (!auth.allowRead(user, null))
-			sendForbiddenErr(user)
-		
-		spec := repo.find(podName, podVersion, false)
-
-		if (spec == null)
-			sendErr(404, "Pod not found: $podName $podVersion")
-
-		// verify permissions
-		if (!auth.allowRead(user, spec))
-			sendForbiddenErr(user)
-
-	    res.headers["Content-Type"] = "application/zip"
-	    if (spec.size != null) res.headers["Content-Length"] = spec.size.toStr
-
-	    return repo.read(spec)
-	}
-
-	Text onPublish() {
-		user := authenticate
-
-		// if user can't publish any pods, immediately bail
-		if (!auth.allowPublish(user, null))
-			sendForbiddenErr(user)
-
-		// allocate temp file
-		tempName := "fanr-" + DateTime.now.toLocale("YYMMDDhhmmss") + "-" + Buf.random(4).toHex + ".pod"
-		tempFile := tempDir + tempName.toUri
-
-		try {
-			// read input to temp file
-			tempOut := tempFile.out
-			len  := req.headers.contentLength?.toInt ?: null
-			try		req.body.in.pipe(tempOut, len)
-			finally	tempOut.close
-
-			// check if user can publish this specific pod
-			spec := PodSpec.load(tempFile)
-			if (!auth.allowPublish(user, spec))
-				sendForbiddenErr(user)
-
-			// publish to local repo
-			spec = repo.publish(tempFile, user)
-
-			// return JSON response
-			return Text.fromJsonObj(["published":spec.meta])
-			
-		} finally {
-			try { tempFile.delete } catch { }
-		}
-	}
-	
-	
 	Text onAuth() {
 		username	:= req.url.queryStr ?: "*"
 		user		:= auth.user(username)
@@ -144,6 +32,86 @@ const class FanrHandler {
 			json.remove("salt")
 		
 		return Text.fromJsonObj(json)
+	}
+
+	Text onFind(Str podName, Version? podVersion := null) {
+		user := authenticate
+		pod  := repo.find(user, podName, podVersion)
+
+		if (pod == null)
+			sendErr(404, "Pod not found: $podName" + (podVersion == null ? "" : " $podVersion"))
+
+		return Text.fromJsonObj(pod.toJsonObj)
+    }
+
+	Text onPing() {
+		authenticate
+		return Text.fromJsonObj([
+			"fanr.type"		: MongoRepo#.qname,
+			"fanr.version"	: Pod.find("fanr").version.toStr
+		])
+	}
+	
+	InStream onPod(Str podName, Version podVersion) {
+		user := authenticate
+		pod  := repo.find(user, podName, podVersion)
+
+		if (pod == null)
+			sendErr(404, "Pod not found: $podName $podVersion")
+
+	    res.headers.contentType 	= MimeType("application/zip")
+	    res.headers.contentLength	= pod.fileSize
+
+	    return pod.loadFile.in
+	}
+
+	Text onPublish() {
+		user := authenticate
+
+		// if user can't publish any pods, immediately bail
+		if (!auth.allowPublish(user, null))
+			sendForbiddenErr(user)
+
+		// allocate temp file
+		tempName := "fanr-" + DateTime.now.toLocale("YYMMDDhhmmss") + "-" + Buf.random(4).toHex + ".pod"
+		tempFile := tempDir + tempName.toUri
+
+		try {
+			tempOut := tempFile.out
+			len  := req.headers.contentLength?.toInt ?: null
+			try		req.body.in.pipe(tempOut, len)
+			finally	tempOut.close
+
+			// check if user can publish this specific pod
+//			spec := PodSpec.load(tempFile)
+//			if (!auth.allowPublish(user, spec))
+//				sendForbiddenErr(user)
+
+			pod := repo.publish(user, tempFile)
+
+			return Text.fromJsonObj(["published" : pod.toJsonObj])
+			
+		} finally {
+			try { tempFile.delete } catch { }
+		}
+	}
+
+	Text onQuery() {
+		user := authenticate
+
+		// query can be GET query part or POST body
+		query 		:= (req.httpMethod == "GET" ? req.url.queryStr : req.body.str) ?: sendErr(400, "Missing '?query' in URL")
+		numVersions := Int.fromStr(req.headers["Fan-NumVersions"] ?: "3", 10, false) ?: 3
+
+		// do the query
+		PodSpec[]? pods := null
+		try {
+			pods = repo.query(user, query, numVersions)
+		} catch (ParseErr e) {
+			sendErr(400, e.toStr)
+		}
+
+		return Text.fromJsonObj(["pods" : pods.map { it.meta }])
 	}
 
 	private Obj? authenticate() {
@@ -196,20 +164,8 @@ const class FanrHandler {
 		return s
 	}
 
-//	private Void printPodSpecJson(OutStream out, PodSpec pod, Bool comma) {
-//		out.printLine("{")
-//		keys := pod.meta.keys
-//		keys.moveTo("pod.name", 0)
-//		keys.moveTo("pod.version", 1)
-//		keys.each |k, j| {
-//			v := pod.meta[k]
-//			out.print(k.toCode).print(":").print(v.toCode).printLine(j+1<keys.size?",":"")
-//		}
-//		out.printLine(comma ? "}," : "}")
-//	}
-
 	private Str getRequiredHeader(Str key) {
-		req.headers[key] ?: throw Err("Missing required header $key.toCode")
+		req.headers[key] ?: sendErr(400, "Missing required header $key.toCode")
 	}
 
 	private Void sendUnauthErr(Str msg) {
