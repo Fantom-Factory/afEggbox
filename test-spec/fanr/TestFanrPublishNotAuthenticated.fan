@@ -22,6 +22,6 @@ class TestFanrPublishNotAuthenticated : FanrFixture {
 	Void publish(Str wrongPassword) {
 		fanrClient.password = wrongPassword
 
-		super.publishPod
+		super.publishToRepo
 	}
 }

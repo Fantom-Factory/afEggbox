@@ -20,6 +20,6 @@ class TestFanrPublishNotRegistered : FanrFixture {
 	Void publish() {
 		fanrClient.username = null
 		fanrClient.password = null
-		super.publishPod
+		super.publishToRepo
 	}
 }

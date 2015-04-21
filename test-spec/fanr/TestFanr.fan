@@ -26,7 +26,7 @@ using afButter
 **  - [Ping]`run:TestFanrPing#`: ping a server's meta-data
 **  - [Find]`run:TestFanrFind#`: find exact match for pod name/version
 **  - Query: query the repository for set of pods
-**  - Read: download a pod for installation
+**  - [Read]`run:TestFanrRead#`: download a pod for installation
 **  - [Publish]`run:TestFanrPublish#`: upload a pod to add to the repository
 ** 
 class TestFanr : RepoFixture { }

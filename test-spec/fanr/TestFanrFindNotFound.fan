@@ -6,7 +6,7 @@ using util
 ** #########
 ** The *find* URL is used to perform a an exact find.
 ** 
-** But if the pod is not found, then a 404 should be returned.
+** But if the pod queried for does not exist in the repository, then a 404 should be returned.
 ** 
 ** Example
 ** -------

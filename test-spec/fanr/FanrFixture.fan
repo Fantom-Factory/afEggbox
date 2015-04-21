@@ -6,6 +6,7 @@ abstract class FanrFixture : RepoFixture {
 	FanrClient? fanrClient
 	Str:Str		meta	:= [:] { ordered = true }
 	[Str:Obj?]?	jsonObj
+	Buf?		resBody
 	Str?		httpStatus
 	
 	Str username {
@@ -37,7 +38,8 @@ abstract class FanrFixture : RepoFixture {
 	
 	Void createPod() {
 		podFile := podFile
-		podDao.create(RepoPod(podFile, newUser))
+		pod := podDao.create(RepoPod(podFile, newUser))
+		podFileDao.create(RepoPodFile(pod, podFile))
 		podFile.delete
 	}
 
@@ -52,7 +54,7 @@ abstract class FanrFixture : RepoFixture {
 		}
 	}
 
-	Void publishPod() {
+	Void publishToRepo() {
 		podFile	:= podFile
 		try {
 			response	:= fanrClient.publish(podFile)
@@ -63,6 +65,17 @@ abstract class FanrFixture : RepoFixture {
 			httpStatus = "${err.statusCode} - ${err.statusMsg}"
 		} finally {
 			podFile.delete
+		}
+	}
+
+	Void readFromRepo(Str url) {
+		try {
+			response	:= fanrClient.query(url.toUri)
+			httpStatus	= "${response.statusCode} - ${response.statusMsg}"
+			resBody		= response.body.buf
+			
+		} catch (BadStatusErr err) {
+			httpStatus = "${err.statusCode} - ${err.statusMsg}"
 		}
 	}
 
