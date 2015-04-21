@@ -106,14 +106,14 @@ const class FanrHandler {
 		numVersions := Int.fromStr(req.headers["Fan-NumVersions"] ?: "3", 10, false) ?: 3
 
 		// do the query
-		PodSpec[]? pods := null
+		RepoPod[]? pods := null
 		try {
 			pods = repo.query(user, query, numVersions)
 		} catch (ParseErr e) {
 			sendErr(400, e.toStr)
 		}
 
-		return Text.fromJsonObj(["pods" : pods.map { it.meta }])
+		return Text.fromJsonObj(["pods" : pods.map { it.toJsonObj }])
 	}
 
 	private Obj? authenticate() {

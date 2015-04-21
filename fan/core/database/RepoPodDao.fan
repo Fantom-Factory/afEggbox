@@ -9,7 +9,7 @@ const mixin RepoPodDao : EntityDao {
 	abstract RepoPod[]		findAll()
 	abstract RepoPod? 		find(Str name, Version? version)
 
-	abstract Void query(|Cursor->Obj?| f)
+	abstract RepoPod[] 		query(|Cursor->Obj?| f)
 
 	abstract RepoPod toPod(Obj doc)
 }
@@ -42,7 +42,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			.first 
 	}
 
-	override Void query(|Cursor->Obj?| f) {
+	override RepoPod[] query(|Cursor->Obj?| f) {
 		datastore.collection.find([:], f)
 	}
 	
