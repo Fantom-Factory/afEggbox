@@ -5,6 +5,8 @@ using fanr
 
 @Entity { name = "pod" }
 class RepoPod {
+	@Inject private const RepoPodFileDao?	podFileDao
+
 	@Property	Str?		_id
 	@Property	Str			name
 	@Property	Version		version
@@ -20,7 +22,7 @@ class RepoPod {
 	static new fromFile(File podFile, RepoUser user) {
 		zip	:= Zip.open(podFile)
 		try {
-			props 	:= zip.contents[`/meta.props`].readProps
+			props 	:= zip.contents[`/meta.props`]?.readProps ?: throw Err("Missing meta.props")
 			meta	:= RepoPodMeta(podFile.name, props)
 
 			return RepoPod() {
@@ -38,8 +40,16 @@ class RepoPod {
 		}
 	}
 	
+	Str:Obj toJsonObj() {
+		meta.meta
+	}
+	
 	PodSpec toPodSpec() {
 		PodSpec(meta.meta, null)
+	}
+	
+	Buf loadFile() {
+		podFileDao.get(_id, true).data
 	}
 	
 	private Str findAboutFandoc(Zip zip) {

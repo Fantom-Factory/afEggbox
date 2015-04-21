@@ -34,7 +34,7 @@ class TestFanrRead : FanrFixture {
 		textProps := propText.toBuf.readProps
 		fileProps := ([Str:Str]?) null
 		
-		zip := Zip.read(resBody.in)
+		zip := Zip.read(resBody.seek(0).in)
 		File? entry
 		while ((entry = zip.readNext) != null) {
 			if (entry.uri == `/meta.props`)

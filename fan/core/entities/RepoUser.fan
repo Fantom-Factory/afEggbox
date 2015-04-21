@@ -23,4 +23,10 @@ class RepoUser {
 	Str generateSecret(Str password) {
 		Buf().print("${userName}:${userSalt}").hmac("SHA-1", password.toBuf).toBase64
 	}
+	
+	RepoPod? filter(RepoPod pod) {
+		pod.isPublic ? pod : (
+			(pod.ownerId == userName) ? pod : null
+		)
+	}
 }
