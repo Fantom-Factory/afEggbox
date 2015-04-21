@@ -33,6 +33,20 @@ const class MongoRepo {
 	}
 
 	PodSpec[] query(Str query, Int numVersions := 1) {
-		[,]
+		if (numVersions < 1) throw ArgErr("numVersions < 1")
+		
+		q := Query.fromStr(query)
+		
+		pods := RepoPod[,] 
+		podDao.query |c| {
+			while (c.hasNext && pods.size < numVersions) {
+				pod := podDao.toPod(c.next)
+				if (q.include(pod.toPodSpec))
+					pods.add(pod)
+			}
+			return null
+		}
+		
+		return pods.map { it.toPodSpec }
 	}
 }

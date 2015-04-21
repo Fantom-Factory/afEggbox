@@ -1,4 +1,5 @@
 using afIoc
+using afMongo
 using afMorphia
 
 const mixin RepoPodDao : EntityDao {
@@ -7,6 +8,10 @@ const mixin RepoPodDao : EntityDao {
 	abstract RepoPod?		get(Str name, Bool checked := true)
 	abstract RepoPod[]		findAll()
 	abstract RepoPod? 		find(Str name, Version? version)
+
+	abstract Void query(|Cursor->Obj?| f)
+
+	abstract RepoPod toPod(Obj doc)
 }
 
 internal const class RepoPodDaoImpl : RepoPodDao {
@@ -33,6 +38,14 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	
 		return datastore.query(field("name").eqIgnoreCase(name))
 		.findAll.sort |RepoPod p1, RepoPod p2->Int| { p2.version <=> p1.version }.first 
+	}
+
+	override Void query(|Cursor->Obj?| f) {
+		datastore.collection.find([:], f)
+	}
+	
+	override RepoPod toPod(Obj doc) {
+		datastore.fromMongoDoc(doc)
 	}
 
 	override RepoPod create(Obj entity) {

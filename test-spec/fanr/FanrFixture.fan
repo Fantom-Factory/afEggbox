@@ -43,7 +43,7 @@ abstract class FanrFixture : RepoFixture {
 		podFile.delete
 	}
 
-	Void queryRepo(Str url) {
+	virtual Void queryRepo(Str url) {
 		try {
 			response	:= fanrClient.query(url.toUri)
 			httpStatus	= "${response.statusCode} - ${response.statusMsg}"

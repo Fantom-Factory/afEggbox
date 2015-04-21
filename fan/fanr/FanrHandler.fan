@@ -35,11 +35,39 @@ const class FanrHandler {
 				sendErr(404, "Pod not found: $podName $podVersion")
 
 		// verify permissions
-		if (!auth.allowQuery(user, null))
+		if (!auth.allowQuery(user, spec))
 			sendForbiddenErr(user)
 
 		return Text.fromJsonObj(spec.meta)
     }
+
+	Text onQuery() {
+		user := authenticate
+
+		// if user can't query any pods, immediately bail
+		if (!auth.allowQuery(user, null))
+			sendForbiddenErr(user)
+
+		// query can be GET query part or POST body
+		query := (req.httpMethod == "GET" ? req.url.queryStr : req.body.str) ?: sendErr(400, "Missing '?query' in URL")
+
+		// get options
+		numVersions := Int.fromStr(req.headers["Fan-NumVersions"] ?: "3", 10, false) ?: 3
+
+		// do the query
+		PodSpec[]? pods := null
+		try {
+			pods = repo.query(query, numVersions)
+		} catch (ParseErr e) {
+			sendErr(400, e.toStr)
+		}
+
+		// filter out any pods the user is not allowed to query
+		pods = pods.findAll |pod| { auth.allowQuery(user, pod) }
+
+		// return JSON response
+		return Text.fromJsonObj(["pods":pods.map { it.meta }])
+	}
 
 	InStream onPod(Str podName, Version podVersion) {
 		user := authenticate
@@ -193,7 +221,7 @@ const class FanrHandler {
     	else sendErr(403, "Not allowed")
     }
 
-    private Void sendErr(Int code, Str msg) {
+    private Str? sendErr(Int code, Str msg) {
 		res.statusCode = code
 		throw ReProcessErr(Text.fromJsonObj(["err":msg]))
 	}
