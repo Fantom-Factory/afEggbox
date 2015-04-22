@@ -1,0 +1,42 @@
+doctype html
+html (xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg")
+	head
+		title ${pageTitle}
+
+		// http://getbootstrap.com/css/#overview-mobile
+		meta#viewport (name="viewport" content="initial-scale=1.0")
+
+		// Atom Feed
+		// link (rel="alternate" type="application/atom+xml" title="Fantom Factory" href="/feeds/all")
+
+		/* http://realfavicongenerator.net/
+			link (rel="shortcut icon" href="/favicon.ico")
+			link (rel="apple-touch-icon" sizes="57x57"   href="/favicons/apple-touch-icon-57x57.png")
+			link (rel="apple-touch-icon" sizes="60x60"   href="/favicons/apple-touch-icon-60x60.png")
+			link (rel="apple-touch-icon" sizes="72x72"   href="/favicons/apple-touch-icon-72x72.png")
+			link (rel="apple-touch-icon" sizes="76x76"   href="/favicons/apple-touch-icon-76x76.png")
+			link (rel="apple-touch-icon" sizes="114x114" href="/favicons/apple-touch-icon-114x114.png")
+			link (rel="apple-touch-icon" sizes="120x120" href="/favicons/apple-touch-icon-120x120.png")
+			link (rel="apple-touch-icon" sizes="144x144" href="/favicons/apple-touch-icon-144x144.png")
+			link (rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-touch-icon-152x152.png")
+			link (rel="icon" type="image/png" href="/favicons/favicon-16x16.png"   sizes="16x16")
+			link (rel="icon" type="image/png" href="/favicons/favicon-32x32.png"   sizes="32x32")
+			link (rel="icon" type="image/png" href="/favicons/favicon-96x96.png"   sizes="96x96")
+			link (rel="icon" type="image/png" href="/favicons/favicon-160x160.png" sizes="160x160")
+			link (rel="icon" type="image/png" href="/favicons/favicon-196x196.png" sizes="196x196")
+			meta (name="application-name"			content="Fantom-Factory")
+			meta (name="apple-mobile-web-app-title"	content="Fantom-Factory")
+			meta (name="msapplication-TileColor"	content="#00A300")
+			meta (name="msapplication-TileImage"	content="/favicons/mstile-144x144.png")
+			meta (name="msapplication-config"		content="/favicons/browserconfig.xml")
+
+		// -- afGa.renderGoogleAnalytics
+
+	body
+		-- app.renderTopNavBar
+
+		main#${pageId}.container
+			-- renderBody
+
+		-- app.renderFatFooter
+	
