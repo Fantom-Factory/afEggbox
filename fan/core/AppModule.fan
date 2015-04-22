@@ -14,8 +14,7 @@ class AppModule {
 
 	@Contribute { serviceType=Converters# }
 	static Void contributeConverters(Configuration config) {		
-		config.overrideValue(Map#,	config.createProxy(Converter#, OrderedMapConverter#))
-		config[RepoPodMeta#] = 		config.createProxy(Converter#, RepoPodMetaConverter#)
+		config[RepoPodMeta#] = 	config.createProxy(Converter#, RepoPodMetaConverter#)
 	}
 
 	@Contribute { serviceType=ApplicationDefaults# }

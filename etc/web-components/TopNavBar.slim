@@ -1,0 +1,86 @@
+nav.navbar.navbar-default.navbar-fixed-top (role="navigation")
+	div.container
+
+	/*
+		// Brand and toggle get grouped for better mobile display
+		div.navbar-header
+			button.navbar-toggle (type="button" data-toggle="collapse" data-target=".navbar-mobile")
+				span.sr-only Toggle navigation
+				span.icon-bar
+				span.icon-bar
+				span.icon-bar
+
+			a.navbar-brand (rel="home" href="/")
+				-- app.renderFactoryLogo
+				span.fantomFactoryText Fantom
+					span.factory -Factory
+
+		// Collect the nav links, forms, and other content for toggling
+		div.hidden-sm.hidden-md.hidden-lg.navbar-mobile.collapse
+			ul.nav.navbar-nav
+				li.dropdown
+					a [href="${pageUrl(PodsIndexPage#)}"] 
+						div.title <i class="fa fa-circle-o-notch"></i> Pods
+				li.dropdown
+					a [href="${pageUrl(ArticlesIndexPage#)}"]
+						div.title <i class="fa fa-book"></i> Articles
+		
+		div.navbar-desktop
+			ul.nav.navbar-nav.navbar-right
+
+				li.dropdown
+					// keep menus click free for now - so touch devices can expand the menu.
+					a.dropdown-toggle (href="${pageUrl(PodsIndexPage#)}")
+						i.visible-lg-inline.fa.fa-circle-o-notch
+						|  Pods <b class="caret"></b>
+					ul.dropdown-menu
+						li; a [href="${pageUrl(PodsIndexPage#)}"]
+							div.title -- All Pods --
+						li.divider
+						-- pods.featured.each |pod|
+							li; a [href="${format(pod, "url")}"] ${format(pod, "title")}
+
+				li.dropdown
+					a.dropdown-toggle (href="${pageUrl(ArticlesIndexPage#)}")
+						i.visible-lg-inline.fa.fa-book
+						|  Articles <b class="caret"></b>
+					ul.dropdown-menu
+						li; a (href="${pageUrl(ArticlesIndexPage#)}")
+							div.title -- All Articles --
+						li.divider
+						-- articles.featured.each |article|
+							li; a [href="${format(article, "url")}"] ${format(article, "title")}
+
+				li
+					form.navbar-form (role="search" action="${searchUrl}" method="GET")
+						div.input-group
+							input.form-control.input-sm (type="search" name="q" placeholder="Search")
+							div.input-group-btn
+								button.btn.btn-default.input-sm (type="submit")
+									i.fa.fa-search
+
+				li.dropdown.settings
+					a.dropdown-toggle (href="#")
+						i.fa.fa-cog; b.caret
+					ul.dropdown-menu
+						li
+							a (href="#" data-pulse-colour="#20ee23")
+								i.fa.fa-none.fa-fw
+								| Green Pulse
+						li
+							a (href="#" data-pulse-colour="#ffff23")
+								i.fa.fa-none.fa-fw
+								| Yellow Pulse
+						li	
+							a (href="#" data-pulse-colour="#00B0F4")
+								i.fa.fa-none.fa-fw
+								| Blue Pulse
+						li.divider
+						li
+							a (href="#" data-pulse-toggle)
+								i.fa.fa-check.fa-fw
+								| Pulse Background
+
+				/* li
+					a (class="atomFeed" href="${AtomFeedGenerator.feedUrl}" title="Subscribe to the Fantom-Factory Feed")
+						i.fa.fa-rss
