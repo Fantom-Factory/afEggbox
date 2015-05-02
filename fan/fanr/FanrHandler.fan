@@ -18,7 +18,7 @@ const class FanrHandler {
 	
 	Text onAuth() {
 		username	:= req.url.queryStr ?: "*"
-		user		:= userDao.get(username, false)
+		user		:= userDao.get(username.toUri, false)
 		salt		:= user?.userSalt
 		secrets		:= secretAlgorithms.join(",")
 		signatures	:= signatureAlgorithms.join(",")
@@ -122,7 +122,7 @@ const class FanrHandler {
 		if (username == null) return null
 
 		// check that user name is valid
-		user := userDao.get(username, false)
+		user := userDao.get(username.toUri, false)
 		if (user == null) 
 			sendUnauthErr("Invalid username: $username")
 

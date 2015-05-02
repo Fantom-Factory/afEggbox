@@ -41,6 +41,7 @@ class Build : BuildPod {
 			"afDuvet      1.0.8  - 1.0",
 			"afSitemap    1.0.0  - 1.0",
 			"afSlim       1.1.16 - 1.1",
+			"afFormBean   0+",
 
 			// ---- Test ------------------------
 			"util         1.0.67 - 1.0",
@@ -49,7 +50,7 @@ class Build : BuildPod {
 			"afFancordion 1.0.0  - 1.0"
 		]
 
-		srcDirs = [`test-spec/`, `test-spec/utils/`, `test-spec/fanr/`, `fan/`, `fan/web/`, `fan/web/pages/`, `fan/web/components/`, `fan/fanr/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`, `fan/bedframe/`]
+		srcDirs = [`test-spec/`, `test-spec/utils/`, `test-spec/fanr/`, `fan/`, `fan/web/`, `fan/web/services/`, `fan/web/pages/`, `fan/web/pages/user/`, `fan/web/components/`, `fan/fanr/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`, `fan/bedframe/`]
 		resDirs = [`etc/web-components/`, `etc/web-pages/`, `etc/web-static/`]
 	}
 }

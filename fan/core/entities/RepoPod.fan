@@ -7,14 +7,14 @@ using fanr
 class RepoPod {
 	@Inject private const RepoPodFileDao?	podFileDao
 
-	@Property	Str?		_id
-	@Property	Str			name
-	@Property	Version		version
-	@Property	Int			fileSize
-	@Property	Bool		isPublic
-	@Property	Str			ownerId
-	@Property	Str			aboutFandoc
-	@Property	RepoPodMeta	meta
+	@Property{}	Str?		_id
+	@Property{}	Str			name
+	@Property{}	Version		version
+	@Property{}	Int			fileSize
+	@Property{}	Bool		isPublic
+	@Property{}	Uri			ownerId
+	@Property{}	Str			aboutFandoc
+	@Property{}	RepoPodMeta	meta
 
 	@Inject
 	new make(|This|f) { f(this) }
@@ -32,7 +32,7 @@ class RepoPod {
 				it.meta			= meta
 				it.aboutFandoc	= findAboutFandoc(zip)
 				it.isPublic		= false	// FIXME: isPublic
-				it.ownerId		= user.userName
+				it.ownerId		= user.email
 			}
 
 		} finally {

@@ -4,7 +4,7 @@ using afButter
 ** A simple fanr client for testing the WebMod
 ** Shamelessly ripped and adapted from fanr::WebRepo
 class FanrClient {
-			Str?		username
+			Uri?		username		// actually an email
 			Str?		password		:= "password"
 			ButterDish	client
 
@@ -49,7 +49,7 @@ class FanrClient {
 		secret := Buf.fromBase64(this.secret)
 
 		// add signing headers which are included in signature
-		c.headers["Fanr-Username"]				= username
+		c.headers["Fanr-Username"]				= username.toStr
 		c.headers["Fanr-SecretAlgorithm"]		= secretAlgorithm
 		c.headers["Fanr-SignatureAlgorithm"]	= "HMAC-SHA1"
 		c.headers["Fanr-Ts"]					= (DateTime.nowUtc + tsSkew).toStr

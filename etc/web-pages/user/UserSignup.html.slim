@@ -1,0 +1,12 @@
+-- app.renderLayout("Sign Up")
+
+	h1	Sign Up
+	
+	-- if (flash.msgExists)
+		div.flashMsg ${flash.msg}
+
+	form (action="${signUpUrl}" method="post")
+		== formBean.renderErrors
+		== formBean.renderBean(signUpDetails)
+		div.formBean-submitRow
+			input (type="submit" name="login" value="Login")
