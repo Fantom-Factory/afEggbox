@@ -19,9 +19,9 @@ const mixin Layout : PrComponent {
 	@Inject abstract Bool	inProd
 
 	@InitRender
-	Void init(Str title, Str pageId) {
+	Void init(Str title) {
 		this.title 	= title
-		this.pageId = pageId
+		this.pageId = pageMeta.pageType.name.decapitalize
 		
 //		[`/css/bootstrap.min.css`, `/css/website.min.css`].map { injector.injectStylesheet.fromLocalUrl(it) }
 	}

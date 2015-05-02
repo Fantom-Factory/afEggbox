@@ -14,6 +14,7 @@ class AppModule {
 
 	@Contribute { serviceType=Converters# }
 	static Void contributeConverters(Configuration config) {		
+		config[RepoPodMeta#] = 	config.autobuild(RepoPodMetaConverter#)
 		config[RepoPodMeta#] = 	config.createProxy(Converter#, RepoPodMetaConverter#)
 	}
 

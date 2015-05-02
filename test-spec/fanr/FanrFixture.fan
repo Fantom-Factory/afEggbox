@@ -9,7 +9,7 @@ abstract class FanrFixture : RepoFixture {
 	Buf?		resBody
 	Str?		httpStatus
 	
-	Str username {
+	Uri username {
 		get { fanrClient.username }
 		set { fanrClient.username = it
 			createOrUpdateUser(newUser(it, fanrClient.password))
@@ -85,7 +85,7 @@ abstract class FanrFixture : RepoFixture {
 	}
 	
 	private Void createOrUpdateUser(RepoUser user) {
-		existing := userDao.findByUsername(user.userName)
+		existing := userDao.findByEmail(user.email)
 		if (existing != null) 
 			userDao.delete(existing)
 		userDao.create(user)

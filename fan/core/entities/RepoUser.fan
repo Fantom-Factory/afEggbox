@@ -4,29 +4,29 @@ using afMorphia
 @Entity { name = "user" }
 class RepoUser {
 	
-	@Property { name="_id" } Str	userName
-	@Property { }	Str				realName
-	@Property { }	Uri				email
+	@Property { name="_id" } Uri	email
+//	@Property { }	Str?			userName
+//	@Property { }	Str?			realName
 	@Property { }	Str				userSalt
 	@Property { }	Str				userSecret
 
 	@Inject
 	new make(|This| in) { in(this) }
 	
-	new makeNewUser(Str userName, Str password, |This| f) {
-		this.userName 	= userName
+	new makeNewUser(Uri email, Str password, |This|? f := null) {
+		this.email 		= email
 		this.userSalt	= Buf.random(16).toHex
 		this.userSecret	= generateSecret(password) 
-		f(this)
+		f?.call(this)
 	}
 	
 	Str generateSecret(Str password) {
-		Buf().print("${userName}:${userSalt}").hmac("SHA-1", password.toBuf).toBase64
+		Buf().print("${email}:${userSalt}").hmac("SHA-1", password.toBuf).toBase64
 	}
 	
 	RepoPod? filter(RepoPod pod) {
 		pod.isPublic ? pod : (
-			(pod.ownerId == userName) ? pod : null
+			(pod.ownerId == email) ? pod : null
 		)
 	}
 }
