@@ -4,14 +4,14 @@ using afMorphia
 @Entity { name = "user" }
 class RepoUser {
 	
-	@Property Str	_id
-	Uri	email {
-		get {  _id.toUri }
-		set {  _id = it.toStr }
-	}
+//	@Property Str	_id
+//	Uri	email {
+//		get {  _id.toUri }
+//		set {  _id = it.toStr }
+//	}
 		
 //	@Property { name="_id" } Str	email
-//	@Property { name="_id" } Uri	email
+	@Property { name="_id" } Uri	email
 	
 //	@Property { }	Str?			userName
 //	@Property { }	Str?			realName

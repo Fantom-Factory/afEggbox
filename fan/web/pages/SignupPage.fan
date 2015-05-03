@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 using afFormBean
 
-const mixin UserSignupPage : PrUserPage {
+const mixin SignupPage : PrUserPage {
 
 	@Inject abstract RepoUserDao	userDao
 	@Inject abstract UserSession	userSession

@@ -15,6 +15,14 @@
 ** *********************
 ** Acceptance tests for 'fanr' functionality:
 ** 
-**  - [Fanr tests]`run:TestFanr#`
+**  - [Fanr tests]`http:run:TestFanr#`
+**
+** 
+**  
+** Web Acceptance Tests
+** ********************
+** Acceptance tests for web site functionality:
+** 
+**  - [Fanr tests]`run:TestWeb#`
 ** 
 class RepoTests : RepoFixture { }
