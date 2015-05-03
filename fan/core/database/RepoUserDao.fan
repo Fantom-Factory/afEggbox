@@ -28,7 +28,7 @@ internal const class RepoUserDaoImpl : RepoUserDao {
 	}
 
 	override RepoUser? findByEmail(Uri email) {
-		datastore.query(field(RepoUser#email.name).eqIgnoreCase(email.toStr)).findOne(false)
+		datastore.query(field("_id").eqIgnoreCase(email.toStr)).findOne(false)
 	}
 
 //	override RepoUser? findByUsername(Str username) {

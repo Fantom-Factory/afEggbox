@@ -25,7 +25,9 @@ abstract class FanrFixture : RepoFixture {
 
 	override Void setupFixture() {
 		super.setupFixture
-		fanrClient = FanrClient() { it.client = this.client }
+		fanrClient = FanrClient() {
+			it.client = this.client
+		}
 	}
 
 	File podFile() {
@@ -51,6 +53,7 @@ abstract class FanrFixture : RepoFixture {
 			
 		} catch (BadStatusErr err) {
 			httpStatus = "${err.statusCode} - ${err.statusMsg}"
+			jsonObj		= ["code":err.statusCode, "msg":err.statusMsg]
 		}
 	}
 
@@ -63,6 +66,7 @@ abstract class FanrFixture : RepoFixture {
 			
 		} catch (BadStatusErr err) {
 			httpStatus = "${err.statusCode} - ${err.statusMsg}"
+			jsonObj		= ["code":err.statusCode, "msg":err.statusMsg]
 		} finally {
 			podFile.delete
 		}
@@ -86,7 +90,7 @@ abstract class FanrFixture : RepoFixture {
 	
 	private Void createOrUpdateUser(RepoUser user) {
 		existing := userDao.findByEmail(user.email)
-		if (existing != null) 
+		if (existing != null)
 			userDao.delete(existing)
 		userDao.create(user)
 	}

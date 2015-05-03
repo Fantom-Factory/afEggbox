@@ -27,9 +27,13 @@ class TestFanrAuth : FanrFixture {
 	override Void verifyJson(Str json) {
 		expectedJsonObj := (Str:Obj?) JsonInStream(json.in).readJson
 		expectedJsonObj	["salt"] = "salt"
-		jsonObj  		["salt"] = "salt"
 		expectedJsonObj	["ts"]   = "timestamp"
-		jsonObj  		["ts"]   = "timestamp"
-		verifyEq(expectedJsonObj.toStr, jsonObj.toStr)	// don't compare Map types
+		if (jsonObj != null) {
+			if (jsonObj.containsKey("salt"))
+				jsonObj  ["salt"] = "salt"
+			if (jsonObj.containsKey("ts"))
+				jsonObj  ["ts"]   = "timestamp"
+		}
+		verifyEq(expectedJsonObj.toStr, jsonObj?.toStr)	// don't compare Map types
 	}
 }
