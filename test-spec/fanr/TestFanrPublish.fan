@@ -50,6 +50,7 @@ class TestFanrPublish : FanrFixture {
 	
 	Void createUser() {
 		username = `steve.eynon`
+		password = "password"
 	}
 	
 	Obj findPod(Str podName) {

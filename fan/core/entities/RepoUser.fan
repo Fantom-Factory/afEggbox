@@ -4,7 +4,15 @@ using afMorphia
 @Entity { name = "user" }
 class RepoUser {
 	
-	@Property { name="_id" } Uri	email
+	@Property Str	_id
+	Uri	email {
+		get {  _id.toUri }
+		set {  _id = it.toStr }
+	}
+		
+//	@Property { name="_id" } Str	email
+//	@Property { name="_id" } Uri	email
+	
 //	@Property { }	Str?			userName
 //	@Property { }	Str?			realName
 	@Property { }	Str				userSalt
@@ -16,7 +24,8 @@ class RepoUser {
 	new makeNewUser(Uri email, Str password, |This|? f := null) {
 		this.email 		= email
 		this.userSalt	= Buf.random(16).toHex
-		this.userSecret	= generateSecret(password) 
+		this.userSecret	= generateSecret(password)
+//		this.userName	= email.userInfo
 		f?.call(this)
 	}
 	

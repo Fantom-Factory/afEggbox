@@ -8,7 +8,7 @@ class FanrClient {
 			Str?		password		:= "password"
 			ButterDish	client
 
-	private Uri			uri				:= `/`
+	private Uri			baseUrl			:= `/fanr/`
 	private Str?		secret			// base64 string
 	private Str?		secretAlgorithm	// algorithm we picked for secret
 	private Duration	tsSkew	:= 0sec	// diff b/w my clock and server clock
@@ -36,7 +36,7 @@ class FanrClient {
 	}
 
 	private ButterRequest prepare(Str method, Uri path) {
-		c := ButterRequest(uri + path)
+		c := ButterRequest(baseUrl + path.relTo(`/`))
 		c.method = method
 		if (username != null) sign(c)
 		return c
@@ -76,7 +76,7 @@ class FanrClient {
 	private Void initForSigning() {
 		// if we don't have HMAC, then first thing we need to do is
 		// ping server to get the salt for our username
-		c	:= client.get(uri + `auth?$username`)
+		c	:= client.get(baseUrl + `auth?$username`)
 		res := c.body.jsonMap
 
 		// get timestamp and store away delta so our requests
