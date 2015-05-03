@@ -7,6 +7,9 @@ using afMorphia
 class AppModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
+		
+		defs.add(UserSession#)
+		
 		defs.add(RepoPodDao#)
 		defs.add(RepoPodFileDao#)
 		defs.add(RepoUserDao#)
