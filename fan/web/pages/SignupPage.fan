@@ -11,7 +11,7 @@ const mixin SignupPage : PrUserPage {
 //	@Inject	abstract SystemActivity	systemActivity
 //	@Inject abstract UserActivity	userActivity
 //	@Inject	abstract FlashMsg		flash
-	@Inject { type=LoginDetails# } 
+	@Inject { type=SignUpDetails# } 
 			abstract FormBean		formBean
 			abstract SignUpDetails?	signUpDetails
 
