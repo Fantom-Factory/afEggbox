@@ -7,7 +7,6 @@ using afFormBean
 const mixin SignupPage : PrPage {
 
 	@Inject abstract RepoUserDao	userDao
-	@Inject abstract UserSession	userSession
 //	@Inject	abstract SystemActivity	systemActivity
 //	@Inject abstract UserActivity	userActivity
 //	@Inject	abstract FlashMsg		flash

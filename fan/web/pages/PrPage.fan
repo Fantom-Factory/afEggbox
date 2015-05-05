@@ -7,8 +7,6 @@ using afDuvet
 @Abstract @Page
 const mixin PrPage : PrComponent {
 
-	@Inject	abstract PageMeta 		pageMeta
-	
 	Bool isActive() {
 		this.typeof.fits(pageMeta.pageType) 
 	}

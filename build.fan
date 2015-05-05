@@ -39,9 +39,10 @@ class Build : BuildPod {
 			"afEfanXtra   1.1.2  - 1.1",
 			"afPillow     1.0.22 - 1.0",
 			"afDuvet      1.0.8  - 1.0",
-			"afSitemap    1.0.0  - 1.0",
 			"afSlim       1.1.16 - 1.1",
 			"afFormBean   0+",
+			"afColdFeet   1.3.4  - 1.3",
+			"afSitemap    1.0.0  - 1.0",
 
 			// ---- Test ------------------------
 			"util         1.0.67 - 1.0",

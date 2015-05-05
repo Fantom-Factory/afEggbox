@@ -11,6 +11,8 @@ class WebModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
 		defs.add(ErrorSkin#, BootstrapErrorSkin#)
+		
+		defs.add(Backdoor#)
 	}
 
 	@Contribute { serviceType=ScriptModules# }
@@ -26,6 +28,11 @@ class WebModule {
 		config.overrideValue("email",		BootstrapInputSkin())
 		config.overrideValue("text",		BootstrapInputSkin())
 		config.overrideValue("password",	BootstrapInputSkin())
+	}
+	
+	@Contribute { serviceType=MiddlewarePipeline# }
+	static Void contributeBedSheetMiddleware(Configuration config) {
+		config.set("AuthMiddleware", config.autobuild(AuthenticationMiddleware#)).before("afBedSheet.routes")
 	}
 	
 //	@Contribute { serviceType=RequireJsConfigTweaks# }

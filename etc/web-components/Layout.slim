@@ -35,7 +35,10 @@ html (xmlns:svg="http://www.w3.org/2000/svg")
 		// -- afGa.renderGoogleAnalytics
 
 	body
-		-- app.renderTopNavBar
+		-- if (isLoggedIn)
+			-- app.renderTopNavBarPrivate
+		-- else
+			-- app.renderTopNavBarPublic
 
 		main#${pageId}.container
 			-- renderBody
