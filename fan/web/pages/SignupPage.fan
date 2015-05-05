@@ -20,13 +20,13 @@ const mixin SignupPage : PrUserPage {
 		signUpDetails = SignUpDetails()
 		formBean.messages["field.submit.label"] = "Sign Up"
 	}
-		
+
 	Str signUpUrl() {
-		pageMeta.eventUrl(#onLogin).encode
+		pageMeta.eventUrl(#onSignUp).encode
 	}
-	
+
 	@PageEvent { name=""; httpMethod="POST" }
-	Redirect? onLogin() {
+	Redirect? onSignUp() {
 		if (!formBean.validateForm(httpRequest.body.form))
 			return null
 
@@ -38,12 +38,12 @@ const mixin SignupPage : PrUserPage {
 			formBean.errorMsgs.add(Msgs.signup_emailTaken(user.email))
 			return null
 		}
-		
+
+		user = userDao.create(signUpDetails.toUser)
 		userSession.loginAs(user)
 //		userActivity.logLoggedIn
 		return Redirect.afterPost(pages[UserPodsPage#].pageUrl)
 	}
-
 }
 
 class SignUpDetails {
@@ -54,4 +54,7 @@ class SignUpDetails {
 	@HtmlInput { type="password"; required=true; minLength=3; maxLength=128 }
 	Str?	password
 
+	RepoUser toUser() {
+		RepoUser(email, password)
+	}
 }

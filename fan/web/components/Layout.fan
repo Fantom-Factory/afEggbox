@@ -23,7 +23,9 @@ const mixin Layout : PrComponent {
 		this.title 	= title
 		this.pageId = pageMeta.pageType.name.decapitalize
 		
-//		[`/css/bootstrap.min.css`, `/css/website.min.css`].map { injector.injectStylesheet.fromLocalUrl(it) }
+		injector.injectStylesheet.fromLocalUrl(`/css/website.min.css`)
+//		injector.injectScript.fromLocalUrl(`/js/bootstrap.min.js`)
+		injector.injectRequireModule("bootstrap")
 	}
 	
 	Str pageTitle() {
