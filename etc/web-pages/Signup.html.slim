@@ -6,7 +6,7 @@
 		div.flashMsg ${flash.msg}
 
 	div.col-md-4
-		form (action="${signUpUrl}" method="post")
+		form (action="${signUpUrl}" method="post" novalidate)
 			== formBean.renderErrors
 			== formBean.renderBean(signUpDetails)
 			div.pull-right

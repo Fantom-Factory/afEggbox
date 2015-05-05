@@ -4,10 +4,15 @@ using afIocEnv
 using afBedSheet
 using afDuvet
 using afFormBean::InputSkins
+using afFormBean::ErrorSkin
 
 @SubModule { modules=[BedFrameModule#] }
 class WebModule {
 	
+	static Void defineServices(ServiceDefinitions defs) {
+		defs.add(ErrorSkin#, BootstrapErrorSkin#)
+	}
+
 	@Contribute { serviceType=ScriptModules# }
 	static Void contributeScriptModules(Configuration config) {
 		config.add(ScriptModule("jquery"		).atUrl(`//code.jquery.com/jquery-1.11.2.min.js`).fallbackToUrl(`/js/jquery-1.11.2.min.js`))
@@ -18,9 +23,9 @@ class WebModule {
 	
 	@Contribute { serviceType=InputSkins# }
 	static Void contributeInputSkins(Configuration config) {
-		config.overrideValue("email",		TextInputSkin())
-		config.overrideValue("text",		TextInputSkin())
-		config.overrideValue("password",	TextInputSkin())
+		config.overrideValue("email",		BootstrapInputSkin())
+		config.overrideValue("text",		BootstrapInputSkin())
+		config.overrideValue("password",	BootstrapInputSkin())
 	}
 	
 //	@Contribute { serviceType=RequireJsConfigTweaks# }
