@@ -1,5 +1,6 @@
 using afIoc::Inject
 using afPillow::Pages
+using afPillow::PageMeta
 using afEfanXtra::Abstract
 using afEfanXtra::EfanComponent
 using afDuvet::HtmlInjector
@@ -13,6 +14,8 @@ const mixin PrComponent : EfanComponent {
 	@Inject abstract HtmlInjector	injector
 	@Inject abstract HttpRequest	httpRequest
 	@Inject	abstract FileHandler	fileHandler
+	@Inject	abstract PageMeta		pageMeta
+	@Inject	abstract UserSession	userSession
 	
 //	Str assetUrl(Uri localUrl) {
 //		fileHandler.fromLocalUrl(localUrl).clientUrl.encode 
@@ -37,5 +40,9 @@ const mixin PrComponent : EfanComponent {
 		}
 
 		throw ArgErr("WTF is a ${obj.typeof}??? Hints: ${hints} - $obj")
+	}
+	
+	Bool isLoggedIn() {
+		userSession.isLoggedIn
 	}
 }

@@ -8,7 +8,6 @@ using afDuvet
 
 const mixin Layout : PrComponent {
 	
-	@Inject abstract PageMeta		pageMeta
 	@Inject abstract HttpRequest	httpReq
 	@Inject abstract IocEnv			iocEnv
 

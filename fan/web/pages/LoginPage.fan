@@ -7,7 +7,6 @@ using afFormBean
 const mixin LoginPage : PrPage {
 
 	@Inject abstract RepoUserDao	userDao
-	@Inject abstract UserSession	userSession
 //	@Inject	abstract SystemActivity	systemActivity
 //	@Inject abstract UserActivity	userActivity
 //	@Inject	abstract FlashMsg		flash
@@ -48,8 +47,8 @@ const mixin LoginPage : PrPage {
 
 class LoginDetails {
 	
-	@HtmlInput { type="text"; required=true; minLength=3; maxLength=128 }
-	Uri?	email	// type="text" so I can enter non-emails in the browser
+	@HtmlInput { type="email"; required=true; minLength=3; maxLength=128 }
+	Uri?	email
 
 	@HtmlInput { type="password"; required=true; minLength=3; maxLength=128 }
 	Str?	password
