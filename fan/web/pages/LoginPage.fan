@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 using afFormBean
 
-const mixin UserLoginPage : PrUserPage {
+const mixin LoginPage : PrPage {
 
 	@Inject abstract RepoUserDao	userDao
 	@Inject abstract UserSession	userSession
@@ -33,7 +33,7 @@ const mixin UserLoginPage : PrUserPage {
 		loginDetails = formBean.createBean
 		
 		user := userDao.findByEmail(loginDetails.email)
-		if (user == null || user.generateSecret(loginDetails.password) != loginDetails.password) {
+		if (user == null || user.generateSecret(loginDetails.password) != user.userSecret) {
 //			systemActivity.logFailedLogin(loginDetails.email, loginDetails.password)
 			formBean.errorMsgs.add(Msgs.login_incorrectDetails)
 			return null
@@ -41,7 +41,7 @@ const mixin UserLoginPage : PrUserPage {
 		
 		userSession.loginAs(user)
 //		userActivity.logLoggedIn
-		return Redirect.afterPost(pages[UserPodsPage#].pageUrl)
+		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 	}
 
 }

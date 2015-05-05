@@ -15,7 +15,7 @@ using afBounce
 **   ----------------------  --------
 **   micky.mouse@disney.com  password
 ** 
-** and click [Sign Up]`exe:clickSignUp`
+** and click [Sign Up]`exe:click("SignUp")`
 ** then a new user should be saved to the database with the values:
 ** 
 **   table:
@@ -25,15 +25,11 @@ using afBounce
 **   ----  
 **   micky.mouse@disney.com 
 ** 
-** On signing up I should be taken to the [user details page]`eq:renderedPageName` and see the message:
+** On signing up I should be taken to the [My Details Page]`eq:renderedPageName` and see the message:
 ** 
 **   eq:flashMsg
 **   Quote by 'ED 209' was successfully created
 class TestSignUp : WebFixture {
-	
-	Void clickSignUp() {
-		SubmitButton("[name=signUp]").submitForm
-	}
 
 	RepoUser user() {
 		userDao.findAll.first

@@ -17,10 +17,10 @@ const mixin PrComponent : EfanComponent {
 //	Str assetUrl(Uri localUrl) {
 //		fileHandler.fromLocalUrl(localUrl).clientUrl.encode 
 //	}
-//
-//	Str pageUrl(Type pageType) {
-//		pages[pageType].pageUrl.encode
-//	}
+
+	Str pageUrl(Type pageType) {
+		pages[pageType].pageUrl.encode
+	}
 	
 	** TODO: we could make this a contributable service
 	** this is great, because you can't add format methods to Dates and other objs outside of your control

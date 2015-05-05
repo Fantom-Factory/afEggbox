@@ -25,5 +25,13 @@ abstract class RepoFixture : FixtureTest {
 
 	RepoUser newUser(Uri email := `Wotever`, Str password := "password") {
 		RepoUser(email, password)
-	}	
+	}
+	
+
+	Void createOrUpdateUser(RepoUser user) {
+		existing := userDao.findByEmail(user.email)
+		if (existing != null)
+			userDao.delete(existing)
+		userDao.create(user)
+	}
 }
