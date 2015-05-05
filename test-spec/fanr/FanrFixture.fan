@@ -87,11 +87,4 @@ abstract class FanrFixture : RepoFixture {
 		expectedJsonObj := JsonInStream(json.in).readJson
 		verifyEq(expectedJsonObj.toStr, jsonObj.toStr)	// don't compare Map types
 	}
-	
-	private Void createOrUpdateUser(RepoUser user) {
-		existing := userDao.findByEmail(user.email)
-		if (existing != null)
-			userDao.delete(existing)
-		userDao.create(user)
-	}
 }

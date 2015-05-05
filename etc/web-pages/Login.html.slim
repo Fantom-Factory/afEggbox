@@ -1,0 +1,13 @@
+-- app.renderLayout("Login")
+
+	h1.page-header	Login
+	
+	/*-- if (flash.msgExists)
+		div.flashMsg ${flash.msg}
+
+	div.col-md-4
+		form (action="${loginUrl}" method="post")
+			== formBean.renderErrors
+			== formBean.renderBean(loginDetails)
+			div.pull-right
+				button.btn.btn-primary (type="submit" name="login") Login

@@ -1,5 +1,0 @@
-
-const mixin UserPodsPage : PrUserPage {
-	
-	
-}

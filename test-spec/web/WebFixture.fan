@@ -10,13 +10,6 @@ abstract class WebFixture : RepoFixture {
 	override Void setupFixture() {
 		super.setupFixture
 	}
-
-	private Void createOrUpdateUser(RepoUser user) {
-		existing := userDao.findByEmail(user.email)
-		if (existing != null)
-			userDao.delete(existing)
-		userDao.create(user)
-	}
 	
     // Other common / reusable methods such as :
 	
@@ -50,9 +43,13 @@ abstract class WebFixture : RepoFixture {
 	}
 	
 	Str renderedPageName() {
-		renderedPageType.name.toDisplayName.lower
+		renderedPageType.name.toDisplayName
 	}
 	
+	Void click(Str name) {
+		SubmitButton("[name=${name}]").submitForm
+	}
+
 //	Str renderComponent(Type componentType, Obj[] context) {
 //		html := efanXtra.component(componentType).render(context)
 //		Actor.locals["afBounce.sizzleDoc"] = SizzleDoc.fromStr(html)

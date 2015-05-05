@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 using afFormBean
 
-const mixin SignupPage : PrUserPage {
+const mixin SignupPage : PrPage {
 
 	@Inject abstract RepoUserDao	userDao
 	@Inject abstract UserSession	userSession
@@ -42,7 +42,7 @@ const mixin SignupPage : PrUserPage {
 		user = userDao.create(signUpDetails.toUser)
 		userSession.loginAs(user)
 //		userActivity.logLoggedIn
-		return Redirect.afterPost(pages[UserPodsPage#].pageUrl)
+		return Redirect.afterPost(pages[MyDetailsPage#].pageUrl)
 	}
 }
 
