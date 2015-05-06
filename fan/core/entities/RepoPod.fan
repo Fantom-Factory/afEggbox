@@ -21,7 +21,7 @@ class RepoPod {
 	
 	static new fromBuf(RepoUser user, Buf podBuf) {
 		contents:= readContents(podBuf) 
-		props 	:= contents[`/meta.props`]?.readProps ?: throw Err("Missing meta.props")
+		props 	:= contents[`/meta.props`]?.readProps ?: throw Err("Invalid Pod File - does not contain `/meta.props`")
 		meta	:= RepoPodMeta(props)
 
 		return RepoPod() {

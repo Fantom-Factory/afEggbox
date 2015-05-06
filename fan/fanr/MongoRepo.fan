@@ -19,10 +19,14 @@ const class MongoRepo {
 	}
 
 	RepoPod publish(RepoUser? user, InStream podStream) {
-		podBuf	:= Buf(100 * 1024)	// Most pods are less than 10Kb
-		bytes	:= podStream.readBuf(podBuf, maxPodSize)	
-		if (bytes >= maxPodSize - 1)	// ensure there are no 'off by one' errors!
-			throw Err("Pod exceed maximum size of " + maxPodSize.toLocale("B"))
+		podBuf		:= Buf(100 * 1024)	// Most pods are less than 100Kb
+		bytesRead	:= (Int?) 0
+		while (bytesRead != null && podBuf.size < maxPodSize) {
+			// MultiPartInStream reads in chunks at a time
+			bytesRead = podStream.readBuf(podBuf, maxPodSize - podBuf.size)
+		}
+		if (podBuf.size >= maxPodSize - 1)	// ensure there are no 'off by one' errors!
+			throw Err("Pod exceeds maximum size of " + maxPodSize.toLocale("B"))
 		pod 	:= podDao.create(RepoPod(user, podBuf.flip))
 		podFile	:= podFileDao.create(RepoPodFile(pod, podBuf))
 		return pod

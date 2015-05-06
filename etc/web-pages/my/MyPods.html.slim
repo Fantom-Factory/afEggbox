@@ -6,20 +6,41 @@
 		p	You have no pods! Why don't you try uploading one?
 	
 	-- else
-		table.table.table-striped.table-hover.table-condensed.table-responsive
-			tr
-				th	Name
-				th	Version
-				th	Updated On
-				th	Downloads
-				th	Summary
-			-- allPods.each |pod|
+		div.table-responsive
+			table.table.table-striped.table-condensed
 				tr
-					th	${pod.name}
-					th	${pod.version}
-					th	${pod.builtOn}
-					th	${downloads(pod)}
-					th	${pod.meta.summary}
+					th	Name
+					th	Version
+					th	Built On
+					th	Downloads
+					th	Summary
+				-- allPods.each |pod|
+					tr
+						td	${pod.name}
+						td	${pod.version}
+						td	${pod.builtOn.toLocale("DDD MMM YYYY")}
+						td	${downloads(pod)}
+						td	${pod.meta.summary}
 
 
-	h2	Upload a Pod
+
+	p	&nbsp;
+
+	h2	Upload Pod File
+
+	div.row
+		div.col-sm-6
+
+			form.clearfix (action="${uploadUrl}" enctype="multipart/form-data" method="post")
+				== formBean.renderErrors
+				div.form-group
+					label (for="podFile")	Pod File
+					div.input-group
+						span.input-group-btn
+							span.btn.btn-info.btn-file	Browse&hellip; 
+								input#podFile (name="podFile" type="file" accept=".pod")
+						input.form-control (type="text" placeholder="No file selected..." disabled)
+
+				div.pull-right
+					button.btn.btn-primary (type="submit" name="upload") Upload
+					
