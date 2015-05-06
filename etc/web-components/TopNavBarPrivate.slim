@@ -11,9 +11,10 @@ nav.navbar.navbar-default.navbar-fixed-top
 
 		div#navbar.navbar-collapse.collapse
 			ul.nav.navbar-nav
-				li;			a (href="#")	Pods
+				== pageLink(PodsPage#,	"Pods")
+
 			ul.nav.navbar-nav.navbar-right
-				li; 		a (href="#")	Help
+				//li; 		a (href="#")	Help
 				li.dropdown
 					a.dropdown-toggle (href="#" data-toggle="dropdown" role="button" aria-expanded="false")	My Stuff
 						span.caret
