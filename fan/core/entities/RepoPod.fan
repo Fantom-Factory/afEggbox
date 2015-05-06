@@ -11,6 +11,7 @@ class RepoPod {
 	@Property{}	Str			name
 	@Property{}	Version		version
 	@Property{}	Int			fileSize
+	@Property{}	DateTime	builtOn
 	@Property{}	Bool		isPublic
 	@Property{}	Uri			ownerId
 	@Property{}	Str			aboutFandoc
@@ -107,6 +108,10 @@ class RepoPodMeta {
 		meta.keys.exclude { specialKeys.contains(it) }.sort.each { m[it] = meta[it] }
 		
 		this.meta = m
+	}
+	
+	Str summary() {
+		meta["pod.summary"]
 	}
 	
 	@Operator

@@ -23,6 +23,10 @@ const mixin SignupPage : PrPage {
 	Str signUpUrl() {
 		pageMeta.eventUrl(#onSignUp).encode
 	}
+	
+	Str formCss() {
+		formBean.hasErrors ? "form-error" : "form-okay"
+	}
 
 	@PageEvent { name=""; httpMethod="POST" }
 	Redirect? onSignUp() {

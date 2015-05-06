@@ -24,6 +24,10 @@ const mixin LoginPage : PrPage {
 		pageMeta.eventUrl(#onLogin).encode
 	}
 	
+	Str formCss() {
+		formBean.hasErrors ? "form-error" : "form-okay"
+	}
+
 	@PageEvent { name=""; httpMethod="POST" }
 	Redirect? onLogin() {
 		if (!formBean.validateForm(httpRequest.body.form))
