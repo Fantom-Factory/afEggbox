@@ -4,9 +4,12 @@ using util
 ** ####
 ** Web tests
 ** 
+** Login / Authentication Tests
+** ****************************
 **  - [Sign Up]`run:TestSignUp#`: 
 **  - [Login Fail]`run:TestLoginFail#`: 
 **  - [Login Success]`run:TestLoginSuccess#`: 
-**  - [Basic Auth]`run:TestBasicAuth#`: 
+**  - [Protect my screens]`run:TestProtectMyScreens#`: 
 ** 
+**  - [Pods Page]`run:TestPodsPage#`: 
 class TestWeb : RepoFixture { }

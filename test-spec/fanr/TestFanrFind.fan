@@ -31,7 +31,8 @@ using util
 **       "pod.name"    : "xml",
 **       "pod.version" : "1.0.67",
 **       "pod.depends" : "sys 1.0",
-**       "pod.summary" : "XML Parser and Document Modelling"
+**       "pod.summary" : "XML Parser and Document Modelling",
+**       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **   }
 **
 ** 

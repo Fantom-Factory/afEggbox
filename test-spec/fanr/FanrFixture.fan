@@ -28,21 +28,21 @@ abstract class FanrFixture : RepoFixture {
 		fanrClient = FanrClient() {
 			it.client = this.client
 		}
+		meta["build.ts"] = "2006-06-06T06:06:00Z UTC"
 	}
 
-	File podFile() {
-		podFile := File.createTemp("afPodRepo_", ".pod").deleteOnExit
-		zip := Zip.write(podFile.out)
+	Buf podBuf() {
+		podBuf := Buf()
+		zip := Zip.write(podBuf.out)
 		zip.writeNext(`meta.props`).writeProps(meta)
 		zip.close
-		return podFile
+		return podBuf.flip
 	}
 	
 	Void createPod() {
-		podFile := podFile
-		pod := podDao.create(RepoPod(podFile, newUser))
-		podFileDao.create(RepoPodFile(pod, podFile))
-		podFile.delete
+		podBuf := podBuf
+		pod := podDao.create(RepoPod(newUser, podBuf))
+		podFileDao.create(RepoPodFile(pod, podBuf))
 	}
 
 	virtual Void queryRepo(Str url) {
@@ -58,7 +58,7 @@ abstract class FanrFixture : RepoFixture {
 	}
 
 	Void publishToRepo() {
-		podFile	:= podFile
+		podFile	:= podBuf
 		try {
 			response	:= fanrClient.publish(podFile)
 			httpStatus	= "${response.statusCode} - ${response.statusMsg}"
@@ -67,8 +67,6 @@ abstract class FanrFixture : RepoFixture {
 		} catch (BadStatusErr err) {
 			httpStatus = "${err.statusCode} - ${err.statusMsg}"
 			jsonObj		= ["code":err.statusCode, "msg":err.statusMsg]
-		} finally {
-			podFile.delete
 		}
 	}
 
@@ -83,8 +81,8 @@ abstract class FanrFixture : RepoFixture {
 		}
 	}
 
-	virtual Void verifyJson(Str json) {
-		expectedJsonObj := JsonInStream(json.in).readJson
-		verifyEq(expectedJsonObj.toStr, jsonObj.toStr)	// don't compare Map types
+	virtual Void verifyJson(Str jsonStr) {
+		expected := (Str:Obj?) JsonInStream(jsonStr.in).readJson
+		verifyEq(expected.toStr, jsonObj.toStr)	// don't compare Map types
 	}
 }

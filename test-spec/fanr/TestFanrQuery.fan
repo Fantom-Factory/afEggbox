@@ -31,12 +31,14 @@ using util
 **       "pod.version" : "2.06",
 **       "pod.depends" : "sys 1.0",
 **       "pod.summary" : "A powerful Dependency Injection / Inversion Of Control framework",
+**       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **     },
 **     {
 **       "pod.name"    : "afIoc",
 **       "pod.version" : "1.69",
 **       "pod.depends" : "sys 1.0",
 **       "pod.summary" : "A powerful Dependency Injection / Inversion Of Control framework",
+**       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **     }
 **   ]
 ** }

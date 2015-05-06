@@ -6,13 +6,12 @@ class RepoPodFile {
 	@Property	Str		_id
 	@Property	Buf		data
 	
-	@Inject	// TODO: delete this!
 	new make(|This|f) { f(this) }
 	
-	static new fromFile(RepoPod pod, File file) {
+	static new fromFile(RepoPod pod, Buf podBuf) {
 		RepoPodFile {
 			it._id	= pod._id
-			it.data	= file.readAllBuf
+			it.data	= podBuf.seek(0)
 		}
 	}
 }

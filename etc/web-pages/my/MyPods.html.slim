@@ -2,17 +2,24 @@
 
 	h1.page-header	Pods
 
-	table.table.table-striped.table-hover.table-condensed.table-responsive
-		tr
-			th	Name
-			th	Version
-			th	Updated On
-			th	Downloads
-			th	Summary
-		-- allPods.each |pod|
+	-- if (allPods.isEmpty)
+		p	You have no pods! Why don't you try uploading one?
+	
+	-- else
+		table.table.table-striped.table-hover.table-condensed.table-responsive
 			tr
-				th	${pod.name}
-				th	${pod.version}
-				th	${pod.builtOn}
-				th	${downloads(pod)}
-				th	${pod.meta.summary}
+				th	Name
+				th	Version
+				th	Updated On
+				th	Downloads
+				th	Summary
+			-- allPods.each |pod|
+				tr
+					th	${pod.name}
+					th	${pod.version}
+					th	${pod.builtOn}
+					th	${downloads(pod)}
+					th	${pod.meta.summary}
+
+
+	h2	Upload a Pod

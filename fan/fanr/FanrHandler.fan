@@ -74,28 +74,9 @@ const class FanrHandler {
 		if (user == null)
 			sendForbiddenErr(user)
 
-		// allocate temp file
-		tempName := "fanr-" + DateTime.now.toLocale("YYMMDDhhmmss") + "-" + Buf.random(4).toHex + ".pod"
-		tempFile := tempDir + tempName.toUri
+		pod := repo.publish(user, req.body.in)
 
-		try {
-			tempOut := tempFile.out
-			len  := req.headers.contentLength?.toInt ?: null
-			try		req.body.in.pipe(tempOut, len)
-			finally	tempOut.close
-
-			// check if user can publish this specific pod
-//			spec := PodSpec.load(tempFile)
-//			if (!auth.allowPublish(user, spec))
-//				sendForbiddenErr(user)
-
-			pod := repo.publish(user, tempFile)
-
-			return Text.fromJsonObj(["published" : pod.toJsonObj])
-			
-		} finally {
-			try { tempFile.delete } catch { }
-		}
+		return Text.fromJsonObj(["published" : pod.toJsonObj])			
 	}
 
 	Text onQuery() {

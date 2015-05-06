@@ -34,7 +34,8 @@ using util
 **           "pod.name"    : "acmeWidgets",
 **           "pod.version" : "1.3.68",
 **           "pod.depends" : "sys 1.0; gfx 1.0; fwt 1.0",
-**           "pod.summary" : "Widgets for everyone!"
+**           "pod.summary" : "Widgets for everyone!",
+**           "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **       }
 **   }
 ** 
