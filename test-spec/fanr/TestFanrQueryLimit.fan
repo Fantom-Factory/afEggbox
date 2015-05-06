@@ -31,19 +31,22 @@ using util
 **       "pod.name"    : "afPod1",
 **       "pod.version" : "1.01",
 **       "pod.depends" : "sys 1.0",
-**       "pod.summary" : "pod-1"
+**       "pod.summary" : "pod-1",
+**       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **     },
 **     {
 **       "pod.name"    : "afPod2",
 **       "pod.version" : "1.02",
 **       "pod.depends" : "sys 1.0",
-**       "pod.summary" : "pod-2"
+**       "pod.summary" : "pod-2",
+**       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **     },
 **     {
 **       "pod.name"    : "afPod3",
 **       "pod.version" : "1.03",
 **       "pod.depends" : "sys 1.0",
-**       "pod.summary" : "pod-3"
+**       "pod.summary" : "pod-3",
+**       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **     }
 **   ]
 ** }
@@ -61,7 +64,8 @@ using util
 **       "pod.name"    : "afPod1",
 **       "pod.version" : "1.01",
 **       "pod.depends" : "sys 1.0",
-**       "pod.summary" : "pod-1"
+**       "pod.summary" : "pod-1",
+**       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **     }
 **   ]
 ** }

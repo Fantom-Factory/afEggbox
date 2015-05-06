@@ -6,6 +6,7 @@ using afBedSheet
 ** My version of fanr::Repo - but with extra method params
 const class MongoRepo {
 	
+			private const Int				maxPodSize	:= 10*1024*1024	// TODO: move 10 Mb max pod size to a config
 	@Inject private const RepoPodDao		podDao
 	@Inject private const RepoPodFileDao	podFileDao
 	
@@ -17,11 +18,13 @@ const class MongoRepo {
 //			)
 	}
 
-	RepoPod publish(RepoUser? user, File file) {
-		// do this first as it throws an Err if meta.props does not exist
-		podSpec := PodSpec.load(file)
-		pod 	:= podDao.create(RepoPod(file, user))
-		podFile	:= podFileDao.create(RepoPodFile(pod, file))
+	RepoPod publish(RepoUser? user, InStream podStream) {
+		podBuf	:= Buf(100 * 1024)	// Most pods are less than 10Kb
+		bytes	:= podStream.readBuf(podBuf, maxPodSize)	
+		if (bytes >= maxPodSize - 1)	// ensure there are no 'off by one' errors!
+			throw Err("Pod exceed maximum size of " + maxPodSize.toLocale("B"))
+		pod 	:= podDao.create(RepoPod(user, podBuf.flip))
+		podFile	:= podFileDao.create(RepoPodFile(pod, podBuf))
 		return pod
 	}
 

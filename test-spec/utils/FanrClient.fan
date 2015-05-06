@@ -26,12 +26,12 @@ class FanrClient {
 			return client.sendRequest(prepare("GET", `find/${name}/${version}`))
 	}
 
-	ButterResponse publish(File podFile) {
+	ButterResponse publish(Buf podBuf) {
 		c := prepare("POST", `publish`)
 		c.headers.contentType	= MimeType("application/zip")
-		c.headers.contentLength	= podFile.size
+		c.headers.contentLength	= podBuf.size
 //		c.headers["Expect"]		= "100-continue"
-		c.body.buf = podFile.readAllBuf
+		c.body.buf = podBuf.seek(0)
 		return client.sendRequest(c)
 	}
 
