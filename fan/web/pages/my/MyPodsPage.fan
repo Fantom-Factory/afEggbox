@@ -1,17 +1,26 @@
 using afIoc
 using afBedSheet
 using afFormBean
+using afEfanXtra
 using afPillow
 
 const mixin MyPodsPage : PrMyPage {
 	
 	@Inject abstract MongoRepo		mongoRepo
-//	@Inject	abstract SystemActivity	systemActivity
+	@Inject abstract RepoPodDao		podDao
+	//	@Inject	abstract SystemActivity	systemActivity
 //	@Inject abstract UserActivity	userActivity
 //	@Inject	abstract FlashMsg		flash
+	@Inject { type=LoginDetails# } 
+			abstract FormBean		formBean
+
+	@InitRender
+	Void initRender() {
+		injector.injectRequireModule("fileInput")
+	}
 	
 	RepoPod[] allPods() {
-		[,]
+		podDao.findAll
 	}
 	
 	Str downloads(Obj o) {
@@ -24,18 +33,17 @@ const mixin MyPodsPage : PrMyPage {
 
 	@PageEvent { httpMethod="POST" }
 	Redirect? onUpload() {
-        httpRequest.parseMultiPartForm |Str formName, InStream in, Str:Str headers| {
-			mongoRepo.publish(userSession.user, in)			
-        }
+		try {
+	        httpRequest.parseMultiPartForm |Str inputName, InStream in, Str:Str headers| {
+				if (inputName == "podFile")
+					mongoRepo.publish(userSession.user, in)
+	        }
+//			userActivity.logLoggedIn
+			return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 
-//		user := userDao.findByEmail(podDetails.email)
-//		if (user == null || user.generateSecret(loginDetails.password) != user.userSecret) {
-////			systemActivity.logFailedLogin(loginDetails.email, loginDetails.password)
-//			formBean.errorMsgs.add(Msgs.login_incorrectDetails)
-//			return null
-//		}
-
-//		userActivity.logLoggedIn
-		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
+		} catch (Err err) {
+			formBean.errorMsgs.add(err.msg)
+			return null
+		}
 	}
 }

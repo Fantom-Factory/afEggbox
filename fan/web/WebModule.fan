@@ -11,18 +11,9 @@ class WebModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
 		defs.add(ErrorSkin#, BootstrapErrorSkin#)
-		
 		defs.add(Backdoor#)
 	}
 
-	@Contribute { serviceType=ScriptModules# }
-	static Void contributeScriptModules(Configuration config) {
-		config.add(ScriptModule("jquery"		).atUrl(`//code.jquery.com/jquery-1.11.2.min.js`).fallbackToUrl(`/js/jquery-1.11.2.min.js`))
-		config.add(ScriptModule("bootstrap"		).atUrl(`/js/bootstrap.min.js`).requires("jquery"))
-//		config.add(ScriptModule("fantomModules"	).atUrl(`/scripts/fantomModules.js`))
-	}
-
-	
 	@Contribute { serviceType=InputSkins# }
 	static Void contributeInputSkins(Configuration config) {
 		config.overrideValue("email",		BootstrapInputSkin())
@@ -35,13 +26,20 @@ class WebModule {
 		config.set("AuthMiddleware", config.autobuild(AuthenticationMiddleware#)).before("afBedSheet.routes")
 	}
 	
-//	@Contribute { serviceType=RequireJsConfigTweaks# }
-//	static Void contributeRequireJsConfigTweaks(Configuration conf) {
-//		conf["app.bundles"] = |Str:Obj? config| {
-//			bundles := (Str:Str[]) config.getOrAdd("bundles") { [Str:Str[]][:] }
-//			bundles["fantomModules"] = "pulse unscramble gridtilt onRevealLoadScript onReveal loadScript jsCookie".split
-//		}
-//	}
+	@Contribute { serviceType=ScriptModules# }
+	static Void contributeScriptModules(Configuration config) {
+		config.add(ScriptModule("jquery"		).atUrl(`//code.jquery.com/jquery-1.11.2.min.js`).fallbackToUrl(`/js/jquery-1.11.2.min.js`))
+		config.add(ScriptModule("bootstrap"		).atUrl(`/js/bootstrap.min.js`).requires("jquery"))
+		config.add(ScriptModule("podRepoModules").atUrl(`/js/podRepoModules.js`))
+	}
+	
+	@Contribute { serviceType=RequireJsConfigTweaks# }
+	static Void contributeRequireJsConfigTweaks(Configuration conf) {
+		conf["app.bundles"] = |Str:Obj? config| {
+			bundles := (Str:Str[]) config.getOrAdd("bundles") { [Str:Str[]][:] }
+			bundles["podRepoModules"] = "fileInput".split
+		}
+	}
 	
 	@Contribute { serviceType=ApplicationDefaults# }
 	static Void contributeApplicationDefaults(Configuration config, IocEnv iocEnv) {

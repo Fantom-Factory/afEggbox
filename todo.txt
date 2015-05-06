@@ -1,3 +1,13 @@
 
 did you forget your password?
 email confirmation
+
+upvote / star a pod
+
+Games:
+ - No of pods uploaded
+ - Upload a diff version of same pod
+ - public pods / private pods
+ - download / install pods
+ - no of downloads your pod get
+ 
