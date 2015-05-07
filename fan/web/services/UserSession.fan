@@ -22,13 +22,15 @@ const class UserSession {
 		sessionState = UserSessionState { it.email = user.email }
 	}
 	
-	Void logout() {
+	RepoUser? logout() {
+		user := user
 		httpSession.remove(UserSession#.qname)
 		userRef.cleanUp
+		return user
 	}
 	
 	RepoUser? user() {
-		if (!userRef.isMapped)
+		if (isLoggedIn && !userRef.isMapped)
 			userRef.val = userDao[sessionState.email]
 		return userRef.val
 	}

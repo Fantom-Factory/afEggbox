@@ -40,7 +40,14 @@ html (xmlns:svg="http://www.w3.org/2000/svg")
 		-- else
 			-- app.renderTopNavBarPublic
 
+
 		main#${pageId}.container
+			-- if (alert.msgExists)
+				div.alert.alert-success.alert-dismissible (role="alert")
+					button.close (type="button" data-dismiss="alert" aria-label="Close")
+						span (aria-hidden="true") &times;
+					== alert.msg
+
 			-- renderBody
 
 		p &nbsp;

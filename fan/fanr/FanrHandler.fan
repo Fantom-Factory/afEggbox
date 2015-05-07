@@ -6,7 +6,7 @@ using fanr
 const class FanrHandler {
 			private const Str[]			secretAlgorithms	:= ["SALTED-HMAC-SHA1"]
 			private const Str[] 		signatureAlgorithms	:= ["HMAC-SHA1"]
-	@Inject private const MongoRepo		repo
+	@Inject private const FanrRepo		repo
 	@Inject private const RepoUserDao	userDao
 	@Inject private const HttpRequest	req
 	@Inject private const HttpResponse	res
@@ -49,7 +49,7 @@ const class FanrHandler {
 	Text onPing() {
 		authenticate
 		return Text.fromJsonObj([
-			"fanr.type"		: MongoRepo#.qname,
+			"fanr.type"		: FanrRepo#.qname,
 			"fanr.version"	: Pod.find("fanr").version.toStr
 		])
 	}

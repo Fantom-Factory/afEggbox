@@ -5,7 +5,7 @@ using afMorphia
 class RepoUser {
 
 	@Property { name="_id" } Uri	email
-//	@Property { }	Str?			userName
+	@Property { }	Str?			userName
 //	@Property { }	Str?			realName
 	@Property { }	Str				userSalt
 	@Property { }	Str				userSecret
@@ -16,7 +16,7 @@ class RepoUser {
 		this.email 		= email
 		this.userSalt	= Buf.random(16).toHex
 		this.userSecret	= generateSecret(password)
-//		this.userName	= email.userInfo
+		this.userName	= email.userInfo.toDisplayName
 		f?.call(this)
 	}
 	

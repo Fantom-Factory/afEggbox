@@ -1,7 +1,7 @@
 using afIoc
 using afBedSheet
 
-const class FlashMsg {	
+const class Alert {	
 	@Inject	private const HttpSession	httpSession
 	
 	Str? msg {
@@ -12,7 +12,7 @@ const class FlashMsg {
 	new make(|This| in) { in(this) }
 
 	Bool msgExists() {
-		httpSession["afBedSheet.flash"] != null && httpSession.flash["flashMsg"] != null		
+		httpSession.flashExists && httpSession.flash["flashMsg"] != null		
 	}
 
 //	Void updated(Str thing) {

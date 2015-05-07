@@ -17,6 +17,11 @@ class RepoPod {
 	@Property{}	Str			aboutFandoc
 	@Property{}	RepoPodMeta	meta
 
+				Str			displayName {
+					get { "${name} ${version}" }
+					private set { }
+				}
+
 	new make(|This|f) { f(this) }
 	
 	static new fromBuf(RepoUser user, Buf podBuf) {
