@@ -8,7 +8,9 @@ const mixin LogoutPage : PrPage {
 
 	@InitRender
 	Void initRender() {
-		userSession.logout
+		user := userSession.logout
+		if (user != null)
+			alert.msg = Msgs.alert_userLoggedOut(user)
 		throw ReProcessErr(Redirect.afterPost(pages[LoginPage#].pageUrl))
 	}
 	

@@ -6,7 +6,7 @@ using afPillow
 
 const mixin MyPodsPage : PrMyPage {
 	
-	@Inject abstract MongoRepo		mongoRepo
+	@Inject abstract FanrRepo		fanrRepo
 	@Inject abstract RepoPodDao		podDao
 	//	@Inject	abstract SystemActivity	systemActivity
 //	@Inject abstract UserActivity	userActivity
@@ -32,11 +32,15 @@ const mixin MyPodsPage : PrMyPage {
 	@PageEvent { httpMethod="POST" }
 	Redirect? onUpload() {
 		try {
+			RepoPod? pod
 	        httpRequest.parseMultiPartForm |Str inputName, InStream in, Str:Str headers| {
 				if (inputName == "podFile")
-					mongoRepo.publish(userSession.user, in)
+					pod = fanrRepo.publish(userSession.user, in)
 	        }
+
 //			userActivity.logLoggedIn
+			if (pod != null)
+				alert.msg = Msgs.alert_userUploadedPod(pod)
 			return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 
 		} catch (Err err) {

@@ -4,7 +4,7 @@ using fandoc
 using afBedSheet
 
 ** My version of fanr::Repo - but with extra method params
-const class MongoRepo {
+const class FanrRepo {
 	
 			private const Int				maxPodSize	:= 10*1024*1024	// TODO: move 10 Mb max pod size to a config
 	@Inject private const RepoPodDao		podDao
@@ -18,6 +18,7 @@ const class MongoRepo {
 //			)
 	}
 
+	** Throws 'PublishErr'
 	RepoPod publish(RepoUser? user, InStream podStream) {
 		podBuf		:= Buf(100 * 1024)	// Most pods are less than 100Kb
 		bytesRead	:= (Int?) 0
@@ -26,7 +27,7 @@ const class MongoRepo {
 			bytesRead = podStream.readBuf(podBuf, maxPodSize - podBuf.size)
 		}
 		if (podBuf.size >= maxPodSize - 1)	// ensure there are no 'off by one' errors!
-			throw Err("Pod exceeds maximum size of " + maxPodSize.toLocale("B"))
+			throw PublishErr("Pod exceeds maximum size of " + maxPodSize.toLocale("B"))
 		pod 	:= podDao.create(RepoPod(user, podBuf.flip))
 		podFile	:= podFileDao.create(RepoPodFile(pod, podBuf))
 		return pod
@@ -47,4 +48,8 @@ const class MongoRepo {
 			return pods
 		}
 	}
+}
+
+const class PublishErr : Err {
+	new make(Str msg := "", Err? cause := null) : super(msg, cause) {}
 }

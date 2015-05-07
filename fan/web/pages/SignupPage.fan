@@ -45,6 +45,8 @@ const mixin SignupPage : PrPage {
 		user = userDao.create(signUpDetails.toUser)
 		userSession.loginAs(user)
 //		userActivity.logLoggedIn
+		
+		alert.msg = Msgs.alert_userSignedUp(user)
 		return Redirect.afterPost(pages[MyDetailsPage#].pageUrl)
 	}
 }

@@ -9,7 +9,6 @@ const mixin LoginPage : PrPage {
 	@Inject abstract RepoUserDao	userDao
 //	@Inject	abstract SystemActivity	systemActivity
 //	@Inject abstract UserActivity	userActivity
-//	@Inject	abstract FlashMsg		flash
 	@Inject { type=LoginDetails# } 
 			abstract FormBean		formBean
 			abstract LoginDetails?	loginDetails
@@ -44,6 +43,8 @@ const mixin LoginPage : PrPage {
 		
 		userSession.loginAs(user)
 //		userActivity.logLoggedIn
+		
+		alert.msg = Msgs.alert_userLoggedIn(user)
 		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 	}
 

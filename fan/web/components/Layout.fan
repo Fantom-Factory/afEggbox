@@ -10,6 +10,7 @@ const mixin Layout : PrComponent {
 	
 	@Inject abstract HttpRequest	httpReq
 	@Inject abstract IocEnv			iocEnv
+	@Inject	abstract Alert			alert
 
 	abstract Str? title
 	abstract Str? pageId

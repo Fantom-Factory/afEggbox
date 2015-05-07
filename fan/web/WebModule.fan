@@ -10,6 +10,7 @@ using afFormBean::ErrorSkin
 class WebModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
+		defs.add(Alert#)
 		defs.add(ErrorSkin#, BootstrapErrorSkin#)
 		defs.add(Backdoor#)
 	}
