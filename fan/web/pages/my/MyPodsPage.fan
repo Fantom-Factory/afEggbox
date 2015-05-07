@@ -13,14 +13,12 @@ const mixin MyPodsPage : PrMyPage {
 //	@Inject	abstract FlashMsg		flash
 	@Inject { type=LoginDetails# } 
 			abstract FormBean		formBean
+			abstract RepoPod[]		allPods
 
 	@InitRender
 	Void initRender() {
+		allPods = podDao.findAll
 		injector.injectRequireModule("fileInput")
-	}
-	
-	RepoPod[] allPods() {
-		podDao.findAll
 	}
 	
 	Str downloads(Obj o) {
