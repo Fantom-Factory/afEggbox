@@ -16,7 +16,8 @@ class RepoUser {
 		this.email 		= email
 		this.userSalt	= Buf.random(16).toHex
 		this.userSecret	= generateSecret(password)
-		this.userName	= email.userInfo.toDisplayName
+		// see http://fantom.org/forum/topic/2415 for explanation of '//'
+		this.userName	= `//${email}`.userInfo?.replace(".", "_")?.toDisplayName
 		f?.call(this)
 	}
 	

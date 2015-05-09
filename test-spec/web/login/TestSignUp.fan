@@ -27,11 +27,15 @@ using afBounce
 ** 
 ** On signing up I should be taken to the [My Details Page]`eq:renderedPageName` and see the message:
 ** 
-**   eq:flashMsg
-**   Quote by 'ED 209' was successfully created
+**   eq:alertMsg
+**   Hi Micky Mouse, welcome the Fantom Pod Repository!
 class TestSignUp : WebFixture {
 
 	RepoUser user() {
 		userDao.findAll.first
+	}
+	
+	Str alertMsg() {
+		Element(".t-alertMsg").text
 	}
 }
