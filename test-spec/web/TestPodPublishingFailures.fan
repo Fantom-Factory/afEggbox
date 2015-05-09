@@ -3,17 +3,15 @@ using afIoc
 ** Pod Publishing : Failures
 ** #########################
 ** 
-** name, version, summary, license.name, [vcs.uri | org.uri]
-** 
 ** Example
 ** -------
 ** 
 **  - [Pod exceeds maximum size of 100B]`errMsg:testPodSizeTooBig`
 **  - [Pod name 'acmeWidgets' has already been taken by user 'stevie']`errMsg:testPodNameTakenBySomeoneElse`
-**  - [Pod version '0.1.2' is too small, it must be at least '2.3.4']`errMsg:testPodVersionTooSmall`
+**  - [Pod version '1.1.1' is too small, it must be at least '2.3.4']`errMsg:testPodVersionTooSmall`
 **  - [Pods must define meta data for 'pod.summary']`errMsg:testMissingPodMeta`
-**  - [Public pods must define meta data for 'license.name']`errMsg:testMissingPublicPodMeta`
-**  - [Public pods must contain a 'doc/pod.fandoc' file.]`errMsg:testMissingPublicPodFandoc`
+**  - [Public pods must define meta data for 'licence.name' or 'license.name']`errMsg:testMissingPublicPodMeta`
+**  - [Public pods must contain the file '/doc/pod.fandoc'.]`errMsg:testMissingPublicPodFandoc`
 ** 
 class TestPodPublishingFailures : WebFixture {
 
@@ -30,12 +28,14 @@ class TestPodPublishingFailures : WebFixture {
 	]
 	
 	Void testPodSizeTooBig() {
+		setupFixture
 		repo := (FanrRepo) reg.autobuild(FanrRepo#, null, [FanrRepo#maxPodSize : 100])
 		buf  := Buf().writeChars("".padl(100))
 		repo.publish(newUser, buf.flip.in)
 	}
 
 	Void testPodNameTakenBySomeoneElse() {
+		setupFixture
 		// an old private pod
 		repo.publish(newUser(`stevie@abc.com`), makePod(podMeta.setAll([
 			"pod.name"    : "acmeWidgets",
@@ -52,6 +52,7 @@ class TestPodPublishingFailures : WebFixture {
 	}
 
 	Void testPodVersionTooSmall() {
+		setupFixture
 		repo.publish(newUser, makePod(podMeta.setAll([
 			"pod.version" : "0.1.2",
 		])).in)
@@ -63,11 +64,12 @@ class TestPodPublishingFailures : WebFixture {
 		])).in)
 
 		repo.publish(newUser, makePod(podMeta.setAll([
-			"pod.version" : "0.0.2",
+			"pod.version" : "1.1.1",
 		])).in)
 	}
 
 	Void testMissingPodMeta() {
+		setupFixture
 		repo.publish(newUser, makePod([
 			"pod.name"    : "acmeWidgets",
 			"pod.version" : "0.0.5",
@@ -78,22 +80,28 @@ class TestPodPublishingFailures : WebFixture {
 	}
 
 	Void testMissingPublicPodMeta() {
+		setupFixture
 		repo.publish(newUser, makePod([
 			"pod.name"    : "acmeWidgets",
 			"pod.version" : "0.0.5",
 			"pod.depends" : "sys 1.0",
-			"build.ts"	  : "2006-06-06T06:06:00Z UTC"
+			"pod.summary" : "Widgets for everyone!",
+			"build.ts"	  : "2006-06-06T06:06:00Z UTC",
+			"repo.public"  : "true"
 		], |Zip zip| {
 			zip.writeNext(`/doc/pod.fandoc`)
 		}).in)
 	}
 
 	Void testMissingPublicPodFandoc() {
+		setupFixture
 		repo.publish(newUser, makePod([
 			"pod.name"    : "acmeWidgets",
 			"pod.version" : "0.0.5",
 			"pod.depends" : "sys 1.0",
+			"pod.summary" : "Widgets for everyone!",
 			"build.ts"	  : "2006-06-06T06:06:00Z UTC",
+			"repo.public"  : "true",
 			"license.name": "pfft",
 			"vcs.uri"	  : "pfft",
 		]).in)
