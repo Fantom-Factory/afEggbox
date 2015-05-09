@@ -6,7 +6,7 @@ using afBedSheet
 ** My version of fanr::Repo - but with extra method params
 const class FanrRepo {
 	
-			private const Int				maxPodSize	:= 10*1024*1024	// TODO: move 10 Mb max pod size to a config
+			internal const Int				maxPodSize	:= 10*1024*1024	// TODO: move 10 Mb max pod size to a config
 	@Inject private const RepoPodDao		podDao
 	@Inject private const RepoPodFileDao	podFileDao
 	
@@ -19,7 +19,7 @@ const class FanrRepo {
 	}
 
 	** Throws 'PublishErr'
-	RepoPod publish(RepoUser? user, InStream podStream) {
+	RepoPod publish(RepoUser user, InStream podStream) {
 		podBuf		:= Buf(100 * 1024)	// Most pods are less than 100Kb
 		bytesRead	:= (Int?) 0
 		while (bytesRead != null && podBuf.size < maxPodSize) {

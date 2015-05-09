@@ -11,3 +11,4 @@ Games:
  - download / install pods
  - no of downloads your pod get
  
+email notifications of new pod uploads

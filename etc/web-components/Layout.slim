@@ -46,7 +46,8 @@ html (xmlns:svg="http://www.w3.org/2000/svg")
 				div.alert.alert-success.alert-dismissible (role="alert")
 					button.close (type="button" data-dismiss="alert" aria-label="Close")
 						span (aria-hidden="true") &times;
-					== alert.msg
+					span.t-alertMsg
+						== alert.msg
 
 			-- renderBody
 

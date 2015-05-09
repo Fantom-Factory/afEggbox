@@ -15,7 +15,7 @@
 ** *********************
 ** Acceptance tests for 'fanr' functionality:
 ** 
-**  - [Fanr tests]`run:TestFanr#`
+**  - [Fanr tests]`http:run:TestFanr#`
 **
 ** 
 **  
