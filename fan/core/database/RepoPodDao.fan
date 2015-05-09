@@ -7,7 +7,8 @@ const mixin RepoPodDao : EntityDao {
 	@Operator
 	abstract RepoPod?		get(Str name, Bool checked := true)
 	abstract RepoPod[]		findAll()
-	abstract RepoPod? 		find(Str name, Version? version)
+	abstract RepoPod? 		findOne(Str name, Version? version := null)
+	abstract  RepoPod[]		findMany(Str name)
 
 	abstract RepoPod[] 		query(|Cursor->Obj?| f)
 
@@ -32,7 +33,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		datastore.query.orderBy("_id").findAll
 	}
 	
-	override RepoPod? find(Str name, Version? version) {
+	override RepoPod? findOne(Str name, Version? version := null) {
 		if (version != null)
 			return get(_id(name, version), false)
 	
@@ -40,6 +41,13 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			.findAll
 			.sort |RepoPod p1, RepoPod p2->Int| { p2.version <=> p1.version }
 			.first 
+	}
+
+	override RepoPod[] findMany(Str name) {
+		return datastore
+			.query(field("name").eqIgnoreCase(name))
+			.findAll
+			.sort |RepoPod p1, RepoPod p2->Int| { p2.version <=> p1.version }
 	}
 
 	override RepoPod[] query(|Cursor->Obj?| f) {

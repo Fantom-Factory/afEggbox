@@ -26,9 +26,12 @@ class RepoPod {
 	
 	static new fromBuf(RepoUser user, Buf podBuf) {
 		contents:= readContents(podBuf) 
-		props 	:= contents[`/meta.props`]?.readProps ?: throw Err("Invalid Pod File - does not contain `/meta.props`")
+		props 	:= contents[`/meta.props`]?.readProps ?: throw PublishErr(Msgs.publish_missingPodFile(`/meta.props`))
 		meta	:= RepoPodMeta(props)
-
+		
+		if (meta.isPublic && !contents.containsKey(`/doc/pod.fandoc`))
+			throw PublishErr(Msgs.publish_missingPublicPodFile(`/doc/pod.fandoc`))
+		
 		return RepoPod() {
 			it.name			= meta["pod.name"]
 			it.fileSize		= podBuf.size
@@ -36,7 +39,7 @@ class RepoPod {
 			it.builtOn		= DateTime(meta["build.ts"], true)
 			it.meta			= meta
 			it.aboutFandoc	= findAboutFandoc(contents)
-			it.isPublic		= false	// FIXME: isPublic
+			it.isPublic		= meta.isPublic
 			it.ownerId		= user.email
 		}
 	}
@@ -111,7 +114,7 @@ class RepoPod {
 
 class RepoPodMeta {	
 	static const	
-	private 	Str[] 	specialKeys	:= ["pod.name", "pod.version", "pod.depends", "pod.summary"]
+	private 	Str[] 	specialKeys	:= ["pod.name", "pod.version", "pod.depends", "pod.summary", "build.ts"]
 	internal	Str:Str	meta
 	
 	new make(Str:Str meta) {
@@ -128,8 +131,28 @@ class RepoPodMeta {
 		meta["pod.summary"]
 	}
 	
+	Bool isPublic() {
+		if (meta.containsKey("repo.public"))
+			return Bool.fromStr(meta["repo.public"] ?: "false", false) ?: false
+		if (meta.containsKey("repo.private"))
+			return !(Bool.fromStr(meta["repo.private"] ?: "true", false) ?: true)
+		return false
+	}
+
+	Str? licenceName() {
+		meta["licence.name"] ?: meta["license.name"]
+	}
+
+	Str? vcsUrl() {
+		meta["vcs.uri"]
+	}
+	
+	Str? orgUrl() {
+		meta["org.uri"]
+	}
+	
 	@Operator
-	Str get(Str key) {
+	Str? get(Str key) {
 		meta[key]
 	}
 	
@@ -138,8 +161,12 @@ class RepoPodMeta {
 		meta[key] = val
 	}
 	
+	Bool containsKey(Str key) {
+		meta.containsKey(key)
+	}
+	
 	private static Void assertKeyExists(Str:Str meta, Str key) {
 		if (!meta.containsKey(key))
-			throw Err("Pod meta should contain the key '${key}' - ${meta}")
+			throw PublishErr(Msgs.publish_missingPodMeta(key))
 	}
 }
