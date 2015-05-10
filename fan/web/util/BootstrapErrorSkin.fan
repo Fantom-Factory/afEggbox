@@ -5,9 +5,11 @@ const class BootstrapErrorSkin : ErrorSkin {
 	override Str render(FormBean formBean) {
 		if (!formBean.hasErrors) return Str.defVal
 		
+		banner := (formBean.messages["errors.${formBean.beanType.name}.banner"] ?: formBean.messages["errors.${formBean.beanType.name.decapitalize}.banner"]) ?: formBean.messages["errors.banner"]
+
 		html := ""
 		html += """<div class="alert alert-danger" role="alert">"""
-		html += formBean.messages["errors.banner"]
+		html += banner
 		html += """<ul>"""
 		formBean.errorMsgs.each {
 			html += """<li>${it}</li>"""

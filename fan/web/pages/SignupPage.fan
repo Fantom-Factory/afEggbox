@@ -14,10 +14,11 @@ const mixin SignupPage : PrPage {
 			abstract FormBean		formBean
 			abstract SignUpDetails?	signUpDetails
 
-	@InitRender
+	@BeforeRender
 	Void initRender() {
 		signUpDetails = SignUpDetails()
 		formBean.messages["field.submit.label"] = "Sign Up"
+		formBean.formFields[SignUpDetails#password].formValue = ""
 	}
 
 	Str signUpUrl() {
@@ -35,7 +36,7 @@ const mixin SignupPage : PrPage {
 
 		signUpDetails = formBean.createBean
 		
-		user := userDao.findByEmail(signUpDetails.email)
+		user := userDao.getByEmail(signUpDetails.email, false)
 		if (user != null) {
 //			systemActivity.logFailedLogin(loginDetails.email, loginDetails.password)
 			formBean.errorMsgs.add(Msgs.signup_emailTaken(user.email))
@@ -53,10 +54,10 @@ const mixin SignupPage : PrPage {
 
 class SignUpDetails {
 	
-	@HtmlInput { type="email"; required=true; minLength=3; maxLength=128 }
+	@HtmlInput { type="email"; placeholder="email"; required=true; minLength=3; maxLength=128 }
 	Uri?	email
 
-	@HtmlInput { type="password"; required=true; minLength=3; maxLength=128 }
+	@HtmlInput { type="text"; placeholder="password"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=128 }
 	Str?	password
 
 	RepoUser toUser() {

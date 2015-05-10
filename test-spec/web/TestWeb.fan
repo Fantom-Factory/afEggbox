@@ -13,4 +13,5 @@ using util
 **
 ** . 
 **  - [Pods Page]`run:TestPodPublishingFailures#`
+**  - [List Pods]`run:TestPodListing#`
 class TestWeb : RepoFixture { }

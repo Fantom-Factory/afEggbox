@@ -7,14 +7,14 @@ abstract class WebFixture : RepoFixture {
 	@Inject {}	Pages?			pages
 	@Inject {}	UserSession?	userSession
 	
-	override Void setupFixture() {
-		super.setupFixture
-	}
+//	override Void setupFixture() {
+//		super.setupFixture
+//	}
 	
     // Other common / reusable methods such as :
 	
 	Void loginAs(Uri email) {
-		user := userDao[email]	// assert user exists
+		user := userDao.getByEmail(email)	// assert user exists
 		client.webSession(true)[UserSession#.qname] = UserSessionState { it.email = email }
 	}
 

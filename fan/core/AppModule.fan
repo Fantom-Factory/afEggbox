@@ -20,6 +20,14 @@ class AppModule {
 		config[RepoPodMeta#] = 	config.createProxy(Converter#, RepoPodMetaConverter#)
 	}
 
+	@Contribute { serviceType=RegistryStartup# }
+	internal static Void contributeRegistryStartup(Configuration config) {
+		config.set("afPodRepo.ensureIndexes", |->| {
+			indexes := (Indexes) config.autobuild(Indexes#)
+			indexes.ensureIndexes
+		}).after("afMorphia.testConnection")
+	}
+	
 	@Contribute { serviceType=ApplicationDefaults# }
 	static Void contributeApplicationDefaults(Configuration config, IocEnv env) {
 		
@@ -35,5 +43,4 @@ class AppModule {
 //			config[MorphiaConfigIds.mongoUrl]	= `mongodb://heroku:password@ds063630.mongolab.com:63630/bushmasters`
 		}
 	}
-
 }

@@ -17,8 +17,9 @@ const mixin EntityDao {
 		return datastore.insert(entity)
 	}
 
-	virtual Void update(Obj entity) {
+	virtual Obj update(Obj entity) {
 		datastore.update(entity)
+		return entity
 	}
 
 	virtual Void delete(Obj entity) {

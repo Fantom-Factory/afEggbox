@@ -9,6 +9,7 @@ abstract class RepoFixture : FixtureTest {
 	@Inject {}	RepoPodDao?			podDao
 	@Inject {}	RepoPodFileDao?		podFileDao
 	@Inject {}	RepoUserDao?		userDao
+	@Inject {}	FanrRepo?			fanrRepo
 
     virtual Void setupFixture() {
 		podDao.dropAll
@@ -27,11 +28,18 @@ abstract class RepoFixture : FixtureTest {
 		RepoUser(email, password)
 	}
 	
+	RepoUser getOrMakeUser(Str email) {
+		existing := userDao.getByEmail(email.toUri, false)
+		return (existing != null) ? existing : userDao.create(newUser(email.toUri))
+	}
 
-	Void createOrUpdateUser(RepoUser user) {
-		existing := userDao.findByEmail(user.email)
+	@Deprecated
+	RepoUser createOrUpdateUser(RepoUser user) {
+		existing := userDao.getByEmail(user.email, false)
 		if (existing != null)
-			userDao.delete(existing)
-		userDao.create(user)
+			user = userDao.update(existing)
+		else
+			user = userDao.create(user)
+		return user
 	}
 }

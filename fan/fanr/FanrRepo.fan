@@ -31,10 +31,10 @@ const class FanrRepo {
 
 		// validate the pod before we publish it
 		pod 		:= RepoPod(user, podBuf.flip)
-		existing	:= podDao.findMany(pod.name).first
+		existing	:= podDao.findOne(pod.name)
 		if (existing != null) {
-			if (existing.ownerId != user.email) {
-				exUser := userDao.get(existing.ownerId, false)?.userName ?: `//${existing.ownerId}`.userInfo
+			if (existing.ownerId != user._id) {
+				exUser := userDao.get(existing.ownerId, false).userName
 				throw PublishErr(Msgs.publish_podNameAlreadyTaken(pod.name, exUser))
 			}
 			
