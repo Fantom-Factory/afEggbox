@@ -17,9 +17,10 @@ class WebModule {
 
 	@Contribute { serviceType=InputSkins# }
 	static Void contributeInputSkins(Configuration config) {
-		config.overrideValue("email",		BootstrapInputSkin())
-		config.overrideValue("text",		BootstrapInputSkin())
-		config.overrideValue("password",	BootstrapInputSkin())
+		config.overrideValue("email",		BootstrapTextSkin())
+		config.overrideValue("text",		BootstrapTextSkin())
+		config.overrideValue("password",	BootstrapTextSkin())
+		config.set			("static",		BootstrapStaticSkin())
 	}
 	
 	@Contribute { serviceType=MiddlewarePipeline# }

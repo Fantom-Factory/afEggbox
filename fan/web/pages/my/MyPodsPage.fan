@@ -8,16 +8,13 @@ const mixin MyPodsPage : PrMyPage {
 	
 	@Inject abstract FanrRepo		fanrRepo
 	@Inject abstract RepoPodDao		podDao
-	//	@Inject	abstract SystemActivity	systemActivity
-//	@Inject abstract UserActivity	userActivity
-//	@Inject	abstract FlashMsg		flash
 	@Inject { type=LoginDetails# } 
 			abstract FormBean		formBean
 			abstract RepoPod[]		allPods
 
 	@InitRender
 	Void initRender() {
-		allPods = podDao.findAll
+		allPods = podDao.findPrivate(userSession.user)
 		injector.injectRequireModule("fileInput")
 	}
 	

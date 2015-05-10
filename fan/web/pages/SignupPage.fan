@@ -17,7 +17,6 @@ const mixin SignupPage : PrPage {
 	@BeforeRender
 	Void initRender() {
 		signUpDetails = SignUpDetails()
-		formBean.messages["field.submit.label"] = "Sign Up"
 		formBean.formFields[SignUpDetails#password].formValue = ""
 	}
 

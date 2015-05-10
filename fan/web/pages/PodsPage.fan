@@ -8,7 +8,7 @@ const mixin PodsPage : PrPage {
 
 	@InitRender
 	Void initRender() {
-		allPods = podDao.findAll
+		allPods = podDao.findPublic(userSession.user)
 		injector.injectRequireModule("fileInput")
 	}
 	
