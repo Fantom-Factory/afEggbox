@@ -13,7 +13,7 @@ class RepoPod {
 	@Property{}	Int			fileSize
 	@Property{}	DateTime	builtOn
 	@Property{}	Bool		isPublic
-	@Property{}	Uri			ownerId
+	@Property{}	Int			ownerId
 	@Property{}	Str			aboutFandoc
 	@Property{}	RepoPodMeta	meta
 
@@ -40,7 +40,7 @@ class RepoPod {
 			it.meta			= meta
 			it.aboutFandoc	= findAboutFandoc(contents)
 			it.isPublic		= meta.isPublic
-			it.ownerId		= user.email
+			it.ownerId		= user._id
 		}
 	}
 	
@@ -109,7 +109,9 @@ class RepoPod {
 		
 		meta := contents[`/meta.props`].readProps
 		return meta["summary"] ?: (meta["podName"] ?: "")
-	}	
+	}
+	
+	override Str toStr() { _id }
 }
 
 class RepoPodMeta {	

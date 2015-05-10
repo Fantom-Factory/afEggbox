@@ -3,9 +3,9 @@ using afMorphia
 
 const mixin RepoUserDao : EntityDao {
 	@Operator
-	abstract RepoUser?		get(Uri email, Bool checked := true)
+	abstract RepoUser?		get(Int id, Bool checked := true)
+	abstract RepoUser?		getByEmail(Uri email, Bool checked := true)
 	abstract RepoUser[]		findAll()
-	abstract RepoUser?		findByEmail(Uri email)
 //	abstract RepoUser?		findByUsername(Str username)
 }
 
@@ -19,16 +19,16 @@ internal const class RepoUserDaoImpl : RepoUserDao {
 
 	new make(|This| in) { in(this) }
 	
-	override RepoUser? get(Uri email, Bool checked := true) {
-		datastore.query(field("_id").eqIgnoreCase(email.toStr)).findOne(checked)
+	override RepoUser? get(Int id, Bool checked := true) {
+		datastore.query(field("_id").eq(id)).findOne(checked)
+	}
+
+	override RepoUser? getByEmail(Uri email, Bool checked := true) {
+		datastore.query(field("email").eqIgnoreCase(email.toStr)).findOne(checked)
 	}
 
 	override RepoUser[] findAll() {
-		datastore.query.orderBy("_id").findAll
-	}
-
-	override RepoUser? findByEmail(Uri email) {
-		datastore.query(field("_id").eqIgnoreCase(email.toStr)).findOne(false)
+		datastore.query.orderBy("email").findAll
 	}
 
 //	override RepoUser? findByUsername(Str username) {
@@ -36,7 +36,4 @@ internal const class RepoUserDaoImpl : RepoUserDao {
 //		datastore.query(field("_id").eqIgnoreCase(username)).findOne(false)
 //	}
 
-	override RepoUser create(Obj user) {
-		datastore.insert(user)
-	}
 }

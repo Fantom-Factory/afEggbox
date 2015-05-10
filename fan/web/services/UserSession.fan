@@ -31,7 +31,7 @@ const class UserSession {
 	
 	RepoUser? user() {
 		if (isLoggedIn && !userRef.isMapped)
-			userRef.val = userDao[sessionState.email]
+			userRef.val = userDao.getByEmail(sessionState.email)
 		return userRef.val
 	}
 }

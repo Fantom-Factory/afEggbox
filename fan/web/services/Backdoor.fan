@@ -14,7 +14,7 @@ const class Backdoor {
 	}
 	
 	Void login() {
-		user := userDao.get(`backdoor@testing.com`, false)
+		user := userDao.getByEmail(`backdoor@testing.com`, false)
 		if (user == null)
 			user = userDao.create(RepoUser(`backdoor@testing.com`, "password"))
 		log.warn("Logging user in via backdoor...")

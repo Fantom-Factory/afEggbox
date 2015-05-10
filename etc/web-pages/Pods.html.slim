@@ -1,19 +1,24 @@
--- app.renderLayout("My Pods")
+-- app.renderLayout("Pods")
 
 	h1.page-header	Pods
 
-	div.table-responsive
-		table.table.table-striped.table-condensed
-			tr
-				th	Name
-				th	Version
-				th	Built On
-				th	Downloads
-				th	Summary
-			-- allPods.each |pod|
+	-- if (allPods.isEmpty)
+		p	This repository has no pods! Why don't you upload one?
+	
+	-- else
+		p	You have ${allPods.size} pods.
+		div.table-responsive
+			table.table.table-striped.table-condensed
 				tr
-					td	${pod.name}
-					td	${pod.version}
-					td	${pod.builtOn.toLocale("DDD MMM YYYY")}
-					td	${downloads(pod)}
-					td	${pod.meta.summary}
+					th	Name
+					th	Version
+					th	Built On
+					th	Downloads
+					th	Summary
+				-- allPods.each |pod|
+					tr
+						td	${pod.name}
+						td	${pod.version}
+						td	${pod.builtOn.toLocale("DDD MMM YYYY")}
+						td	${downloads(pod)}
+						td	${pod.meta.summary}

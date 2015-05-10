@@ -21,7 +21,7 @@ using afBounce
 ** then I should still see the [Login Page]`eq:renderedPageName` and the error message:
 ** 
 **   eq:errorMsg
-**   Email and / or password incorrect
+**   Email address not known
 ** 
 class TestLoginFail : WebFixture {
 

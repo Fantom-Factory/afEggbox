@@ -13,12 +13,13 @@ const mixin LoginPage : PrPage {
 			abstract FormBean		formBean
 			abstract LoginDetails?	loginDetails
 
-	@InitRender
+	@BeforeRender
 	Void initRender() {
 		loginDetails = LoginDetails()
 		formBean.messages["field.submit.label"] = "Login"
+		formBean.formFields[LoginDetails#password].formValue = ""
 	}
-		
+
 	Str loginUrl() {
 		pageMeta.eventUrl(#onLogin).encode
 	}
@@ -34,10 +35,14 @@ const mixin LoginPage : PrPage {
 
 		loginDetails = formBean.createBean
 		
-		user := userDao.findByEmail(loginDetails.email)
-		if (user == null || user.generateSecret(loginDetails.password) != user.userSecret) {
+		user := userDao.getByEmail(loginDetails.email, false)
+		if (user == null) {
+			formBean.errorMsgs.add(Msgs.login_userNotFound)
+			return null			
+		}
+		if(user.generateSecret(loginDetails.password) != user.userSecret) {
 //			systemActivity.logFailedLogin(loginDetails.email, loginDetails.password)
-			formBean.errorMsgs.add(Msgs.login_incorrectDetails)
+			formBean.errorMsgs.add(Msgs.login_incorrectPassword)
 			return null
 		}
 		
@@ -52,9 +57,9 @@ const mixin LoginPage : PrPage {
 
 class LoginDetails {
 	
-	@HtmlInput { type="email"; required=true; minLength=3; maxLength=128 }
+	@HtmlInput { type="email"; placeholder="email"; required=true; minLength=3; maxLength=128 }
 	Uri?	email
 
-	@HtmlInput { type="password"; required=true; minLength=3; maxLength=128 }
+	@HtmlInput { type="text"; placeholder="password"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=128 }
 	Str?	password
 }

@@ -30,7 +30,7 @@ class Build : BuildPod {
 			"afIocEnv     1.0.18 - 1.0", 
 			
 			// ---- Database --------------------
-//			"afBson       1.0.0  - 1.0",
+			"afBson       1.0.0  - 1.0",
 			"afMongo      1.0.0  - 1.0",
 			"afMorphia    1.0.2  - 1.0",
 			
@@ -52,6 +52,6 @@ class Build : BuildPod {
 		]
 
 		srcDirs = [`test-spec/`, `test-spec/web/`, `test-spec/web/login/`, `test-spec/utils/`, `test-spec/fanr/`, `fan/`, `fan/web/`, `fan/web/util/`, `fan/web/services/`, `fan/web/pages/`, `fan/web/pages/my/`, `fan/web/components/`, `fan/fanr/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`, `fan/bedframe/`]
-		resDirs = [,]
+		resDirs = [`res/`]
 	}
 }

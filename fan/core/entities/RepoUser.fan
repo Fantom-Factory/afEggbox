@@ -4,11 +4,12 @@ using afMorphia
 @Entity { name = "user" }
 class RepoUser {
 
-	@Property { name="_id" } Uri	email
-	@Property { }	Str?			userName
-//	@Property { }	Str?			realName
-	@Property { }	Str				userSalt
-	@Property { }	Str				userSecret
+	@Property { }	Int		_id
+	@Property { }	Uri		email
+	@Property { }	Str?	userName
+//	@Property { }	Str?	realName
+	@Property { }	Str		userSalt
+	@Property { }	Str		userSecret
 
 	new make(|This| in) { in(this) }
 	
@@ -17,7 +18,7 @@ class RepoUser {
 		this.userSalt	= Buf.random(16).toHex
 		this.userSecret	= generateSecret(password)
 		// see http://fantom.org/forum/topic/2415 for explanation of '//'
-		this.userName	= `//${email}`.userInfo?.replace(".", "_")?.toDisplayName
+		this.userName	= `//${email}`.userInfo?.replace(".", "_")?.toDisplayName ?: email.toStr.toDisplayName	// for tests where I can't be arsed to type in an entire email address
 		f?.call(this)
 	}
 	
@@ -27,7 +28,9 @@ class RepoUser {
 	
 	RepoPod? filter(RepoPod pod) {
 		pod.isPublic ? pod : (
-			(pod.ownerId == email) ? pod : null
+			(pod.ownerId == _id) ? pod : null
 		)
 	}
+	
+	override Str toStr() { email.toStr }
 }

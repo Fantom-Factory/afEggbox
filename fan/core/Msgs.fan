@@ -33,8 +33,12 @@ mixin Msgs {
 
 	// ---- Form Errors -------------------------------------------------------
 
-	static Str login_incorrectDetails() {
-		"Email and / or password incorrect"
+	static Str login_userNotFound() {
+		"Email address not known"
+	}
+	
+	static Str login_incorrectPassword() {
+		"Incorrect password"
 	}
 	
 	static Str signup_emailTaken(Uri email) {
