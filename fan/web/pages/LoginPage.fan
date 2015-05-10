@@ -7,8 +7,6 @@ using afFormBean
 const mixin LoginPage : PrPage {
 
 	@Inject abstract RepoUserDao	userDao
-//	@Inject	abstract SystemActivity	systemActivity
-//	@Inject abstract UserActivity	userActivity
 	@Inject { type=LoginDetails# } 
 			abstract FormBean		formBean
 			abstract LoginDetails?	loginDetails
@@ -16,7 +14,6 @@ const mixin LoginPage : PrPage {
 	@BeforeRender
 	Void initRender() {
 		loginDetails = LoginDetails()
-		formBean.messages["field.submit.label"] = "Login"
 		formBean.formFields[LoginDetails#password].formValue = ""
 	}
 
@@ -52,7 +49,6 @@ const mixin LoginPage : PrPage {
 		alert.msg = Msgs.alert_userLoggedIn(user)
 		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 	}
-
 }
 
 class LoginDetails {

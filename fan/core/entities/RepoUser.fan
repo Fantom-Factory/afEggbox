@@ -1,13 +1,18 @@
 using afIoc
 using afMorphia
+using afFormBean::HtmlInput
 
 @Entity { name = "user" }
 class RepoUser {
 
 	@Property { }	Int		_id
-	@Property { }	Uri		email
-	@Property { }	Str?	userName
-//	@Property { }	Str?	realName
+	
+	@HtmlInput { type="static" }
+	@Property  { }	Uri		email
+	
+	@HtmlInput { type="text"; required=true; minLength=3; maxLength=128 }
+	@Property  { }	Str		userName
+
 	@Property { }	Str		userSalt
 	@Property { }	Str		userSecret
 
