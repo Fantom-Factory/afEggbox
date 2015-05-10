@@ -5,7 +5,6 @@ using afIoc
 ** 
 ** Example
 ** -------
-** 
 **  - [Pod exceeds maximum size of 100B]`errMsg:podSizeTooBig`
 **  - [Pod name 'acmeWidgets' has already been taken by user 'Stevie']`errMsg:podNameTakenBySomeoneElse`
 **  - [Pod version '1.1.1' is too small, it must be at least '2.3.4']`errMsg:podVersionTooSmall`
@@ -37,14 +36,14 @@ class TestPodPublishingFailures : WebFixture {
 	Void podNameTakenBySomeoneElse() {
 		setupFixture
 		// an old private pod
-		repo.publish(createOrUpdateUser(newUser(`stevie@abc.com`)), makePod(podMeta.setAll([
+		repo.publish(getOrMakeUser("stevie@abc.com"), makePod(podMeta.setAll([
 			"pod.name"    : "acmeWidgets",
 			"pod.version" : "0.0.5",
 			"pod.summary" : "Widgets for me!"
 		])).in)
 
 		// a new public pod
-		repo.publish(createOrUpdateUser(newUser(`steveo@abc.com`)), makePod(podMeta.setAll([
+		repo.publish(getOrMakeUser("steveo@abc.com"), makePod(podMeta.setAll([
 			"pod.name"    : "acmeWidgets",
 			"pod.version" : "0.0.2",
 			"pod.summary" : "Widgets for everyone!"

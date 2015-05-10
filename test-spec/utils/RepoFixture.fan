@@ -10,11 +10,13 @@ abstract class RepoFixture : FixtureTest {
 	@Inject {}	RepoPodFileDao?		podFileDao
 	@Inject {}	RepoUserDao?		userDao
 	@Inject {}	FanrRepo?			fanrRepo
+	@Autobuild	Indexes?			indexes
 
     virtual Void setupFixture() {
 		podDao.dropAll
 		podFileDao.dropAll
 		userDao.dropAll
+		indexes.ensureIndexes
     }
 
     virtual Void tearDownFixture() { }
