@@ -6,7 +6,7 @@
 		p	This repository has no pods! Why don't you upload one?
 	
 	-- else
-		p	You have ${allPods.size} pods.
+		p	There are ${allPods.size} pod(s).
 		div.table-responsive
 			table.table.table-striped.table-condensed
 				tr
@@ -17,7 +17,7 @@
 					th	Summary
 				-- allPods.each |pod|
 					tr
-						td	${pod.name}
+						td;	a (href="${podSummaryUrl(pod)}") ${pod.name}
 						td	${pod.version}
 						td	${pod.builtOn.toLocale("DDD MMM YYYY")}
 						td	${downloads(pod)}

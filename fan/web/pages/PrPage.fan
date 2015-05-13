@@ -12,4 +12,8 @@ const mixin PrPage : PrComponent {
 	Bool isActive() {
 		this.typeof.fits(pageMeta.pageType) 
 	}
+	
+	Str podSummaryUrl(RepoPod pod) {
+		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).encode
+	}
 }

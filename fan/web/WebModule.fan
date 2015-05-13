@@ -6,7 +6,7 @@ using afDuvet
 using afFormBean::InputSkins
 using afFormBean::ErrorSkin
 
-@SubModule { modules=[BedFrameModule#] }
+@SubModule { modules=[BedFrameModule#, FandocModule#] }
 class WebModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
@@ -15,6 +15,11 @@ class WebModule {
 		defs.add(Backdoor#)
 	}
 
+	@Contribute { serviceType=Routes# }
+	static Void contributeRoutes(Configuration config) {
+		config.add(config.autobuild(PodRoutes#))
+	}
+	
 	@Contribute { serviceType=InputSkins# }
 	static Void contributeInputSkins(Configuration config) {
 		config.overrideValue("email",		BootstrapTextSkin())

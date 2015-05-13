@@ -1,6 +1,8 @@
 using afIoc
 using afEfanXtra
+using afPillow
 
+@Page { disableRoutes = true }
 const mixin PodsPage : PrPage {
 
 	@Inject abstract RepoPodDao		podDao
