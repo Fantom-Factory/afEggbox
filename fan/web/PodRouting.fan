@@ -44,20 +44,32 @@ const class PodRoutes : Route {
 		if (podName == null)
 			return pages.renderPage(PodsPage#)
 
+		pod := podDao.findOne(podName, podVersion)
+		if (pod == null) {
+			v := (podVersion != null) ? " v${podVersion}" : ""
+			return HttpStatus(404, "Pod ${podName}${v} not found")
+		}
+
 		// --> /pods/afSlim
 		// --> /pods/afSlim/
 		// --> /pods/afSlim/1.1.14
 		// --> /pods/afSlim/1.1.14/
-		if (podSection == null && reqPath.isEmpty) {
-			pod := podDao.findOne(podName, podVersion)
-			if (pod == null) {
-				v := (podVersion != null) ? " v${podVersion}" : ""
-				throw HttpStatusErr(404, "Pod ${podName}${v} not found")
-			}
+		if (podSection == null && reqPath.isEmpty)
 			return pages.renderPage(PodSummaryPage#, [pod])
+		
+		// --> /pods/afSlim
+		// --> /pods/afSlim/
+		// --> /pods/afSlim/1.1.14
+		// --> /pods/afSlim/1.1.14/
+		if (podSection == "docs") {
+			fileUrl := `/doc/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
+			if (fileUrl == `/doc/`)
+				fileUrl = fileUrl.plusName("pod.fandoc")
+			// TODO: handle images and other files
+			return pages.renderPage(PodDocsPage#, [pod, fileUrl])
 		}
-			
-		throw Err()
+		
+		return null
 	}
 	
 	private Str? chomp(Str[] path) {

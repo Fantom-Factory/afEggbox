@@ -1,4 +1,5 @@
 using afIoc
+using afFancordion
 
 ** Pod Publishing : Failures
 ** #########################
@@ -12,6 +13,7 @@ using afIoc
 **  - [Public pods must define meta data for 'licence.name' or 'license.name']`errMsg:missingPublicPodMeta`
 **  - [Public pods must contain the file '/doc/pod.fandoc'.]`errMsg:missingPublicPodFandoc`
 ** 
+@Fixture { failFast = false }
 class TestPodPublishingFailures : WebFixture {
 
 	@Inject private Registry? reg
@@ -28,7 +30,7 @@ class TestPodPublishingFailures : WebFixture {
 	
 	Void podSizeTooBig() {
 		setupFixture
-		repo := (FanrRepo) reg.autobuild(FanrRepo#, null, [PodContents#maxPodSize : 100])
+		repo := (FanrRepo) reg.autobuild(FanrRepo#, null, [FanrRepo#maxPodSize : 100])
 		buf  := Buf().writeChars("".padl(100))
 		repo.publish(newUser, buf.flip.in)
 	}

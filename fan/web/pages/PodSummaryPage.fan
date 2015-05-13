@@ -6,14 +6,13 @@ using afPillow
 @Page { disableRoutes = true }
 const mixin PodSummaryPage : PrPage {
 
-	@Inject	abstract |->HtmlWriter|	htmlWriter
-	@Inject	abstract RepoPodDao		podDao
+	@Inject	abstract HtmlWriter		htmlWriter
 	@PageContext
-			abstract RepoPod?		pod
+			abstract RepoPod		pod
 
 		// TODO: seo this page!
 	
 	Str aboutPod() {
-		htmlWriter().toHtml(pod.aboutFandoc)
+		htmlWriter.toHtml(pod.aboutFandoc)
 	}
 }

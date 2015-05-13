@@ -10,9 +10,10 @@ class AppModule {
 		
 		defs.add(UserSession#)
 		
+		defs.add(RepoUserDao#)
 		defs.add(RepoPodDao#)
 		defs.add(RepoPodFileDao#)
-		defs.add(RepoUserDao#)
+		defs.add(RepoPodDocsDao#)
 	}
 
 	@Contribute { serviceType=Converters# }
