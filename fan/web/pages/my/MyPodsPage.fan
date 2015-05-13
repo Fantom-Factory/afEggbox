@@ -8,7 +8,7 @@ const mixin MyPodsPage : PrMyPage {
 	
 	@Inject abstract FanrRepo		fanrRepo
 	@Inject abstract RepoPodDao		podDao
-	@Inject { type=LoginDetails# } 
+	@Inject { type=PodUploadDetails# } 
 			abstract FormBean		formBean
 			abstract RepoPod[]		allPods
 
@@ -40,9 +40,11 @@ const mixin MyPodsPage : PrMyPage {
 				alert.msg = Msgs.alert_userUploadedPod(pod)
 			return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 
-		} catch (Err err) {
+		} catch (PublishErr err) {
 			formBean.errorMsgs.add(err.msg)
 			return null
 		}
 	}
 }
+
+class PodUploadDetails { }

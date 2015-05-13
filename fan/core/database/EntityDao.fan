@@ -30,7 +30,7 @@ const mixin EntityDao {
 		datastore.drop(false)
 	}
 
-	virtual QueryCriterion field(Str fieldName) {
+	protected virtual QueryCriterion field(Str fieldName) {
 		Query().field(fieldName)
 	}
 }

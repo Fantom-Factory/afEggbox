@@ -5,10 +5,12 @@ using afBedSheet
 
 ** My version of fanr::Repo - but with extra method params
 const class FanrRepo {
-	
+	const Int		maxPodSize	:= 10*1024*1024	// TODO: move 10 Mb max pod size to a config
+
 	@Inject private const RepoUserDao		userDao
 	@Inject private const RepoPodDao		podDao
 	@Inject private const RepoPodFileDao	podFileDao
+	@Inject private const RepoPodDocsDao	podDocsDao
 	
 	new make(|This|in) { in(this) }
 
@@ -19,7 +21,7 @@ const class FanrRepo {
 	** Throws 'PublishErr'
 	RepoPod publish(RepoUser user, InStream podStream) {
 	
-		podContents := PodContents(user, podStream)
+		podContents := PodContents(user, podStream) { it.maxPodSize = this.maxPodSize }
 		pod := podContents.pod
 		
 		// validate the pod before we publish it
@@ -43,7 +45,8 @@ const class FanrRepo {
 
 		// all good - commit the data to the database
 		pod 	 = podDao.create(pod)
-		podFile	:= podFileDao.create(RepoPodFile(pod, podContents.podBuf))
+		podFileDao.create(RepoPodFile(pod, podContents.podBuf))
+		podDocsDao.create(RepoPodDocs(pod, podContents.docContents))
 		return pod
 	}
 
@@ -65,7 +68,7 @@ const class FanrRepo {
 }
 
 class PodContents {
-	internal const Int				maxPodSize	:= 10*1024*1024	// TODO: move 10 Mb max pod size to a config
+	Int		maxPodSize	:= 10*1024*1024	// TODO: move 10 Mb max pod size to a config
 
 	Buf?	podBuf
 	Str:Str	metaProps	:= Str:Str[:]
@@ -89,7 +92,7 @@ class PodContents {
 	
 	Void readPodStream(InStream podStream) {
 		// attempt to read in the pod without blindly sucking in 19 Gigs!
-		podBuf		:= Buf(100 * 1024)	// Most pods are less than 100Kb
+		podBuf		= Buf(100 * 1024)	// Most pods are less than 100Kb
 		bytesRead	:= (Int?) 0
 		while (bytesRead != null && podBuf.size < maxPodSize) {
 			// MultiPartInStream reads in chunks at a time
@@ -98,6 +101,8 @@ class PodContents {
 
 		if (podBuf.size >= maxPodSize - 1)	// ensure there are no 'off by one' errors!
 			throw PublishErr(Msgs.publish_podSizeTooBig(maxPodSize))
+
+		podBuf.flip
 	}
 	
 	private Void readPodContents() {
