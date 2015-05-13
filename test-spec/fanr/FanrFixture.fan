@@ -41,7 +41,7 @@ abstract class FanrFixture : RepoFixture {
 	
 	Void createPod() {
 		podBuf := podBuf
-		pod := podDao.create(RepoPod(newUser, podBuf))
+		pod := podDao.create(PodContents(newUser, podBuf.in).pod)
 		podFileDao.create(RepoPodFile(pod, podBuf))
 	}
 

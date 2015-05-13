@@ -28,7 +28,7 @@ class TestPodPublishingFailures : WebFixture {
 	
 	Void podSizeTooBig() {
 		setupFixture
-		repo := (FanrRepo) reg.autobuild(FanrRepo#, null, [FanrRepo#maxPodSize : 100])
+		repo := (FanrRepo) reg.autobuild(FanrRepo#, null, [PodContents#maxPodSize : 100])
 		buf  := Buf().writeChars("".padl(100))
 		repo.publish(newUser, buf.flip.in)
 	}

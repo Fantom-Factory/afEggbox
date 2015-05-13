@@ -24,21 +24,15 @@ class RepoPod {
 
 	new make(|This|f) { f(this) }
 	
-	static new fromBuf(RepoUser user, Buf podBuf) {
-		contents:= readContents(podBuf) 
-		props 	:= contents[`/meta.props`]?.readProps ?: throw PublishErr(Msgs.publish_missingPodFile(`/meta.props`))
-		meta	:= RepoPodMeta(props)
-		
-		if (meta.isPublic && !contents.containsKey(`/doc/pod.fandoc`))
-			throw PublishErr(Msgs.publish_missingPublicPodFile(`/doc/pod.fandoc`))
-		
+	static new fromContents(RepoUser user, Int podSize, Str:Str metaProps, Uri:Buf docContents) {
+		meta := RepoPodMeta(metaProps)
 		return RepoPod() {
 			it.name			= meta["pod.name"]
-			it.fileSize		= podBuf.size
+			it.fileSize		= podSize
 			it.version		= Version(meta["pod.version"])
 			it.builtOn		= DateTime(meta["build.ts"], true)
 			it.meta			= meta
-			it.aboutFandoc	= findAboutFandoc(contents)
+			it.aboutFandoc	= findAboutFandoc(metaProps, docContents)
 			it.isPublic		= meta.isPublic
 			it.ownerId		= user._id
 		}
@@ -56,26 +50,7 @@ class RepoPod {
 		podFileDao.get(_id, true).data
 	}
 	
-	private static Uri:Buf readContents(Buf podBuf) {
-		contents := Uri:Buf[:] 
-		zip	:= Zip.read(podBuf.in)
-		try {
-			File? entry
-			while ((entry = zip.readNext) != null && contents.size < 3) {
-				if (entry.uri == `/meta.props`)
-					contents[entry.uri] = entry.readAllBuf
-				if (entry.uri == `/doc/about.fdoc`)
-					contents[entry.uri] = entry.readAllBuf
-				if (entry.uri == `/doc/pod.fandoc`)
-					contents[entry.uri] = entry.readAllBuf
-			}
-			return contents
-		} finally {
-			zip.close
-		}	
-	}
-	
-	private Str findAboutFandoc(Uri:Buf contents) {
+	private Str findAboutFandoc(Str:Str metaProps, Uri:Buf contents) {
 		aboutFd := contents[`/doc/about.fdoc`]?.readAllStr		
 		if (aboutFd != null)
 			return aboutFd
@@ -107,8 +82,7 @@ class RepoPod {
 			}
 		}
 		
-		meta := contents[`/meta.props`].readProps
-		return meta["summary"] ?: (meta["podName"] ?: "")
+		return metaProps["summary"] ?: (metaProps["podName"] ?: "???")
 	}
 	
 	override Str toStr() { _id }
@@ -131,6 +105,10 @@ class RepoPodMeta {
 	
 	Str summary() {
 		meta["pod.summary"]
+	}
+	
+	Str projectName() {
+		meta["proj.name"] ?: meta["pod.name"]
 	}
 	
 	Bool isPublic() {

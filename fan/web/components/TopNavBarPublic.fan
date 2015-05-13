@@ -11,7 +11,7 @@ const mixin TopNavBarPublic : PrComponent {
 	
 	Str pageLink(Type page, Str name) {
 		html := (pageMeta.pageType == page) ? """<li class="active">""" : "<li>"
-		html += """<a href="${pageUrl(page)}")>${name}</a>"""
+		html += """<a href="${pageUrl(page)}">${name}</a>"""
 		html += "</li>"
 		return html
 	}
