@@ -11,6 +11,8 @@ const class FanrRepo {
 	@Inject private const RepoPodDao		podDao
 	@Inject private const RepoPodFileDao	podFileDao
 	@Inject private const RepoPodDocsDao	podDocsDao
+	@Inject private const RepoPodSrcDao		podSrcDao
+	@Inject private const RepoPodApiDao		podApiDao
 	
 	new make(|This|in) { in(this) }
 
@@ -48,6 +50,8 @@ const class FanrRepo {
 		pod 	 = podDao.create(pod)
 		podFileDao.create(RepoPodFile(pod, podContents.podBuf))
 		podDocsDao.create(RepoPodDocs(pod, podContents.docContents))
+		podSrcDao .create(RepoPodSrc (pod, podContents.srcContents))
+		podApiDao .create(RepoPodApi (pod, podContents.apiContents))
 		return pod
 	}
 
@@ -75,9 +79,10 @@ const class FanrRepo {
 		if (!user.owns(pod))
 			throw PodDeleteErr(Msgs.podDelete_cannotDeleteOtherPeoplesPods)
 
-		// TODO: delete API and SRC
-		podDocsDao.deleteById(pod._id, false)
 		podFileDao.deleteById(pod._id, false)
+		podDocsDao.deleteById(pod._id, false)
+		podSrcDao .deleteById(pod._id, false)
+		podApiDao .deleteById(pod._id, false)
 		podDao.delete(pod)
 	}
 }
@@ -137,7 +142,7 @@ class PodContents {
 					else
 						docContents[entry.uri] = entry.readAllBuf
 				
-				if (entry.uri.toStr.startsWith("/src/") && entry.uri.ext == ".fan")
+				if (entry.uri.toStr.startsWith("/src/") && entry.uri.ext == "fan")
 					srcContents[entry.uri] = entry.readAllStr					
 			}
 		} finally {

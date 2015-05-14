@@ -24,6 +24,7 @@ class WebModule {
 	static Void contributeInputSkins(Configuration config) {
 		config.overrideValue("email",		BootstrapTextSkin())
 		config.overrideValue("text",		BootstrapTextSkin())
+		config.overrideValue("url",			BootstrapTextSkin())
 		config.overrideValue("password",	BootstrapTextSkin())
 		config.set			("static",		BootstrapStaticSkin())
 	}
