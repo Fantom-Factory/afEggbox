@@ -13,7 +13,7 @@ const mixin PodEditPage : PrPage {
 					abstract FormBean		podDeleteFormBean
 
 	Str deleteUrl() {
-		pageMeta.eventUrl(#onDelete).encode
+		`/pods/${pod.name}/${pod.version}/edit/delete`.encode
 	}
 
 	@PageEvent { httpMethod="POST" }
@@ -29,7 +29,8 @@ const mixin PodEditPage : PrPage {
 		}
 
 		try {
-			fanrRepo.delete(userSession.user, pod)
+			user := userSession.user
+			fanrRepo.delete(user, pod)
 	//		userActivity.logPodDeleted
 			
 			alert.msg = Msgs.alert_podDeleted(pod)

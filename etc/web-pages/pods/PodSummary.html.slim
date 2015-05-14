@@ -1,5 +1,9 @@
 -- app.renderLayout("Pods")
 
+	-- if (loggedIn && user.owns(pod))
+		div.pull-right
+			a.btn.btn-primary (href="${podEditUrl}") Edit Pod Details
+
 	div.page-header
 		h1	${pod.meta.projectName} v${pod.version}
 		div.h1
