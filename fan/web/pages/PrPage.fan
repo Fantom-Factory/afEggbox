@@ -16,4 +16,7 @@ const mixin PrPage : PrComponent {
 	Str podSummaryUrl(RepoPod pod) {
 		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).encode
 	}
+	Str podDocsUrl(RepoPod pod) {
+		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plusName("docs").encode
+	}
 }

@@ -31,10 +31,8 @@ class RepoUser {
 		Buf().print("${email}:${userSalt}").hmac("SHA-1", password.toBuf).toBase64
 	}
 	
-	RepoPod? filter(RepoPod pod) {
-		pod.isPublic ? pod : (
-			(pod.ownerId == _id) ? pod : null
-		)
+	Bool owns(RepoPod pod) {
+		pod.ownerId == _id
 	}
 	
 	override Str toStr() { email.toStr }

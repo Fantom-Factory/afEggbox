@@ -40,7 +40,7 @@ const mixin MyPodsPage : PrMyPage {
 				alert.msg = Msgs.alert_userUploadedPod(pod)
 			return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 
-		} catch (PublishErr err) {
+		} catch (PodPublishErr err) {
 			formBean.errorMsgs.add(err.msg)
 			return null
 		}
