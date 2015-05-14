@@ -36,4 +36,9 @@ class RepoUser {
 	}
 	
 	override Str toStr() { email.toStr }
+	
+	override Int hash() { _id }
+	override Bool equals(Obj? that) {
+		_id == (that as RepoUser)._id
+	}
 }

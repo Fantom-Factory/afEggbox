@@ -9,7 +9,13 @@ const mixin MyDetailsPage : PrMyPage {
 	@Inject abstract RepoUserDao	userDao
 	@Inject { type=RepoUser# } 
 			abstract FormBean		formBean
+			abstract RepoUser		user
 
+	@InitRender
+	Void initRender() {
+		user = userDao.get(loggedInUser._id)
+	}
+	
 	Str saveUrl() {
 		pageMeta.eventUrl(#onSave).encode
 	}
@@ -19,10 +25,17 @@ const mixin MyDetailsPage : PrMyPage {
 		if (!formBean.validateForm(httpRequest.body.form))
 			return null
 
-		formBean.updateBean(user)
-		userDao.update(user)
+		formBean.updateBean(loggedInUser)
+		
+		existing := userDao.getByUserName(user.userName, false)
+		if (existing != null && existing._id != loggedInUser._id) {
+			formBean.errorMsgs.add(Msgs.userEdit_userNameTaken(user.userName))
+			return null
+		}
+		
+		userDao.update(loggedInUser)
 
-		alert.msg = Msgs.alert_userDetailsSaved(user)
+		alert.msg = Msgs.alert_userDetailsSaved(loggedInUser)
 		return Redirect.afterPost(pages[MyDetailsPage#].pageUrl)
 	}
 }

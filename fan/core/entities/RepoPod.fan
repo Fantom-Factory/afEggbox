@@ -5,6 +5,7 @@ using fanr
 
 @Entity { name = "pod" }
 class RepoPod {
+	@Inject private const RepoUserDao?		userDao
 	@Inject private const RepoPodFileDao?	podFileDao
 
 	@Property{}	Str?		_id
@@ -50,6 +51,10 @@ class RepoPod {
 		podFileDao.get(_id, true).data
 	}
 	
+	RepoUser owner() {
+		userDao[ownerId]
+	}
+	
 	private Str findAboutFandoc(Str:Str metaProps, Uri:Buf contents) {
 		aboutFd := contents[`/doc/about.fdoc`]?.readAllStr		
 		if (aboutFd != null)
@@ -85,7 +90,12 @@ class RepoPod {
 		return metaProps["summary"] ?: (metaProps["podName"] ?: "???")
 	}
 	
-	override Str toStr() { _id }
+	override Str toStr() { "${name}-${version}" }
+	
+	override Int hash() { _id.toInt }
+	override Bool equals(Obj? that) {
+		_id == (that as RepoPod)._id
+	}
 }
 
 class RepoPodMeta {	

@@ -32,6 +32,12 @@ class WebModule {
 	static Void contributeBedSheetMiddleware(Configuration config) {
 		config.set("AuthMiddleware", config.autobuild(AuthenticationMiddleware#)).before("afBedSheet.routes")
 	}
+
+	@Contribute { serviceType=ValueEncoders# }
+	static Void contributeValueEncoders(Configuration config) {
+		config[RepoPod#]	= config.autobuild(PodValueEncoder#)
+		config[RepoUser#]	= config.autobuild(UserValueEncoder#)
+	}
 	
 	@Contribute { serviceType=ScriptModules# }
 	static Void contributeScriptModules(Configuration config) {
