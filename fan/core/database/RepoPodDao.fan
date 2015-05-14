@@ -104,6 +104,6 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 
 	private Str _id(Str name, Version version) {
-		"${name.lower} ${version}"
+		"${name.lower}-${version}"
 	}
 }

@@ -59,6 +59,10 @@ mixin Msgs {
 		"Email address `${email}` is already taken."
 	}
 
+	static Str userEdit_userNameTaken(Str userName) {
+		"User name '${userName}' has already been taken."
+	}
+
 	static Str podDelete_podNameDoesNotMatch(Str podName) {
 		"The entered pod name was not '${podName}'"
 	}

@@ -37,6 +37,6 @@ internal const class RepoPodFileDaoImpl : RepoPodFileDao {
 
 	
 	private Str _id(Str name, Version version) {
-		"${name.lower} ${version}"
+		"${name.lower}-${version}"
 	}
 }

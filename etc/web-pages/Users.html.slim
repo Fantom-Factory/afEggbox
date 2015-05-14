@@ -1,0 +1,10 @@
+-- app.renderLayout("User ${user.userName}")
+
+	-- if (loggedIn && loggedInUser == user)
+		div.pull-right
+			a.btn.btn-primary (href="${pages[MyDetailsPage#].pageUrl.encode}") Edit User Details
+
+	h1.page-header	User ${user.userName}
+
+	div email:		${user.email}
+	div username:	${user.userName}

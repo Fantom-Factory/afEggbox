@@ -13,8 +13,9 @@
 					th	Name
 					th	Version
 					th	Built On
-					th	Downloads
 					th	Summary
+					th	Downloads
+					th	Creator
 					th	Docs
 				-- allPods.each |pod|
 					tr
@@ -22,6 +23,7 @@
 						// / ${pod.meta.projectName}
 						td	${pod.version}
 						td	${pod.builtOn.toLocale("DDD MMM YYYY")}
-						td	${downloads(pod)}
 						td	${pod.meta.summary}
+						td	${downloads(pod)}
+						td;	a (href="${userUrl(pod.owner)}") ${pod.owner.userName}
 						td;	a (href="${podDocsUrl(pod)}") Documentation
