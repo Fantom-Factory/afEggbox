@@ -147,6 +147,6 @@ class RepoPodMeta {
 	
 	private static Void assertKeyExists(Str:Str meta, Str key) {
 		if (!meta.containsKey(key))
-			throw PublishErr(Msgs.publish_missingPodMeta(key))
+			throw PodPublishErr(Msgs.publish_missingPodMeta(key))
 	}
 }

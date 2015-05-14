@@ -1,7 +1,7 @@
 
 mixin Msgs {
 
-	// ---- Publish Errors ----------------------------------------------------
+	// ---- Pod Publish Errors ------------------------------------------------
 
 	static Str publish_podSizeTooBig(Int noOfBytes) {
 		"Pod exceeds maximum size of " + noOfBytes.toLocale("B")
@@ -31,6 +31,20 @@ mixin Msgs {
 		"Public pods must contain the file '${fileUrl}'."
 	}
 
+	static Str publish_nameTooSmall(Str podName) {
+		"Pod names must be at least 3 characters - ${podName}"
+	}
+
+	// ---- Pod Delete Errors -------------------------------------------------
+	
+	static Str podDelete_cannotDeletePublicPods(Str podName) {
+		"Public pods may not be deleted"
+	}
+	
+	static Str podDelete_cannotDeleteOtherPeoplesPods() {
+		"You can not delete other people's pods!"
+	}
+	
 	// ---- Form Errors -------------------------------------------------------
 
 	static Str login_userNotFound() {
@@ -43,6 +57,10 @@ mixin Msgs {
 	
 	static Str signup_emailTaken(Uri email) {
 		"Email address `${email}` is already taken."
+	}
+
+	static Str podDelete_podNameDoesNotMatch(Str podName) {
+		"The entered pod name does not match '${podName}'"
 	}
 	
 	// ---- Alert Messages ----------------------------------------------------
@@ -65,5 +83,9 @@ mixin Msgs {
 
 	static Str alert_userDetailsSaved(RepoUser user) {
 		"User details successfully uploaded!"
+	}
+
+	static Str alert_podDeleted(RepoPod pod) {
+		"Pod ${pod.name} was deleted"
 	}
 }

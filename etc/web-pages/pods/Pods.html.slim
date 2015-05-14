@@ -15,10 +15,13 @@
 					th	Built On
 					th	Downloads
 					th	Summary
+					th	Docs
 				-- allPods.each |pod|
 					tr
 						td;	a (href="${podSummaryUrl(pod)}") ${pod.name}
+						// / ${pod.meta.projectName}
 						td	${pod.version}
 						td	${pod.builtOn.toLocale("DDD MMM YYYY")}
 						td	${downloads(pod)}
 						td	${pod.meta.summary}
+						td;	a (href="${podDocsUrl(pod)}") Documentation

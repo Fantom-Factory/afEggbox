@@ -1,0 +1,16 @@
+-- app.renderLayout("Edit")
+
+	div.page-header
+		h1	${pod.meta.projectName} v${pod.version} Edit
+
+	h2	Delete Pod
+
+	div.row
+		div.col-sm-6
+
+			form (action="${deleteUrl}" method="post")
+				== podDeleteFormBean.renderErrors
+				== podDeleteFormBean.renderBean
+				div.pull-right
+					button.btn.btn-danger (type="submit" name="delete") Delete
+					

@@ -10,19 +10,19 @@ const class PodRoutes : Route {
 
 	new make(|This|in) { in(this) }
 	
-	** Returns a response object should the given uri (and http method) match this route. Returns 'null' if not.
-	
-	
 	** Returns a hint at what this route matches on. Used for debugging and in 404 / 500 error pages. 
 	override Str matchHint() { "GET - /pods/***" }
 
 	** Returns a hint at what response this route returns. Used for debugging and in 404 / 500 error pages. 
 	override Str responseHint() { "Pod Pages" }
 
-	// http://localhost:8069/pods/1/2/3/4/5
 	override Obj? match(HttpRequest httpReq) {
+		// FIXME: what of POST EVENTS?
 		if (httpReq.httpMethod != "GET")
 			return null
+
+			// FIXME: what of Editing Public pods?
+
 		
 		reqPath := httpReq.url.pathOnly.path.rw
 		pods	:= chomp(reqPath)

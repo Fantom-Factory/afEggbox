@@ -15,7 +15,8 @@ const class FanrRepo {
 	new make(|This|in) { in(this) }
 
 	RepoPod? find(RepoUser? user, Str name, Version? version) {
-		podDao.findOne(name, version)
+		pod := podDao.findOne(name, version)
+		return user.owns(pod) ? pod : null
 	}
 
 	** Throws 'PublishErr'
@@ -29,18 +30,18 @@ const class FanrRepo {
 		if (existing != null) {
 			if (existing.ownerId != user._id) {
 				exUser := userDao.get(existing.ownerId, false).userName
-				throw PublishErr(Msgs.publish_podNameAlreadyTaken(pod.name, exUser))
+				throw PodPublishErr(Msgs.publish_podNameAlreadyTaken(pod.name, exUser))
 			}
 			
 			if (pod.version <= existing.version)
-				throw PublishErr(Msgs.publish_podVersionTooSmall(existing.version, pod.version))
+				throw PodPublishErr(Msgs.publish_podVersionTooSmall(existing.version, pod.version))
 		}
 		
 		if (pod.isPublic) {
 			if (pod.meta.licenceName == null)
-				throw PublishErr(Msgs.publish_missingPublicPodMeta("licence.name' or 'license.name"))
+				throw PodPublishErr(Msgs.publish_missingPublicPodMeta("licence.name' or 'license.name"))
 			if (pod.meta.vcsUrl == null && pod.meta.orgUrl == null)
-				throw PublishErr(Msgs.publish_missingPublicPodMeta("vcs.uri' or 'org.uri"))
+				throw PodPublishErr(Msgs.publish_missingPublicPodMeta("vcs.uri' or 'org.uri"))
 		}	
 
 		// all good - commit the data to the database
@@ -65,6 +66,20 @@ const class FanrRepo {
 			return pods
 		}
 	}
+	
+	Void delete(RepoUser user, RepoPod pod) {
+		// FIXME: make configurable
+		if (pod.isPublic)
+			throw PodDeleteErr(Msgs.podDelete_cannotDeletePublicPods(pod.name))
+
+		if (!user.owns(pod))
+			throw PodDeleteErr(Msgs.podDelete_cannotDeleteOtherPeoplesPods)
+
+		// TODO: delete API and SRC
+		podDocsDao.deleteById(pod._id)
+		podFileDao.deleteById(pod._id)
+		podDao.delete(pod)
+	}
 }
 
 class PodContents {
@@ -83,11 +98,13 @@ class PodContents {
 		readPodContents
 		
 		if (metaProps.isEmpty)
-			throw PublishErr(Msgs.publish_missingPodFile(`/meta.props`))
+			throw PodPublishErr(Msgs.publish_missingPodFile(`/meta.props`))
 
 		pod = RepoPod(user, podBuf.size, metaProps, docContents)
 		if (pod.isPublic && !docContents.containsKey(`/doc/pod.fandoc`))
-			throw PublishErr(Msgs.publish_missingPublicPodFile(`/doc/pod.fandoc`))	
+			throw PodPublishErr(Msgs.publish_missingPublicPodFile(`/doc/pod.fandoc`))
+		if (pod.name.size <= 3)
+			throw PodPublishErr(Msgs.publish_nameTooSmall(pod.name))
 	}
 	
 	Void readPodStream(InStream podStream) {
@@ -100,7 +117,7 @@ class PodContents {
 		}
 
 		if (podBuf.size >= maxPodSize - 1)	// ensure there are no 'off by one' errors!
-			throw PublishErr(Msgs.publish_podSizeTooBig(maxPodSize))
+			throw PodPublishErr(Msgs.publish_podSizeTooBig(maxPodSize))
 
 		podBuf.flip
 	}
@@ -115,7 +132,7 @@ class PodContents {
 					metaProps = entry.readProps
 				
 				if (entry.uri.toStr.startsWith("/doc/"))
-					if (entry.uri.path.size == 2 && entry.uri.ext == ".apidoc")
+					if (entry.uri.path.size == 2 && entry.uri.ext == "apidoc")
 						apiContents[entry.uri] = entry.readAllStr
 					else
 						docContents[entry.uri] = entry.readAllBuf
@@ -129,6 +146,10 @@ class PodContents {
 	}
 }
 
-const class PublishErr : Err {
+const class PodPublishErr : Err {
+	new make(Str msg := "", Err? cause := null) : super(msg, cause) {}
+}
+
+const class PodDeleteErr : Err {
 	new make(Str msg := "", Err? cause := null) : super(msg, cause) {}
 }
