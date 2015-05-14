@@ -63,6 +63,20 @@ const class PodRoutes : Route {
 			return pages.renderPage(PodDocsPage#, [pod, fileUrl])
 		}
 
+		// --> /pods/afSlim/src
+		// --> /pods/afSlim/1.1.14/src
+		if (podSection == "src") {
+			fileUrl := `/src/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
+			return pages.renderPage(PodSrcPage#, [pod, fileUrl])
+		}
+
+		// --> /pods/afSlim/api
+		// --> /pods/afSlim/1.1.14/api
+		if (podSection == "api") {
+			fileUrl := `/doc/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
+			return pages.renderPage(PodApiPage#, [pod, fileUrl])
+		}
+
 		// --> /pods/afSlim/edit
 		// --> /pods/afSlim/1.1.14/edit
 		if (podSection == "edit" && reqPath.isEmpty) {
@@ -103,6 +117,17 @@ const class PodRoutes : Route {
 			if (userSession.isLoggedIn) {
 				if (userSession.user.owns(pod)) 
 					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onDelete, null)
+				throw HttpStatusErr(401, "Unauthorised")
+			}
+			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+		}
+		
+		// --> /pods/afSlim/edit/save
+		// --> /pods/afSlim/1.1.14/edit/save
+		if (podSection == "edit" && podEvent == "save" && reqPath.isEmpty) {
+			if (userSession.isLoggedIn) {
+				if (userSession.user.owns(pod)) 
+					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onSave, null)
 				throw HttpStatusErr(401, "Unauthorised")
 			}
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
