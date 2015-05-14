@@ -4,7 +4,7 @@ using afPillow
 
 const class PodRoutes : Route {
 	
-	@Inject	private const HttpRequest	httpReq
+	@Inject	private const UserSession	userSession
 	@Inject	private const Pages	 		pages
 	@Inject	private const RepoPodDao	podDao
 
@@ -17,28 +17,24 @@ const class PodRoutes : Route {
 	override Str responseHint() { "Pod Pages" }
 
 	override Obj? match(HttpRequest httpReq) {
-		// FIXME: what of POST EVENTS?
-		if (httpReq.httpMethod != "GET")
-			return null
-
-			// FIXME: what of Editing Public pods?
-
-		
 		reqPath := httpReq.url.pathOnly.path.rw
 		pods	:= chomp(reqPath)
 		if (pods != "pods")
 			return null
+
+		if (httpReq.httpMethod == "POST")
+			return matchEvents(httpReq, reqPath)
+
+		if (httpReq.httpMethod != "GET")
+			return null
+
+			// FIXME: what of Editing Public pods?
 		
 		podName		:= chomp(reqPath)
 		podVersion	:= Version((reqPath.isEmpty ? null : reqPath.first) ?: "", false)
 		if (podVersion != null)	chomp(reqPath)
 		podSection	:= chomp(reqPath)
 		
-		echo("podName - $podName")
-		echo("podVersion - $podVersion")
-		echo("podSection - $podSection")
-		echo("extra - $reqPath")
-
 		// --> /pods
 		// --> /pods/
 		if (podName == null)
@@ -57,10 +53,8 @@ const class PodRoutes : Route {
 		if (podSection == null && reqPath.isEmpty)
 			return pages.renderPage(PodSummaryPage#, [pod])
 		
-		// --> /pods/afSlim
-		// --> /pods/afSlim/
-		// --> /pods/afSlim/1.1.14
-		// --> /pods/afSlim/1.1.14/
+		// --> /pods/afSlim/docs
+		// --> /pods/afSlim/1.1.14/docs
 		if (podSection == "docs") {
 			fileUrl := `/doc/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
 			if (fileUrl == `/doc/`)
@@ -68,9 +62,55 @@ const class PodRoutes : Route {
 			// TODO: handle images and other files
 			return pages.renderPage(PodDocsPage#, [pod, fileUrl])
 		}
+
+		// --> /pods/afSlim/edit
+		// --> /pods/afSlim/1.1.14/edit
+		if (podSection == "edit" && reqPath.isEmpty) {
+			if (userSession.isLoggedIn) {
+				if (userSession.user.owns(pod)) 
+					return pages.renderPage(PodEditPage#, [pod])	
+				throw HttpStatusErr(401, "Unauthorised")
+			}
+			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+		}
 		
 		return null
 	}
+
+	
+	Obj? matchEvents(HttpRequest httpReq, Str[] reqPath) {
+		podName		:= chomp(reqPath)
+		podVersion	:= Version((reqPath.isEmpty ? null : reqPath.first) ?: "", false)
+		if (podVersion != null)	chomp(reqPath)
+		podSection	:= chomp(reqPath)
+		
+		// --> /pods
+		// --> /pods/
+		if (podName == null)
+			return null
+
+		pod := podDao.findOne(podName, podVersion)
+		if (pod == null) {
+			v := (podVersion != null) ? " v${podVersion}" : ""
+			return HttpStatus(404, "Pod ${podName}${v} not found")
+		}
+		
+		podEvent	:= chomp(reqPath)
+		
+		// --> /pods/afSlim/edit/delete
+		// --> /pods/afSlim/1.1.14/edit/delete
+		if (podSection == "edit" && podEvent == "delete" && reqPath.isEmpty) {
+			if (userSession.isLoggedIn) {
+				if (userSession.user.owns(pod)) 
+					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onDelete, null)
+				throw HttpStatusErr(401, "Unauthorised")
+			}
+			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+		}
+		
+		return null
+	}
+
 	
 	private Str? chomp(Str[] path) {
 		path.isEmpty ? null : path.removeAt(0) 

@@ -26,8 +26,8 @@ const mixin EntityDao {
 		datastore.delete(entity)
 	}
 
-	virtual Void deleteById(Obj id) {
-		datastore.deleteById(id)
+	virtual Void deleteById(Obj id, Bool checked := true) {
+		datastore.deleteById(id, checked)
 	}
 
 	virtual Void dropAll() {

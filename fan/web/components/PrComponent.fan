@@ -42,7 +42,11 @@ const mixin PrComponent : EfanComponent {
 		throw ArgErr("WTF is a ${obj.typeof}??? Hints: ${hints} - $obj")
 	}
 	
-	Bool isLoggedIn() {
+	Bool loggedIn() {
 		userSession.isLoggedIn
+	}
+
+	RepoUser? user() {
+		userSession.user
 	}
 }

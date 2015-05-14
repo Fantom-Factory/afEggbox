@@ -69,15 +69,15 @@ const class FanrRepo {
 	
 	Void delete(RepoUser user, RepoPod pod) {
 		// FIXME: make configurable
-		if (pod.isPublic)
-			throw PodDeleteErr(Msgs.podDelete_cannotDeletePublicPods(pod.name))
+//		if (pod.isPublic)
+//			throw PodDeleteErr(Msgs.podDelete_cannotDeletePublicPods(pod.name))
 
 		if (!user.owns(pod))
 			throw PodDeleteErr(Msgs.podDelete_cannotDeleteOtherPeoplesPods)
 
 		// TODO: delete API and SRC
-		podDocsDao.deleteById(pod._id)
-		podFileDao.deleteById(pod._id)
+		podDocsDao.deleteById(pod._id, false)
+		podFileDao.deleteById(pod._id, false)
 		podDao.delete(pod)
 	}
 }

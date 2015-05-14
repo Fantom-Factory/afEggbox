@@ -12,6 +12,10 @@ const mixin PodSummaryPage : PrPage {
 
 		// TODO: seo this page!
 	
+	Str podEditUrl() {
+		`/pods/${pod.name}/${pod.version}/edit`.encode
+	}
+	
 	Str aboutPod() {
 		htmlWriter.toHtml(pod.aboutFandoc)
 	}

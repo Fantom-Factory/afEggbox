@@ -60,7 +60,7 @@ mixin Msgs {
 	}
 
 	static Str podDelete_podNameDoesNotMatch(Str podName) {
-		"The entered pod name does not match '${podName}'"
+		"The entered pod name was not '${podName}'"
 	}
 	
 	// ---- Alert Messages ----------------------------------------------------
@@ -86,6 +86,6 @@ mixin Msgs {
 	}
 
 	static Str alert_podDeleted(RepoPod pod) {
-		"Pod ${pod.name} was deleted"
+		"Deleted pod ${pod.name}"
 	}
 }

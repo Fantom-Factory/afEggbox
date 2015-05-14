@@ -27,8 +27,11 @@ const class AuthenticationMiddleware : Middleware {
 				pipeline.service; return				
 			}
 			
-			if (userSession.isLoggedIn && userSession.user.owns(pod)) {
-				pipeline.service; return								
+			if (userSession.isLoggedIn) {
+				if (userSession.user.owns(pod)) {
+					pipeline.service; return	
+				}
+				throw HttpStatusErr(401, "Unauthorised")
 			}
 
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))

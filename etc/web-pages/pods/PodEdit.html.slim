@@ -10,7 +10,7 @@
 
 			form (action="${deleteUrl}" method="post")
 				== podDeleteFormBean.renderErrors
-				== podDeleteFormBean.renderBean
+				== podDeleteFormBean.renderBean(null)
 				div.pull-right
 					button.btn.btn-danger (type="submit" name="delete") Delete
 					

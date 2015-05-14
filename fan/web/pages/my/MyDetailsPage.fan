@@ -9,12 +9,6 @@ const mixin MyDetailsPage : PrMyPage {
 	@Inject abstract RepoUserDao	userDao
 	@Inject { type=RepoUser# } 
 			abstract FormBean		formBean
-			abstract RepoUser		user
-
-	@InitRender
-	Void intiRender() {
-		user = userSession.user
-	}
 
 	Str saveUrl() {
 		pageMeta.eventUrl(#onSave).encode
