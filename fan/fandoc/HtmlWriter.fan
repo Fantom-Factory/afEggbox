@@ -40,8 +40,9 @@ class HtmlWriter : DocWriter {
 				skin.p(para.admonition)
 
 			case DocNodeId.pre:
-				pre := elem as Pre
-				skin.pre
+				// pre := elem as Pre
+				// skin.pre
+				null?.toStr
 
 			case DocNodeId.blockQuote:
 				blockQuote := elem as BlockQuote
@@ -96,6 +97,9 @@ class HtmlWriter : DocWriter {
 				preProcessors.process(cmd, preText, skin)
 				return
 			}
+			
+			skin.pre.escape(docText.str).preEnd
+			return
 		}
 		
 		skin.escape(docText.str)
@@ -115,7 +119,8 @@ class HtmlWriter : DocWriter {
 				skin.pEnd
 
 			case DocNodeId.pre:
-				skin.preEnd
+				// skin.preEnd
+				null?.toStr
 
 			case DocNodeId.blockQuote:
 				skin.blockQuoteEnd
@@ -143,6 +148,7 @@ class HtmlWriter : DocWriter {
 
 			case DocNodeId.image:
 				// skin.imgEnd
+				null?.toStr
 		}
 	}
 }
