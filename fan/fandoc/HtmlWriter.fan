@@ -5,10 +5,9 @@ using afBedSheet::FileHandler
 class HtmlWriter : DocWriter {
 	
 //	@Inject LinkResolver 	linkResolvers
-//	@Inject PreProcessors	preProcessors
-	
-	private HtmlSkin?	skin
-	private Bool		inPreText
+	@Inject private PreTextProcessors	preProcessors	
+			private HtmlSkin?			skin
+			private Bool				inPreText
 
 	new make(|This| in) { 
 		in(this) 
@@ -87,22 +86,19 @@ class HtmlWriter : DocWriter {
 	}
 
 	override Void text(DocText docText) {
-//		if (inPreText && docText.str.lower.startsWith("syntax:")) {
-//			lines	:= docText.str.splitLines
-//			syntax 	:= lines[0]["syntax:".size..-1].trim.lower
-//			lines.removeAt(0)
-//			while (!lines.isEmpty && lines[0].trim.isEmpty)
-//				lines.removeAt(0)
-//			text 	:= lines.join("\n")
-//			uri		:= doc.meta[Article.FILE_META_ID].toUri
-//			if (highlightSyntax && isValid(syntax)) {
-//				html	:= syntaxHilighter.hilight(uri, syntax, text) 
-//				out.print(html)
-//			} else {
-//				safeText(text)
-//			}
-//		} else
-			skin.escape(docText.str)
+		if (inPreText) {
+			idx		:= docText.str.index("\n") ?: -1
+			cmdTxt	:= docText.str[0..idx].trim
+			cmd 	:= (Uri?) null
+			try { cmd = cmdTxt.toUri } catch { }
+			if (cmd != null && preProcessors.canProcess(cmd)) {
+				preText := docText.str[idx..-1]
+				preProcessors.process(cmd, preText, skin)
+				return
+			}
+		}
+		
+		skin.escape(docText.str)
 	}
 
 	override Void elemEnd(DocElem elem) {
