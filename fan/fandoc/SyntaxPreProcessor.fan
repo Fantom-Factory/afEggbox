@@ -1,6 +1,11 @@
+using afIoc
 using syntax
 
 class SyntaxPreProcessor : PreTextProcessor {
+	
+	@Inject	private SyntaxWriter	syntaxWriter
+	
+	new make(|This|in) { in(this) }
 	
 	override Void process(Uri cmd, Str preText, HtmlSkin skin) {
 		ext := cmd.pathStr.trim
@@ -13,10 +18,7 @@ class SyntaxPreProcessor : PreTextProcessor {
 		while (preText.endsWith("\n"))
 			preText = preText[0..-2]
 
-		skin.out.div("class=\"syntax\"")
-		rules	:= SyntaxRules.loadForExt(ext)
-		synDoc	:= SyntaxDoc.parse(rules, preText.in)
-		HtmlSyntaxWriter(skin.out).writeLines(synDoc)
-		skin.out.divEnd
+		syntax := syntaxWriter.writeSyntax(preText, ext)
+		skin.w(syntax)
 	}
 }
