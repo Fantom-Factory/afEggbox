@@ -28,8 +28,6 @@ const class PodRoutes : Route {
 		if (httpReq.httpMethod != "GET")
 			return null
 
-			// FIXME: what of Editing Public pods?
-		
 		podName		:= chomp(reqPath)
 		podVersion	:= Version((reqPath.isEmpty ? null : reqPath.first) ?: "", false)
 		if (podVersion != null)	chomp(reqPath)
