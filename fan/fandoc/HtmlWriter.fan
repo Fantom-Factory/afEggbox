@@ -20,13 +20,13 @@ class HtmlWriter : DocWriter {
 		return skin.toStr
 	}
 	
-	override Void docStart(Doc doc) { }
-	override Void docEnd(Doc doc) { }
+	override Void docStart(fandoc::Doc doc) { }
+	override Void docEnd(fandoc::Doc doc) { }
 	
 	override Void elemStart(DocElem elem) {
 		switch (elem.id) {
 			case DocNodeId.doc:
-				doc := elem as Doc
+				//doc := elem as Doc
 				// ??? <body> + meta
 
 			case DocNodeId.heading:
@@ -108,7 +108,7 @@ class HtmlWriter : DocWriter {
 	override Void elemEnd(DocElem elem) {
 		switch (elem.id) {
 			case DocNodeId.doc:
-				doc := elem as Doc
+				//doc := elem as Doc
 				// ??? <body> + meta
 
 			case DocNodeId.heading:
