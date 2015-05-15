@@ -1,7 +1,8 @@
+using web
 
 mixin HtmlSkin {
 	
-	abstract OutStream out
+	abstract WebOutStream out
 	
 	virtual This h(Int level, Str? id)	{ w("<h${level}").attr("id", id).w(">") 						}
 	virtual This hEnd(Int level)		{ w("</h${level}>")												}
@@ -60,11 +61,11 @@ mixin HtmlSkin {
 }
 
 class MyHtmlSkin : HtmlSkin {
-	override OutStream out
+	override WebOutStream out
 	StrBuf buf
 	new make() {
 		buf = StrBuf()
-		out = buf.out
+		out = WebOutStream(buf.out)
 	}
 	override Str toStr() {
 		buf.toStr
