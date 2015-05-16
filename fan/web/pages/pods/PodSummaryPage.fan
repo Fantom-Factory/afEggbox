@@ -6,7 +6,7 @@ using afPillow
 @Page { disableRoutes = true }
 const mixin PodSummaryPage : PrPage {
 
-	@Inject	abstract HtmlWriter		htmlWriter
+	@Inject	abstract Fandoc			fandoc
 	@PageContext
 			abstract RepoPod		pod
 
@@ -17,6 +17,6 @@ const mixin PodSummaryPage : PrPage {
 	}
 	
 	Str aboutPod() {
-		htmlWriter.toHtml(pod.aboutFandoc)
+		fandoc.writeStrToHtml(pod.aboutFandoc)
 	}
 }

@@ -1,7 +1,7 @@
 using afIoc
 using syntax
 
-class SyntaxPreProcessor : PreTextProcessor {
+internal class SyntaxPreProcessor : PreTextProcessor {
 	
 	@Inject	private SyntaxWriter	syntaxWriter
 	

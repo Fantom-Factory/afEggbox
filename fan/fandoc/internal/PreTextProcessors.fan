@@ -1,4 +1,5 @@
 
+@NoDoc	// don't overwhelm the masses
 class PreTextProcessors {
 	private Str:PreTextProcessor processors
 	
