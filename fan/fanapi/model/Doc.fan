@@ -10,7 +10,7 @@
 **  - `DocRes`: resource file
 **  - `DocSrc`: source file
 **
-const abstract class Doc
+const abstract class FanDoc
 {
 //  **
 //  ** Space which contains this document

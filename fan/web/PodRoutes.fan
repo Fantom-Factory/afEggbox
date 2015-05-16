@@ -51,14 +51,14 @@ const class PodRoutes : Route {
 		if (podSection == null && reqPath.isEmpty)
 			return pages.renderPage(PodSummaryPage#, [pod])
 		
-		// --> /pods/afSlim/docs
-		// --> /pods/afSlim/1.1.14/docs
-		if (podSection == "docs") {
+		// --> /pods/afSlim/doc
+		// --> /pods/afSlim/1.1.14/doc
+		if (podSection == "doc") {
 			fileUrl := `/doc/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
 			if (fileUrl == `/doc/`)
 				fileUrl = fileUrl.plusName("pod.fandoc")
 			// TODO: handle images and other files
-			return pages.renderPage(PodDocsPage#, [pod, fileUrl])
+			return pages.renderPage(PodDocPage#, [pod, fileUrl])
 		}
 
 		// --> /pods/afSlim/src

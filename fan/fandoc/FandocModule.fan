@@ -14,4 +14,12 @@ class FandocModule {
 		config["syntax"]	= config.autobuild(SyntaxPreProcessor#)
 		config["table"]		= config.autobuild(TablePreProcessor#)
 	}
+	
+	@Contribute { serviceType=LinkResolvers# }
+	static Void contributeLinkResolvers(Configuration config) {
+		config["literal"]	= LiteralLinkResolver()
+		config["anchor"]	= AnchorLinkResolver()
+		config["fantom"]	= config.autobuild(FantomLinkResolver#)
+		config["fandoc"]	= config.autobuild(FandocLinkResolver#)
+	}
 }
