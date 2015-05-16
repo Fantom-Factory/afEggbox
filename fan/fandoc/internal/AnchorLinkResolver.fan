@@ -3,15 +3,15 @@ using afBeanUtils
 internal const class AnchorLinkResolver : LinkResolver {
 	
 	** Validate in-page anchors
-	override Uri? resolve(Str url, LinkResolverCtx ctx) {
-		if (url.startsWith("#") && ctx.doc != null) {
-			id := url[1..-1]
+	override Uri? resolve(Uri uri, LinkResolverCtx ctx) {
+		if (uri.toStr.startsWith("#") && ctx.doc != null) {
+			id := uri.toStr[1..-1]
 			hd := ctx.doc.findHeadings.find { (it.anchorId ?: it.title.fromDisplayName) == id }
 			if (hd == null) {
 				headings := ctx.doc.findHeadings.map { it.anchorId ?: it.title.fromDisplayName }.sort.join(", ")
-				return ctx.invalidLink(url, "Could not find heading: $url Available headings: ${headings}")
+				return ctx.invalidLink(uri, "Could not find heading: $uri Available headings: ${headings}")
 			}
-			return url.toUri
+			return uri
 		}
 		return null
 	}
