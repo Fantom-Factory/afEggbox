@@ -2,7 +2,8 @@ using web
 
 mixin HtmlSkin {
 	
-	abstract WebOutStream out
+	abstract WebOutStream	out
+	abstract Str 			toHtml()
 	
 	virtual This h(Int level, Str? id)	{ w("<h${level}").attr("id", id).w(">") 						}
 	virtual This hEnd(Int level)		{ w("</h${level}>")												}
@@ -57,15 +58,18 @@ mixin HtmlSkin {
 		out.writeXml(val, OutStream.xmlEscQuotes)
 		out.writeChar('"')
 		return this
-	}
+	}	
 }
 
-class MyHtmlSkin : HtmlSkin {
+internal class DefaultHtmlSkin : HtmlSkin {
 	override WebOutStream out
 	StrBuf buf
 	new make() {
 		buf = StrBuf()
 		out = WebOutStream(buf.out)
+	}
+	override Str toHtml() {
+		buf.toStr
 	}
 	override Str toStr() {
 		buf.toStr

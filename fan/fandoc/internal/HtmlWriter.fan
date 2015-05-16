@@ -2,22 +2,16 @@ using afIoc
 using fandoc
 using afBedSheet::FileHandler
 
-class HtmlWriter : DocWriter {
+internal class HtmlWriter : DocWriter {
 	
-//	@Inject LinkResolver 	linkResolvers
+	@Inject private	LinkResolvers 		linkResolvers
 	@Inject private PreTextProcessors	preProcessors	
 			private HtmlSkin?			skin
 			private Bool				inPreText
 
-	new make(|This| in) { 
-		in(this) 
-	}
-	
-	Str toHtml(Str fandoc) {
-		doc := FandocParser().parseStr(fandoc)
-		skin = MyHtmlSkin()
-		doc.writeChildren(this)
-		return skin.toStr
+	new make(HtmlSkin? htmlSkin, |This| in) {
+		this.skin = htmlSkin ?:  DefaultHtmlSkin()
+		in(this)
 	}
 	
 	override Void docStart(fandoc::Doc doc) { }
@@ -150,6 +144,10 @@ class HtmlWriter : DocWriter {
 				// skin.imgEnd
 				null?.toStr
 		}
+	}
+	
+	Str toHtml() {
+		skin.toHtml
 	}
 }
 

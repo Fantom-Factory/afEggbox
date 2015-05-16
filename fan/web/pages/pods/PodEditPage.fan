@@ -97,10 +97,10 @@ class PodEditDetails {
 		set { pod.meta["proj.uri"]  = it }
 	}
 
-	@HtmlInput { type="text"; placeholder="Summary"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=1024 }
+	@HtmlInput { type="textarea"; placeholder="Summary"; attributes="rows=\"3\""; required=true; minLength=3; maxLength=1024; hint="Summaries generally don't include the pod or project name" }
 	Str summary {
-		get { pod.meta["pod.summary"] }
-		set { pod.meta["pod.summary"] = it }
+		get { pod.meta["pod.summary"] ?: "" }
+		set { pod.meta["pod.summary"]  = it }
 	}
 
 	@HtmlInput { type="text"; placeholder="Organisation Name"; required=true; minLength=3; maxLength=215 }
@@ -117,8 +117,8 @@ class PodEditDetails {
 
 	@HtmlInput { type="text"; placeholder="Source Code Management"; required=true; minLength=3; maxLength=128 }
 	Str sourceCodeManagement {
-		get { pod.meta["vcs.name"] }
-		set { pod.meta["vcs.name"] = it }
+		get { pod.meta["vcs.name"] ?: "" }
+		set { pod.meta["vcs.name"]  = it }
 	}
 
 	@HtmlInput { type="url"; placeholder="Source Code Management URL"; required=true; minLength=3; maxLength=512 }

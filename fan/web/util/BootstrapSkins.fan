@@ -2,42 +2,61 @@ using afIoc
 using afBedSheet
 using afFormBean
 
-const class BootstrapTextSkin : InputSkin {
-	override Str render(SkinCtx skinCtx) {
+const mixin BootstrapSkin : InputSkin {
+	Str renderFormGroup(SkinCtx skinCtx, |Str->Str| inputStr) {
 		html	:= Str.defVal
 		errCss	:= skinCtx.fieldInvalid ? " has-error" : Str.defVal
 		hint	:= skinCtx.input.hint ?: skinCtx.msg("field.${skinCtx.name}.hint")
-		attrs	:= skinCtx.renderAttributes(["class":"form-control"])
+		attMap	:= ["class":"form-control"]
+		if (hint != null)
+			attMap["aria-describedby"] = "${skinCtx.name}-helpBlock"
+		attrs	:= skinCtx.renderAttributes(attMap)
 
 		html	+= """<div class="form-group${errCss}">"""
 		html	+= """<label for="${skinCtx.name}">${skinCtx.label}</label>"""
-		html	+= """<input ${attrs} type="${skinCtx.input.type}" value="${skinCtx.value}">"""
+		html	+= inputStr(attrs)
 		html	+= """</div>"""
 
 		if (hint != null)
-			// add "aria-describedby"
-			html += """<span class="help-block">${hint}</span>"""				
+			html += """<span id="${skinCtx.name}-helpBlock" class="help-block">${hint}</span>"""				
 
 		return html + "\n"
 	}
 }
 
-const class BootstrapStaticSkin : InputSkin {
+const class BootstrapTextSkin : BootstrapSkin {
 	override Str render(SkinCtx skinCtx) {
+		renderFormGroup(skinCtx) |attrs| {
+			"""<input ${attrs} type="${skinCtx.input.type}" value="${skinCtx.value}">"""
+		}
+	}
+}
+
+const class BootstrapTextAreaSkin : BootstrapSkin {
+	override Str render(SkinCtx skinCtx) {
+		renderFormGroup(skinCtx) |attrs| {
+			"""<textarea ${attrs}>${skinCtx.value}</textarea>"""
+		}
+	}
+}
+
+const class BootstrapStaticSkin : BootstrapSkin {
+	override Str render(SkinCtx skinCtx) {
+		renderFormGroup(skinCtx) |attrs| {
+			"""<p ${attrs}>${skinCtx.value.toXml}</p>"""
+		}
+	}
+}
+
+const class BootstrapCheckboxSkin : BootstrapSkin {
+	override Str render(SkinCtx skinCtx) {
+		checked := (skinCtx.value == "true" || skinCtx.value == "on") ? " checked" : Str.defVal
 		html	:= Str.defVal
-		errCss	:= skinCtx.fieldInvalid ? " has-error" : Str.defVal
-		hint	:= skinCtx.input.hint ?: skinCtx.msg("field.${skinCtx.name}.hint")
-		attrs	:= skinCtx.renderAttributes(["class":"form-control-static"])
-
-		html	+= """<div class="form-group${errCss}">"""
-		html	+= """<label for="${skinCtx.name}">${skinCtx.label}</label>"""
-		html	+= """<p ${attrs}>${skinCtx.value.toXml}</p>"""
+		html	+= """<div class="checkbox">"""
+		html	+= """<label>"""
+		html	+= """<input type="checkbox" ${skinCtx.renderAttributes}${checked}> ${skinCtx.label}"""
+		html	+= """</label>"""
 		html	+= """</div>"""
-
-		if (hint != null)
-			// TODO: add "aria-describedby"
-			html += """<span class="help-block">${hint}</span>"""				
-
 		return html + "\n"
 	}
 }

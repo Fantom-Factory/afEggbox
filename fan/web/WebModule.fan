@@ -26,6 +26,8 @@ class WebModule {
 		config.overrideValue("text",		BootstrapTextSkin())
 		config.overrideValue("url",			BootstrapTextSkin())
 		config.overrideValue("password",	BootstrapTextSkin())
+		config.overrideValue("checkbox",	BootstrapCheckboxSkin())
+		config.overrideValue("textarea",	BootstrapTextAreaSkin())
 		config.set			("static",		BootstrapStaticSkin())
 	}
 	
