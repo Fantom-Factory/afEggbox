@@ -9,7 +9,7 @@ internal class LinkResolvers {
 		this.resolvers = resolvers
 	}
 	
-	Uri? resolve(Str url, LinkResolverCtx? ctx := null) {
-		resolvers.eachWhile { it.resolve(url, ctx ?: LinkResolverCtx()) } ?: throw Err("Could not resolve link - $url")
+	Uri? resolve(Uri uri, LinkResolverCtx? ctx := null) {
+		resolvers.eachWhile { it.resolve(uri, ctx ?: LinkResolverCtx()) } ?: throw Err("Could not resolve link - $uri")
 	}
 }

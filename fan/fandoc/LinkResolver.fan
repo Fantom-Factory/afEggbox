@@ -1,5 +1,5 @@
 
 mixin LinkResolver {
 	
-	abstract Uri? resolve(Str url, LinkResolverCtx ctx)
+	abstract Uri? resolve(Uri uri, LinkResolverCtx ctx)
 }
