@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 
 @Page { disableRoutes = true }
-const mixin PodDocsPage : PrPage {
+const mixin PodDocPage : PrPage {
 
 	@Inject			abstract Fandoc			fandoc
 	@Inject			abstract RepoPodDocsDao	podDocsDao

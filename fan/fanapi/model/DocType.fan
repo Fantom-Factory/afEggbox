@@ -2,7 +2,7 @@
 **
 ** DocType models the documentation of a `sys::Type`.
 **
-const class DocType : Doc
+const class DocType : FanDoc
 {
 
   ** Constructor
