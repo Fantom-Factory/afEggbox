@@ -35,63 +35,23 @@ internal const class FantomLinkResolver : LinkResolver {
 		link := uri.toStr
 		
 		if (link.contains("::")) {
+			if (link.split(':').size > 3)
+				return ctx.invalidLink(uri, "Invalid API URI, too many path segments")
 			podName	:= link.split(':').first
-			typeStr	:= link.split(':').getSafe(2)
+			typeStr	:= link[podName.size+2..-1]
 			pod		:= podDao.findOne(podName, null)
 			if (pod == null)
 				return ctx.invalidLink(uri, "Could not find pod ${podName}")
-			if (typeStr == null || typeStr.isEmpty || typeStr.equalsIgnoreCase("index"))
-				return summaryUrl(pod)
-			if (typeStr.equalsIgnoreCase("pod-doc"))
-				return summaryUrl(pod).plusName("doc", true)
-						
-			apiDocs := podApiDao.get(pod._id, false)
-			if (apiDocs != null) {
-				if (typeStr.split('.').size > 2)
-					return ctx.invalidLink(uri, "Invalid API URI, too many path segments")
-				typeNom	:= typeStr.split('.').first
-				apiKey	:= apiDocs.contents.keys.find { it.toStr.equalsIgnoreCase("/doc/${typeNom}.apidoc") }
-				if (apiKey != null) {
-					docType	:= ApiDocParser(apiDocs.contents[apiKey].in).parseType
-					slotStr	:= typeStr.split('.').getSafe(1)
-					apiUri	:= summaryUrl(pod).plusName("api", true).plusName(docType.name)
-					if (slotStr == null)
-						return apiUri
-					slot	:= docType.slot(slotStr, false)	// ApiDocParser ensures a case-insensitive match
-					if (slot == null)
-						return ctx.invalidLink(uri, "Could not find API slot for `${pod.name}::${docType.name}.${slotStr}`", apiUri)
-					return apiUri.plusName("${docType.name}#${slot.name}")
-				}
+			return ctx.withPod(pod) {
+				resolveFromPod(uri, typeStr, ctx)
 			}
-
-			podDocs := podDocDao.get(pod._id, false)
-			if (podDocs != null) {
-				docNom	:= typeStr.split('#').first
-				docKey	:= podDocs.contents.keys.find { it.toStr.equalsIgnoreCase("/doc/${docNom}.fandoc") }
-				if (docKey != null) {
-					if (docNom.split('#').size > 2)
-						return ctx.invalidLink(uri, "Invalid document URI, too many path fragments")
-					docUrl	:= summaryUrl(pod) + docKey.relTo(`/`)
-					fragStr	:= docNom.split('#').getSafe(1)
-					if (fragStr == null)
-						return docUrl					
-					try {
-						fandoc	:= FandocParser().parseStr(podDocs.contents[docKey].readAllStr)
-						heading	:= fandoc.findHeadings.find { (it.anchorId ?: it.title.fromDisplayName).equalsIgnoreCase(uri.frag) }
-						if (heading == null)
-							return ctx.invalidLink(uri, "Document ${docKey} in ${pod.name} does not contain a heading ID #${uri.frag}", docUrl)
-						return docUrl.plusName("${docUrl.name}#${heading.anchorId ?: heading.title.fromDisplayName}")				
-					} catch (Err err) {
-						return ctx.invalidLink(uri, "Document ${docKey} in ${pod.name} is not a valid Fandoc - ${err.msg}", docUrl)
-					}
-				}
-			}
-
-			// not an absolute link
-			return null
 		}
 		
-		// TODO: Fantom relative links
+		if (ctx.pod != null && uri.scheme == null) {
+			return resolveFromPod(uri, link, ctx)
+			
+			// FIXME: resolve type relative link to slot
+		}
 		
 		return null
 	}
@@ -102,7 +62,55 @@ internal const class FantomLinkResolver : LinkResolver {
 		return url
 	}
 	
-//	Uri resolveLink(Uri uri, LinkResolverCtx ctx) {
-//		resolvers().resolve(uri, ctx)
-//	}
+	Uri? resolveFromPod(Uri uri, Str? link, LinkResolverCtx ctx) {
+		if (link.split('.').size > 2)
+			return ctx.invalidLink(uri, "Invalid API URI, too many path segments")
+		pod := ctx.pod
+		if (link == null || link.isEmpty || link.equalsIgnoreCase("index"))
+			return summaryUrl(pod)
+		if (link.equalsIgnoreCase("pod-doc"))
+			return summaryUrl(pod).plusName("doc", true)
+
+		apiDocs := podApiDao.get(pod._id, false)
+		if (apiDocs != null) {
+			typeNom	:= link.split('.').first
+			apiKey	:= apiDocs.contents.keys.find { it.toStr.equalsIgnoreCase("/doc/${typeNom}.apidoc") }
+			if (apiKey != null) {
+				docType	:= ApiDocParser(apiDocs.contents[apiKey].in).parseType
+				slotStr	:= link.split('.').getSafe(1)
+				apiUri	:= summaryUrl(pod).plusName("api", true).plusName(docType.name)
+				if (slotStr == null)
+					return apiUri
+				slot	:= docType.slot(slotStr, false)	// ApiDocParser ensures a case-insensitive match
+				if (slot == null)
+					return ctx.invalidLink(uri, "Could not find API slot for `${pod.name}::${docType.name}.${slotStr}`", apiUri)
+				return apiUri.plusName("${docType.name}#${slot.name}")
+			}
+		}
+
+		podDocs := podDocDao.get(pod._id, false)
+		if (podDocs != null) {
+			docNom	:= link.split('#').first
+			docKey	:= podDocs.contents.keys.find { it.toStr.equalsIgnoreCase("/doc/${docNom}.fandoc") }
+			if (docKey != null) {
+				if (docNom.split('#').size > 2)
+					return ctx.invalidLink(uri, "Invalid document URI, too many path fragments")
+				docUrl	:= summaryUrl(pod) + docKey.relTo(`/`)
+				fragStr	:= docNom.split('#').getSafe(1)
+				if (fragStr == null)
+					return docUrl					
+				try {
+					fandoc	:= FandocParser().parseStr(podDocs.contents[docKey].readAllStr)
+					heading	:= fandoc.findHeadings.find { (it.anchorId ?: it.title.fromDisplayName).equalsIgnoreCase(uri.frag) }
+					if (heading == null)
+						return ctx.invalidLink(uri, "Document ${docKey} in ${pod.name} does not contain a heading ID #${uri.frag}", docUrl)
+					return docUrl.plusName("${docUrl.name}#${heading.anchorId ?: heading.title.fromDisplayName}")				
+				} catch (Err err) {
+					return ctx.invalidLink(uri, "Document ${docKey} in ${pod.name} is not a valid Fandoc - ${err.msg}", docUrl)
+				}
+			}
+		}
+
+		return null
+	}
 }

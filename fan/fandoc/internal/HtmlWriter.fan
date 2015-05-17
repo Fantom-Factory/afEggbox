@@ -7,9 +7,11 @@ internal class HtmlWriter : DocWriter {
 	@Inject private	LinkResolvers 		linkResolvers
 	@Inject private PreTextProcessors	preProcessors	
 			private HtmlSkin?			skin
+			private LinkResolverCtx?	ctx
 			private Bool				inPreText
 
-	new make(HtmlSkin? htmlSkin, |This| in) {
+	new make(LinkResolverCtx? ctx, HtmlSkin? htmlSkin, |This| in) {
+		this.ctx  = ctx
 		this.skin = htmlSkin ?:  DefaultHtmlSkin()
 		in(this)
 	}
@@ -68,12 +70,12 @@ internal class HtmlWriter : DocWriter {
 
 			case DocNodeId.link:
 				link := elem as Link
-				href := linkResolvers.resolve(link.uri.toUri)
+				href := linkResolvers.resolve(link.uri.toUri, ctx)
 				skin.a(href)
 
 			case DocNodeId.image:
 				img := elem as Image
-				src := linkResolvers.resolve(img.uri.toUri)
+				src := linkResolvers.resolve(img.uri.toUri, ctx)
 				skin.img(src, img.alt)
 		}
 		
