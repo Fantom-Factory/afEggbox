@@ -10,6 +10,13 @@ internal class LinkResolvers {
 	}
 	
 	Uri? resolve(Uri uri, LinkResolverCtx? ctx := null) {
-		resolvers.eachWhile { it.resolve(uri, ctx ?: LinkResolverCtx()) } ?: throw Err("Could not resolve link - $uri")
+		ctx = ctx ?:LinkResolverCtx()
+		invalidCount := ctx.invalidLinks.size
+		resolved := resolvers.eachWhile { it.resolve(uri, ctx) }
+		if (resolved == null && invalidCount == ctx.invalidLinks.size)
+			ctx.invalidLink(uri, "Could not resolve link - $uri")
+		
+		ctx.invalidLinks.each { echo(it) }
+		return resolved ?: `/ERROR`
 	}
 }

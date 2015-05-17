@@ -68,12 +68,12 @@ internal class HtmlWriter : DocWriter {
 
 			case DocNodeId.link:
 				link := elem as Link
-				href := link.uri.toUri	// FIXME: resolve img URI
+				href := linkResolvers.resolve(link.uri.toUri)
 				skin.a(href)
 
 			case DocNodeId.image:
 				img := elem as Image
-				src := img.uri.toUri	// FIXME: resolve img URI
+				src := linkResolvers.resolve(img.uri.toUri)
 				skin.img(src, img.alt)
 		}
 		

@@ -139,13 +139,13 @@ class PodContents {
 				if (entry.uri == `/meta.props`)
 					metaProps = entry.readProps
 				
-				if (entry.uri.toStr.startsWith("/doc/"))
+				if (entry.uri.toStr.startsWith("/doc/") && !entry.uri.isDir)
 					if (entry.uri.path.size == 2 && entry.uri.ext == "apidoc")
 						apiContents[entry.uri] = entry.readAllStr
 					else
 						docContents[entry.uri] = entry.readAllBuf
 				
-				if (entry.uri.toStr.startsWith("/src/") && entry.uri.ext == "fan")
+				if (entry.uri.toStr.startsWith("/src/") && entry.uri.ext == "fan" && !entry.uri.isDir)
 					srcContents[entry.uri] = entry.readAllStr					
 			}
 		} finally {

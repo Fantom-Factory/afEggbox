@@ -18,6 +18,6 @@ const mixin PodSrcPage : PrPage {
 		if (src == null)
 			throw HttpStatusErr(404, "Pod src for `${fileUri}` not found")
 		
-		return syntaxWriter.writeSyntax(src, "fan")
+		return syntaxWriter.writeSyntax(src, "fan", true)
 	}
 }
