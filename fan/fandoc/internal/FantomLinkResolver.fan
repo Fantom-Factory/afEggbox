@@ -53,6 +53,8 @@ internal const class FantomLinkResolver : LinkResolver {
 			// FIXME: resolve type relative link to slot
 		}
 		
+		// TODO: handle Fantom src URLs : adIoc::src-Inject.fan
+		
 		return null
 	}
 	

@@ -17,12 +17,12 @@ internal const class FandocLinkResolver : LinkResolver {
 		if (uri.scheme != "fandoc" || uri.auth != null || uri.path.isEmpty)
 			return null
 		
-		path 		:= normalise(uri).path
+		path 		:= normalise(uri).path.rw
 		podName		:= chomp(path)
-		podVersion	:= Version(uri.query["v"], false)
+		podVersion	:= Version(uri.query["v"] ?: "", false)
 		pod			:= podDao.findOne(podName, podVersion)
 		latestPod	:= podDao.findOne(podName)
-		isLatest	:= pod.version == latestPod.version
+		isLatest	:= pod?.version == latestPod?.version
 		
 		if (pod == null)
 			return ctx.invalidLink(uri, "Could not find pod ${podName}" + (podVersion == null ? "" : " v${podVersion}"))
@@ -91,18 +91,19 @@ internal const class FandocLinkResolver : LinkResolver {
 			srcKey	:= podSrc.contents.keys.find { it.toStr.equalsIgnoreCase("/src/${typeStr}.fan") }
 			if (srcKey == null)
 				return ctx.invalidLink(uri, "Could not find src document for `${pod.name}::${typeStr}`")
-			srcUri	:= summaryUrl(pod, isLatest).plusName("src", true).plusName(srcKey.path[1])
+			extIdx	:= srcKey.path[1].indexr(".")
+			srcUri	:= summaryUrl(pod, isLatest).plusName("src", true).plusName(srcKey.path[1][0..<extIdx])
 			if (uri.frag == null)
 				return srcUri 
 			lineStr	:= uri.frag
-			line	:= (lineStr.size > 4) ? lineStr[0..4] : lineStr[0..-1]
+			line	:= (lineStr.size > 4) ? lineStr[0..<4] : lineStr[0..-1]
 			lineNo	:= (lineStr.size > 4) ? lineStr[4..-1].toInt(10, false) : null
 			if (line.lower != "line" || lineNo == null)
 				return ctx.invalidLink(uri, "Invalid line number '${line}'", srcUri)
 			return srcUri.plusName("${srcUri.name}#${uri.frag}")
 		}
 		
-		return ctx.invalidLink(uri, "Invalid section '${section}' in fandoc URI `${uri}`. Valid sections are: api, doc, src")
+		return ctx.invalidLink(uri, "Invalid section '${section}'. Valid sections are: api, doc, src")
 	}
 	
 	private Uri summaryUrl(RepoPod pod, Bool isLatest) {
