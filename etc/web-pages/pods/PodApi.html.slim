@@ -1,7 +1,92 @@
--- app.renderLayout("Api")
+-? using fandoc
 
-	div.page-header
-		h1	${pod.meta.projectName} v${pod.version} Api
+-- app.renderLayout("type.qname")
 
-	pre
-		== api
+	div.mainSidebar
+		div.main.type
+		
+			h1	
+				span; == DocFlags.toTypeDis(type.flags)
+				== type.qname
+				
+			// writeTypeInheritance
+			pre
+				-- indent := 0
+				-- type.base.eachr |ref|
+					-- if (indent > 0)
+						== "\n${Str.spaces(indent*2)}"
+					== app.renderDocTypeRefTemplate(ctx, ref, true)
+					-- indent++
+				-- if (type.base.size > 0) 
+					== "\n${Str.spaces(indent*2)}"
+				== type.qname
+				-- type.mixins.each |ref, i|
+					== i==0 ? " : " : ", "
+					== app.renderDocTypeRefTemplate(ctx, ref, true)
+			
+			// writeFacets
+			-- if (type.facets.size > 0)
+				p.facets
+					-- type.facets.each |f|
+						== app.renderDocFacetTemplate(ctx, f)
+						br
+			
+			== writeFandoc(type.doc)
+
+			-- if (DocFlags.isEnum(type.flags))
+				ul
+					-- type.slots.each |s|
+						-- if (DocFlags.isEnum(s.flags))
+							li;	a (href="#${s.name}")	${s.name}
+			
+			dl
+				-- type.slots.each |slot|
+					dt#${slot.name}	$slot.name
+					dd
+						p.sig; code
+							-- slot.facets.each |f|
+								== app.renderDocFacetTemplate(ctx, f)
+								br
+							
+							-- if (slot is DocField)
+								-- field := (DocField) slot
+								== DocFlags.toSlotDis(field.flags) + " "
+								== app.renderDocTypeRefTemplate(ctx, field.type, false)
+								== " ${field.name}"
+								== field.init != null ? " := ${field.init.toXml}" : ""
+								== field.setterFlags != null ? " { " + DocFlags.toSlotDis(field.setterFlags) + " set }" : ""
+							
+							-- else
+								-- method := (DocMethod) slot
+								-- if (DocFlags.isCtor(method.flags))
+									== DocFlags.isStatic(method.flags) ? "static " : ""
+									== "new"
+								-- else
+									== DocFlags.toSlotDis(method.flags) + " "
+									== app.renderDocTypeRefTemplate(ctx, method.returns, false)
+								== " $method.name("
+								-- method.params.each |param, i|
+									== i > 0 ? ", " : ""
+									== app.renderDocTypeRefTemplate(ctx, param.type, false)
+									== " $param.name"
+									== param.def != null ? " := $param.def.toXml" : ""
+								== ")"
+
+						-- if (slotHasSrc(slot))
+							p.src
+								a (href="${slotSrcUrl}") Source
+						
+						== writeFandoc(slot.doc)
+
+		div.sidebar
+			h3	Source
+				ul;	li
+					-- if (typeHasSrc)
+						a (href="${typeSrcUrl}")	View Source
+					-- else
+						| Not available
+
+			h3	Slots
+				ul
+					-- type.slots.each |slot|
+						li;	a (href="#${slot.name}")	${slot.name}

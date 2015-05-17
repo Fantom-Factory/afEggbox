@@ -65,7 +65,7 @@ const class PodRoutes : Route {
 		// --> /pods/afSlim/1.1.14/src
 		if (podSection == "src") {
 			fileUrl := `/src/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
-			return pages.renderPage(PodSrcPage#, [pod, fileUrl])
+			return pages.renderPage(PodSrcPage#, [pod, fileUrl.plusName("${fileUrl.name}.fan")])
 		}
 
 		// --> /pods/afSlim/api

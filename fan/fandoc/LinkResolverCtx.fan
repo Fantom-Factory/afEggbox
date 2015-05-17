@@ -3,6 +3,7 @@ using fandoc
 class LinkResolverCtx {
 	Uri:Str		invalidLinks	:= Uri:Str[:] { ordered = true }
 	RepoPod?	pod
+	Str?		type
 	Doc?		doc
 	
 //	new make(|This|in) { in(this) }
@@ -19,6 +20,19 @@ class LinkResolverCtx {
 			return func(this)
 		} finally {
 			this.pod = origPod
+		}
+	}
+
+	Obj? withType(RepoPod pod, Str type, |LinkResolverCtx->Obj?| func) {
+		origPod  := this.pod
+		origType := this.type
+		try {
+			this.pod  = pod
+			this.type = type
+			return func(this)
+		} finally {
+			this.pod  = origPod
+			this.type = type
 		}
 	}
 
