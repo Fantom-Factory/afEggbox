@@ -1,0 +1,55 @@
+-- app.renderLayout("API index")
+
+	div.row.api.type
+		div.col-sm-9
+			h1	
+				span	pod
+				== pod.name
+
+			p;	== pod.meta.summary
+			
+			-- if (!podApi.mixins.isEmpty)
+				h2	Mixins
+				table.table.table-striped.table-condensed.table-responsive
+					-- podApi.mixins.each |type|
+						tr
+							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
+							td;	== writeFandoc(type.doc.firstSentence)
+			
+			-- if (!podApi.classes.isEmpty)
+				h2	Classes
+				table.table.table-striped.table-condensed.table-responsive
+					-- podApi.classes.each |type|
+						tr
+							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
+							td;	== writeFandoc(type.doc.firstSentence)
+			
+			-- if (!podApi.enums.isEmpty)
+				h2	Enums
+				table.table.table-striped.table-condensed.table-responsive
+					-- podApi.enums.each |type|
+						tr
+							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
+							td;	== writeFandoc(type.doc.firstSentence)
+
+			-- if (!podApi.facets.isEmpty)
+				h2	Facets
+				table.table.table-striped.table-condensed.table-responsive
+					-- podApi.facets.each |type|
+						tr
+							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
+							td;	== writeFandoc(type.doc.firstSentence)
+
+			-- if (!podApi.errs.isEmpty)
+				h2	Errs
+				table.table.table-striped.table-condensed.table-responsive
+					-- podApi.errs.each |type|
+						tr
+							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
+							td;	== writeFandoc(type.doc.firstSentence)
+
+		div.col-sm-3.hidden-xs.contents
+			h3	All Types
+			ul.list-unstyled
+				-- podApi.allTypes.each |type|
+					li;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
