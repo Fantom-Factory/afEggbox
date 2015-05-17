@@ -11,4 +11,24 @@ class LinkResolverCtx {
 		invalidLinks[uri] = msg
 		return returnUri
 	}
+	
+	Obj? withPod(RepoPod pod, |LinkResolverCtx->Obj?| func) {
+		origPod := this.pod
+		try {
+			this.pod = pod
+			return func(this)
+		} finally {
+			this.pod = origPod
+		}
+	}
+
+	Obj? withDoc(Doc doc, |LinkResolverCtx->Obj?| func) {
+		origDoc := this.doc
+		try {
+			this.doc = doc
+			return func(this)
+		} finally {
+			this.doc = origDoc
+		}
+	}
 }

@@ -15,6 +15,9 @@ const mixin PodDocPage : PrPage {
 		fandoc := podDocsDao.find(pod.name, pod.version)[fileUri]?.readAllStr
 		if (fandoc == null)
 			throw HttpStatusErr(404, "Pod file `${fileUri}` not found")
-		return this.fandoc.writeStrToHtml(fandoc)
+
+		return LinkResolverCtx().withPod(pod) |ctx->Str| {
+			return this.fandoc.writeStrToHtml(fandoc, ctx)
+		}
 	}
 }

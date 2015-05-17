@@ -16,7 +16,7 @@ internal class LinkResolvers {
 		if (resolved == null && invalidCount == ctx.invalidLinks.size)
 			ctx.invalidLink(uri, "Could not resolve link - $uri")
 		
-		ctx.invalidLinks.each { echo(it) }
+		ctx.invalidLinks.keys.eachRange(invalidCount..-1) { echo("$it -> ${ctx.invalidLinks[it]}") }
 		return resolved ?: `/ERROR`
 	}
 }
