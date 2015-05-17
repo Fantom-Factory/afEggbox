@@ -2,9 +2,8 @@
 
 -- app.renderLayout("type.qname")
 
-	div.mainSidebar
-		div.main.type
-		
+	div.row.api.type
+		div.col-sm-9
 			h1	
 				span; == DocFlags.toTypeDis(type.flags)
 				== type.qname
@@ -26,13 +25,13 @@
 			
 			// writeFacets
 			-- if (type.facets.size > 0)
-				p.facets
+				p.facets.sig
 					-- type.facets.each |f|
 						== app.renderDocFacetTemplate(ctx, f)
 						br
 			
 			== writeFandoc(type.doc)
-
+	
 			-- if (DocFlags.isEnum(type.flags))
 				ul
 					-- type.slots.each |s|
@@ -43,6 +42,10 @@
 				-- type.slots.each |slot|
 					dt#${slot.name}	$slot.name
 					dd
+						-- if (slotHasSrc(slot))
+							p.src
+								a (href="${slotSrcUrl}") Source
+	
 						p.sig; code
 							-- slot.facets.each |f|
 								== app.renderDocFacetTemplate(ctx, f)
@@ -71,22 +74,19 @@
 									== " $param.name"
 									== param.def != null ? " := $param.def.toXml" : ""
 								== ")"
-
-						-- if (slotHasSrc(slot))
-							p.src
-								a (href="${slotSrcUrl}") Source
 						
 						== writeFandoc(slot.doc)
-
-		div.sidebar
-			h3	Source
-				ul;	li
+	
+		div.col-sm-3.hidden-xs.contents
+			div
+				h3	Source
+				ul.list-unstyled
 					-- if (typeHasSrc)
-						a (href="${typeSrcUrl}")	View Source
+						li;	a (href="${typeSrcUrl}")	View Source
 					-- else
-						| Not available
-
-			h3	Slots
-				ul
+						li	Not available
+		
+				h3	Slots
+				ul.list-unstyled
 					-- type.slots.each |slot|
 						li;	a (href="#${slot.name}")	${slot.name}

@@ -1,0 +1,45 @@
+
+.api.type {
+	a {
+		text-decoration: underline;
+	}
+
+	h1 > span:first-child {
+		display:		block;
+		color:			#4c697e;
+		font-size:		60%;
+		font-weight:	normal;
+	}
+
+	h1 {
+		color:			#3d6ba0;
+		font-weight:	bold;
+	}
+	
+	dd {
+		margin-left:	@padding-large-horizontal * 2;
+		margin-bottom:	@padding-large-vertical * 2;
+		position:		relative;
+	}
+	
+	dl dt {
+		background-color: #f2f6f8;
+		border-top:		1px solid #d0dae5;
+		font-weight:	bold;
+		padding:		@padding-base-vertical @padding-base-horizontal;
+	}
+	
+	.src {
+		position:		absolute;
+		top:			-@line-height-computed - (@padding-base-vertical * 2) - 5px;
+		right:			1em;
+	}
+
+	.sig {
+		margin:			@padding-large-vertical 0;
+		code, a {
+			background-color:	inherit;
+			color:		#070;
+		}
+	}
+}

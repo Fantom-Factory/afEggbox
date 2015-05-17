@@ -78,7 +78,7 @@ internal const class FantomLinkResolver : LinkResolver {
 			typeNom	:= link.split('.').first
 			apiKey	:= apiDocs.contents.keys.find { it.toStr.equalsIgnoreCase("/doc/${typeNom}.apidoc") }
 			if (apiKey != null) {
-				docType	:= ApiDocParser(apiDocs.contents[apiKey].in).parseType
+				docType	:= ApiDocParser(pod.name, apiDocs.contents[apiKey].in).parseType
 				slotStr	:= link.split('.').getSafe(1)
 				apiUri	:= summaryUrl(pod).plusName("api", true).plusName(docType.name)
 				if (slotStr == null)
