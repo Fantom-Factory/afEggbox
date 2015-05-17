@@ -9,7 +9,6 @@ const mixin PodApiPage : PrPage {
 	@Inject			abstract RepoPodApiDao		podApiDao
 	@Inject			abstract RepoPodSrcDao		podSrcDao
 	@Inject			abstract Fandoc				fandoc
-	@Inject			abstract LinkResolvers		linkResolvers
 	@PageContext	abstract RepoPod			pod
 	@PageContext	abstract Uri				fileUri
 					abstract DocType			type

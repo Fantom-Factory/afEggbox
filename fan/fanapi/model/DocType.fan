@@ -2,7 +2,8 @@
 **
 ** DocType models the documentation of a `sys::Type`.
 **
-const class DocType : FanDoc
+//const class DocType : FanDoc
+const class DocType 
 {
 
   ** Constructor
@@ -50,17 +51,17 @@ const class DocType : FanDoc
 //  ** The space for this doc is `pod`
 //  override DocSpace space() { pod }
 
-  ** The document name under space is `name`
-  override Str docName() { name }
+//  ** The document name under space is `name`
+//  override Str docName() { name }
 
   ** Title of the document is the qualified name
-  override Str title() { qname }
+  Str title() { qname }
 
 //  ** Default renderer is `DocTypeRenderer`
 //  override Type renderer() { DocTypeRenderer# }
 
-  ** Return true
-  override Bool isCode() { true}
+//  ** Return true
+//  override Bool isCode() { true}
 
   ** Source code location of this type definition
   const DocLoc loc
