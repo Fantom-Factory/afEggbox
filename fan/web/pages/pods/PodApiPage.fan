@@ -23,7 +23,7 @@ const mixin PodApiPage : PrPage {
 		if (apiDoc == null)
 			throw HttpStatusErr(404, "Pod API for `${fileUri}` not found")
 		
-		this.type	= ApiDocParser(apiDoc.in).parseType(true)
+		this.type	= ApiDocParser(pod.name, apiDoc.in).parseType(true)
 		this.ctx	= LinkResolverCtx() { 
 			it.pod 	= this.pod
 			it.type	= this.type.name

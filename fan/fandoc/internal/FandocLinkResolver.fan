@@ -41,7 +41,7 @@ internal const class FandocLinkResolver : LinkResolver {
 			apiKey	:= apiDocs.contents.keys.find { it.toStr.equalsIgnoreCase("/doc/${typeStr}.apidoc") }
 			if (apiKey == null)
 				return ctx.invalidLink(uri, "Could not find API document for `${pod.name}::${typeStr}`")
-			apiType	:= ApiDocParser(apiDocs.contents[apiKey].in).parseType
+			apiType	:= ApiDocParser(pod.name, apiDocs.contents[apiKey].in).parseType
 			apiUri	:= summaryUrl(pod, isLatest).plusName("api", true).plusName(apiType.name)
 			if (path.isEmpty && uri.frag == null)
 				return apiUri
@@ -51,7 +51,7 @@ internal const class FandocLinkResolver : LinkResolver {
 			slot	:= apiType.slot(slotStr, false)	// ApiDocParser ensures a case-insensitive match
 			if (slot == null)
 				return ctx.invalidLink(uri, "Could not find API slot for `${pod.name}::${apiType.name}.${slotStr}`", apiUri)
-			return apiUri.plusName("${apiType.name}#${slot.name}")
+			return apiUri + `#${slot.name}`
 		}
 
 		if (section == "doc") {
@@ -100,7 +100,7 @@ internal const class FandocLinkResolver : LinkResolver {
 			lineNo	:= (lineStr.size > 4) ? lineStr[4..-1].toInt(10, false) : null
 			if (line.lower != "line" || lineNo == null)
 				return ctx.invalidLink(uri, "Invalid line number '${line}'", srcUri)
-			return srcUri.plusName("${srcUri.name}#${uri.frag}")
+			return srcUri + `#${uri.frag}`
 		}
 		
 		return ctx.invalidLink(uri, "Invalid section '${section}'. Valid sections are: api, doc, src")
