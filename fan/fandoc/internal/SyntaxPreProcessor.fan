@@ -18,7 +18,7 @@ internal class SyntaxPreProcessor : PreTextProcessor {
 		while (preText.endsWith("\n"))
 			preText = preText[0..-2]
 
-		syntax := syntaxWriter.writeSyntax(preText, ext)
+		syntax := syntaxWriter.writeSyntax(preText, ext, false)
 		skin.w(syntax)
 	}
 }

@@ -1,6 +1,7 @@
 using afIoc
 using afBedSheet
 using afPillow
+using fandoc
 
 ** Supports Fantom links as defined in `compilerDoc::DocLink`:
 **
@@ -21,7 +22,6 @@ using afPillow
 **
 internal const class FantomLinkResolver : LinkResolver {
 
-//	@Inject private const |->LinkResolvers|	resolvers
 	@Inject private const Pages				pages
 	@Inject private const RepoPodDao		podDao
 	@Inject private const RepoPodApiDao		podApiDao
@@ -50,7 +50,7 @@ internal const class FantomLinkResolver : LinkResolver {
 				if (typeStr.split('.').size > 2)
 					return ctx.invalidLink(uri, "Invalid API URI, too many path segments")
 				typeNom	:= typeStr.split('.').first
-				apiKey	:= apiDocs.contents.keys.find { it.toStr.equalsIgnoreCase("/doc/${typeStr}.apidoc") }
+				apiKey	:= apiDocs.contents.keys.find { it.toStr.equalsIgnoreCase("/doc/${typeNom}.apidoc") }
 				if (apiKey != null) {
 					docType	:= ApiDocParser(apiDocs.contents[apiKey].in).parseType
 					slotStr	:= typeStr.split('.').getSafe(1)
@@ -74,15 +74,24 @@ internal const class FantomLinkResolver : LinkResolver {
 					docUrl	:= summaryUrl(pod) + docKey.relTo(`/`)
 					fragStr	:= docNom.split('#').getSafe(1)
 					if (fragStr == null)
-						return docUrl
-					return docUrl.plusName("${docUrl.name}#${fragStr}")
+						return docUrl					
+					try {
+						fandoc	:= FandocParser().parseStr(podDocs.contents[docKey].readAllStr)
+						heading	:= fandoc.findHeadings.find { (it.anchorId ?: it.title.fromDisplayName).equalsIgnoreCase(uri.frag) }
+						if (heading == null)
+							return ctx.invalidLink(uri, "Document ${docKey} in ${pod.name} does not contain a heading ID #${uri.frag}", docUrl)
+						return docUrl.plusName("${docUrl.name}#${heading.anchorId ?: heading.title.fromDisplayName}")				
+					} catch (Err err) {
+						return ctx.invalidLink(uri, "Document ${docKey} in ${pod.name} is not a valid Fandoc - ${err.msg}", docUrl)
+					}
 				}
 			}
 
+			// not an absolute link
 			return null
 		}
 		
-		
+		// TODO: Fantom relative links
 		
 		return null
 	}
