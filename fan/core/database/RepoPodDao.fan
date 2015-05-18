@@ -16,7 +16,7 @@ const mixin RepoPodDao : EntityDao {
 	** used for fanr queries
 	abstract RepoPod[] 		query(|Cursor->Obj?| f)
 
-	abstract RepoPod toPod(Obj doc)
+	abstract RepoPod toPod(Obj doc)	
 }
 
 internal const class RepoPodDaoImpl : RepoPodDao {
@@ -26,6 +26,8 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 
 	@Inject
 	override const IntSequences	intSeqs
+
+	@Inject	const DirtyCash dirtyCache
 
 	// see http://stackoverflow.com/questions/7717109/how-can-i-compare-arbitrary-version-numbers/7717160#7717160
 	private const Str	reduceByVersionFunc	:= 
@@ -50,7 +52,9 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	new make(|This| in) { in(this) }
 	
 	override RepoPod? get(Str _id, Bool checked := true) {
-		datastore.query(field("_id").eq(_id.lower)).findOne(checked)
+		dirtyCache.get(RepoPod#, _id.lower) |->Obj?| {
+			datastore.query(field("_id").eq(_id.lower)).findOne(checked)
+		}
 	}
 
 	override RepoPod[] findAll() {
@@ -58,10 +62,11 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 	
 	override RepoPod? findOne(Str name, Version? version := null) {
-		if (version != null)
-			return get(_id(name, version), false)
-	
-		return reduceByVersion(field("name").eqIgnoreCase(name)).first
+		dirtyCache.get(RepoPod#, _id(name, version)) |->Obj?| {
+			version != null
+				? get(_id(name, version), false)
+				: reduceByVersion(field("name").eqIgnoreCase(name)).first
+		}
 	}
 
 	override RepoPod[] findPublic(RepoUser? user) {
@@ -103,7 +108,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		return pods.map { datastore.fromMongoDoc(it) }
 	}
 
-	private Str _id(Str name, Version version) {
-		"${name.lower}-${version}"
+	private Str _id(Str name, Version? version) {
+		"${name}-${version}".lower
 	}
 }

@@ -57,6 +57,19 @@ class WebModule {
 		}
 	}
 	
+	
+	@Advise { serviceId="afPillow::Pages" }
+	static Void addTransations(MethodAdvisor[] methodAdvisors, DirtyCash dirtyCash) {
+		methodAdvisors
+			.find { it.method.name.startsWith("renderPage") }
+			.addAdvice |invocation -> Obj?| { 
+			        
+				return dirtyCash.cash |->Obj?| { 
+					return invocation.invoke
+				}
+			} 
+	}
+	
 	@Contribute { serviceType=ApplicationDefaults# }
 	static Void contributeApplicationDefaults(Configuration config, IocEnv iocEnv) {
 //		if (iocEnv.isProd)
