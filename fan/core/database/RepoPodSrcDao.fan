@@ -4,7 +4,7 @@ using afMorphia
 const mixin RepoPodSrcDao : EntityDao {
 
 	@Operator
-	abstract RepoPodSrc?	get(Str name, Bool checked := true)
+	abstract RepoPodSrc?	get(Str _id, Bool checked := true)
 	abstract RepoPodSrc? 	find(Str name, Version version, Bool checked := true)
 
 }
@@ -17,14 +17,20 @@ internal const class RepoPodSrcDaoImpl : RepoPodSrcDao {
 	@Inject
 	override const IntSequences	intSeqs
 
+	@Inject	const DirtyCash dirtyCache
+
 	new make(|This| in) { in(this) }
 	
-	override RepoPodSrc? get(Str name, Bool checked := true) {
-		datastore.query(field("_id").eq(name)).findOne(checked)
+	override RepoPodSrc? get(Str _id, Bool checked := true) {
+		dirtyCache.get(RepoPodSrc#, _id.lower) |->Obj?| {
+			datastore.query(field("_id").eq(_id)).findOne(checked)
+		}
 	}
 
 	override RepoPodSrc? find(Str name, Version version, Bool checked := true) {
-		get(_id(name, version), checked) 
+		dirtyCache.get(RepoPodSrc#, _id(name, version)) |->Obj?| {
+			get(_id(name, version), checked)
+		}
 	}
 	
 	override RepoPodSrc create(Obj entity) {
@@ -32,6 +38,6 @@ internal const class RepoPodSrcDaoImpl : RepoPodSrcDao {
 	}
 	
 	private Str _id(Str name, Version version) {
-		"${name.lower}-${version}"
+		"${name}-${version}".lower
 	}
 }

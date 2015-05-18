@@ -16,6 +16,8 @@ class AppModule {
 		defs.add(RepoPodDocsDao#)
 		defs.add(RepoPodSrcDao#)
 		defs.add(RepoPodApiDao#)
+		
+		defs.add(DirtyCash#)
 	}
 
 	@Contribute { serviceType=Converters# }
