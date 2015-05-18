@@ -1,5 +1,10 @@
 -- app.renderLayout("API index")
 
+	ol.breadcrumb
+		li;	a (href="${podsUrl}")	Pods
+		li;	a (href="${podSummaryUrl(pod)}")	${pod.name}
+		li.active	API
+
 	div.row.api.type
 		div.col-sm-9
 			h1	
