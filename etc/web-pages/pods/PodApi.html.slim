@@ -2,6 +2,12 @@
 
 -- app.renderLayout(type.qname)
 
+	ol.breadcrumb
+		li;	a (href="${podsUrl}")	Pods
+		li;	a (href="${podSummaryUrl(pod)}")	${pod.name}
+		li;	a (href="${podApiUrl(pod)}")		API
+		li.active	${type.name}
+
 	div.row.api.type
 		div.col-sm-9
 			h1	

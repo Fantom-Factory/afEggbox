@@ -20,4 +20,9 @@ const mixin PodSrcPage : PrPage {
 		
 		return syntaxWriter.writeSyntax(src, "fan", true)
 	}
+	
+	Str srcName() {
+		idx := fileUri.name.indexr(".")
+		return fileUri.name[0..<idx]
+	}
 }

@@ -1,5 +1,9 @@
 -- app.renderLayout("Pods")
 
+	ol.breadcrumb
+		li;	a (href="${podsUrl}")	Pods
+		li.active	${pod.name}
+
 	-- if (loggedIn && loggedInUser.owns(pod))
 		div.pull-right
 			a.btn.btn-primary (href="${podUrl(`/edit`)}") Edit Pod Details
