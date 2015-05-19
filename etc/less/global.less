@@ -82,3 +82,13 @@ form.form-okay input:valid {
 	cursor:		inherit;
 	display:	block;
 }
+
+// stops code badges from merging / running into pre blocks
+li > div.syntax {
+	margin-top:	@padding-large-vertical;
+}
+
+ol, ul {
+	// better than the Firefox default of 40px!
+	padding-left:	@padding-large-horizontal;
+}

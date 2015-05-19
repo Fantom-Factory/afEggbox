@@ -5,7 +5,14 @@
 		li;	a (href="${podSummaryUrl(pod)}")	${pod.name}
 		li.active	Documentation
 
-	div.page-header
-		h1	${pod.meta.projectName} v${pod.version} Docs
+	div.row
+		div.col-sm-9
 
-	== docs
+			div.page-header
+				h1	${pod.meta.projectName} v${pod.version} Docs
+
+			== docs
+
+		div.col-sm-3.hidden-xs.contents
+			h3	Contents
+			== toc(doc.findHeadings)

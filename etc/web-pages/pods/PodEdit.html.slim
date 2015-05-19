@@ -1,5 +1,10 @@
 -- app.renderLayout("Edit")
 
+	ol.breadcrumb
+		li;	a (href="${podsUrl}")	Pods
+		li;	a (href="${podSummaryUrl(pod)}")	${pod.name}
+		li.active	Edit
+
 	div.page-header
 		h1	${pod.meta.projectName} v${pod.version} Details
 
