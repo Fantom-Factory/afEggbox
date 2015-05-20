@@ -47,7 +47,7 @@ internal const class FantomLinkResolver : LinkResolver {
 			}
 		}
 		
-		if (ctx.pod != null && uri.scheme == null) {
+		if (ctx.pod != null && uri.scheme == null && !uri.isPathAbs) {
 			return resolveFromPod(uri, link, ctx)
 			
 			// FIXME: resolve type relative link to slot
@@ -102,6 +102,7 @@ internal const class FantomLinkResolver : LinkResolver {
 				if (fragStr == null)
 					return docUrl					
 				try {
+					// FIXME: use Fandoc service
 					fandoc	:= FandocParser().parseStr(podDocs.contents[docKey].readAllStr)
 					heading	:= fandoc.findHeadings.find { (it.anchorId ?: it.title.fromDisplayName).equalsIgnoreCase(uri.frag) }
 					if (heading == null)

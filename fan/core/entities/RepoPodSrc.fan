@@ -16,7 +16,7 @@ class RepoPodSrc {
 	}
 	
 	@Operator
-	Str? get(Uri fileUri) {
-		contents[fileUri]
+	Str? get(Str fileName) {
+		contents[`/src/${fileName}`]
 	}
 }

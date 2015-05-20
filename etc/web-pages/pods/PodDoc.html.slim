@@ -7,12 +7,18 @@
 
 	div.row
 		div.col-sm-9
-
-			div.page-header
-				h1	${pod.meta.projectName} v${pod.version} Docs
+			h1.podHeading
+				span ${pod.meta.projectName} v${pod.version}
+				| User Guide
+				
+			/* div.page-header
+				h1	${pod.meta.projectName} v${pod.version} - User Guide
 
 			== docs
 
 		div.col-sm-3.hidden-xs.contents
 			h3	Contents
-			== toc(doc.findHeadings)
+			
+			h4;	a (href="${apiUrl}")	API
+
+			== tableOfContents

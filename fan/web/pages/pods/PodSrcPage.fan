@@ -13,13 +13,13 @@ const mixin PodSrcPage : PrPage {
 	@PageContext	abstract RepoPod		pod
 	@PageContext	abstract Uri			fileUri
 
-	Str src() {
-		src := podSrcDao.find(pod.name, pod.version, false)?.get(fileUri)
-		if (src == null)
-			throw HttpStatusErr(404, "Pod src for `${fileUri}` not found")
-		
-		return syntaxWriter.writeSyntax(src, "fan", true)
-	}
+//	Str src() {
+//		src := podSrcDao.find(pod.name, pod.version, false)?.get(fileUri)
+//		if (src == null)
+//			throw HttpStatusErr(404, "Pod src for `${fileUri}` not found")
+//		
+//		return syntaxWriter.writeSyntax(src, "fan", true)
+//	}
 	
 	Str srcName() {
 		idx := fileUri.name.indexr(".")

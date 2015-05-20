@@ -23,6 +23,11 @@ const class Indexes {
 
 		userCol.index("_email_")	.ensure(["email"	: Index.ASC])
 		
+		// we can't run mapReduce commands on a collection that doesn't exist
+		// i.e. the /pods page throws a MongoDB Err if there are no pods
+		if (!podCol.exists)
+			podCol.create
+		
 		log.info("Done.")
 	}
 	

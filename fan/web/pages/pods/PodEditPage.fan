@@ -111,7 +111,7 @@ class PodEditDetails {
 
 	@HtmlInput { type="url"; placeholder="Project URL"; required=true; minLength=3; maxLength=512 }
 	Uri projectUrl {
-		get { pod.meta.projectUrl ?: "" }
+		get { pod.meta.projectUrl ?: `` }
 		set { pod.meta.projectUrl  = it }
 	}
 
@@ -129,7 +129,7 @@ class PodEditDetails {
 
 	@HtmlInput { type="url"; placeholder="Organisation URL"; required=true; minLength=3; maxLength=512 }
 	Uri organisationUrl {
-		get { pod.meta.orgUrl ?: "" }
+		get { pod.meta.orgUrl ?: `` }
 		set { pod.meta.orgUrl  = it }
 	}
 
@@ -141,7 +141,7 @@ class PodEditDetails {
 
 	@HtmlInput { type="url"; placeholder="Source Code Management URL"; required=true; minLength=3; maxLength=512 }
 	Uri sourceCodeManagementUrl {
-		get { pod.meta.vcsUrl ?: "" }
+		get { pod.meta.vcsUrl ?: `` }
 		set { pod.meta.vcsUrl  = it }
 	}	
 }

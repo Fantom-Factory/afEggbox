@@ -10,9 +10,8 @@
 
 	div.row
 		div.col-sm-9
-			div.page-header
-				h1	${pod.meta.projectName} v${pod.version}
-					div.small	${pod.meta.summary}
+			h1.podHeading	${pod.meta.projectName} ${pod.version}
+				div.small	${pod.meta.summary}
 		
 			p
 				a (href="${podUrl(`/api`)}") API

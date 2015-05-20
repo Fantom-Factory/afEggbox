@@ -8,9 +8,9 @@
 		li;	a (href="${podApiUrl(pod)}")		API
 		li.active	${type.name}
 
-	div.row.api.type
-		div.col-sm-9
-			h1	
+	div.row
+		div.col-sm-9.api
+			h1.podHeading
 				span; == DocFlags.toTypeDis(type.flags)
 				== type.qname
 

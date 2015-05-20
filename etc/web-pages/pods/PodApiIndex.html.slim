@@ -5,9 +5,9 @@
 		li;	a (href="${podSummaryUrl(pod)}")	${pod.name}
 		li.active	API
 
-	div.row.api.type
-		div.col-sm-9
-			h1	
+	div.row
+		div.col-sm-9.api
+			h1.podHeading
 				span	pod
 				== pod.name
 
@@ -54,6 +54,15 @@
 							td;	== writeFandoc(type.doc.firstSentence)
 
 		div.col-sm-3.hidden-xs.contents
+		div.col-sm-3.hidden-xs.contents
+			h3	Contents
+			
+			h4;	a (href="#")	API
+
+			h4;	a (href="#")	User Guide
+
+			h4;	a (href="#")	Release Notes
+
 			h3	All Types
 			ul.list-unstyled
 				-- podApi.allTypes.each |type|

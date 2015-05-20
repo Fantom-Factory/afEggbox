@@ -18,11 +18,11 @@ const mixin PodApiPage : PrPage {
 
 	@BeforeRender
 	Void beforeRender() {
-		apiDoc := podApiDao.get(pod._id, false)?.get(fileUri)
-		if (apiDoc == null)
-			throw HttpStatusErr(404, "Pod API for `${fileUri}` not found")
-		
-		this.type	= ApiDocParser(pod.name, apiDoc.in).parseType(true)
+//		apiDoc := podApiDao.get(pod._id, false)?.get(fileUri)
+//		if (apiDoc == null)
+//			throw HttpStatusErr(404, "Pod API for `${fileUri}` not found")
+//		
+//		this.type	= ApiDocParser(pod.name, apiDoc.in).parseType(true)
 		this.ctx	= LinkResolverCtx() { 
 			it.pod 	= this.pod
 			it.type	= this.type.name
