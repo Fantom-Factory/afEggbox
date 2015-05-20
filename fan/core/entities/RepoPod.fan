@@ -8,30 +8,30 @@ class RepoPod {
 	@Inject private const RepoUserDao?		userDao
 	@Inject private const RepoPodFileDao?	podFileDao
 
-	@Property{}	Str?		_id
-	@Property{}	Str			name
-	@Property{}	Version		version
-	@Property{}	Int			fileSize
-	@Property{}	DateTime	builtOn
-	@Property{}	Int			ownerId
-	@Property{}	Str			aboutFandoc
-	@Property{}	RepoPodMeta	meta
-	@Property{}	Bool		isPublic {
-		// get { keep our own 'isPublic' for indexing and searching on }
+	@Property{}	Str?			_id
+	@Property{}	Str				name
+	@Property{}	Version			version
+	@Property{}	Int				fileSize
+	@Property{}	DateTime		builtOn
+	@Property{}	Int				ownerId
+	@Property{}	Str				aboutFandoc
+	@Property{}	RepoPodMeta?	meta	// nullable so we can use the isPublic Bool setter from the IoC ctor
+	@Property{}	Bool			isPublic {
+		// keep our own 'isPublic' for indexing and searching on
 		set {
 			&isPublic = it
-			meta["repo.public"] = it.toStr
+			meta?.set("repo.public", it.toStr)
 		}
 	}
-	@Property{}	Bool		isDeprecated {
-		// get { keep our own 'isDeprecated' for indexing and searching on }
+	@Property{}	Bool			isDeprecated {
+		// keep our own 'isDeprecated' for indexing and searching on
 		set {
 			&isDeprecated = it
-			meta["repo.deprecated"] = it.toStr 
+			meta?.set("repo.deprecated", it.toStr)
 		}
 	}
 
-				Str			displayName {
+				Str				displayName {
 					get { "${name} ${version}" }
 					private set { }
 				}
@@ -47,7 +47,8 @@ class RepoPod {
 			it.builtOn		= DateTime(meta["build.ts"], true)
 			it.meta			= meta
 			it.aboutFandoc	= findAboutFandoc(metaProps, docContents)
-			it.isPublic		= meta.isPublic
+			it.&isPublic	= meta.isPublic
+			it.&isDeprecated= meta.isDeprecated
 			it.ownerId		= user._id
 		}
 	}
@@ -88,6 +89,7 @@ class RepoPod {
 			overview := (Heading?) null
 			foundOverview := false
 			elems := DocElem[,]
+			// FIXME: use Fandoc service
 			FandocParser().parseStr(podFd).children.find |kid->Bool| {
 				if (foundOverview) {
 					if ((kid.id == DocNodeId.heading) && ((Heading) kid).level == overview.level)
@@ -116,7 +118,7 @@ class RepoPod {
 	
 	override Int hash() { _id.toInt }
 	override Bool equals(Obj? that) {
-		_id == (that as RepoPod)._id
+		_id == (that as RepoPod)?._id
 	}
 }
 

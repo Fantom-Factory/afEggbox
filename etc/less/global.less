@@ -1,12 +1,14 @@
 
-//@electric-blue:			#33B5E5;
-//@electric-green:		#20EE23;
-
 //@colour-rss:			@brand-warning;
 //@colour-white:			#FFFFFF;
 //@colour-black:			#131313;
 
+/* ---- Globals --------------------------------------------------------------------------------- */
 
+ol, ul {
+	// better than the Firefox default of 40px!
+	padding-left:	@padding-large-horizontal;
+}
 
 /* ---- Mixins ---------------------------------------------------------------------------------- */
 
@@ -36,6 +38,19 @@
 //	font-size:		smaller;
 //}
 
+.podHeading {
+	color:			#3d6ba0;
+	font-weight:	bold;
+	margin-bottom:	@line-height-computed;
+	border-bottom:	1px solid @page-header-border-color;
+
+	> span:first-child {
+		display:		block;
+		color:			#4c697e;
+		font-size:		60%;
+		font-weight:	normal;
+	}
+}
 
 
 /* ---- Bootstrap Overrides --------------------------------------------------------------------- */
@@ -88,7 +103,5 @@ li > div.syntax {
 	margin-top:	@padding-large-vertical;
 }
 
-ol, ul {
-	// better than the Firefox default of 40px!
-	padding-left:	@padding-large-horizontal;
-}
+
+

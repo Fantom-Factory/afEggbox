@@ -18,8 +18,8 @@ class RepoPodApi {
 	}
 	
 	@Operator
-	Str? get(Uri fileUri) {
-		contents[fileUri]
+	Str? get(Str typeName) {
+		contents[`/doc/${typeName}.apidoc`]
 	}
 	
 	DocType[] mixins() {
