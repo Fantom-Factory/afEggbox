@@ -85,52 +85,65 @@ class PodEditDetails {
 		set { pod.isPublic = it }
 	}
 
+	@HtmlInput { type="checkbox" }
+	Bool isDeprecated {
+		get { pod.isDeprecated }
+		set { pod.isDeprecated = it }
+	}
+
+	@HtmlInput { type="checkbox" }
+	Bool isInternal {
+		get { pod.meta.isInternal }
+		set { pod.meta.isInternal = it }
+	}
+
+	@HtmlInput { type="text"; placeholder="licenceName"; required=true; minLength=3; maxLength=128 }
+	Str? licenceName {
+		get { pod.meta.licenceName ?: "" }
+		set { pod.meta.licenceName  = it }
+	}
+
 	@HtmlInput { type="text"; placeholder="Project Name"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=128 }
 	Str projectName {
-		get { pod.meta["proj.name"] ?: "" }
-		set { pod.meta["proj.name"]  = it }
+		get { pod.meta.projectName }
+		set { pod.meta.projectName  = it }
 	}
 
 	@HtmlInput { type="url"; placeholder="Project URL"; required=true; minLength=3; maxLength=512 }
-	Str projectUrl {
-		get { pod.meta["proj.uri"] ?: "" }
-		set { pod.meta["proj.uri"]  = it }
+	Uri projectUrl {
+		get { pod.meta.projectUrl ?: "" }
+		set { pod.meta.projectUrl  = it }
 	}
 
 	@HtmlInput { type="textarea"; placeholder="Summary"; attributes="rows=\"3\""; required=true; minLength=3; maxLength=1024; hint="Summaries generally don't include the pod or project name" }
 	Str summary {
-		get { pod.meta["pod.summary"] ?: "" }
-		set { pod.meta["pod.summary"]  = it }
+		get { pod.meta.summary }
+		set { pod.meta.summary  = it }
 	}
 
-	@HtmlInput { type="text"; placeholder="Organisation Name"; required=true; minLength=3; maxLength=215 }
+	@HtmlInput { type="text"; placeholder="Organisation Name"; required=true; minLength=3; maxLength=256 }
 	Str organisationName {
-		get { pod.meta["org.name"] ?: "" }
-		set { pod.meta["org.name"]  = it }
+		get { pod.meta.orgName ?: "" }
+		set { pod.meta.orgName  = it }
 	}
 
 	@HtmlInput { type="url"; placeholder="Organisation URL"; required=true; minLength=3; maxLength=512 }
-	Str organisationUrl {
-		get { pod.meta["org.uri"] ?: "" }
-		set { pod.meta["org.uri"]  = it }
+	Uri organisationUrl {
+		get { pod.meta.orgUrl ?: "" }
+		set { pod.meta.orgUrl  = it }
 	}
 
 	@HtmlInput { type="text"; placeholder="Source Code Management"; required=true; minLength=3; maxLength=128 }
 	Str sourceCodeManagement {
-		get { pod.meta["vcs.name"] ?: "" }
-		set { pod.meta["vcs.name"]  = it }
+		get { pod.meta.vcsName ?: "" }
+		set { pod.meta.vcsName  = it }
 	}
 
 	@HtmlInput { type="url"; placeholder="Source Code Management URL"; required=true; minLength=3; maxLength=512 }
-	Str sourceCodeManagementUrl {
-		get { pod.meta["vcs.uri"] ?: "" }
-		set { pod.meta["vcs.uri"]  = it }
-	}
-
-	// TODO: edit pod fields
-//license.name=The MIT Licence
-//tags=database
-	
+	Uri sourceCodeManagementUrl {
+		get { pod.meta.vcsUrl ?: "" }
+		set { pod.meta.vcsUrl  = it }
+	}	
 }
 
 class PodDeleteDetails {

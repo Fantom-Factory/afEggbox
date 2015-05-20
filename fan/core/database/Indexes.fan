@@ -16,9 +16,10 @@ const class Indexes {
 	Void ensureIndexes() {
 		log.info("Ensuring Mongo Indexes...")
 
-		podCol.index("_name_")		.ensure(["name"		: Index.ASC])
-		podCol.index("_ownerId_")	.ensure(["ownerId"	: Index.ASC])
-		podCol.index("_isPublic_")	.ensure(["isPublic"	: Index.ASC])
+		podCol.index("_name_")			.ensure(["name"			: Index.ASC])
+		podCol.index("_ownerId_")		.ensure(["ownerId"		: Index.ASC])
+		podCol.index("_isPublic_")		.ensure(["isPublic"		: Index.ASC])
+		podCol.index("_isDeprecated_")	.ensure(["isDeprecated"	: Index.ASC])
 
 		userCol.index("_email_")	.ensure(["email"	: Index.ASC])
 		

@@ -42,7 +42,7 @@ const class FanrRepo {
 		if (pod.isPublic) {
 			if (pod.meta.licenceName == null || pod.meta.licenceName.isEmpty)
 				throw PodPublishErr(Msgs.publish_missingPublicPodMeta("licence.name' or 'license.name"))
-			if ((pod.meta.vcsUrl == null || pod.meta.vcsUrl.isEmpty) && (pod.meta.orgUrl == null || pod.meta.orgUrl.isEmpty))
+			if ((pod.meta.vcsUrl == null || pod.meta.vcsUrl.toStr.isEmpty) && (pod.meta.orgUrl == null || pod.meta.orgUrl.toStr.isEmpty))
 				throw PodPublishErr(Msgs.publish_missingPublicPodMeta("vcs.uri' or 'org.uri"))
 		}	
 
