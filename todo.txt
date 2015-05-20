@@ -2,6 +2,10 @@
 did you forget your password?
 email confirmation
 
+users to have a gravatar email field (defaults to normal)
+
+lib icons in pod
+
 upvote / star a pod
 
 Games:

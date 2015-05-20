@@ -13,10 +13,23 @@ class RepoPod {
 	@Property{}	Version		version
 	@Property{}	Int			fileSize
 	@Property{}	DateTime	builtOn
-	@Property{}	Bool		isPublic
 	@Property{}	Int			ownerId
 	@Property{}	Str			aboutFandoc
 	@Property{}	RepoPodMeta	meta
+	@Property{}	Bool		isPublic {
+		// get { keep our own 'isPublic' for indexing and searching on }
+		set {
+			&isPublic = it
+			meta["repo.public"] = it.toStr
+		}
+	}
+	@Property{}	Bool		isDeprecated {
+		// get { keep our own 'isDeprecated' for indexing and searching on }
+		set {
+			&isDeprecated = it
+			meta["repo.deprecated"] = it.toStr 
+		}
+	}
 
 				Str			displayName {
 					get { "${name} ${version}" }
@@ -49,6 +62,15 @@ class RepoPod {
 	
 	Buf loadFile() {
 		podFileDao.get(_id, true).data
+	}
+	
+	Str summary() {
+		summary := meta.summary
+		if (isDeprecated)
+			summary = "(Deprecated) ${summary}"
+		if (meta.isInternal)
+			summary = "(Internal) ${summary}"
+		return summary
 	}
 	
 	RepoUser owner() {
@@ -110,37 +132,83 @@ class RepoPodMeta {
 		specialKeys.each { m[it] = meta[it] }
 		meta.keys.exclude { specialKeys.contains(it) }.sort.each { m[it] = meta[it] }
 		
+		// convert the older "repo.private" --> "repo.public"
+		if (m.containsKey("repo.private")) {
+			m["repo.public"] = (!(Bool.fromStr(m["repo.private"] ?: "true", false) ?: true)).toStr
+			m.remove("repo.private")
+		}
+
+		// respect both British and American spellings - but use / keep the British one!
+		if (m.containsKey("license.name")) {
+			m["licence.name"] = m["license.name"]
+			m.remove("license.name")
+		}
+		
 		this.meta = m
-	}
-	
-	Str summary() {
-		meta["pod.summary"]
-	}
-	
-	Str projectName() {
-		meta["proj.name"] ?: meta["pod.name"]
+
+		try parseTest := projectUrl
+		catch projectUrl = null
+
+		try parseTest := orgUrl
+		catch orgUrl = null
+		
+		try parseTest := vcsUrl
+		catch vcsUrl = null
 	}
 	
 	Bool isPublic() {
-		if (meta.containsKey("repo.public"))
-			return Bool.fromStr(meta["repo.public"] ?: "false", false) ?: false
-		if (meta.containsKey("repo.private"))
-			return !(Bool.fromStr(meta["repo.private"] ?: "true", false) ?: true)
-		return false
+		Bool.fromStr(meta["repo.public"] ?: "false", false) ?: false
 	}
 
-	Str? licenceName() {
-		meta["licence.name"] ?: meta["license.name"]
+	Bool isDeprecated() {
+		Bool.fromStr(meta["repo.deprecated"] ?: "false", false) ?: false
 	}
 
-	Str? vcsUrl() {
-		meta["vcs.uri"]
+	Bool isInternal {
+		get { Bool.fromStr(meta["repo.internal"] ?: "false", false) ?: false }
+		set { meta["repo.internal"] = it.toStr }
+	}
+
+	Str summary {
+		get { meta["pod.summary"] }
+		set { meta["pod.summary"] = it }
 	}
 	
-	Str? orgUrl() {
-		meta["org.uri"]
+	Str projectName {
+		get { meta["proj.name"] ?: meta["pod.name"] }
+		set { meta["proj.name"] = it }
+	}
+
+	Uri? projectUrl {
+		get { meta["proj.url"]?.toUri }
+		set { meta["proj.url"] = it.toStr }
 	}
 	
+	Str? licenceName {
+		get { meta["licence.name"] }
+		set { meta["licence.name"] = it }
+	}
+
+	Str? orgName {
+		get { meta["org.name"] }
+		set { meta["org.name"] = it }
+	}
+
+	Uri? orgUrl {
+		get { meta["org.uri"]?.toUri }
+		set { meta["org.uri"] = it.toStr }
+	}
+
+	Str? vcsName {
+		get { meta["vcs.name"] }
+		set { meta["vcs.name"] = it }
+	}
+
+	Uri? vcsUrl {
+		get { meta["vcs.uri"]?.toUri }
+		set { meta["vcs.uri"] = it.toStr }
+	}
+		
 	@Operator
 	Str? get(Str key) {
 		meta[key]
