@@ -18,9 +18,9 @@ const mixin PodApiIndexPage : PrPage {
 		if (podApi == null)
 			throw HttpStatusErr(404, "API for pod ${pod.name} not found")
 		
-		this.ctx = LinkResolverCtx() { 
-			it.pod = this.pod
-		} 
+//		this.ctx = LinkResolverCtx() { 
+//			it.pod = this.pod
+//		} 
 	}
 	
 	Str writeFandoc(DocFandoc doc) {

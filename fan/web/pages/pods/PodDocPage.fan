@@ -7,29 +7,21 @@ using fandoc
 @Page { disableRoutes = true }
 const mixin PodDocPage : PrPage {
 
-	@Inject			abstract Fandoc				fandoc
-	@Inject			abstract RepoPodDocsDao		podDocsDao
+//	@Inject			abstract Fandoc				fandoc
+//	@Inject			abstract RepoPodDocsDao		podDocsDao
 	@Inject			abstract |RepoPod, Uri?, Str? -> FandocDocUri| docUriFactory
 	@Inject			abstract |RepoPod, Str?, Str? -> FandocApiUri| apiUriFactory
-	@PageContext	abstract RepoPod			pod
-	@PageContext	abstract Uri				fileUri
-					abstract RepoPodDocs?		podDocs
-					abstract LinkResolverCtx?	linkResolverCtx
+	@PageContext	abstract FandocDocUri		fandocUri
+//	@PageContext	abstract Uri				fileUri
+//					abstract RepoPodDocs?		podDocs
+//					abstract LinkResolverCtx?	linkResolverCtx
 
-	@BeforeRender
-	Void beforeRender() {
-		podDocs = podDocsDao.find(pod.name, pod.version)
-		if (!podDocs.contents.containsKey(fileUri))
-			throw HttpStatusErr(404, "Pod file `${fileUri}` not found")
-		linkResolverCtx = LinkResolverCtx {
-			it.pod = this.pod
-		}
+	RepoPod pod() {
+		fandocUri.pod
 	}
 
-	Str docs() {
-		docStr	:= podDocs[fileUri]?.readAllStr
-		doc 	:= fandoc.parseStr(docStr)
-		return this.fandoc.writeDocToHtml(doc, linkResolverCtx)
+	Str docHtml() {
+		fandocUri.docHtml
 	}
 	
 	Str apiUrl() {
@@ -38,13 +30,11 @@ const mixin PodDocPage : PrPage {
 	
 	Str tableOfContents() {
 		html	:= StrBuf()
-		contents := (Obj[][]) podDocs.pages.map { it.relTo(`/doc`) }.exclude { it == `pod.fandoc`}.sort.map |Uri page->Obj| { [page, page.name[0..<page.name.indexr(".")].toDisplayName] }.insert(0, [`pod.fandoc`, "User Guide"])
-		
-		contents.each { 
-			page  := (Uri) `/doc/` + it[0] 
-			title := (Str) it[1]
+		contents := fandocUri.pageContents
+
+		contents.each |title, page| { 
 			link  := (FandocDocUri) docUriFactory(pod, page, null)
-			if (link.fileUri == this.fileUri)
+			if (link.fileUri == fandocUri.fileUri)
 				html.add("<h4 class=\"text-muted\">").add(title).add("</h4>")
 			else
 				html.add("<h4>").add("<a href=\"${link.toClientUrl.encode}\">").add(title).add("</a>").add("</h4>")
@@ -76,7 +66,7 @@ const mixin PodDocPage : PrPage {
 			id  := h.anchorId ?: h.title.fromDisplayName
 
 			html.add("<li>")
-			if (page == this.fileUri)
+			if (page == fandocUri.fileUri)
 				html.add("<a href=\"#${id.toUri.encode}\">${h.title}</a>")
 			else {
 				link := (FandocDocUri) docUriFactory(pod, page, id)

@@ -6,7 +6,7 @@
 
 	-- if (loggedIn && loggedInUser.owns(pod))
 		div.pull-right
-			a.btn.btn-primary (href="${podUrl(`/edit`)}") Edit Pod Details
+			a.btn.btn-primary (href="${editUrl}") Edit Pod Details
 
 	div.row
 		div.col-sm-9
@@ -14,10 +14,10 @@
 				div.small	${pod.meta.summary}
 		
 			p
-				a (href="${podUrl(`/api`)}") API
+				a (href="${apiUrl}") API
 			p
-				a (href="${podUrl(`/doc`)}") Documentation
+				a (href="${docUrl}") Documentation
 		
-			== aboutPod
+			== aboutHtml
 
 		div.col-sm-3.hidden-xs.contents

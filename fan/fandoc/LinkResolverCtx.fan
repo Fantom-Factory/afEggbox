@@ -6,7 +6,9 @@ class LinkResolverCtx {
 	Str?		type
 	Doc?		doc
 	
-//	new make(|This|in) { in(this) }
+	new make(RepoPod pod) { 
+		this.pod = pod 
+	}
 	
 	Uri? invalidLink(Uri uri, Str msg, Uri? returnUri := null) {
 		invalidLinks[uri] = msg

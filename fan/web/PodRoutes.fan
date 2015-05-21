@@ -8,6 +8,7 @@ const class PodRoutes : Route {
 	@Inject	private const Pages	 		pages
 	@Inject	private const RepoPodDao	podDao
 	@Inject private const Backdoor		backdoor
+	@Inject private const Registry		reg
 
 	new make(|This|in) { in(this) }
 	
@@ -30,56 +31,12 @@ const class PodRoutes : Route {
 			return null
 
 		podName		:= chomp(reqPath)
+		if (podName == null)
+			return pages.renderPage(PodsPage#)
+		
 		podVersion	:= Version((reqPath.isEmpty ? null : reqPath.first) ?: "", false)
 		if (podVersion != null)	chomp(reqPath)
 		podSection	:= chomp(reqPath)
-		
-		// --> /pods
-		// --> /pods/
-		if (podName == null)
-			return pages.renderPage(PodsPage#)
-
-		pod := podDao.findOne(podName, podVersion)
-		if (pod == null) {
-			v := (podVersion != null) ? " v${podVersion}" : ""
-			return HttpStatus(404, "Pod ${podName}${v} not found")
-		}
-
-		// --> /pods/afSlim
-		// --> /pods/afSlim/
-		// --> /pods/afSlim/1.1.14
-		// --> /pods/afSlim/1.1.14/
-		if (podSection == null && reqPath.isEmpty)
-			return pages.renderPage(PodSummaryPage#, [pod])
-		
-		// --> /pods/afSlim/doc
-		// --> /pods/afSlim/1.1.14/doc
-		if (podSection == "doc") {
-			fileUrl := `/doc/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
-			if (fileUrl == `/doc/`)
-				fileUrl = fileUrl.plusName("pod.fandoc")
-			if (fileUrl.ext == null)
-				fileUrl = fileUrl.plusName("${fileUrl.name}.fandoc")
-			
-			// TODO: handle images and other files
-			return pages.renderPage(PodDocPage#, [pod, fileUrl])
-		}
-
-		// --> /pods/afSlim/src
-		// --> /pods/afSlim/1.1.14/src
-		if (podSection == "src") {
-			fileUrl := `/src/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
-			return pages.renderPage(PodSrcPage#, [pod, fileUrl.plusName("${fileUrl.name}.fan")])
-		}
-
-		// --> /pods/afSlim/api
-		// --> /pods/afSlim/1.1.14/api
-		if (podSection == "api") {
-			fileUrl := `/doc/` + ((podVersion == null) ? httpReq.url[3..-1] : httpReq.url[4..-1]).relTo(`/`)
-			if (fileUrl == `/doc/`)
-				return pages.renderPage(PodApiIndexPage#, [pod])
-			return pages.renderPage(PodApiPage#, [pod, fileUrl.plusName("${fileUrl.name}.apidoc")])
-		}
 
 		// --> /pods/afSlim/edit
 		// --> /pods/afSlim/1.1.14/edit
@@ -88,12 +45,39 @@ const class PodRoutes : Route {
 				backdoor.login
 
 			if (userSession.isLoggedIn) {
+				pod := podDao.findOne(podName, podVersion)
+				if (pod == null) {
+					v := (podVersion != null) ? " v${podVersion}" : ""
+					return HttpStatus(404, "Pod ${podName}${v} not found")
+				}
+
 				if (userSession.user.owns(pod)) 
 					return pages.renderPage(PodEditPage#, [pod])
 				throw HttpStatusErr(401, "Unauthorised")
 			}
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
 		}
+
+		fandocUri := FandocUri.fromClientUrl(reg, httpReq.url)
+		if (fandocUri == null)
+			return null
+		
+		ctx := LinkResolverCtx(fandocUri.pod)
+		if ((fandocUri.validate(ctx, httpReq.url) ?: false) == false) 
+			return HttpStatus(404, ctx.invalidLinks.vals.first)
+		
+		if (fandocUri is FandocSummaryUri)
+			return pages.renderPage(PodSummaryPage#, [fandocUri])
+
+		if (fandocUri is FandocDocUri)
+			// TODO: handle images and other files
+			return pages.renderPage(PodDocPage#, [fandocUri])
+		
+		if (fandocUri is FandocSrcUri)
+			return pages.renderPage(PodSrcPage#, [fandocUri])
+		
+		if (fandocUri is FandocApiUri)
+			return pages.renderPage(PodApiPage#, [fandocUri])
 		
 		return null
 	}

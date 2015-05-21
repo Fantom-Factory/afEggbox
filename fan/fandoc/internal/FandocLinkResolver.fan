@@ -84,6 +84,52 @@ abstract const class FandocUri {
 		return null
 	}
 	
+	static new fromClientUrl(Registry reg, Uri clientUrl) {
+		reqPath 	:= clientUrl.pathOnly.path.rw
+		pods		:= chomp(reqPath)
+		podName		:= chomp(reqPath)
+		podVersion	:= Version((reqPath.isEmpty ? null : reqPath.first) ?: "", false)
+		if (podVersion != null)	chomp(reqPath)
+		podSection	:= chomp(reqPath)
+		
+		if (pods != "pods" || podName == null)
+			return null
+
+		// --> /pods/afSlim
+		// --> /pods/afSlim/1.1.14
+		if (podSection == null && reqPath.isEmpty)
+			return reg.autobuild(FandocSummaryUri#, [podName, podVersion])
+		
+		// --> /pods/afSlim/doc
+		// --> /pods/afSlim/1.1.14/doc
+		if (podSection == "doc") {
+			fileUrl := `/doc/` + ((podVersion == null) ? clientUrl[3..-1] : clientUrl[4..-1]).relTo(`/`)
+			if (fileUrl == `/doc/`)
+				fileUrl = fileUrl.plusName("pod.fandoc")
+			if (fileUrl.ext == null)
+				fileUrl = fileUrl.plusName("${fileUrl.name}.fandoc")
+			return reg.autobuild(FandocDocUri#, [podName, podVersion, fileUrl, null])
+		}
+
+		// --> /pods/afSlim/src
+		// --> /pods/afSlim/1.1.14/src
+		if (podSection == "src") {
+			fileUrl := `/src/` + ((podVersion == null) ? clientUrl[3..-1] : clientUrl[4..-1]).relTo(`/`)
+			fileUrl = fileUrl.plusName("${fileUrl.name}.fan")
+			return reg.autobuild(FandocSrcUri#, [podName, podVersion, fileUrl, null])
+		}
+
+		// --> /pods/afSlim/api
+		// --> /pods/afSlim/1.1.14/api
+		if (podSection == "api") {
+			fileUrl := `/doc/` + ((podVersion == null) ? clientUrl[3..-1] : clientUrl[4..-1]).relTo(`/`)
+			fileUrl = fileUrl.plusName("${fileUrl.name}.apidoc")
+			return reg.autobuild(FandocApiUri#, [podName, podVersion, fileUrl, null])
+		}
+
+		return null
+	}
+	
 	private static Str? chomp(Str[] path) {
 		path.isEmpty ? null : path.removeAt(0) 
 	}
@@ -103,6 +149,7 @@ abstract const class FandocUri {
 	}
 	
 	protected Bool? validatePod(LinkResolverCtx ctx, Uri uri, |RepoPod->Bool?| func) {
+		pod := pod
 		if (pod == null) {
 			ctx.invalidLink(uri, "Could not find pod ${podName} " + (podVersion ?: ""))
 			return false
@@ -120,11 +167,16 @@ abstract const class FandocUri {
 }
 
 const class FandocSummaryUri : FandocUri {
+	@Inject private const Fandoc	fandoc
 
 	new make(Str podName, Version? podVersion, |This| in) : super(podName, podVersion, in) { }
 
 	override Bool? validate(LinkResolverCtx ctx, Uri uri) {
 		validatePod(ctx, uri) |pod->Bool?| { true }
+	}
+	
+	Str aboutHtml() {
+		fandoc.writeStrToHtml(pod.aboutFandoc, LinkResolverCtx(pod))
 	}
 	
 	override Uri toUri() {
@@ -177,23 +229,22 @@ const class FandocApiUri : FandocUri {
 			return true
 		}
 	}
-	
-	override Uri toUri() {
+
+	Uri baseUri() {
 		uri := `api`
 		if (typeName != null)
 			uri = uri.plusSlash.plusName(typeName)
 		if (slotName != null)
 			uri = `${uri}#${slotName}`
-		return fandocUri(uri)
+		return uri
+	}
+	
+	override Uri toUri() {
+		fandocUri(baseUri)
 	}
 
 	override Uri toClientUrl() {
-		url := `api`
-		if (typeName != null)
-			url = url.plusSlash.plusName(typeName)
-		if (slotName != null)
-			url = `${url}#${slotName}`
-		return fandocUrl(url)
+		fandocUrl(baseUri)
 	}
 }
 
@@ -263,6 +314,7 @@ const class FandocSrcUri : FandocUri {
 
 const class FandocDocUri : FandocUri {
 	@Inject private const RepoPodDocsDao	podDocDao
+	@Inject private const Fandoc			fandocRenderer
 					const Uri? 				fileUri
 					const Str? 				headingId
 
@@ -276,8 +328,24 @@ const class FandocDocUri : FandocUri {
 		this.headingId	= headingId
 	}
 	
+	Str docHtml() {
+		fandoc := podDocDao[pod._id][fileUri].readAllStr
+		return fandocRenderer.writeStrToHtml(fandoc, LinkResolverCtx(pod))
+	}
+	
+	Uri:Str pageContents() {
+		// TODO: look for a contents.fog
+		pageUris := (Uri[]) podDocDao[pod._id].contents.keys.findAll { it.ext == "fandoc" }.exclude { it == `/doc/pod.fandoc`}.sort
+		contents := Uri:Str[:] { it.ordered = true }.add(`/doc/pod.fandoc`, "User Guide")
+		pageUris.each {
+			contents[it] = it.name[0..<it.name.indexr(".")].toDisplayName
+		}
+		return contents
+	}
+	
 	Heading[] findHeadings() {
-		podDocDao.get(pod._id).findHeadings(fileUri)
+		fandoc := podDocDao[pod._id][fileUri].readAllStr
+		return fandocRenderer.parseStr(FandocParser(), fandoc).findHeadings
 	}
 	
 	override Bool? validate(LinkResolverCtx ctx, Uri uri) {
@@ -289,15 +357,16 @@ const class FandocDocUri : FandocUri {
 			podDoc := podDocDao.get(pod._id, false)
 			if (podDoc == null)
 				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} has no Doc files")
-			docFile := podDoc[fileUri]
+			docFile := podDoc.get(fileUri, false)
 			if (docFile == null)
 				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} does not have a Doc file `${fileUri}`")
-			
+
 			if (headingId == null)
 				return true
-			
+
 			// validate Heading
-			heading	:= podDoc.resolveHeading(fileUri, headingId)
+			doc		:= fandocRenderer.parseStr(FandocParser(), docFile.readAllStr)
+			heading	:= doc.findHeadings.find { (it.anchorId ?: it.title.fromDisplayName) == headingId }
 			if (heading == null)
 				return (Obj?) ctx.invalidLink(uri, "Document ${podName}${fileUri} does not contain the heading ID #${uri.frag}")
 			

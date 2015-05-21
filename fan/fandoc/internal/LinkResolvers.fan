@@ -12,8 +12,7 @@ class LinkResolvers {
 //          if (elem.uri.startsWith("examples::"))
 //            elem.uri = "http://fantom.org/doc/" + elem.uri.replace("::", "/")	
 	
-	Uri? resolve(Uri uri, LinkResolverCtx? ctx := null) {
-		ctx = ctx ?:LinkResolverCtx()
+	Uri? resolve(Uri uri, LinkResolverCtx ctx) {
 		invalidCount := ctx.invalidLinks.size
 		resolved := resolvers.eachWhile { it.resolve(uri, ctx) }
 		if (resolved == null && invalidCount == ctx.invalidLinks.size)
