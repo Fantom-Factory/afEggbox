@@ -23,26 +23,26 @@ const mixin PodApiPage : PrPage {
 //			throw HttpStatusErr(404, "Pod API for `${fileUri}` not found")
 //		
 //		this.type	= ApiDocParser(pod.name, apiDoc.in).parseType(true)
-		this.ctx	= LinkResolverCtx() { 
-			it.pod 	= this.pod
-			it.type	= this.type.name
-		} 
+//		this.ctx	= LinkResolverCtx() { 
+//			it.pod 	= this.pod
+//			it.type	= this.type.name
+//		} 
 	}
 	
 	Str writeFandoc(DocFandoc doc) {
 		fandoc.writeStrToHtml(doc.text, ctx)
 	}
 	
-	Bool typeHasSrc() {
-		uri := `fandoc:/${pod.name}/src/${type.name}`.plusQuery(["v":pod.version.toStr])
-		typeSrcUrl = linkResolvers.resolve(uri)?.encode
-		return typeSrcUrl != null
-	}
-
-	Bool slotHasSrc(DocSlot slot) {
-		uri := `fandoc:/${pod.name}/src/${type.name}/${slot.name}#line${slot.loc.line}`.plusQuery(["v":pod.version.toStr])
-		slotSrcUrl = linkResolvers.resolve(uri)?.encode
-		return slotSrcUrl != null
-	}
+//	Bool typeHasSrc() {
+//		uri := `fandoc:/${pod.name}/src/${type.name}`.plusQuery(["v":pod.version.toStr])
+//		typeSrcUrl = linkResolvers.resolve(uri)?.encode
+//		return typeSrcUrl != null
+//	}
+//
+//	Bool slotHasSrc(DocSlot slot) {
+//		uri := `fandoc:/${pod.name}/src/${type.name}/${slot.name}#line${slot.loc.line}`.plusQuery(["v":pod.version.toStr])
+//		slotSrcUrl = linkResolvers.resolve(uri)?.encode
+//		return slotSrcUrl != null
+//	}
 
 }

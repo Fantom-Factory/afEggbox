@@ -6,25 +6,30 @@ using afPillow
 @Page { disableRoutes = true }
 const mixin PodSummaryPage : PrPage {
 
-	@Inject	abstract Fandoc			fandoc
-	@PageContext
-			abstract RepoPod		pod
-//			abstract Uri			podUri
+	@PageContext	abstract FandocSummaryUri	fandocUri
 	
-//	@BeforeRender
-//	Void beforeRender() {
-//		this.podUri = `/pods/${pod.name}/${pod.version}`
-//	}
-
 		// TODO: seo this page!
 	
-	Str podUrl(Uri url) {
-		if (url == `/edit`)
-			return `/pods/${pod.name}/${pod.version}/edit`.encode	// TODO: remove version on latest pod
-		return resolve(pod, url)
+	RepoPod pod() {
+		fandocUri.pod
+	}
+
+	Str aboutHtml() {
+		fandocUri.aboutHtml
+	}
+
+	Str editUrl() {
+		fandocUri.toClientUrl.plusSlash.plusName("edit").encode
+	}
+
+	Str apiUrl() {
+		// FIXME: check if pod has API
+		fandocUri.toClientUrl.plusSlash.plusName("api").encode
 	}
 	
-	Str aboutPod() {
-		fandoc.writeStrToHtml(pod.aboutFandoc)
+	Str docUrl() {
+		// FIXME: check if pod has pod docs
+		fandocUri.toClientUrl.plusSlash.plusName("doc").encode
 	}
+	
 }
