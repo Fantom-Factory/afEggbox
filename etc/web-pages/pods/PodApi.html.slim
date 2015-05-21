@@ -2,11 +2,7 @@
 
 -- app.renderLayout(type.qname)
 
-	ol.breadcrumb
-		li;	a (href="${podsUrl}")	Pods
-		li;	a (href="${podSummaryUrl(pod)}")	${pod.name}
-		li;	a (href="${podApiUrl(pod)}")		API
-		li.active	${type.name}
+	== app.renderPodBreadcrumbs(fandocUri)
 
 	div.row
 		div.col-sm-9.api
@@ -36,7 +32,7 @@
 						== app.renderDocFacetTemplate(ctx, f)
 						br
 			
-			== writeFandoc(type.doc)
+			== fandocUri.typeHtml
 	
 			-- if (DocFlags.isEnum(type.flags))
 				ul
@@ -46,11 +42,12 @@
 			
 			dl
 				-- type.slots.each |slot|
+					-- slotSrcUri := fandocUri.toSrcUri(type.name, slot.name)
 					dt#${slot.name}	$slot.name
 					dd
-						-- if (slotHasSrc(slot))
+						-- if (slotSrcUri.hasSrc)
 							p.src
-								a (href="${slotSrcUrl}") Source
+								a (href="${slotSrcUri.toClientUrl.encode}") Source
 	
 						p.sig; code
 							-- slot.facets.each |f|
@@ -81,13 +78,17 @@
 									== param.def != null ? " := $param.def.toXml" : ""
 								== ")"
 						
-						== writeFandoc(slot.doc)
+						-- slotUri := fandocUri.toApiUri(type.name, slot.name)
+						== slotUri.slotHtml
 	
 		div.col-sm-3.hidden-xs.contents
+			== app.renderPodToc(fandocUri)
+
 			h3	Source
 			ul.list-unstyled
-				-- if (typeHasSrc)
-					li;	a (href="${typeSrcUrl}")	View Source
+				-- typeSrcUri := fandocUri.toTypeSrcUri
+				-- if (typeSrcUri.hasSrc)
+					li;	a (href="${typeSrcUri.toClientUrl.encode}")	View Source
 				-- else
 					li	Not available
 	

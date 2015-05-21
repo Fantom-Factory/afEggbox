@@ -24,12 +24,12 @@ const mixin PodSummaryPage : PrPage {
 
 	Str apiUrl() {
 		// FIXME: check if pod has API
-		fandocUri.toClientUrl.plusSlash.plusName("api").encode
+		fandocUri.toApiUri.toClientUrl.encode
 	}
 	
 	Str docUrl() {
 		// FIXME: check if pod has pod docs
-		fandocUri.toClientUrl.plusSlash.plusName("doc").encode
+		fandocUri.toDocUri.toClientUrl.encode
 	}
 	
 }

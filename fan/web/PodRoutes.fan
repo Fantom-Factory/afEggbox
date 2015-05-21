@@ -77,7 +77,9 @@ const class PodRoutes : Route {
 			return pages.renderPage(PodSrcPage#, [fandocUri])
 		
 		if (fandocUri is FandocApiUri)
-			return pages.renderPage(PodApiPage#, [fandocUri])
+			return (fandocUri as FandocApiUri).typeName == null
+				? pages.renderPage(PodApiIndexPage#, [fandocUri])
+				: pages.renderPage(PodApiPage#, [fandocUri])
 		
 		return null
 	}

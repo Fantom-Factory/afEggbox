@@ -43,11 +43,6 @@ const mixin PrComponent : EfanComponent {
 		throw ArgErr("WTF is a ${obj.typeof}??? Hints: ${hints} - $obj")
 	}
 	
-//	Str resolve(RepoPod pod, Uri uri) {
-//		podUri := (`fandoc:/${pod.name}/` + uri.relTo(`/`)).plusQuery(["v":pod.version.toStr])
-//		return linkResolvers.resolve(podUri)?.encode ?: "/ERROR"
-//	}
-	
 	Bool loggedIn() {
 		userSession.isLoggedIn
 	}

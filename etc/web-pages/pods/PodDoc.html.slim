@@ -1,21 +1,14 @@
 -- app.renderLayout("Docs")
 
-	ol.breadcrumb
-		li;	a (href="${podsUrl}")	Pods
-		li;	a (href="${podSummaryUrl(pod)}")	${pod.name}
-		li.active	Documentation
+	== app.renderPodBreadcrumbs(fandocUri)
 
 	div.row
 		div.col-sm-9
 			h1.podHeading
 				span ${pod.meta.projectName} v${pod.version}
-				| User Guide
+				== fandocUri.title
 				
 			== docHtml
 
 		div.col-sm-3.hidden-xs.contents
-			h3	Contents
-			
-			h4;	a (href="${apiUrl}")	API
-
-			== tableOfContents
+			== app.renderPodToc(fandocUri)

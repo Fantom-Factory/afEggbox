@@ -4,8 +4,8 @@ using fandoc
 
 @Entity { name = "podDocs" }
 class RepoPodDocs {
-	@Property {}	Str		_id
-	@Property {}	Uri:Buf	contents
+	@Property {} Str		_id
+	@Property {} Uri:Buf	contents
 	
 	new make(|This|f) { f(this) }
 	
