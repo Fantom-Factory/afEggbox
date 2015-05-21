@@ -3,9 +3,10 @@ using afMorphia
 
 @Entity { name = "podApi" }
 class RepoPodApi {
-	@Property {}	Str		_id
-	@Property {}	Str?	podName	// FIXME: make not-nullable (once we delete existing data)
-	@Property {}	Uri:Str	contents
+	@Property	const Str			_id
+	@Property	const Str			podName
+	@Property	const Uri:Str		contents
+					  Str:DocType	docTypes	:= Str:DocType[:]
 	
 	new make(|This|f) { f(this) }
 	
@@ -18,38 +19,19 @@ class RepoPodApi {
 	}
 	
 	@Operator
-	Str? get(Str typeName) {
-		contents[`/doc/${typeName}.apidoc`]
+	DocType? get(Str typeName, Bool checked := true) {
+		if (docTypes.containsKey(typeName))
+			return docTypes[typeName]
+		
+		apidoc := contents[`/doc/${typeName}.apidoc`] ?: (checked ? throw Err("Pod api `$typeName` not found") : null)
+		if (apidoc == null)
+			return apidoc
+		docType := ApiDocParser(podName, apidoc.toStr.in).parseType
+		docTypes[typeName] = docType
+		return docType
 	}
 	
-	DocType[] mixins() {
-		allTypes.findAll { it.isMixin }
-	}
-	
-	DocType[] classes() {
-		allTypes.findAll { !it.isMixin && !it.isFacet && !it.isEnum && !it.isErr}
-	}
-	
-	DocType[] enums() {
-		allTypes.findAll { it.isEnum }
-	}
-	
-	DocType[] facets() {
-		allTypes.findAll { it.isFacet }
-	}
-	
-	DocType[] errs() {
-		allTypes.findAll { it.isErr }
-	}
-	
-	once DocType[] allTypes() {
-		contents.vals
-			.map { ApiDocParser(podName ?: _id.split('-').first, it.in).parseType }
-			.exclude |DocType t->Bool| {
-				t.hasFacet("sys::NoDoc")     ||
-				DocFlags.isInternal(t.flags) ||
-				DocFlags.isPrivate(t.flags)  ||
-				DocFlags.isSynthetic(t.flags)
-			} 
+	DocType[] allTypes() {
+		contents.keys.map { this.get(it.name[0..<it.name.indexr(".")]) }
 	}
 }

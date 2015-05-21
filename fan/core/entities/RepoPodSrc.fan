@@ -2,9 +2,9 @@ using afIoc
 using afMorphia
 
 @Entity { name = "podSrc" }
-class RepoPodSrc {
-	@Property {}	Str		_id
-	@Property {}	Uri:Str	contents
+const class RepoPodSrc {
+	@Property const Str		_id
+	@Property const Uri:Str	contents
 	
 	new make(|This|f) { f(this) }
 	
@@ -16,7 +16,7 @@ class RepoPodSrc {
 	}
 	
 	@Operator
-	Str? get(Str fileName) {
-		contents[`/src/${fileName}`]
+	Str? get(Str fileName, Bool checked := true) {
+		contents[`/src/${fileName}`] ?: (checked ? throw Err("Pod src `$fileName` not found") : null)
 	}
 }

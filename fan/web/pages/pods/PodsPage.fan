@@ -14,6 +14,19 @@ const mixin PodsPage : PrPage {
 		injector.injectRequireModule("fileInput")
 	}
 	
+	Str podSummaryUrl(RepoPod pod) {
+		// FIXME: use FandocUri
+		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).encode
+	}
+	Str podApiUrl(RepoPod pod) {
+		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name, true).plusName("api", true).encode
+	}
+	Str podDocsUrl(RepoPod pod) {
+		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name, true).plusName("doc", true).encode
+	}
+	Str userUrl(RepoUser user) {
+		pages[UsersPage#].withContext([user]).pageUrl.encode
+	}
 	Str downloads(Obj o) {
 		""
 	}

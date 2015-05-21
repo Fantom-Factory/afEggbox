@@ -1,8 +1,6 @@
 -- app.renderLayout("Pods")
 
-	ol.breadcrumb
-		li;	a (href="${podsUrl}")	Pods
-		li.active	${pod.name}
+	== app.renderPodBreadcrumbs(fandocUri)
 
 	-- if (loggedIn && loggedInUser.owns(pod))
 		div.pull-right
@@ -13,11 +11,8 @@
 			h1.podHeading	${pod.meta.projectName} ${pod.version}
 				div.small	${pod.meta.summary}
 		
-			p
-				a (href="${apiUrl}") API
-			p
-				a (href="${docUrl}") Documentation
-		
 			== aboutHtml
 
 		div.col-sm-3.hidden-xs.contents
+			== app.renderPodToc(fandocUri)
+		

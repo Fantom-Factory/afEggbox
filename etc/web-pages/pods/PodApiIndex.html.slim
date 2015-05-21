@@ -1,9 +1,6 @@
 -- app.renderLayout("API index")
 
-	ol.breadcrumb
-		li;	a (href="${podsUrl}")	Pods
-		li;	a (href="${podSummaryUrl(pod)}")	${pod.name}
-		li.active	API
+	== app.renderPodBreadcrumbs(fandocUri)
 
 	div.row
 		div.col-sm-9.api
@@ -13,57 +10,50 @@
 
 			p;	== pod.meta.summary
 			
-			-- if (!podApi.mixins.isEmpty)
+			-- if (!fandocUri.mixins.isEmpty)
 				h2	Mixins
 				table.table.table-striped.table-condensed.table-responsive
-					-- podApi.mixins.each |type|
+					-- fandocUri.mixins.each |uri|
 						tr
-							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
-							td;	== writeFandoc(type.doc.firstSentence)
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
 
-			-- if (!podApi.classes.isEmpty)
+			-- if (!fandocUri.classes.isEmpty)
 				h2	Classes
 				table.table.table-striped.table-condensed.table-responsive
-					-- podApi.classes.each |type|
+					-- fandocUri.classes.each |uri|
 						tr
-							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
-							td;	== writeFandoc(type.doc.firstSentence)
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
 			
-			-- if (!podApi.enums.isEmpty)
+			-- if (!fandocUri.enums.isEmpty)
 				h2	Enums
 				table.table.table-striped.table-condensed.table-responsive
-					-- podApi.enums.each |type|
+					-- fandocUri.enums.each |uri|
 						tr
-							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
-							td;	== writeFandoc(type.doc.firstSentence)
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
 
-			-- if (!podApi.facets.isEmpty)
+			-- if (!fandocUri.facets.isEmpty)
 				h2	Facets
 				table.table.table-striped.table-condensed.table-responsive
-					-- podApi.facets.each |type|
+					-- fandocUri.facets.each |uri|
 						tr
-							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
-							td;	== writeFandoc(type.doc.firstSentence)
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
 
-			-- if (!podApi.errs.isEmpty)
+			-- if (!fandocUri.errs.isEmpty)
 				h2	Errs
 				table.table.table-striped.table-condensed.table-responsive
-					-- podApi.errs.each |type|
+					-- fandocUri.errs.each |uri|
 						tr
-							td;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
-							td;	== writeFandoc(type.doc.firstSentence)
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
 
 		div.col-sm-3.hidden-xs.contents
-		div.col-sm-3.hidden-xs.contents
-			h3	Contents
-			
-			h4;	a (href="#")	API
-
-			h4;	a (href="#")	User Guide
-
-			h4;	a (href="#")	Release Notes
+			== app.renderPodToc(fandocUri)
 
 			h3	All Types
 			ul.list-unstyled
-				-- podApi.allTypes.each |type|
-					li;	a (href="${resolve(pod, `/api/`.plusName(type.name))}"); == type.name
+				-- fandocUri.allTypes.each |uri|
+					li;	a (href="${uri.toClientUrl.encode}"); == uri.title

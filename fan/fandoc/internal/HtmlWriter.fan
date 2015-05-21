@@ -71,11 +71,13 @@ internal class HtmlWriter : DocWriter {
 			case DocNodeId.link:
 				link := elem as Link
 				href := linkResolvers.resolve(link.uri.toUri, ctx) ?: `/ERROR`
+				// TODO: don't render links that don't resolve (maybe show as red text)
 				skin.a(href)
 
 			case DocNodeId.image:
 				img := elem as Image
 				src := linkResolvers.resolve(img.uri.toUri, ctx) ?: `/ERROR`
+				// TODO: don't render images that don't resolve
 				skin.img(src, img.alt)
 		}
 		
