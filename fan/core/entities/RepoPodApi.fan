@@ -18,6 +18,10 @@ class RepoPodApi {
 		}
 	}
 	
+	Bool hasType(Str typeName) {
+		contents.containsKey(`/doc/${typeName}.apidoc`)
+	}
+	
 	@Operator
 	DocType? get(Str typeName, Bool checked := true) {
 		if (docTypes.containsKey(typeName))

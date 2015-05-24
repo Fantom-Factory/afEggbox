@@ -67,11 +67,14 @@ using afFancordion
 **   foo::Bar.poo                   fandoc:/foo/api/Bar?v=2.0#poo
 **   foo::foo                       fandoc:/foo/doc/foo?v=2.0
 **   foo::foo#frag                  fandoc:/foo/doc/foo?v=2.0#frag
+**   foo::src-Bar                   fandoc:/foo/api/Bar/src?v=2.0
 **   Bar                            fandoc:/foo/api/Bar?v=2.0
 **   Bar.poo                        fandoc:/foo/api/Bar?v=2.0#poo
 **   poo                            fandoc:/foo/api/Bar?v=2.0#poo
 **   foo                            fandoc:/foo/doc/foo?v=2.0
+**   src-Bar                        fandoc:/foo/api/Bar/src?v=2.0
 **   foo#frag                       fandoc:/foo/doc/foo?v=2.0#frag
+**   bar.txt                        fandoc:/foo/doc/bar.txt?v=2.0
 **
 ** .
 **  
@@ -134,7 +137,7 @@ class TestFandocUri : RepoFixture {
 
 	Void parseFantomUri(Str uri) {
 		pod := podDao["foo-2.0"]
-		ctx := LinkResolverCtx(pod)
+		ctx := LinkResolverCtx(pod) { it.type = "Bar" }
 		fandocUri := FandocUri.fromFantomUri(reg, ctx, uri.toUri)
 		if (!fandocUri.validate(ctx, uri.toUri)) {
 			this.fandocUri = "${fandocUri?.toUri} - ${ctx.invalidLinks}"

@@ -18,6 +18,6 @@ const mixin PodApiPage : PrPage {
 	
 	LinkResolverCtx ctx() {
 		// FIXME:
-		LinkResolverCtx(pod)
+		LinkResolverCtx(pod) { it.type = fandocUri.typeName }
 	}
 }

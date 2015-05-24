@@ -15,7 +15,7 @@
 ** *********************
 ** Acceptance tests for 'fanr' functionality:
 ** 
-**  - [Fanr tests]`run:TestFanr#`
+**  - [Fanr tests]`http:run:TestFanr#`
 **
 ** 
 **  
@@ -23,7 +23,7 @@
 ** ********************
 ** Acceptance tests for web site functionality:
 ** 
-**  - [Fanr tests]`run:TestWeb#`
+**  - [Fanr tests]`http:run:TestWeb#`
 ** 
 ** 
 ** 
