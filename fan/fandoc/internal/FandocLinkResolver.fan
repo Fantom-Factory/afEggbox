@@ -558,6 +558,10 @@ const class FandocDocUri : FandocUri {
 		return contents
 	}
 	
+	Buf content() {
+		podDocDao[pod._id][fileUri]
+	}
+	
 	Heading[] findHeadings() {
 		fandoc := podDocDao[pod._id][fileUri].readAllStr
 		return fandocRenderer.parseStr(FandocParser(), fandoc).findHeadings
@@ -600,7 +604,7 @@ const class FandocDocUri : FandocUri {
 	}
 	
 	override Str title() {
-		pageContents[fileUri]
+		pageContents[fileUri] ?: "Page ${fileUri} does not exist"
 	}
 	
 	override FandocUri? toParentUri() {
