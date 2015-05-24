@@ -17,7 +17,7 @@ mixin HtmlSkin {
 	virtual This b()					{ w("<b>")			 											}
 	virtual This bEnd()					{ w("</b>")			 											}
 
-	virtual This a(Uri href)			{ w("<a").attr("href", href).w(">")								}
+	virtual This a(Uri href, Bool broken){ w("<a").attr("href", broken ? `/ERROR` : href).w(">")		}
 	virtual This aEnd()					{ w("</a>")														}
 
 	virtual This code() 				{ w("<code>") 													}
@@ -63,11 +63,24 @@ mixin HtmlSkin {
 
 internal class DefaultHtmlSkin : HtmlSkin {
 	override WebOutStream out
-	StrBuf buf
+	StrBuf	buf
+
 	new make() {
 		buf = StrBuf()
 		out = WebOutStream(buf.out)
 	}
+	
+	override This a(Uri href, Bool broken) {
+		if (broken)
+			w("<a").attr("class", "brokenLink").attr("rel", "nofollow").attr("href", href).w(">")
+		else
+			w("<a").attr("href", href).w(">")
+		return this
+	}
+	override This aEnd() {
+		w("</a>")
+	}
+
 	override Str toHtml() {
 		buf.toStr
 	}

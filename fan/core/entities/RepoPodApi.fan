@@ -32,6 +32,6 @@ class RepoPodApi {
 	}
 	
 	DocType[] allTypes() {
-		contents.keys.map { this.get(it.name[0..<it.name.indexr(".")]) }
+		contents.keys.sort.map { this.get(it.name[0..<it.name.indexr(".")]) }
 	}
 }

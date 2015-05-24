@@ -6,7 +6,9 @@ class LinkResolverCtx {
 	Str?		type
 	Doc?		doc
 	
-	new make(RepoPod pod) { 
+	new make() { }
+	
+	new makeWithPod(RepoPod pod) { 
 		this.pod = pod 
 	}
 	

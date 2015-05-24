@@ -18,6 +18,12 @@ const class FanrRepo {
 
 	RepoPod? find(RepoUser? user, Str name, Version? version) {
 		pod := podDao.findOne(name, version)
+		if (pod == null)
+			return null
+		if (pod.isPublic)
+			return pod
+		if (user == null)
+			return null
 		return user.owns(pod) ? pod : null
 	}
 
@@ -109,9 +115,10 @@ class PodContents {
 			throw PodPublishErr(Msgs.publish_missingPodFile(`/meta.props`))
 
 		pod = RepoPod(user, podBuf.size, metaProps, docContents)
-		if (pod.isPublic && !docContents.containsKey(`/doc/pod.fandoc`))
-			throw PodPublishErr(Msgs.publish_missingPublicPodFile(`/doc/pod.fandoc`))
-		if (pod.name.size <= 3)
+		// Naa - we'll not enforce this, just print an embarrassing msg instead
+//		if (pod.isPublic && !docContents.containsKey(`/doc/pod.fandoc`))
+//			throw PodPublishErr(Msgs.publish_missingPublicPodFile(`/doc/pod.fandoc`))
+		if (pod.name.size < 3)
 			throw PodPublishErr(Msgs.publish_nameTooSmall(pod.name))
 	}
 	

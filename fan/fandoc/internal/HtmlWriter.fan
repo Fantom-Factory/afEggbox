@@ -70,17 +70,18 @@ internal class HtmlWriter : DocWriter {
 
 			case DocNodeId.link:
 				link := elem as Link
-				href := linkResolvers.resolve(link.uri.toUri, ctx) ?: `/ERROR`
-				// TODO: don't render links that don't resolve (maybe show as red text)
-				skin.a(href)
+				// TODO: trap URI parse errors
+				href := linkResolvers.resolve(link.uri.toUri, ctx)
+				skin.a(href == null ? link.uri.toUri : href, href == null)
 
 			case DocNodeId.image:
 				img := elem as Image
+				// TODO: trap URI parse errors
 				src := linkResolvers.resolve(img.uri.toUri, ctx) ?: `/ERROR`
 				// TODO: don't render images that don't resolve
 				skin.img(src, img.alt)
 		}
-		
+
 		inPreText = (elem.id == DocNodeId.pre)
 	}
 

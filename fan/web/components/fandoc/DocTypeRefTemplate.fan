@@ -3,10 +3,15 @@ using afEfanXtra
  
 const mixin DocTypeRefTemplate : EfanComponent {
 
-	@Inject	abstract LinkResolvers		linkResolvers
-			abstract LinkResolverCtx	ctx
-			abstract DocTypeRef			ref
-			abstract Bool				full
+	private static const Str[] sysPodNames := "docIntro docLang docFanr docTools build compiler compilerDoc compilerJava compilerJs concurrent dom email fandoc fanr fansh flux fluxText fwt gfx inet obix sql syntax sys util web webfwt webmod wisp xml".lower.split
+
+	@Inject 	abstract Registry			reg
+	@Autobuild	abstract FantomLinkResolver	fantomLinkResolver
+				abstract DocTypeRef			ref
+				abstract Bool				full
+
+				abstract LinkResolverCtx ctx
+				abstract Str				typeUrl
 
 	@InitRender
 	Void init(LinkResolverCtx ctx, DocTypeRef ref, Bool full) {
@@ -15,8 +20,27 @@ const mixin DocTypeRefTemplate : EfanComponent {
 		this.full	= full
 	}
 	
-	Str resolveUri() {
+	Bool resolved() {
 		// TODO: resolve pod version to nearest matching
-		linkResolvers.resolve(`fandoc:/${ref.pod}/api/${ref.name}`, ctx)?.encode ?: "/ERROR"
+		// TODO: need to know which version of the pod we're linking from
+
+		uri		  := `fandoc:/${ref.pod}/api/${ref.name}`
+		fandocUri := FandocUri.fromUri(reg, ctx, uri)
+//		fandocUri := (FandocUri) reg.autobuild(FandocUri#, [LinkResolverCtx(), `fandoc:/${ref.pod}/api/${ref.name}`])
+		if (fandocUri.validate(ctx, uri)) {
+			typeUrl = fandocUri.toClientUrl.encode
+			return true
+		}
+		
+		if (isSysPod(ref.pod)) {
+			typeUrl = `http://fantom.org/doc/${ref.pod}/${ref.name}.html`.encode
+			return true
+		}
+		
+		return false
+	}
+	
+	Bool isSysPod(Str podName) {
+		sysPodNames.contains(podName.lower)
 	}
 }

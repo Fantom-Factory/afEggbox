@@ -29,6 +29,7 @@ abstract class FanrFixture : RepoFixture {
 			it.client = this.client
 		}
 		meta["build.ts"] = "2006-06-06T06:06:00Z UTC"
+		meta["repo.public"] = "true"
 	}
 
 	Buf podBuf() {

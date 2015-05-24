@@ -3,30 +3,31 @@
 	ol.breadcrumb
 		li.active	Pods
 
-	h1.page-header	Pods
-
-	-- if (allPods.isEmpty)
-		p	This repository has no pods! Why don't you upload one?
+	article
+		h1.page-header	Pods
 	
-	-- else
-		p	There are ${allPods.size} pod(s).
-		div.table-responsive
-			table.table.table-striped.table-condensed
-				tr
-					th	Name
-					th	Version
-					th	Built On
-					th	Summary
-					th	Downloads
-					th	Creator
-					th	Docs
-				-- allPods.each |pod|
+		-- if (allPods.isEmpty)
+			p	This repository has no pods! Why don't you upload one?
+		
+		-- else
+			p	There are ${allPods.size} pod(s).
+			div.table-responsive
+				table.table.table-striped.table-condensed
 					tr
-						td;	a (href="${podSummaryUrl(pod)}") ${pod.name}
-						// / ${pod.meta.projectName}
-						td	${pod.version}
-						td	${pod.builtOn.toLocale("DDD MMM YYYY")}
-						td	${pod.summary}
-						td	${downloads(pod)}
-						td;	a (href="${userUrl(pod.owner)}") ${pod.owner.userName}
-						td;	a (href="${podDocsUrl(pod)}") Documentation
+						th	Name
+						th	Version
+						th	Built On
+						th	Summary
+						th	Downloads
+						th	Creator
+						th	Docs
+					-- allPods.each |pod|
+						tr
+							td;	a (href="${podSummaryUrl(pod)}") ${pod.name}
+							// / ${pod.meta.projectName}
+							td	${pod.version}
+							td	${pod.builtOn.toLocale("DDD MMM YYYY")}
+							td	${pod.summary}
+							td	${downloads(pod)}
+							td;	a (href="${userUrl(pod.owner)}") ${pod.owner.userName}
+							td;	a (href="${podDocsUrl(pod)}") Documentation
