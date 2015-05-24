@@ -8,7 +8,7 @@ const mixin DocTypeRefTemplate : EfanComponent {
 				abstract DocTypeRef			ref
 				abstract Bool				full
 
-				abstract LinkResolverCtx ctx
+				abstract LinkResolverCtx	ctx
 				abstract Str				typeUrl
 
 	@InitRender
@@ -20,25 +20,13 @@ const mixin DocTypeRefTemplate : EfanComponent {
 	
 	Bool resolved() {
 		// TODO: resolve pod version to nearest matching
-		// TODO: need to know which version of the pod we're linking from
-
-		uri		  := `fandoc:/${ref.pod}/api/${ref.name}`
-		fandocUri := FandocUri.fromUri(reg, ctx, uri)
-//		fandocUri := (FandocUri) reg.autobuild(FandocUri#, [LinkResolverCtx(), `fandoc:/${ref.pod}/api/${ref.name}`])
-		if (fandocUri.validate(ctx, uri)) {
+		
+		fandocUri := (FandocApiUri) reg.autobuild(FandocApiUri#, [ref.pod, ctx.pod?.version, ref.name, null]) 
+		if (fandocUri.validate(ctx, fandocUri.toUri)) {
 			typeUrl = fandocUri.toClientUrl.encode
 			return true
 		}
 		
-//		if (isSysPod(ref.pod)) {
-//			typeUrl = `http://fantom.org/doc/${ref.pod}/${ref.name}.html`.encode
-//			return true
-//		}
-		
 		return false
 	}
-	
-//	Bool isSysPod(Str podName) {
-//		sysPodNames.contains(podName.lower)
-//	}
 }

@@ -1,7 +1,7 @@
 
 @NoDoc	// don't overwhelm the masses
-class PreTextProcessors {
-	private Str:PreTextProcessor processors
+const class PreTextProcessors {
+	private const Str:PreTextProcessor processors
 	
 	new make(Str:PreTextProcessor processors) {
 		this.processors = processors
