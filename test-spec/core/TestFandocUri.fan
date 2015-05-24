@@ -64,9 +64,9 @@ using afFancordion
 **   foo::index                     fandoc:/foo/?v=2.0
 **   foo::pod-doc                   fandoc:/foo/doc/?v=2.0
 **   foo::Bar                       fandoc:/foo/api/Bar?v=2.0
-**   foo::Bar.poo                   fandoc:/foo/api/Bar?v=2.0#slot
+**   foo::Bar.poo                   fandoc:/foo/api/Bar?v=2.0#poo
 **   foo::foo                       fandoc:/foo/doc/foo?v=2.0
-**   foo::foo#frag                  fandoc:/foo/doc/foo#frag?v=2.0
+**   foo::foo#frag                  fandoc:/foo/doc/foo?v=2.0#frag
 **   Bar                            fandoc:/foo/api/Bar?v=2.0
 **   Bar.poo                        fandoc:/foo/api/Bar?v=2.0#poo
 **   poo                            fandoc:/foo/api/Bar?v=2.0#poo
@@ -111,8 +111,8 @@ class TestFandocUri : RepoFixture {
 		ctx := LinkResolverCtx(pod)
 		fandocUri := FandocUri.fromUri(reg, ctx, uri.toUri)
 		if (!fandocUri.validate(ctx, uri.toUri)) {
-			this.fandocUri = ctx.invalidLinks.toStr
-			this.clientUrl = ctx.invalidLinks.toStr
+			this.fandocUri = "${fandocUri?.toUri} - ${ctx.invalidLinks}"
+			this.clientUrl = "${fandocUri?.toClientUrl} - ${ctx.invalidLinks}"
 			return
 		}
 		this.fandocUri = fandocUri.toUri.toStr
@@ -124,8 +124,8 @@ class TestFandocUri : RepoFixture {
 		ctx := LinkResolverCtx(pod)
 		fandocUri := FandocUri.fromClientUrl(reg, ctx, uri.toUri)
 		if (!fandocUri.validate(ctx, uri.toUri)) {
-			this.fandocUri = ctx.invalidLinks.toStr
-			this.clientUrl = ctx.invalidLinks.toStr
+			this.fandocUri = "${fandocUri?.toUri} - ${ctx.invalidLinks}"
+			this.clientUrl = "${fandocUri?.toClientUrl} - ${ctx.invalidLinks}"
 			return
 		}
 		this.fandocUri = fandocUri.toUri.toStr
@@ -137,13 +137,11 @@ class TestFandocUri : RepoFixture {
 		ctx := LinkResolverCtx(pod)
 		fandocUri := FandocUri.fromFantomUri(reg, ctx, uri.toUri)
 		if (!fandocUri.validate(ctx, uri.toUri)) {
-			this.fandocUri = ctx.invalidLinks.toStr
-			this.clientUrl = ctx.invalidLinks.toStr
+			this.fandocUri = "${fandocUri?.toUri} - ${ctx.invalidLinks}"
+			this.clientUrl = "${fandocUri?.toClientUrl} - ${ctx.invalidLinks}"
 			return
 		}
 		this.fandocUri = fandocUri.toUri.toStr
 		this.clientUrl = fandocUri.toClientUrl.toStr
-		this.fandocUri = null
-		this.clientUrl = null
 	}
 }

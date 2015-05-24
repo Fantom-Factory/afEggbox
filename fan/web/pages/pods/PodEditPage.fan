@@ -87,7 +87,7 @@ class PodEditDetails {
 	@HtmlInput { type="checkbox" }
 	Bool isPublic {
 		get { pod.isPublic }
-		set { pod.isPublic = it }
+		set { pod.isPublic = it	}
 	}
 
 	@HtmlInput { type="checkbox" }

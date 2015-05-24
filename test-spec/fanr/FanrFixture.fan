@@ -30,6 +30,8 @@ abstract class FanrFixture : RepoFixture {
 		}
 		meta["build.ts"] = "2006-06-06T06:06:00Z UTC"
 		meta["repo.public"] = "true"
+		meta["licence.name"] = "wotever"
+		meta["vcs.uri"] = "wotever"
 	}
 
 	Buf podBuf() {
@@ -84,6 +86,15 @@ abstract class FanrFixture : RepoFixture {
 
 	virtual Void verifyJson(Str jsonStr) {
 		expected := (Str:Obj?) JsonInStream(jsonStr.in).readJson
+		jsonObj.remove("repo.public")
+		jsonObj.remove("licence.name")
+		jsonObj.remove("vcs.uri")
+		(([Str:Obj?]?) jsonObj["published"])?.remove("repo.public")
+		(([Str:Obj?]?) jsonObj["published"])?.remove("licence.name")
+		(([Str:Obj?]?) jsonObj["published"])?.remove("vcs.uri")
+		(([Str:Obj?][]?) jsonObj["pods"])?.each { it.remove("repo.public") }
+		(([Str:Obj?][]?) jsonObj["pods"])?.each { it.remove("licence.name") }
+		(([Str:Obj?][]?) jsonObj["pods"])?.each { it.remove("vcs.uri") }
 		verifyEq(expected.toStr, jsonObj.toStr)	// don't compare Map types
 	}
 }
