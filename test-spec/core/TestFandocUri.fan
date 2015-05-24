@@ -80,18 +80,34 @@ using afFancordion
 **  
 **   table:
 **   col[0]+exe:parseFandocUri(#TEXT)
-**   col[1]+eq:clientUri
+**   col[1]+eq:clientUrl
 ** 
 **   Fandoc URI In                       Client URL Out
 **   -----------------------------       ------------------------------
-**   fandoc:/sys/                        http://fantom.org/doc/sys/index
-**   fandoc:/sys/api/                    http://fantom.org/doc/sys/index
+**   fandoc:/sys/                        http://fantom.org/doc/sys/index.html
+**   fandoc:/sys/api/                    http://fantom.org/doc/sys/index.html
 **   fandoc:/sys/api/Uri                 http://fantom.org/doc/sys/Uri.html
 **   fandoc:/sys/api/Uri/src             http://fantom.org/doc/sys/src-Uri.fan
 **   fandoc:/sys/api/Uri#frag            http://fantom.org/doc/sys/Uri.html#frag
-**   fandoc:/docLang/doc/                http://fantom.org/doc/docLang/index
+**   fandoc:/docLang/doc/                http://fantom.org/doc/docLang/index.html
 **   fandoc:/docLang/doc/Slots           http://fantom.org/doc/docLang/Slots.html
 **   fandoc:/docLang/doc/deployment.png  http://fantom.org/doc/docLang/deployment.png
+** 
+** .
+**  
+**   table:
+**   col[0]+exe:parseFantomUri(#TEXT)
+**   col[1]+eq:clientUrl
+** 
+**   Fantom URI In                       Client URL Out
+**   -----------------------------       ------------------------------
+**   sys::index                          http://fantom.org/doc/sys/index.html
+**   sys::Uri                            http://fantom.org/doc/sys/Uri.html
+**   sys::src-Uri                        http://fantom.org/doc/sys/src-Uri.fan
+**   sys::Uri.frag                       http://fantom.org/doc/sys/Uri.html#frag
+**   docLang::pod-doc                    http://fantom.org/doc/docLang/index.html
+**   docLang::Slots                      http://fantom.org/doc/docLang/Slots.html
+**   docLang::deployment.png             http://fantom.org/doc/docLang/deployment.png
 ** 
 ** Note 'deployment.png' with ctx 'docLang' should resolve to 'fandoc:/docLang/doc/deployment.png'.
 ** 
@@ -138,7 +154,7 @@ class TestFandocUri : RepoFixture {
 	Void parseFantomUri(Str uri) {
 		pod := podDao["foo-2.0"]
 		ctx := LinkResolverCtx(pod) { it.type = "Bar" }
-		fandocUri := FandocUri.fromFantomUri(reg, ctx, uri.toUri)
+		fandocUri := FandocUri.fromFantomUri(reg, ctx, uri)
 		if (!fandocUri.validate(ctx, uri.toUri)) {
 			this.fandocUri = "${fandocUri?.toUri} - ${ctx.invalidLinks}"
 			this.clientUrl = "${fandocUri?.toClientUrl} - ${ctx.invalidLinks}"

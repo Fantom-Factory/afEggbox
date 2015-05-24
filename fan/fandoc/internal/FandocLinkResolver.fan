@@ -10,7 +10,8 @@ internal const class FandocLinkResolver : LinkResolver {
 	
 	new make(|This|in) { in(this) }
 	
-	override Uri? resolve(Uri uri, LinkResolverCtx ctx) {
+	override Uri? resolve(Str str, LinkResolverCtx ctx) {
+		uri := str.toUri
 		if (uri.scheme != "fandoc") return null
 
 		fandocUri := FandocUri.fromUri(reg, ctx, uri)
@@ -32,6 +33,7 @@ internal const class FandocLinkResolver : LinkResolver {
 
 
 abstract const class FandocUri {
+	private static	const Str[] corePodNames := "docIntro docLang docFanr docTools build compiler compilerDoc compilerJava compilerJs concurrent dom email fandoc fanr fansh flux fluxText fwt gfx inet obix sql syntax sys util web webfwt webmod wisp xml".lower.split
 	@Inject const Fandoc		fandocRenderer
 	@Inject const Registry		reg
 	@Inject const RepoPodDao	podDao
@@ -112,37 +114,50 @@ abstract const class FandocUri {
 		return (Obj?) ctx.invalidLink(uri, "Invalid path segment '${section}'")		
 	}
 
-	static new fromFantomUri(Registry reg, LinkResolverCtx ctx, Uri uri) {
-		link := uri.toStr
+	static new fromFantomUri(Registry reg, LinkResolverCtx ctx, Str link) {
+		uri := link.toUri
 		if (link.contains("::")) {
 			if (link.split(':').size > 3)
 				return (Obj?) ctx.invalidLink(uri, "Invalid URI")
 			podName		:= link.split(':').first
 			typeName	:= link[podName.size+2..-1]
-			return parseFantomUri(reg, ctx, uri, podName, typeName)
+			return parseFantomUri(reg, ctx, link, podName, typeName)
 		}
 		
 		if (ctx.pod != null && uri.scheme == null && !uri.isPathAbs) {
-			return parseFantomUri(reg, ctx, uri, ctx.pod.name, link)
+			return parseFantomUri(reg, ctx, link, ctx.pod.name, link)
 		}
 		
 		return null
 	}
 	
-	private static FandocUri? parseFantomUri(Registry reg, LinkResolverCtx ctx, Uri uri, Str podName, Str typeName) {
-		if (typeName == "index")
+	private static FandocUri? parseFantomUri(Registry reg, LinkResolverCtx ctx, Str str, Str podName, Str typeName) {
+		uri := str.toUri
+		if (typeName == "index" || typeName.isEmpty)
 			return reg.autobuild(FandocSummaryUri#, [podName, null])
 		if (typeName == "pod-doc")
 			return reg.autobuild(FandocDocUri#, [podName, null, `/doc/pod.fandoc`, null])
 
 		if (typeName.startsWith("src-"))
 			return reg.autobuild(FandocSrcUri#, [podName, null, typeName[4..-1], null])
-
+		
 		podDao 		:= (RepoPodDao)		reg.serviceById(RepoPodDao#.qname)
 		podApiDao	:= (RepoPodApiDao)	reg.serviceById(RepoPodApiDao#.qname)
 		pod 		:= podDao.findOne(podName) 
+		
+		if (pod == null && corePodNames.contains(podName.lower)) {
+			slotName	:= (Str?) null
+			if (typeName.contains(".") && typeName.split('.').size == 2 && typeName[0].isUpper) {
+				slotName = typeName.split('.').getSafe(1)
+				typeName = typeName.split('.').getSafe(0)
+			}
+			return reg.autobuild(FandocApiUri#, [podName, null, typeName, slotName])
+		}
+		
+		if (pod == null)
+			return (Obj?) ctx.invalidLink(uri, "Pod '${podName}' not found")
+		
 		podApi		:= podApiDao[pod._id]
-
 		if (podApi.hasType(typeName.split('.')[0])) {
 			slotName	:= (Str?) null
 			if (typeName.contains(".")) {
@@ -176,7 +191,11 @@ abstract const class FandocUri {
 	private static Str? chomp(Str[] path) {
 		path.isEmpty ? null : path.removeAt(0) 
 	}
-	
+
+	Bool isCorePod() {
+		podDao.findOne(podName, podVersion) == null && corePodNames.contains(podName.lower)
+	}
+
 	abstract FandocUri? toParentUri()
 
 	FandocSummaryUri toSummaryUri() {
@@ -215,11 +234,10 @@ abstract const class FandocUri {
 	protected abstract Uri? baseUri()
 	
 	virtual Uri toUri() {
-		uri := baseUri
-		ver := podVersion != null ? podVersion : podDao.findOne(podName).version
-		return uri == null
-			? `fandoc:/${podName}/`.plusQuery(["v":ver.toStr])
-			: (`fandoc:/${podName}/` + uri).plusQuery(["v":ver.toStr])
+		bse := baseUri
+		uri := bse == null ? `fandoc:/${podName}/` : `fandoc:/${podName}/` + bse
+		ver := podVersion != null ? podVersion : podDao.findOne(podName)?.version
+		return ver == null ? uri : uri.plusQuery(["v":ver.toStr])
 	}
 
 	virtual Uri toClientUrl() {
@@ -228,7 +246,8 @@ abstract const class FandocUri {
 		path := (podVersion == null || podVersion == latestPod.version) 
 			? `/pods/${podName}/` 
 			: `/pods/${podName}/${podVersion}/`
-		return (url == null) ? path : path + url	}
+		return (url == null) ? path : path + url
+	}
 }
 
 const class FandocSummaryUri : FandocUri {
@@ -236,6 +255,7 @@ const class FandocSummaryUri : FandocUri {
 	new make(Str podName, Version? podVersion, |This| in) : super(podName, podVersion, in) { }
 
 	override Bool validate(LinkResolverCtx ctx, Uri uri) {
+		isCorePod ? true :
 		validatePod(ctx, uri) |pod->Bool| { true }
 	}
 		
@@ -253,6 +273,12 @@ const class FandocSummaryUri : FandocUri {
 	
 	override Uri? baseUri() {
 		null
+	}
+	
+	override Uri toClientUrl() {
+		isCorePod
+			? `http://fantom.org/doc/${podName}/index.html`
+			: super.toClientUrl
 	}
 }
 
@@ -340,8 +366,9 @@ const class FandocApiUri : FandocUri {
 				}.toImmutable
 		return allDocTypesRef.val
 	}
-	
+
 	override Bool validate(LinkResolverCtx ctx, Uri uri) {
+		isCorePod ? true :
 		validatePod(ctx, uri) |RepoPod pod->Bool?| {
 			if (typeName == null)
 				return true
@@ -387,6 +414,21 @@ const class FandocApiUri : FandocUri {
 			? toSummaryUri
 			: toApiUri
 	}
+	
+	override Uri toClientUrl() {
+		if (!isCorePod)
+			return super.toClientUrl
+		
+		if (typeName == null)
+			return `http://fantom.org/doc/${podName}/index.html`
+		
+		fileStr := typeName
+		if (fileStr.toUri.ext == null)
+			fileStr += ".html"
+		return (slotName == null)
+			? `http://fantom.org/doc/${podName}/${fileStr}` 
+			: `http://fantom.org/doc/${podName}/${fileStr}#${slotName}`
+	}
 }
 
 const class FandocSrcUri : FandocUri {
@@ -419,6 +461,7 @@ const class FandocSrcUri : FandocUri {
 	}
 
 	override Bool validate(LinkResolverCtx ctx, Uri uri) {
+		isCorePod ? true :
 		validatePod(ctx, uri) |RepoPod pod->Bool?| {
 
 			// validate Type
@@ -473,6 +516,12 @@ const class FandocSrcUri : FandocUri {
 	override FandocUri? toParentUri() {
 		toApiUri(typeName)
 	}
+	
+	override Uri toClientUrl() {
+		isCorePod 
+			? `http://fantom.org/doc/${podName}/src-${typeName}.fan`
+			: super.toClientUrl
+	}
 }
 
 const class FandocDocUri : FandocUri {
@@ -515,6 +564,7 @@ const class FandocDocUri : FandocUri {
 	}
 	
 	override Bool validate(LinkResolverCtx ctx, Uri uri) {
+		isCorePod ? true :
 		validatePod(ctx, uri) |RepoPod pod->Bool?| {
 			
 			// validate Doc File
@@ -557,20 +607,18 @@ const class FandocDocUri : FandocUri {
 		toSummaryUri
 	}
 	
-	static Void main() {
-		w(`api/Bar#poo`.toStr.toUri)
-//		echo(`hello/`+`wot#ever`.plusQuery(["du":"de"]))
-	}
-	
-	static Void w(Uri q) {
-		podName := "foo"
-		uri := `api/Bar#poo`
-		ver := Version("1.0")
-		echo((`fandoc:/${podName}/` + q))
-		echo((`fandoc:/${podName}/` + q).plusQuery(["v":ver.toStr]))
-		pod:="foo"
-		e:=(`fandoc:/${pod}/` + q).plusQuery(["v":"1.0"])
-		echo(e)
+	override Uri toClientUrl() {
+		if (!isCorePod)
+			return super.toClientUrl
 		
+		if (fileUri == `/doc/pod.fandoc`)
+			return `http://fantom.org/doc/${podName}/index.html`
+		
+		fileStr := fileUri.relTo(`/doc/`).toStr.replace(".fandoc", "").toUri
+		if (fileStr.ext == null)
+			fileStr = `${fileStr}.html`
+		return headingId == null
+			? `http://fantom.org/doc/${podName}/` + fileStr
+			: `http://fantom.org/doc/${podName}/` + `${fileStr}#${headingId}`
 	}
 }

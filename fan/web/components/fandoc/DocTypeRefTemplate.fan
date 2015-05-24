@@ -3,8 +3,6 @@ using afEfanXtra
  
 const mixin DocTypeRefTemplate : EfanComponent {
 
-	private static const Str[] sysPodNames := "docIntro docLang docFanr docTools build compiler compilerDoc compilerJava compilerJs concurrent dom email fandoc fanr fansh flux fluxText fwt gfx inet obix sql syntax sys util web webfwt webmod wisp xml".lower.split
-
 	@Inject 	abstract Registry			reg
 	@Autobuild	abstract FantomLinkResolver	fantomLinkResolver
 				abstract DocTypeRef			ref
@@ -32,15 +30,15 @@ const mixin DocTypeRefTemplate : EfanComponent {
 			return true
 		}
 		
-		if (isSysPod(ref.pod)) {
-			typeUrl = `http://fantom.org/doc/${ref.pod}/${ref.name}.html`.encode
-			return true
-		}
+//		if (isSysPod(ref.pod)) {
+//			typeUrl = `http://fantom.org/doc/${ref.pod}/${ref.name}.html`.encode
+//			return true
+//		}
 		
 		return false
 	}
 	
-	Bool isSysPod(Str podName) {
-		sysPodNames.contains(podName.lower)
-	}
+//	Bool isSysPod(Str podName) {
+//		sysPodNames.contains(podName.lower)
+//	}
 }
