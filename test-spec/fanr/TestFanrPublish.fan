@@ -39,7 +39,7 @@ using util
 **       }
 **   }
 ** 
-** The database should then hold an entry for an [acmeWidgets 1.3.68]`exe:findPod(#TEXT)` pod.
+** The database should then hold an entry for an [acmeWidgets-1.3.68]`exe:findPod(#TEXT)` pod.
 ** 
 ** 
 ** Further Details

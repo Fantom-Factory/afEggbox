@@ -107,7 +107,8 @@ class PodContents {
 	RepoPod	pod
 	
 	
-	new make(RepoUser user, InStream podStream) {
+	new make(RepoUser user, InStream podStream, |This|? in := null) {
+		in?.call(this)	// so we can override maxPodSize
 		readPodStream(podStream)
 		readPodContents
 		

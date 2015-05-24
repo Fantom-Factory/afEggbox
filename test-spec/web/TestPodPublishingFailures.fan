@@ -11,10 +11,10 @@ using afFancordion
 **  - [Pod version '1.1.1' is too small, it must be at least '2.3.4']`errMsg:podVersionTooSmall`
 **  - [Pods must define meta data for 'pod.summary']`errMsg:missingPodMeta`
 **  - [Public pods must define meta data for 'licence.name' or 'license.name']`errMsg:missingPublicPodMeta`
-**  - [Public pods must contain the file '/doc/pod.fandoc'.]`errMsg:missingPublicPodFandoc`
 ** 
 @Fixture { failFast = false }
 class TestPodPublishingFailures : WebFixture {
+**  - [Public pods must contain the file '/doc/pod.fandoc'.]`errMsg:missingPublicPodFandoc`
 
 	@Inject private Registry? reg
 	@Inject private FanrRepo? repo

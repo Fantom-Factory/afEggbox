@@ -15,22 +15,9 @@ class RepoPod {
 	@Property{}	DateTime		builtOn
 	@Property{}	Int				ownerId
 	@Property{}	Str				aboutFandoc
-	@Property{}	RepoPodMeta?	meta	// nullable so we can use the isPublic Bool setter from the IoC ctor
-	@Property{}	Bool			isPublic {
-		// keep our own 'isPublic' for indexing and searching on
-		set {
-			&isPublic = it
-			meta?.set("repo.public", it.toStr)
-		}
-	}
-	@Property{}	Bool			isDeprecated {
-		// keep our own 'isDeprecated' for indexing and searching on
-		set {
-			&isDeprecated = it
-			meta?.set("repo.deprecated", it.toStr)
-		}
-	}
-
+	@Property{}	RepoPodMeta		meta
+	@Property{}	Bool			isPublic		// keep our own 'isPublic' for indexing and searching on
+	@Property{}	Bool			isDeprecated	// keep our own 'isDeprecated' for indexing and searching on
 				Str				displayName {
 					get { "${name} ${version}" }
 					private set { }
@@ -47,8 +34,8 @@ class RepoPod {
 			it.builtOn		= DateTime(meta["build.ts"], true)
 			it.meta			= meta
 			it.aboutFandoc	= findAboutFandoc(metaProps, docContents)
-			it.&isPublic	= meta.isPublic
-			it.&isDeprecated= meta.isDeprecated
+			it.&isPublic	= meta.isPublic		// don't worry if the two get out of sync, we only use the non-meta one
+			it.&isDeprecated= meta.isDeprecated	// don't worry if the two get out of sync, we only use the non-meta one
 			it.ownerId		= user._id
 		}
 	}
