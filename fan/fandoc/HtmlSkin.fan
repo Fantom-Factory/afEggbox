@@ -40,6 +40,18 @@ mixin HtmlSkin {
 	virtual This li()					{ w("<li>")														}
 	virtual This liEnd()				{ w("</li>")		 											}
 
+	virtual This table()				{ w("<table>")													}
+	virtual This tableEnd()				{ w("</table>")													}
+	virtual This thead()				{ w("<thead>")													}
+	virtual This theadEnd()				{ w("</thead>")													}
+	virtual This tbody()				{ w("<tbody>")													}
+	virtual This tbodyEnd()				{ w("</tbody>")													}
+	virtual This tr()					{ w("<tr>")														}
+	virtual This trEnd()				{ w("</tr>")													}
+	virtual This th()					{ w("<th>")														}
+	virtual This thEnd()				{ w("</th>")													}
+	virtual This td()					{ w("<td>")														}
+	virtual This tdEnd()				{ w("</td>")													}
 	
 	virtual This w(Str str) {
 		out.print(str)
@@ -70,6 +82,16 @@ internal class DefaultHtmlSkin : HtmlSkin {
 		out = WebOutStream(buf.out)
 	}
 	
+	override Str toHtml() {
+		buf.toStr
+	}
+	override Str toStr() {
+		buf.toStr
+	}
+}
+
+internal class BootstrapHtmlSkin : DefaultHtmlSkin {
+	
 	override This a(Uri href, Bool broken) {
 		if (broken)
 			w("<a").attr("class", "brokenLink").attr("rel", "nofollow").attr("href", href).w(">")
@@ -77,14 +99,7 @@ internal class DefaultHtmlSkin : HtmlSkin {
 			w("<a").attr("href", href).w(">")
 		return this
 	}
-	override This aEnd() {
-		w("</a>")
-	}
+	
+	override This table() { w("<table").attr("class", "table table-condensed table-striped table-hover").w(">") }
 
-	override Str toHtml() {
-		buf.toStr
-	}
-	override Str toStr() {
-		buf.toStr
-	}
 }

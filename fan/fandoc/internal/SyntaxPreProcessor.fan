@@ -1,9 +1,9 @@
 using afIoc
 using syntax
 
-internal class SyntaxPreProcessor : PreTextProcessor {
+internal const class SyntaxPreProcessor : PreTextProcessor {
 	
-	@Inject	private SyntaxWriter	syntaxWriter
+	@Inject	private const SyntaxWriter	syntaxWriter
 	
 	new make(|This|in) { in(this) }
 	

@@ -23,7 +23,7 @@ using fandoc
 @NoDoc
 public const class FantomLinkResolver : LinkResolver {
 
-	@Inject private const Registry			reg
+	@Inject private const Registry	reg
 
 	new make(|This|in) { in(this) }
 	

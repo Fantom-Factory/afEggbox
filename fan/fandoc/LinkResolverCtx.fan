@@ -27,19 +27,6 @@ class LinkResolverCtx {
 		}
 	}
 
-	Obj? withType(RepoPod pod, Str type, |LinkResolverCtx->Obj?| func) {
-		origPod  := this.pod
-		origType := this.type
-		try {
-			this.pod  = pod
-			this.type = type
-			return func(this)
-		} finally {
-			this.pod  = origPod
-			this.type = type
-		}
-	}
-
 	Obj? withDoc(Doc doc, |LinkResolverCtx->Obj?| func) {
 		origDoc := this.doc
 		try {

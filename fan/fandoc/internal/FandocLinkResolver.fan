@@ -288,11 +288,6 @@ const class FandocApiUri : FandocUri {
 					const Str? 			slotName
 					const AtomicRef		allDocTypesRef	:= AtomicRef()
 
-	new makeFromPod(RepoPod pod, Uri? fileUri, Str? typeName, Str? slotName, |This| in) : super.make(pod.name, pod.version, in) { 
-		this.typeName 	= typeName
-		this.slotName	= slotName
-	}
-
 	new make(Str podName, Version? podVersion, Str? typeName, Str? slotName, |This| in) : super(podName, podVersion, in) { 
 		this.typeName	= typeName
 		this.slotName	= slotName
@@ -528,11 +523,6 @@ const class FandocDocUri : FandocUri {
 	@Inject private const RepoPodDocsDao	podDocDao
 					const Uri 				fileUri
 					const Str? 				headingId
-
-	new makeFromPod(RepoPod pod, Uri fileUri, Str? headingId, |This| in) : super.make(pod.name, pod.version, in) { 
-		this.fileUri 	= fileUri
-		this.headingId	= headingId
-	}
 	
 	new make(Str podName, Version? podVersion, Uri fileUri, Str? headingId, |This| in) : super(podName, podVersion, in) { 
 		this.fileUri 	= fileUri
