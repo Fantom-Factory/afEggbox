@@ -22,6 +22,11 @@ const mixin PodEditPage : PrPage {
 		this.editDetails = PodEditDetails(pod)
 	}
 	
+	Str podSummaryUrl(RepoPod pod) {
+		// FIXME: use FandocUri
+		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).encode
+	}
+
 	Str saveUrl() {
 		`/pods/${pod.name}/${pod.version}/edit/save`.encode
 	}

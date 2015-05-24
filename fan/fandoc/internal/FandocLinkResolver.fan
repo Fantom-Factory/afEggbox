@@ -6,19 +6,18 @@ using concurrent
 
 internal const class FandocLinkResolver : LinkResolver {
 
-	@Inject private const Registry			reg
+	@Inject private const Registry	reg
 	
 	new make(|This|in) { in(this) }
 	
 	override Uri? resolve(Uri uri, LinkResolverCtx ctx) {
 		if (uri.scheme != "fandoc") return null
 
-		fandocUri := FandocUri(reg, ctx, uri)
+		fandocUri := FandocUri.fromUri(reg, ctx, uri)
 		if (fandocUri == null)
 			return null
 		
-		valid := fandocUri.validate(ctx, uri) ?: false
-		if (!valid)
+		if (fandocUri.validate(ctx, uri) == false)
 			return null
 		
 		return fandocUri.toClientUrl
@@ -52,6 +51,31 @@ abstract const class FandocUri {
 		path 		:= uri.path.rw
 		podName		:= chomp(path)
 		podVersion	:= Version(uri.query["v"] ?: "", false)
+		
+		return parsePath(reg, ctx, uri, podName, podVersion, path)
+	}
+	
+	static new fromClientUrl(Registry reg, LinkResolverCtx ctx, Uri uri) {
+		path 		:= uri.pathOnly.path.rw
+		pods		:= chomp(path)
+		podName		:= chomp(path)
+		podVersion	:= Version((path.isEmpty ? null : path.first) ?: "", false)
+		if (podVersion != null)	chomp(path)
+		
+		if (pods != "pods")
+			return (Obj?) ctx.invalidLink(uri, "Path segment `/${pods}` should be `/pods`")
+
+		return parsePath(reg, ctx, uri, podName, podVersion, path)
+	}
+	
+	static new fromFantomUri(Registry reg, LinkResolverCtx ctx, Uri uri) {
+		
+		return null
+	}
+	
+	private static new parsePath(Registry reg, LinkResolverCtx ctx, Uri uri, Str? podName, Version? podVersion, Str[] path) {
+		if (podName == null)
+			return (Obj?) ctx.invalidLink(uri, "Invalid pod name '${podName}'")
 
 		if (path.isEmpty)
 			return reg.autobuild(FandocSummaryUri#, [podName, podVersion])
@@ -59,10 +83,17 @@ abstract const class FandocUri {
 		section	:= chomp(path)
 		if (section == "api") {
 			typeName := chomp(path)
-			if (!path.isEmpty)
-				ctx.invalidLink(uri, "Too many path segments: ${path}")
 			slotName := uri.frag
-			return reg.autobuild(FandocApiUri#, [podName, podVersion, typeName, slotName])
+			if (slotName?.contains("?") ?: false) {
+				podVersion = Version(slotName.toUri.query["v"] ?: "", false) ?: podVersion
+				slotName = slotName.toUri.pathStr	// remove any querystring from the frag - happens if frag is written before the query (which is wrong!)
+			}
+			if (path.isEmpty)
+				return reg.autobuild(FandocApiUri#, [podName, podVersion, typeName, slotName])
+			src := path.first
+			if (src == "src")
+				return reg.autobuild(FandocSrcUri#, [podName, podVersion, typeName, slotName])
+			return (Obj?) ctx.invalidLink(uri, "Too many path segments: ${path}")
 		}
 
 		if (section == "src") {
@@ -74,8 +105,8 @@ abstract const class FandocUri {
 		}
 
 		if (section == "doc") {
-			docUri := uri.getRangeToPathAbs(1..-1).pathOnly
-			if (docUri.isDir)
+			docUri := (Uri) path.reduce(`/doc/`) |Uri docUri, seg->Uri| { docUri.plusSlash.plusName(seg) }
+			if (docUri == `/doc/`)
 				docUri = docUri.plusName("pod.fandoc")
 			if (docUri.ext == null)
 				docUri = (docUri.toStr + ".fandoc").toUri
@@ -83,56 +114,7 @@ abstract const class FandocUri {
 			return reg.autobuild(FandocDocUri#, [podName, podVersion, docUri, headingId])
 		}
 
-		ctx.invalidLink(uri, "Invalid path segment '${section}'")
-		return null
-	}
-	
-	static new fromClientUrl(Registry reg, Uri clientUrl) {
-		reqPath 	:= clientUrl.pathOnly.path.rw
-		pods		:= chomp(reqPath)
-		podName		:= chomp(reqPath)
-		podVersion	:= Version((reqPath.isEmpty ? null : reqPath.first) ?: "", false)
-		if (podVersion != null)	chomp(reqPath)
-		podSection	:= chomp(reqPath)
-		
-		if (pods != "pods" || podName == null)
-			return null
-
-		// --> /pods/afSlim
-		// --> /pods/afSlim/1.1.14
-		if (podSection == null)
-			return reg.autobuild(FandocSummaryUri#, [podName, podVersion])
-		
-		// --> /pods/afSlim/doc
-		// --> /pods/afSlim/1.1.14/doc
-		if (podSection == "doc") {
-			fileUrl := `/doc/` + ((podVersion == null) ? clientUrl[3..-1] : clientUrl[4..-1]).relTo(`/`)
-			if (fileUrl == `/doc/`)
-				fileUrl = fileUrl.plusName("pod.fandoc")
-			if (fileUrl.ext == null)
-				fileUrl = fileUrl.plusName("${fileUrl.name}.fandoc")
-			return reg.autobuild(FandocDocUri#, [podName, podVersion, fileUrl, null])
-		}
-
-		// --> /pods/afSlim/src
-		// --> /pods/afSlim/1.1.14/src
-		if (podSection == "src") {
-			typeName := chomp(reqPath)
-			if (!reqPath.isEmpty)
-				return null
-			return reg.autobuild(FandocSrcUri#, [podName, podVersion, typeName, null])
-		}
-
-		// --> /pods/afSlim/api
-		// --> /pods/afSlim/1.1.14/api
-		if (podSection == "api") {
-			typeName := chomp(reqPath)
-			if (!reqPath.isEmpty)
-				return null
-			return reg.autobuild(FandocApiUri#, [podName, podVersion, typeName, null])
-		}
-
-		return null
+		return (Obj?) ctx.invalidLink(uri, "Invalid path segment '${section}'")		
 	}
 	
 	private static Str? chomp(Str[] path) {
@@ -156,20 +138,6 @@ abstract const class FandocUri {
 	FandocDocUri toDocUri(Uri fileUri := `/doc/pod.fandoc`, Str? headingId := null) {
 		reg.autobuild(FandocDocUri#, [podName, podVersion, fileUri, headingId])
 	}
-
-	protected Uri fandocUri(Uri? uri) {
-		uri == null
-			? `fandoc:/${podName}/`.plusQuery(["v":podVersion.toStr])
-			: `fandoc:/${podName}/`.plus(uri).plusQuery(["v":podVersion.toStr])
-	}
-	
-	protected Uri fandocUrl(Uri? url) {
-		latestPod := podDao.findOne(podName)
-		path := (podVersion == null || podVersion == latestPod.version) 
-			? `/pods/${podName}/` 
-			: `/pods/${podName}/${podVersion}/`
-		return (url == null) ? path : path + url
-	}
 	
 	protected Bool? validatePod(LinkResolverCtx ctx, Uri uri, |RepoPod->Bool?| func) {
 		pod := pod
@@ -177,7 +145,7 @@ abstract const class FandocUri {
 			ctx.invalidLink(uri, "Could not find pod ${podName} " + (podVersion ?: ""))
 			return false
 		}
-		return func(pod)
+		return func(pod) ?: false
 	}
 	
 	RepoPod? pod() {
@@ -185,17 +153,40 @@ abstract const class FandocUri {
 	}
 	
 	abstract Str title()
-	abstract Bool? validate(LinkResolverCtx ctx, Uri uri)
-	abstract Uri toUri()
-	abstract Uri toClientUrl()
+	
+	abstract Bool validate(LinkResolverCtx ctx, Uri uri)
+	
+	protected abstract Uri? baseUri()
+	
+	virtual Uri toUri() {
+		uri := baseUri
+		ver := podVersion != null ? podVersion : podDao.findOne(podName).version
+		if (uri != null) {
+		echo("\n######")
+		echo(`fandoc:/${podName}/` + uri)
+		echo(`fandoc:/${podName}/` + uri.plusQuery(["v":ver.toStr]))
+		echo("\n")
+		}
+		return uri == null
+			? `fandoc:/${podName}/`.plusQuery(["v":ver.toStr])
+			: (`fandoc:/${podName}/` + uri).plusQuery(["v":ver.toStr])
+	}
+
+	virtual Uri toClientUrl() {
+		url := baseUri
+		latestPod := podDao.findOne(podName)
+		path := (podVersion == null || podVersion == latestPod.version) 
+			? `/pods/${podName}/` 
+			: `/pods/${podName}/${podVersion}/`
+		return (url == null) ? path : path + url	}
 }
 
 const class FandocSummaryUri : FandocUri {
 
 	new make(Str podName, Version? podVersion, |This| in) : super(podName, podVersion, in) { }
 
-	override Bool? validate(LinkResolverCtx ctx, Uri uri) {
-		validatePod(ctx, uri) |pod->Bool?| { true }
+	override Bool validate(LinkResolverCtx ctx, Uri uri) {
+		validatePod(ctx, uri) |pod->Bool| { true }
 	}
 		
 	Str aboutHtml() {
@@ -210,12 +201,8 @@ const class FandocSummaryUri : FandocUri {
 		null
 	}
 	
-	override Uri toUri() {
-		fandocUri(null)
-	}
-
-	override Uri toClientUrl() {
-		fandocUrl(null)
+	override Uri? baseUri() {
+		null
 	}
 }
 
@@ -236,7 +223,7 @@ const class FandocApiUri : FandocUri {
 	}
 	
 	Bool hasApi() {
-		validate(LinkResolverCtx(pod), `wotever`) ?: false
+		validate(LinkResolverCtx(pod), `wotever`)
 	}
 
 	DocType type() {
@@ -304,7 +291,7 @@ const class FandocApiUri : FandocUri {
 		return allDocTypesRef.val
 	}
 	
-	override Bool? validate(LinkResolverCtx ctx, Uri uri) {
+	override Bool validate(LinkResolverCtx ctx, Uri uri) {
 		validatePod(ctx, uri) |RepoPod pod->Bool?| {
 			if (typeName == null)
 				return true
@@ -330,11 +317,13 @@ const class FandocApiUri : FandocUri {
 		}
 	}
 
-	Uri baseUri() {
+	override Uri? baseUri() {
 		uri := `api/`
 		if (typeName != null)
-			uri = uri.plusSlash.plusName(typeName)
+			uri = uri.plusName(typeName)
 		if (slotName != null)
+			// this is wrong - '#' is encoded as part of the name, and is not parsed as a fragment 
+			// uri = uri.plusName("${uri.name}#${slotName}")
 			uri = `${uri}#${slotName}`
 		return uri
 	}
@@ -347,14 +336,6 @@ const class FandocApiUri : FandocUri {
 		typeName == null
 			? toSummaryUri
 			: toApiUri
-	}
-	
-	override Uri toUri() {
-		fandocUri(baseUri)
-	}
-
-	override Uri toClientUrl() {
-		fandocUrl(baseUri)
 	}
 }
 
@@ -375,7 +356,7 @@ const class FandocSrcUri : FandocUri {
 	}
 
 	Bool hasSrc() {
-		validate(LinkResolverCtx(pod), `wotever`) ?: false
+		validate(LinkResolverCtx(pod), `wotever`)
 	}
 
 	Str srcFile() {
@@ -387,7 +368,7 @@ const class FandocSrcUri : FandocUri {
 		return syntaxWriter.writeSyntax(src, "fan", true)
 	}
 
-	override Bool? validate(LinkResolverCtx ctx, Uri uri) {
+	override Bool validate(LinkResolverCtx ctx, Uri uri) {
 		validatePod(ctx, uri) |RepoPod pod->Bool?| {
 
 			// validate Type
@@ -420,32 +401,27 @@ const class FandocSrcUri : FandocUri {
 		}
 	}
 	
+	DocType type() {
+		podApiDao[pod._id][typeName]
+	}
+
+	DocSlot slot() {
+		type.slot(slotName)
+	}
+
 	override Str title() {
 		"Src"
 	}
 	
-	override FandocUri? toParentUri() {
-		toApiUri(typeName)
+	override Uri? baseUri() {
+		uri := `api/${typeName}/src`
+		if (slotName != null)
+			uri = uri.plusName("${uri.name}#line${slot.loc.line}")
+		return uri
 	}
 
-	override Uri toUri() {
-		uri := `src`.plusSlash.plusName(typeName)
-		if (slotName != null) {
-			// FIXME
-			line := podApiDao[pod._id][typeName].loc.line
-			uri = `${uri}#${line}`
-		}
-		return fandocUri(uri)
-	}
-	
-	override Uri toClientUrl() {
-		url := `src`.plusSlash.plusName(typeName)
-		if (slotName != null) {
-			// FIXME
-			line := podApiDao[pod._id][typeName].loc.line
-			url = `${url}#${line}`
-		}
-		return fandocUrl(url)
+	override FandocUri? toParentUri() {
+		toApiUri(typeName)
 	}
 }
 
@@ -465,7 +441,7 @@ const class FandocDocUri : FandocUri {
 	}
 	
 	Bool hasDoc() {
-		validate(LinkResolverCtx(pod), `wotever`) ?: false
+		validate(LinkResolverCtx(pod), `wotever`)
 	}
 	
 	Str docHtml() {
@@ -488,7 +464,7 @@ const class FandocDocUri : FandocUri {
 		return fandocRenderer.parseStr(FandocParser(), fandoc).findHeadings
 	}
 	
-	override Bool? validate(LinkResolverCtx ctx, Uri uri) {
+	override Bool validate(LinkResolverCtx ctx, Uri uri) {
 		validatePod(ctx, uri) |RepoPod pod->Bool?| {
 			
 			// validate Doc File
@@ -512,13 +488,14 @@ const class FandocDocUri : FandocUri {
 		}
 	}
 
-	Uri baseUri() {
+	override Uri? baseUri() {
 		fileUri := (Uri?) (fileUri == `/doc/pod.fandoc` ? null : fileUri)
 		if (fileUri?.ext == "fandoc")
 			fileUri = fileUri.plusName(fileUri.name[0..<fileUri.name.indexr(".")])
-		uri := fileUri?.relTo(`/`) ?: `doc`
+		uri := fileUri?.relTo(`/`) ?: `doc/`
 		if (headingId != null)
 			uri = `${uri}#${headingId}`
+//			uri = uri.plusName("${uri.name}#line${slot.loc.line}")
 		return uri
 	}
 	
@@ -529,12 +506,21 @@ const class FandocDocUri : FandocUri {
 	override FandocUri? toParentUri() {
 		toSummaryUri
 	}
-
-	override Uri toUri() {
-		fandocUri(baseUri)
+	
+	static Void main() {
+		w(`api/Bar#poo`.toStr.toUri)
+//		echo(`hello/`+`wot#ever`.plusQuery(["du":"de"]))
 	}
 	
-	override Uri toClientUrl() {
-		fandocUrl(baseUri)
+	static Void w(Uri q) {
+		podName := "foo"
+		uri := `api/Bar#poo`
+		ver := Version("1.0")
+		echo((`fandoc:/${podName}/` + q))
+		echo((`fandoc:/${podName}/` + q).plusQuery(["v":ver.toStr]))
+		pod:="foo"
+		e:=(`fandoc:/${pod}/` + q).plusQuery(["v":"1.0"])
+		echo(e)
+		
 	}
 }

@@ -58,12 +58,12 @@ const class PodRoutes : Route {
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
 		}
 
-		fandocUri := FandocUri.fromClientUrl(reg, httpReq.url)
+		fandocUri := FandocUri.fromClientUrl(reg, LinkResolverCtx(), httpReq.url)
 		if (fandocUri == null)
 			return null
 		
 		ctx := LinkResolverCtx(fandocUri.pod)
-		if ((fandocUri.validate(ctx, httpReq.url) ?: false) == false) 
+		if (fandocUri.validate(ctx, httpReq.url) == false) 
 			return HttpStatus(404, ctx.invalidLinks.vals.first)
 		
 		if (fandocUri is FandocSummaryUri)

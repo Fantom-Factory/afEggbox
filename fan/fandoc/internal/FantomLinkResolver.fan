@@ -20,7 +20,8 @@ using fandoc
 **    Chapter#frag       Chapter     pod relative link to chapter anchor
 **    #frag              heading     chapter relative link to anchor		--> see AnchorLinkResolver
 **
-internal const class FantomLinkResolver : LinkResolver {
+@NoDoc
+public const class FantomLinkResolver : LinkResolver {
 
 	@Inject private const Pages				pages
 	@Inject private const RepoPodDao		podDao

@@ -25,4 +25,12 @@
 ** 
 **  - [Fanr tests]`run:TestWeb#`
 ** 
+** 
+** 
+** Core Acceptance Tests
+** *********************
+** Unit tests.
+** 
+**  - [FandocUri]`run:TestFandocUri#`
+** 
 class RepoTests : RepoFixture { }

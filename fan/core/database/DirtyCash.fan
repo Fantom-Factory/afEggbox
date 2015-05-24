@@ -11,12 +11,11 @@ const class DirtyCash {
 	new make(|This| in) { in(this) }
 	
 	Bool caching {
-		get { cachingRef.val }
+		get { cachingRef.val ?: false }
 		set { cachingRef.val = it }
 	}
 
 	Obj? cash(|->Obj?| func) {
-		
 		try {
 			caching = true
 			return func()
@@ -50,14 +49,17 @@ const class DirtyCash {
 	}
 	
 	virtual Obj? get(Type type, Str id, |->Obj?| func) {
-		key := "$type.name->$id"
-		if (cache.containsKey(key)) {
-			cacheHits[key] = ((Int) cacheHits.get(key, 0)) + 1
-		} else {			
-			cache[key] 		 = func()
-			cacheMisses[key] = ((Int) cacheMisses.get(key, 0)) + 1
+		if (caching) {
+			key := "$type.name->$id"
+			if (cache.containsKey(key)) {
+				cacheHits[key] = ((Int) cacheHits.get(key, 0)) + 1
+			} else {			
+				cache[key] 		 = func()
+				cacheMisses[key] = ((Int) cacheMisses.get(key, 0)) + 1
+			}
+			return cache[key]
 		}
-		return cache[key]
+		return func()
 	}	
 }
 

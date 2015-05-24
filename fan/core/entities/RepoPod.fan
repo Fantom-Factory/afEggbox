@@ -182,8 +182,8 @@ class RepoPodMeta {
 	}
 
 	Uri? projectUrl {
-		get { meta["proj.url"]?.toUri }
-		set { meta["proj.url"] = it.toStr }
+		get { meta["proj.uri"]?.toUri }
+		set { meta["proj.uri"] = it.toStr }
 	}
 	
 	Str? licenceName {

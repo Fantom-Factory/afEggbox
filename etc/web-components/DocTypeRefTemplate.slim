@@ -28,6 +28,11 @@
 	== ref.isNullable ? "?" : ""
 
 -- else
-	a (href="${resolveUri}")
+	-- if (resolved)
+		a (href="${typeUrl}")
+			== full ? ref.qname : ref.name
+			== ref.isNullable ? "?" : ""
+	-- else
 		== full ? ref.qname : ref.name
 		== ref.isNullable ? "?" : ""
+		

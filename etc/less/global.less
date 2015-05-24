@@ -10,6 +10,11 @@ ol, ul {
 	padding-left:	@padding-large-horizontal;
 }
 
+.brokenLink {
+	.text-danger;
+	text-decoration:	underline;
+}
+
 /* ---- Mixins ---------------------------------------------------------------------------------- */
 
 
@@ -57,6 +62,11 @@ ol, ul {
 
 body {
 	padding-top:		@navbar-height + @navbar-margin-bottom;
+}
+
+code {
+	color:				#080;
+	background-color:	inherit;
 }
 
 // form-okay prevents invalid forms from appearing green when first rendered!

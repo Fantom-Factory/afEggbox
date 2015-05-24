@@ -9,6 +9,8 @@ abstract class RepoFixture : FixtureTest {
 	@Inject {}	RepoPodDao?			podDao
 	@Inject {}	RepoPodFileDao?		podFileDao
 	@Inject {}	RepoPodDocsDao?		podDocsDao
+	@Inject {}	RepoPodApiDao?		podApiDao
+	@Inject {}	RepoPodSrcDao?		podSrcDao
 	@Inject {}	RepoUserDao?		userDao
 	@Inject {}	FanrRepo?			fanrRepo
 	@Autobuild	Indexes?			indexes
@@ -17,6 +19,8 @@ abstract class RepoFixture : FixtureTest {
 		podDao.dropAll
 		podFileDao.dropAll
 		podDocsDao.dropAll
+		podApiDao.dropAll
+		podSrcDao.dropAll
 		userDao.dropAll
 		indexes.ensureIndexes
     }

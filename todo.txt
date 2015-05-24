@@ -1,4 +1,24 @@
 
+Features
+========
+
+libraries may have multiple documentation pages
+pod meta data editing
+
+
+Fandoc:
+ - syntax highlighting
+ - reference pod images from doc
+ - table formatting  
+ - document linking honours:
+   - fantom code scheme
+   - fandoc: scheme
+   - fan: scheme
+   - pod: scheme
+   
+
+
+
 did you forget your password?
 email confirmation
 
@@ -20,3 +40,6 @@ email notifications of new pod uploads
 /usersPage/ to view public profiles -> gravatar
 
 new pods vs new updates
+
+
+
