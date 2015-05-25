@@ -37,7 +37,7 @@ const class FanrRepo {
 		existing	:= podDao.findOne(pod.name)
 		if (existing != null) {
 			if (existing.ownerId != user._id) {
-				exUser := userDao.get(existing.ownerId, false).userName
+				exUser := userDao.get(existing.ownerId, false).screenName
 				throw PodPublishErr(Msgs.publish_podNameAlreadyTaken(pod.name, exUser))
 			}
 			

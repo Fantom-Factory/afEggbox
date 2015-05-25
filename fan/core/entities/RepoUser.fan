@@ -11,7 +11,11 @@ class RepoUser {
 	@Property  { }	Uri		email
 	
 	@HtmlInput { type="text"; required=true; minLength=3; maxLength=128 }
-	@Property  { }	Str		userName
+					Str		screenName
+	@Property  { }	Str		userName {
+		get { screenName }
+		set { screenName = it }
+	}
 
 	@Property { }	Str		userSalt
 	@Property { }	Str		userSecret
@@ -23,7 +27,7 @@ class RepoUser {
 		this.userSalt	= Buf.random(16).toHex
 		this.userSecret	= generateSecret(password)
 		// see http://fantom.org/forum/topic/2415 for explanation of '//'
-		this.userName	= `//${email}`.userInfo?.replace(".", "_")?.toDisplayName ?: email.toStr.toDisplayName	// for tests where I can't be arsed to type in an entire email address
+		this.screenName	= `//${email}`.userInfo?.replace(".", "_")?.toDisplayName ?: email.toStr.toDisplayName	// for tests where I can't be arsed to type in an entire email address
 		f?.call(this)
 	}
 	

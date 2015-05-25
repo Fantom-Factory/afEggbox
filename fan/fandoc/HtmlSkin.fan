@@ -5,6 +5,9 @@ mixin HtmlSkin {
 	abstract WebOutStream	out
 	abstract Str 			toHtml()
 	
+	virtual This fandoc()				{ w("<div").attr("class", "fandoc").w(">") 						}
+	virtual This fandocEnd()			{ w("</div>")							 						}
+
 	virtual This h(Int level, Str? id)	{ w("<h${level}").attr("id", id).w(">") 						}
 	virtual This hEnd(Int level)		{ w("</h${level}>")												}
 

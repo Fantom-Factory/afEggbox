@@ -9,7 +9,7 @@ const class UserValueEncoder : ValueEncoder {
 	
 	override Str toClient(Obj? value) {
 		if (value == null) return Str.defVal
-		return ((RepoUser) value).userName
+		return ((RepoUser) value).screenName
 	}
 
 	override Obj? toValue(Str clientValue) {

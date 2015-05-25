@@ -11,16 +11,20 @@ header.navbar.navbar-default.navbar-fixed-top
 
 		div#navbar.navbar-collapse.collapse
 			ul.nav.navbar-nav
-				== pageLink(PodsPage#,	"Browse Pods")
+				== pageLink(PodsPage#, 		"All Pods")
+				== pageLink(MyPodsPage#,	"My Pods")
 
 			ul.nav.navbar-nav.navbar-right
+				== userLink("My Details")
+				li; a (href="${pageUrl(LogoutPage#)}")	Logout
+			
+			/* ul.nav.navbar-nav.navbar-right
 				//li; 		a (href="#")	Help
 				li.dropdown
 					a.dropdown-toggle (href="#" data-toggle="dropdown" role="button" aria-expanded="false")	My Stuff
 						span.caret
 					ul.dropdown-menu (role="menu")
 						== pageLink(MyDetailsPage#,	"My Details")
-						== pageLink(MyPodsPage#,	"My Pods")
 						li.divider
 						li; a (href="${pageUrl(LogoutPage#)}")	Logout
 						/*	li.dropdown-header	Nav header
