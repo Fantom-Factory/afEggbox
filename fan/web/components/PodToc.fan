@@ -45,7 +45,7 @@ const mixin PodToc : EfanComponent {
 				if (fandocUri is FandocDocUri && (fandocUri as FandocDocUri).fileUri == link.fileUri) {
 					html.add("<h4 class=\"text-muted\">").add(title).add("</h4>")
 					heads := link.findHeadings
-					doToc(page, heads, html, heads.first?.level ?: 0, 0)
+					doToc(page, heads, html, heads.first?.level ?: 0, 0, true)
 				} else
 					html.add("<h4>").add("<a href=\"${link.toClientUrl.encode}\">").add(title).add("</a>").add("</h4>")
 				
@@ -55,12 +55,15 @@ const mixin PodToc : EfanComponent {
 		return html.toStr
 	}
 
-	Int doToc(Uri page, Heading[] headings, StrBuf html, Int level, Int i) {
+	Int doToc(Uri page, Heading[] headings, StrBuf html, Int level, Int i, Bool topLevel) {
 		if (headings.isEmpty) return i
 
 		fandocUri := (FandocDocUri) fandocUri
 
-		html.add("<ul>")
+		if (topLevel)
+			html.add("<ul class=\"list-unstyled\">")
+		else
+			html.add("<ul>")
 		quit := false
 		while (!quit && i < headings.size) {
 			h := headings[i]
@@ -70,7 +73,7 @@ const mixin PodToc : EfanComponent {
 			}
 			if (h.level > level) {
 //				html.add("<li>")
-				i = doToc(page, headings, html, h.level, i)
+				i = doToc(page, headings, html, h.level, i, false)
 //				html.add("</li>")
 				continue
 			}
