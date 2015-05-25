@@ -22,8 +22,8 @@ const mixin PrComponent : EfanComponent {
 //		fileHandler.fromLocalUrl(localUrl).clientUrl.encode 
 //	}
 
-	Str pageUrl(Type pageType) {
-		pages[pageType].pageUrl.encode
+	Str pageUrl(Type pageType, Obj?[]? pageCtx := null) {
+		pages[pageType].withContext(pageCtx).pageUrl.encode
 	}
 	
 	** TODO: we could make this a contributable service

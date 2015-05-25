@@ -38,8 +38,10 @@ const class Fandoc {
 
 	Str writeDocToHtml(Doc doc, LinkResolverCtx ctx, HtmlSkin? skin := null) {
 		ctx.withDoc(doc) |ctx2->Str| {
+			skin.fandoc
 			htmlWriter := htmlWriter(ctx2, skin ?: BootstrapHtmlSkin())
 			doc.writeChildren(htmlWriter)
+			skin.fandocEnd
 			return htmlWriter.toHtml
 		}
 	}

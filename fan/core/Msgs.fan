@@ -59,8 +59,8 @@ mixin Msgs {
 		"Email address `${email}` is already taken."
 	}
 
-	static Str userEdit_userNameTaken(Str userName) {
-		"User name '${userName}' has already been taken."
+	static Str userEdit_screenNameTaken(Str userName) {
+		"Screen name '${userName}' has already been taken."
 	}
 
 	static Str podDelete_podNameDoesNotMatch(Str podName) {
@@ -70,15 +70,15 @@ mixin Msgs {
 	// ---- Alert Messages ----------------------------------------------------
 	
 	static Str alert_userSignedUp(RepoUser user) {
-		"Hi ${user.userName}, welcome the Fantom Pod Repository!"
+		"Hi ${user.screenName}, welcome the Fantom Pod Repository!"
 	}
 	
 	static Str alert_userLoggedIn(RepoUser user) {
-		"Welcome back ${user.userName}!"
+		"Welcome back ${user.screenName}!"
 	}
 
 	static Str alert_userLoggedOut(RepoUser user) {
-		"${user.userName} has left the building!"
+		"${user.screenName} has left the building!"
 	}
 
 	static Str alert_userUploadedPod(RepoPod pod) {
