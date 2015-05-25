@@ -14,17 +14,19 @@
 					th	Version
 					th	Built On
 					th	Summary
-					th	Downloads
-					th	Docs
+					th	Documentation
+					th	Actions
 				-- allPods.each |pod|
 					tr
 						td;	a (href="${podSummaryUrl(pod)}") ${pod.name}
-						// / ${pod.meta.projectName}
 						td	${pod.version}
 						td	${pod.builtOn.toLocale("DDD MMM YYYY")}
 						td	${pod.summary}
-						td	${downloads(pod)}
-						td;	a (href="${podDocsUrl(pod)}") Documentation
+						td;	== podDocsHtml(pod)
+						td
+							a.btn..btn-xs.btn-primary (href="${podEditUrl(pod)}") Edit
+							| &nbsp;&nbsp;
+							a.btn..btn-xs.btn-danger (href="${podDeleteUrl(pod)}") &times;
 
 
 

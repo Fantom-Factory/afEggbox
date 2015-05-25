@@ -5,6 +5,7 @@ using afPillow
 @Page { disableRoutes = true }
 const mixin PodsPage : PrPage {
 
+	@Inject abstract Registry		registry
 	@Inject abstract RepoPodDao		podDao
 			abstract RepoPod[]		allPods
 
@@ -15,19 +16,26 @@ const mixin PodsPage : PrPage {
 	}
 	
 	Str podSummaryUrl(RepoPod pod) {
-		// FIXME: use FandocUri
-		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).encode
+		fandocUri(pod).toSummaryUri.toClientUrl.encode
 	}
-	Str podApiUrl(RepoPod pod) {
-		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name, true).plusName("api", true).encode
+
+	Str podDocsHtml(RepoPod pod) {
+		apiUri := fandocUri(pod).toApiUri
+		docUri := fandocUri(pod).toDocUri
+		if (apiUri.hasApi && docUri.hasDoc)
+			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a> / <a href=\"${docUri.toClientUrl.encode}\">User Guide</a>" 
+		if (apiUri.hasApi)
+			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a>" 
+		if (docUri.hasDoc)
+			return "<a href=\"${docUri.toClientUrl.encode}\">User Guide</a>"
+		return ""
 	}
-	Str podDocsUrl(RepoPod pod) {
-		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name, true).plusName("doc", true).encode
-	}
+	
 	Str userUrl(RepoUser user) {
 		pages[UsersPage#].withContext([user]).pageUrl.encode
 	}
-	Str downloads(Obj o) {
-		""
+
+	private FandocUri fandocUri(RepoPod pod) {
+		registry.autobuild(FandocSummaryUri#, [pod.name, pod.version])
 	}
 }
