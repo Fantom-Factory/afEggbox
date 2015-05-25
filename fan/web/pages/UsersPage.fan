@@ -7,5 +7,5 @@ using afPillow
 const mixin UsersPage : PrPage {
 	
 	@PageContext	abstract RepoUser	user
-
+	
 }

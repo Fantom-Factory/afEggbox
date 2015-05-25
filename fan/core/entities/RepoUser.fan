@@ -35,6 +35,12 @@ class RepoUser {
 		pod.ownerId == _id
 	}
 	
+	Str gravatarUrl() {
+		// identicon, monsterid, wavatar, retro
+		hash := email.toStr.trim.lower.toBuf.toDigest("MD5").toHex
+		return `http://www.gravatar.com/avatar/${hash}`.plusQuery(["s":"120", "d":"monsterid", "r":"x"]).encode
+	}
+
 	override Str toStr() { email.toStr }
 	
 	override Int hash() { _id }
