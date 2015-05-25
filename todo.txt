@@ -4,7 +4,7 @@ Features
 
 libraries may have multiple documentation pages
 pod meta data editing
-
+documentation/ api for every pod version
 
 Fandoc:
  - syntax highlighting
