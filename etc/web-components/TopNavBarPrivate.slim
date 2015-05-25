@@ -15,18 +15,13 @@ header.navbar.navbar-default.navbar-fixed-top
 				== pageLink(MyPodsPage#,	"My Pods")
 
 			ul.nav.navbar-nav.navbar-right
-				== userLink("My Details")
-				li; a (href="${pageUrl(LogoutPage#)}")	Logout
-			
-			/* ul.nav.navbar-nav.navbar-right
-				//li; 		a (href="#")	Help
 				li.dropdown
-					a.dropdown-toggle (href="#" data-toggle="dropdown" role="button" aria-expanded="false")	My Stuff
+					a.dropdown-toggle (href="#" data-toggle="dropdown" role="button" aria-expanded="false")	Help
 						span.caret
 					ul.dropdown-menu (role="menu")
-						== pageLink(MyDetailsPage#,	"My Details")
-						li.divider
-						li; a (href="${pageUrl(LogoutPage#)}")	Logout
-						/*	li.dropdown-header	Nav header
-							li;	a (href="#")	Separated link
-							li;	a (href="#")	One more separated link
+						== pageLink(HelpPublishPage#,	"Publishing Pods")
+						== pageLink(HelpFandocPage#,	"Writing Documentation")
+						//li.dropdown-header	Nav header
+						//li.divider
+				== userLink("My Details")
+				li; a (href="${pageUrl(LogoutPage#)}")	Logout
