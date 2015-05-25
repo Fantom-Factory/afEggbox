@@ -6,6 +6,7 @@ using afPillow
 
 const mixin MyPodsPage : PrMyPage {
 	
+	@Inject abstract Registry		registry
 	@Inject abstract FanrRepo		fanrRepo
 	@Inject abstract RepoPodDao		podDao
 	@Inject { type=PodUploadDetails# } 
@@ -19,26 +20,42 @@ const mixin MyPodsPage : PrMyPage {
 	}
 	
 	Str podSummaryUrl(RepoPod pod) {
-		// FIXME: use FandocUri
-		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).encode
+		fandocUri(pod).toSummaryUri.toClientUrl.encode
 	}
-	Str podApiUrl(RepoPod pod) {
-		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name, true).plusName("api", true).encode
+
+	Str podDocsHtml(RepoPod pod) {
+		apiUri := fandocUri(pod).toApiUri
+		docUri := fandocUri(pod).toDocUri
+		if (apiUri.hasApi && docUri.hasDoc)
+			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a> / <a href=\"${docUri.toClientUrl.encode}\">User Guide</a>" 
+		if (apiUri.hasApi)
+			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a>" 
+		if (docUri.hasDoc)
+			return "<a href=\"${docUri.toClientUrl.encode}\">User Guide</a>"
+		return ""
 	}
-	Str podDocsUrl(RepoPod pod) {
-		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name, true).plusName("doc", true).encode
-	}
+
 	Str userUrl(RepoUser user) {
 		pages[UsersPage#].withContext([user]).pageUrl.encode
 	}
-	Str downloads(Obj o) {
-		""
+
+	Str podEditUrl(RepoPod pod) {
+		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plusName("edit").encode
+	}
+
+	Str podDeleteUrl(RepoPod pod) {
+		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plus(`edit#delete`).encode
+	}
+
+	private FandocUri fandocUri(RepoPod pod) {
+		registry.autobuild(FandocSummaryUri#, [pod.name, pod.version])
 	}
 	
 	Str uploadUrl() {
 		pageMeta.eventUrl(#onUpload).encode
 	}
 
+	
 	@PageEvent { httpMethod="POST" }
 	Redirect? onUpload() {
 		try {

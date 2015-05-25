@@ -18,9 +18,8 @@
 						th	Version
 						th	Built On
 						th	Summary
-						th	Downloads
 						th	Creator
-						th	Docs
+						th	Documentation
 					-- allPods.each |pod|
 						tr
 							td;	a (href="${podSummaryUrl(pod)}") ${pod.name}
@@ -28,6 +27,5 @@
 							td	${pod.version}
 							td	${pod.builtOn.toLocale("DDD MMM YYYY")}
 							td	${pod.summary}
-							td	${downloads(pod)}
 							td;	a (href="${userUrl(pod.owner)}") ${pod.owner.userName}
-							td;	a (href="${podDocsUrl(pod)}") Documentation
+							td;	== podDocsHtml(pod)
