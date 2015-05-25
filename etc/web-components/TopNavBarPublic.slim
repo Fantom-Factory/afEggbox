@@ -14,6 +14,13 @@ header.navbar.navbar-default.navbar-fixed-top
 				== pageLink(PodsPage#,	"All Pods")
 
 			ul.nav.navbar-nav.navbar-right
-				//li; 		a (href="#")	Help
+				li.dropdown
+					a.dropdown-toggle (href="#" data-toggle="dropdown" role="button" aria-expanded="false")	Help
+						span.caret
+					ul.dropdown-menu (role="menu")
+						== pageLink(HelpPublishPage#,	"Publishing Pods")
+						== pageLink(HelpFandocPage#,	"Writing Documentation")
+						//li.dropdown-header	Nav header
+						//li.divider
 				== pageLink(SignupPage#,	"Sign Up")
 				== pageLink(LoginPage#,		"Login")
