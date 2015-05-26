@@ -5,20 +5,16 @@ using afFormBean::HtmlInput
 @Entity { name = "user" }
 class RepoUser {
 
-	@Property { }	Int		_id
+	@Property{}	Int		_id
 	
 	@HtmlInput { type="static" }
-	@Property  { }	Uri		email
+	@Property{}	Uri		email
 	
 	@HtmlInput { type="text"; required=true; minLength=3; maxLength=128 }
-					Str		screenName
-	@Property  { }	Str		userName {
-		get { screenName }
-		set { screenName = it }
-	}
+	@Property{}	Str		screenName
 
-	@Property { }	Str		userSalt
-	@Property { }	Str		userSecret
+	@Property{}	Str		userSalt
+	@Property{}	Str		userSecret
 
 	new make(|This| in) { in(this) }
 	

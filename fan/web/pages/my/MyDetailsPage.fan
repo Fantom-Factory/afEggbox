@@ -27,7 +27,7 @@ const mixin MyDetailsPage : PrMyPage {
 
 		formBean.updateBean(loggedInUser)
 		
-		existing := userDao.getByUserName(user.screenName, false)
+		existing := userDao.getByScreenName(user.screenName, false)
 		if (existing != null && existing._id != loggedInUser._id) {
 			formBean.errorMsgs.add(Msgs.userEdit_screenNameTaken(user.screenName))
 			return null
