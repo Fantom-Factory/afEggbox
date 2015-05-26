@@ -14,11 +14,11 @@ internal const class FandocLinkResolver : LinkResolver {
 		uri := str.toUri
 		if (uri.scheme != "fandoc") return null
 
-		fandocUri := FandocUri.fromUri(reg, ctx, uri)
+		fandocUri := FandocUri.fromUri(reg, uri)
 		if (fandocUri == null)
 			return null
 		
-		if (fandocUri.validate(ctx, uri) == false)
+		if (fandocUri.validate == false)
 			return null
 		
 		return fandocUri.toClientUrl
@@ -46,7 +46,7 @@ abstract const class FandocUri {
 		in(this)
 	}
 	
-	static new fromUri(Registry reg, LinkResolverCtx ctx, Uri uri) {
+	static new fromUri(Registry reg, Uri uri) {
 		if (uri.auth != null || uri.path.isEmpty)
 			return null
 
@@ -54,10 +54,10 @@ abstract const class FandocUri {
 		podName		:= chomp(path)
 		podVersion	:= Version(uri.query["v"] ?: "", false)
 		
-		return parsePath(reg, ctx, uri, podName, podVersion, path)
+		return parsePath(reg, uri, podName, podVersion, path)
 	}
 	
-	static new fromClientUrl(Registry reg, LinkResolverCtx ctx, Uri uri) {
+	static new fromClientUrl(Registry reg, Uri uri) {
 		path 		:= uri.pathOnly.path.rw
 		pods		:= chomp(path)
 		podName		:= chomp(path)
@@ -65,14 +65,14 @@ abstract const class FandocUri {
 		if (podVersion != null)	chomp(path)
 		
 		if (pods != "pods")
-			return (Obj?) ctx.invalidLink(uri, "Path segment `/${pods}` should be `/pods`")
+			return InvalidLink.invalidLink(InvalidLinkMsgs.pathSegmentNotPods(pods))
 
-		return parsePath(reg, ctx, uri, podName, podVersion, path)
+		return parsePath(reg, uri, podName, podVersion, path)
 	}
 	
-	private static FandocUri? parsePath(Registry reg, LinkResolverCtx ctx, Uri uri, Str? podName, Version? podVersion, Str[] path) {
+	private static FandocUri? parsePath(Registry reg, Uri uri, Str? podName, Version? podVersion, Str[] path) {
 		if (podName == null)
-			return (Obj?) ctx.invalidLink(uri, "Invalid pod name '${podName}'")
+			return InvalidLink.invalidLink(InvalidLinkMsgs.invalidPodName(podName))
 
 		if (path.isEmpty)
 			return reg.autobuild(FandocSummaryUri#, [podName, podVersion])
@@ -90,13 +90,13 @@ abstract const class FandocUri {
 			src := path.first
 			if (src == "src")
 				return reg.autobuild(FandocSrcUri#, [podName, podVersion, typeName, slotName])
-			return (Obj?) ctx.invalidLink(uri, "Too many path segments: ${path}")
+			return InvalidLink.invalidLink(InvalidLinkMsgs.tooManyPathSegments(path))
 		}
 
 		if (section == "src") {
 			typeName := chomp(path)
 			if (!path.isEmpty)
-				ctx.invalidLink(uri, "Too many path segments: ${path}")
+				InvalidLink.invalidLink(InvalidLinkMsgs.tooManyPathSegments(path))
 			slotName := uri.frag
 			return reg.autobuild(FandocSrcUri#, [podName, podVersion, typeName, slotName])
 		}
@@ -111,20 +111,20 @@ abstract const class FandocUri {
 			return reg.autobuild(FandocDocUri#, [podName, podVersion, docUri, headingId])
 		}
 
-		return (Obj?) ctx.invalidLink(uri, "Invalid path segment '${section}'")		
+		return InvalidLink.invalidLink(InvalidLinkMsgs.invalidPathSegment(section))
 	}
 
 	static new fromFantomUri(Registry reg, LinkResolverCtx ctx, Str link) {
 		uri := link.toUri
 		if (link.contains("::")) {
 			if (link.split(':').size > 3)
-				return (Obj?) ctx.invalidLink(uri, "Invalid URI")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.invalidFantomUri)
 			podName		:= link.split(':').first
 			typeName	:= link[podName.size+2..-1]
 			return parseFantomUri(reg, ctx, link, podName, typeName)
 		}
 		
-		if (ctx.pod != null && uri.scheme == null && !uri.isPathAbs) {
+		if (uri.scheme == null && !uri.isPathAbs) {
 			return parseFantomUri(reg, ctx, link, ctx.pod.name, link)
 		}
 		
@@ -155,14 +155,14 @@ abstract const class FandocUri {
 		}
 		
 		if (pod == null)
-			return (Obj?) ctx.invalidLink(uri, "Pod '${podName}' not found")
+			return InvalidLink.invalidLink(InvalidLinkMsgs.podNotFound(podName, null))
 		
 		podApi		:= podApiDao[pod._id]
 		if (podApi.hasType(typeName.split('.')[0])) {
 			slotName	:= (Str?) null
 			if (typeName.contains(".")) {
 				if (typeName.split('.').size > 2)
-					ctx.invalidLink(uri, "Invalid '<type>.<slot>' name")
+					InvalidLink.invalidLink(InvalidLinkMsgs.invalidTypeSlotCombo)
 				else {
 					slotName = typeName.split('.').getSafe(1)
 					typeName = typeName.split('.').getSafe(0)
@@ -214,10 +214,10 @@ abstract const class FandocUri {
 		reg.autobuild(FandocDocUri#, [podName, podVersion, fileUri, headingId])
 	}
 	
-	protected Bool? validatePod(LinkResolverCtx ctx, Uri uri, |RepoPod->Bool?| func) {
+	protected Bool? validatePod(|RepoPod->Bool?| func) {
 		pod := pod
 		if (pod == null) {
-			ctx.invalidLink(uri, "Could not find pod ${podName} " + (podVersion ?: ""))
+			InvalidLink.invalidLink(InvalidLinkMsgs.podNotFound(podName, podVersion))
 			return false
 		}
 		return func(pod) ?: false
@@ -229,7 +229,7 @@ abstract const class FandocUri {
 	
 	abstract Str title()
 	
-	abstract Bool validate(LinkResolverCtx ctx, Uri uri)
+	abstract Bool validate()
 	
 	protected abstract Uri? baseUri()
 	
@@ -254,9 +254,9 @@ const class FandocSummaryUri : FandocUri {
 
 	new make(Str podName, Version? podVersion, |This| in) : super(podName, podVersion, in) { }
 
-	override Bool validate(LinkResolverCtx ctx, Uri uri) {
+	override Bool validate() {
 		isCorePod ? true :
-		validatePod(ctx, uri) |pod->Bool| { true }
+		validatePod |pod->Bool| { true }
 	}
 		
 	Str aboutHtml() {
@@ -264,7 +264,7 @@ const class FandocSummaryUri : FandocUri {
 	}
 	
 	override Str title() {
-		podName
+		pod.meta.projectName
 	}
 
 	override FandocUri? toParentUri() {
@@ -294,7 +294,7 @@ const class FandocApiUri : FandocUri {
 	}
 	
 	Bool hasApi() {
-		validate(LinkResolverCtx(pod), `wotever`)
+		validate
 	}
 
 	DocType type() {
@@ -362,19 +362,19 @@ const class FandocApiUri : FandocUri {
 		return allDocTypesRef.val
 	}
 
-	override Bool validate(LinkResolverCtx ctx, Uri uri) {
+	override Bool validate() {
 		isCorePod ? true :
-		validatePod(ctx, uri) |RepoPod pod->Bool?| {
+		validatePod |RepoPod pod->Bool?| {
 			if (typeName == null)
 				return true
 
 			// validate Type
 			podApi := podApiDao.get(pod._id, false)
 			if (podApi == null)
-				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} has no API files")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindApiFiles(pod))
 			type := podApi.get(typeName, false)
 			if (type == null)
-				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} does not have an API file for ${typeName}")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindType(pod, typeName))
 
 			if (slotName == null)
 				return true
@@ -383,7 +383,7 @@ const class FandocApiUri : FandocUri {
 			slot := type.slot(slotName, false)
 			if (slot == null)
 				// return true because the URL is still usable
-				ctx.invalidLink(uri, "Type ${podName}::${typeName} does not have a slot named: ${slotName}")
+				InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindSlot(pod, typeName, slotName))
 
 			return true
 		}
@@ -443,7 +443,7 @@ const class FandocSrcUri : FandocUri {
 	}
 
 	Bool hasSrc() {
-		validate(LinkResolverCtx(pod), `wotever`)
+		validate
 	}
 
 	Str srcFile() {
@@ -455,23 +455,23 @@ const class FandocSrcUri : FandocUri {
 		return syntaxWriter.writeSyntax(src, "fan", true)
 	}
 
-	override Bool validate(LinkResolverCtx ctx, Uri uri) {
+	override Bool validate() {
 		isCorePod ? true :
-		validatePod(ctx, uri) |RepoPod pod->Bool?| {
+		validatePod |RepoPod pod->Bool?| {
 
 			// validate Type
 			podApi := podApiDao.get(pod._id, false)
 			if (podApi == null)
-				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} has no API files")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindApiFiles(pod))
 			type := podApi.get(typeName, false)
 			if (type == null)
-				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} does not have an API file for ${typeName}")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindType(pod, typeName))
 			podSrc := podSrcDao.get(pod._id, false)
 			if (podSrc == null)
-				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} has no Src files")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindSrcFiles(pod))
 			typeSrc := podSrc[type.loc.file]
 			if (typeSrc == null)
-				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} does not have an Src file for ${type.loc.file}")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindSrcFile(pod, type.loc.file))
 			
 			if (slotName == null)
 				return true
@@ -480,10 +480,10 @@ const class FandocSrcUri : FandocUri {
 			slot := type.slot(slotName, false)
 			if (slot == null)
 				// return true because the URL is still usable
-				ctx.invalidLink(uri, "Type ${podName}::${typeName} does not have a slot named: ${slotName}")
+				InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindSlot(pod, typeName, slotName))
 			slotSrc := podSrc[slot.loc.file]
 			if (slotSrc == null)
-				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} does not have an Src file for ${slot.loc.file}")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindSrcFile(pod, slot.loc.file))
 
 			return true
 		}
@@ -530,7 +530,7 @@ const class FandocDocUri : FandocUri {
 	}
 	
 	Bool hasDoc() {
-		validate(LinkResolverCtx(pod), `wotever`)
+		validate
 	}
 	
 	Str docHtml() {
@@ -540,7 +540,7 @@ const class FandocDocUri : FandocUri {
 	
 	Uri:Str pageContents() {
 		// TODO: look for a contents.fog
-		pageUris := (Uri[]) podDocDao[pod._id].contents.keys.findAll { it.ext == "fandoc" }.exclude { it == `/doc/pod.fandoc`}.sort
+		pageUris := (Uri[]) podDocDao[pod._id].fandocPages.keys.exclude { it == `/doc/pod.fandoc`}.sort
 		contents := Uri:Str[:] { it.ordered = true }.add(`/doc/pod.fandoc`, "User Guide")
 		pageUris.each {
 			contents[it] = it.name[0..<it.name.indexr(".")].toDisplayName
@@ -557,17 +557,17 @@ const class FandocDocUri : FandocUri {
 		return fandocRenderer.parseStr(FandocParser(), fandoc).findHeadings
 	}
 	
-	override Bool validate(LinkResolverCtx ctx, Uri uri) {
+	override Bool validate() {
 		isCorePod ? true :
-		validatePod(ctx, uri) |RepoPod pod->Bool?| {
+		validatePod |RepoPod pod->Bool?| {
 			
 			// validate Doc File
 			podDoc := podDocDao.get(pod._id, false)
 			if (podDoc == null)
-				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} has no Doc files")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindDocFiles(pod))
 			docFile := podDoc.get(fileUri, false)
 			if (docFile == null)
-				return (Obj?) ctx.invalidLink(uri, "Pod ${pod} does not have a Doc file `${fileUri}`")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindDocFile(pod, fileUri))
 
 			if (headingId == null)
 				return true
@@ -575,8 +575,9 @@ const class FandocDocUri : FandocUri {
 			// validate Heading
 			doc		:= fandocRenderer.parseStr(FandocParser(), docFile.readAllStr)
 			heading	:= doc.findHeadings.find { (it.anchorId ?: it.title.fromDisplayName) == headingId }
+			headings := doc.findHeadings.map {  it.anchorId ?: it.title.fromDisplayName }.sort.join(", ")
 			if (heading == null)
-				return (Obj?) ctx.invalidLink(uri, "Document ${podName}${fileUri} does not contain the heading ID #${uri.frag}")
+				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindHeading(headingId, headings))
 			
 			return true
 		}

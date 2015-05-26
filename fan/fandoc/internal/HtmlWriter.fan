@@ -7,10 +7,10 @@ internal class HtmlWriter : DocWriter {
 	@Inject private	LinkResolvers 		linkResolvers
 	@Inject private PreTextProcessors	preProcessors	
 			private HtmlSkin?			skin
-			private LinkResolverCtx?	ctx
+			private LinkResolverCtx		ctx
 			private Bool				inPreText
 
-	new make(LinkResolverCtx? ctx, HtmlSkin? htmlSkin, |This| in) {
+	new make(LinkResolverCtx ctx, HtmlSkin? htmlSkin, |This| in) {
 		this.ctx  = ctx
 		this.skin = htmlSkin ?:  DefaultHtmlSkin()
 		in(this)
@@ -91,9 +91,9 @@ internal class HtmlWriter : DocWriter {
 			cmdTxt	:= docText.str[0..idx].trim
 			cmd 	:= (Uri?) null
 			try { cmd = cmdTxt.toUri } catch { }
-			if (cmd != null && preProcessors.canProcess(cmd)) {
+			if (cmd != null && preProcessors.canProcess(cmd, ctx)) {
 				preText := docText.str[idx..-1]
-				preProcessors.process(cmd, preText, skin)
+				preProcessors.process(cmd, ctx, preText, skin)
 				return
 			}
 			

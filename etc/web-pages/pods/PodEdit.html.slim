@@ -2,28 +2,60 @@
 
 	ol.breadcrumb
 		li;	a (href="${podsUrl}")	Pods
-		li;	a (href="${podSummaryUrl(pod)}")	${pod.name}
+		li;	a (href="${podSummaryUrl.toClientUrl.encode}")	${podSummaryUrl.title}
 		li.active	Edit
 
-	div.page-header
-		h1	${pod.meta.projectName} v${pod.version} Details
+	div.row
+		div.col-sm-12
+			h1.podHeading
+				span edit
+				| ${pod.meta.projectName} ${pod.version}
 
-	h2	Edit Pod Details
 	div.row
 		div.col-sm-6
-			form (action="${saveUrl}" method="post")
+		
+		
+		
+			h2.alert.alert-info	Edit Pod Details
+			form.clearfix (action="${saveUrl}" method="post")
 				== podEditFormBean.renderErrors
 				== podEditFormBean.renderBean(editDetails)
 				div.pull-right
 					button.btn.btn-primary (type="submit" name="save") Save	
-	
-	h2#delete	Delete Pod
-	div.row
-		div.col-sm-6
+			
+			hr
 
-			form (action="${deleteUrl}" method="post")
+
+
+			h2#delete.alert.alert-danger	Delete Pod
+			
+			p	Use this form to delete the pod.
+
+			form.clearfix (action="${deleteUrl}" method="post")
 				== podDeleteFormBean.renderErrors
 				== podDeleteFormBean.renderBean(null)
 				div.pull-right
 					button.btn.btn-danger (type="submit" name="delete") Delete
+
+			hr.visible-xs-block
+					
+		div.col-sm-6
+			-- if (invalidLinks.isEmpty)
+				h2.alert.alert-success	Documentation Errors
+				
+				p No documentation / linking errors were found.
+				
+			
+			-- if (invalidLinks.size > 0)
+				h2.alert.alert-warning	Documentation Errors
+
+				p ${invalidLinks.size} document / linking errors were found:
+				ul.list-unstyled;	-- invalidLinkMap.each |msgs, uri|
+					li
+						b
+							a (href="${uri}") ${uri}
+						ul
+							-- msgs.each
+								li;	== it
+
 					

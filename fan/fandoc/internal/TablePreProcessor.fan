@@ -7,7 +7,7 @@ internal const class TablePreProcessor : PreTextProcessor {
 	
 	new make(|This|in) { in(this) }
 	
-	override Void process(Uri cmd, Str preText, HtmlSkin skin) {
+	override Void process(Uri cmd, LinkResolverCtx ctx, Str preText, HtmlSkin skin) {
 		
 		table := tableParser.parseTable(preText.splitLines)
 		
@@ -19,7 +19,7 @@ internal const class TablePreProcessor : PreTextProcessor {
 			table.first.each { 
 				skin.th
 				// FIXME: need linkresolver
-				fandoc.writeStrToHtml(it, LinkResolverCtx(), skin)
+				fandoc.writeStrToHtml(it, ctx, skin)
 				skin.thEnd
 			}
 			skin.trEnd			
@@ -32,7 +32,7 @@ internal const class TablePreProcessor : PreTextProcessor {
 			row.each { 
 				skin.td
 				// FIXME: need linkresolver
-				fandoc.writeStrToHtml(it, LinkResolverCtx(), skin)
+				fandoc.writeStrToHtml(it, ctx, skin)
 				skin.tdEnd }
 			skin.trEnd			
 		}

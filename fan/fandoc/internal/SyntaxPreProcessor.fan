@@ -7,7 +7,7 @@ internal const class SyntaxPreProcessor : PreTextProcessor {
 	
 	new make(|This|in) { in(this) }
 	
-	override Void process(Uri cmd, Str preText, HtmlSkin skin) {
+	override Void process(Uri cmd, LinkResolverCtx ctx, Str preText, HtmlSkin skin) {
 		ext := cmd.pathStr.trim
 		if (ext == "fantom")
 			ext = "fan"
