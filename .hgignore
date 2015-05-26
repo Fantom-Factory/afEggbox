@@ -1,3 +1,9 @@
 
 syntax: regexp
 ^fancordion-results$
+^config\.properties$
+
+syntax: glob
+.git
+syntax: regexp
+^deploy-to-live\.cmd$

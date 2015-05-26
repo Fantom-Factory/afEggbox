@@ -7,8 +7,8 @@ mixin Msgs {
 		"Pod exceeds maximum size of " + noOfBytes.toLocale("B")
 	}	
 
-	static Str publish_podNameAlreadyTaken(Str podName, Str userName) {
-		"Pod name '${podName}' has already been taken by user '${userName}'"
+	static Str publish_podNameAlreadyTaken(Str podName, Str screenName) {
+		"Pod name '${podName}' has already been taken by user '${screenName}'"
 	}
 
 	static Str publish_podVersionTooSmall(Version vOld, Version vNew) {
@@ -59,8 +59,8 @@ mixin Msgs {
 		"Email address `${email}` is already taken."
 	}
 
-	static Str userEdit_screenNameTaken(Str userName) {
-		"Screen name '${userName}' has already been taken."
+	static Str userEdit_screenNameTaken(Str screenName) {
+		"Screen name '${screenName}' has already been taken."
 	}
 
 	static Str podDelete_podNameDoesNotMatch(Str podName) {

@@ -1,4 +1,4 @@
--- app.renderLayout("User ${user.userName}")
+-- app.renderLayout("User ${user.screenName}")
 
 	-- if (loggedIn && loggedInUser == user)
 		div.pull-right
@@ -8,10 +8,10 @@
 		article.col-sm-9
 			h1.podHeading
 				span	user
-				== user.userName
+				== user.screenName
 
-			div email:		${user.email}
-			div username:	${user.userName}
+			div email:			${user.email}
+			div screen Name:	${user.screenName}
 			div image:
 				img (src="${user.gravatarUrl}")
 

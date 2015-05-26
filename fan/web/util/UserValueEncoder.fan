@@ -14,6 +14,6 @@ const class UserValueEncoder : ValueEncoder {
 
 	override Obj? toValue(Str clientValue) {
 		if (clientValue.isEmpty) return null
-		return userDao.getByUserName(clientValue, true)
+		return userDao.getByScreenName(clientValue, true)
 	}
 }
