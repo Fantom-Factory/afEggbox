@@ -18,11 +18,13 @@ Fandoc:
    
 
 
+on mypods table, show / highlight public / private pods
 
 did you forget your password?
 email confirmation
 
 users to have a gravatar email field (defaults to normal)
+grab default details from gravatar (when save grav email field is diff and fields to be populated are empty)
 
 lib icons in pod
 

@@ -7,3 +7,5 @@ syntax: glob
 .git
 syntax: regexp
 ^deploy-to-live\.cmd$
+syntax: regexp
+^lib-fan$

@@ -1,4 +1,5 @@
 using build
+using fanr
 
 class Build : BuildPod {
 
@@ -56,5 +57,64 @@ class Build : BuildPod {
 
 		srcDirs = [`test-spec/`, `test-spec/web/`, `test-spec/web/login/`, `test-spec/utils/`, `test-spec/fanr/`, `test-spec/core/`, `fan/`, `fan/web/`, `fan/web/util/`, `fan/web/services/`, `fan/web/pages/`, `fan/web/pages/pods/`, `fan/web/pages/my/`, `fan/web/pages/help/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/fanr/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`, `fan/bedframe/`]
 		resDirs = [`res/`, `test/res/`]
+	}
+	
+	
+	@Target { help = "Heroku pre-compile hook, use to install dependencies" }
+	Void herokuPreCompile() {
+
+		pods := depends.findAll |Str dep->Bool| {
+			depend := Depend(dep)
+			pod := Pod.find(depend.name, false)
+			return (pod == null) ? true : !depend.match(pod.version)
+		}
+		installFromRepo(pods, "http://repo.status302.com/fanr/") // repo = "file:lib/fanr/"
+
+		// patch web font mime types
+		patchMimeTypes([
+			"eot"	: "application/vnd.ms-fontobject",
+			"otf"	: "application/font-sfnt",
+			"svg"	: "image/svg+xml",
+			"ttf"	: "application/font-sfnt",
+			"woff"	: "application/font-woff"
+		])
+	}
+
+	private Void installFromRepo(Str[] pods, Str repo) {
+		cmd := "install -errTrace -y -r ${repo}".split.add(pods.join(","))
+		log.info("")
+		log.info("Installing pods...")
+		log.indent
+		log.info("> fanr " + cmd.join(" ") { it.containsChar(' ') ? "\"$it\"" : it })
+		status := fanr::Main().main(cmd)
+		log.unindent
+		// abort build if something went wrong
+		if (status != 0) Env.cur.exit(status)
+
+		(scriptDir + `lib-fan/afBedSheet.pod`).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+		(scriptDir + `lib-fan/afFormBean.pod`).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+	}
+
+	private Void patchMimeTypes(Str:Str extToMimeTypes) {
+		ext2mime := Env.cur.findFile(`etc/sys/ext2mime.props`)
+		mimeTypes := ext2mime.readProps
+		
+		toAdd := extToMimeTypes.exclude |mime, ext->Bool| {
+			mimeTypes.containsKey(ext)
+		}
+		
+		if (!toAdd.isEmpty) {
+			log.indent
+			exts := toAdd.keys.sort.join(", ")
+			log.info("Mime type for file extension(s) ${exts} do not exist")
+			log.info("Patching `${ext2mime.normalize}`...")
+			toAdd.keys.sort.each |ext| {
+				mimeTypes = mimeTypes.rw.add(ext, extToMimeTypes[ext])
+				log.info("   ${ext} = " + mimeTypes[ext])
+			}
+			ext2mime.writeProps(mimeTypes)
+			log.info("Done.")
+			log.unindent
+		}
 	}
 }
