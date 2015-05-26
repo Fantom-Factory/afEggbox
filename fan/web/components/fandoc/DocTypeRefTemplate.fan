@@ -21,8 +21,8 @@ const mixin DocTypeRefTemplate : EfanComponent {
 	Bool resolved() {
 		// TODO: resolve pod version to nearest matching
 		
-		fandocUri := (FandocApiUri) reg.autobuild(FandocApiUri#, [ref.pod, ctx.pod?.version, ref.name, null]) 
-		if (fandocUri.validate(ctx, fandocUri.toUri)) {
+		fandocUri := (FandocApiUri) reg.autobuild(FandocApiUri#, [ref.pod, ctx.pod.version, ref.name, null]) 
+		if (fandocUri.validate) {
 			typeUrl = fandocUri.toClientUrl.encode
 			return true
 		}

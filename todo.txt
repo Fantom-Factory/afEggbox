@@ -17,7 +17,7 @@ Fandoc:
    - pod: scheme
    
 
-
+Breadcrumbs on User / user edit pages
 on mypods table, show / highlight public / private pods
 
 did you forget your password?

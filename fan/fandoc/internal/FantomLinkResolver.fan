@@ -35,7 +35,7 @@ public const class FantomLinkResolver : LinkResolver {
 		if (fandocUri == null)
 			return null
 		
-		if (fandocUri.validate(ctx, uri) == false)
+		if (fandocUri.validate == false)
 			return null
 		
 		return fandocUri.toClientUrl

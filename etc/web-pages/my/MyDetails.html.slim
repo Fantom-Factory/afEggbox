@@ -1,10 +1,11 @@
 -- app.renderLayout("My Details")
 
-	h1.page-header	My Details
-
 	div.row
-		div.col-sm-6
-	
+		div.col-sm-9
+			h1.podHeading
+				span	edit
+				== user.screenName
+
 			form (action="${saveUrl}" method="post")
 				== formBean.renderErrors
 				== formBean.renderBean(user)

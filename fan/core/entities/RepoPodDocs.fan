@@ -10,9 +10,16 @@ class RepoPodDocs {
 	new make(|This|f) { f(this) }
 	
 	static new fromFile(RepoPod pod, Uri:Buf contents) {
+		// FIXME: seperate out the text files
 		RepoPodDocs {
 			it._id		= pod._id
 			it.contents	= contents
+		}
+	}
+	
+	Uri:Buf fandocPages() {
+		contents.findAll |v, k| {
+			k.ext == "fandoc"
 		}
 	}
 	

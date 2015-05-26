@@ -7,11 +7,11 @@ const class PreTextProcessors {
 		this.processors = processors
 	}
 	
-	Bool canProcess(Uri cmd) {
+	Bool canProcess(Uri cmd, LinkResolverCtx ctx) {
 		processors.containsKey(cmd.scheme ?: "")
 	}
 	
-	Void process(Uri cmd, Str preText, HtmlSkin skin) {
-		processors[cmd.scheme].process(cmd, preText, skin)
+	Void process(Uri cmd, LinkResolverCtx ctx, Str preText, HtmlSkin skin) {
+		processors[cmd.scheme].process(cmd, ctx, preText, skin)
 	}
 }
