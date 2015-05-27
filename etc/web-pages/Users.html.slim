@@ -1,8 +1,8 @@
 -- app.renderLayout("User ${user.screenName}")
 
-	-- if (loggedIn && loggedInUser == user)
-		div.pull-right
-			a.btn.btn-primary (href="${pages[MyDetailsPage#].pageUrl.encode}") Edit User Details
+	ol.breadcrumb
+		li.active	Users
+		li.active	${user.screenName}
 
 	div.row
 		article.col-sm-9
@@ -16,3 +16,6 @@
 				img (src="${user.gravatarUrl}")
 
 		nav.col-sm-3.hidden-xs.contents
+			-- if (loggedIn && loggedInUser == user)
+				div.pull-right
+					a.btn.btn-primary (href="${pages[MyDetailsPage#].pageUrl.encode}") Edit User Details

@@ -132,7 +132,7 @@ class RepoPodMeta {
 		specialKeys.each { assertKeyExists(meta, it) }
 
 		m := Str:Str[:] { ordered = true }
-		specialKeys.each { m[it] = meta[it] }
+		specialKeys.each { m[it] = meta[it] ?: "" }
 		meta.keys.exclude { specialKeys.contains(it) }.sort.each { m[it] = meta[it] }
 		
 		// convert the older "repo.private" --> "repo.public"
@@ -227,8 +227,9 @@ class RepoPodMeta {
 	}
 	
 	private static Void assertKeyExists(Str:Str meta, Str key) {
-		if (meta[key] == null || meta[key].isEmpty)
-			throw PodPublishErr(Msgs.publish_missingPodMeta(key))
+		if (key != "pod.summary")	// we'll set 'pod.summary' to "", which is fine for private pods 
+			if (meta[key] == null || meta[key].isEmpty)
+				throw PodPublishErr(Msgs.publish_missingPodMeta(key))
 	}
 }
 

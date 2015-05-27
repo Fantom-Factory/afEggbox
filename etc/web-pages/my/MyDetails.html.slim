@@ -1,5 +1,10 @@
 -- app.renderLayout("My Details")
 
+	ol.breadcrumb
+		li.active	Users
+		li;	a (href="${pages[UsersPage#].withContext([user.screenName]).pageUrl.encode}")	${user.screenName}
+		li.active	Edit
+
 	div.row
 		div.col-sm-9
 			h1.podHeading

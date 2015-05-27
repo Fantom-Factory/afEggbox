@@ -42,6 +42,7 @@ const mixin Layout : PrComponent {
 			return false
 
 		// FIXME: how to tell if a page is public or private?
+		
 		return false
 	}
 }
