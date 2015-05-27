@@ -60,7 +60,7 @@ internal class ApiDocParser
 
       // parse attrs
       attrs  := parseAttrs
-      this.typeRef = DocTypeRef("${podName}::${name}")	// FIXME: need pod name
+      this.typeRef = DocTypeRef("${podName}::${name}")
       this.typeLoc = attrs.loc
 
       // zero or more slots

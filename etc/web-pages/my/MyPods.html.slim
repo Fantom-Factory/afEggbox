@@ -15,18 +15,24 @@
 					th	Built On
 					th	Summary
 					th	Documentation
+					th.text-centre	Doc Errors
 					th	Actions
 				-- allPods.each |pod|
 					tr
-						td;	a (href="${podSummaryUrl(pod)}") ${pod.name}
-						td	${pod.version}
-						td	${pod.builtOn.toLocale("DDD MMM YYYY")}
-						td	${pod.summary}
-						td;	== podDocsHtml(pod)
-						td
-							a.btn..btn-xs.btn-primary (href="${podEditUrl(pod)}") Edit
+						td.text-nowrap;	a (href="${podSummaryUrl(pod)}") ${pod.name}
+						td.text-nowrap	${pod.version}
+						td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
+						td				${pod.summary}
+						td.text-nowrap;	== podDocsHtml(pod)
+						td.text-centre;
+							-- if (pod.invalidLinks.isEmpty)
+								| -
+							-- else
+								span.badge.label.label-warning ${pod.invalidLinks.size}	
+						td.text-nowrap
+							a.btn.btn-xs.btn-primary (href="${podEditUrl(pod)}" title="Goto pod edit page") Edit
 							| &nbsp;&nbsp;
-							a.btn..btn-xs.btn-danger (href="${podDeleteUrl(pod)}") &times;
+							a.btn.btn-xs.btn-danger (href="${podDeleteUrl(pod)}" title="Goto pod deletion page") &times;
 
 
 

@@ -4,7 +4,7 @@ using afIocConfig
 using afMorphia
 
 @SubModule { modules=[FanrModule#, WebModule#] }
-class AppModule {
+class CoreModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
 		
@@ -27,7 +27,8 @@ class AppModule {
 
 	@Contribute { serviceType=Converters# }
 	static Void contributeConverters(Configuration config) {		
-		config[RepoPodMeta#] = 	config.createProxy(Converter#, RepoPodMetaConverter#)
+		config[RepoPodMeta#]	= config.createProxy(Converter#, RepoPodMetaConverter#)
+		config[FandocUri#] 		= config.autobuild(FandocUriConverter#)
 	}
 
 	@Contribute { serviceType=RegistryStartup# }

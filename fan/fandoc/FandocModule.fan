@@ -7,6 +7,8 @@ class FandocModule {
 		defs.add(PreTextProcessors#)
 		defs.add(LinkResolvers#)
 		defs.add(SyntaxWriter#)
+
+		defs.add(InvalidLinks#)	// shouldn't be here
 	}
 	
 	@Contribute { serviceType=PreTextProcessors# }

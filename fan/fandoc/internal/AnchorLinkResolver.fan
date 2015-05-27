@@ -10,7 +10,7 @@ internal const class AnchorLinkResolver : LinkResolver {
 			hd := ctx.doc.findHeadings.find { (it.anchorId ?: it.title.fromDisplayName) == id }
 			if (hd == null) {
 				headings := ctx.doc.findHeadings.map { it.anchorId ?: it.title.fromDisplayName }.sort.join(", ")
-				return InvalidLink.invalidLink(InvalidLinkMsgs.couldNotFindHeading(uri.frag, headings))
+				return InvalidLinks.add(InvalidLinkMsgs.couldNotFindHeading(uri.frag, headings))
 			}
 			return uri
 		}

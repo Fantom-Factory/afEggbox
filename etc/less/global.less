@@ -16,6 +16,7 @@ ol, ul {
 
 /* ---- Helpful Classes ------------------------------------------------------------------------- */
 
+// also use - text-nowrap
 .nowrap {
 	white-space: 		nowrap;
 }
@@ -84,23 +85,23 @@ form.form-okay input:valid {
 
 // from http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/
 .btn-file {
-	position:	relative;
-	overflow:	hidden;
+	position:		relative;
+	overflow:		hidden;
 }
 .btn-file input[type=file] {
-	position:	absolute;
-	top:		0;
-	right:		0;
-	min-width:	100%;
-	min-height:	100%;
-	font-size:	100px;
-	text-align:	right;
-	filter:		alpha(opacity=0);
-	opacity:	0;
-	outline:	none;
-	background:	white;
-	cursor:		inherit;
-	display:	block;
+	position:		absolute;
+	top:			0;
+	right:			0;
+	min-width:		100%;
+	min-height:		100%;
+	font-size:		100px;
+	text-align:		right;
+	filter:			alpha(opacity=0);
+	opacity:		0;
+	outline:		none;
+	background:		white;
+	cursor:			inherit;
+	display:		block;
 }
 
 // stops code badges from merging / running into pre blocks
@@ -108,3 +109,7 @@ li > div.syntax {
 	margin-top:	@padding-large-vertical;
 }
 
+// Labels as badges - see http://stackoverflow.com/a/26495054/1532548
+.badge {
+	border-radius:	1em;
+}

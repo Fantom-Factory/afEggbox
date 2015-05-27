@@ -13,6 +13,7 @@ const class FanrRepo {
 	@Inject private const RepoPodDocsDao	podDocsDao
 	@Inject private const RepoPodSrcDao		podSrcDao
 	@Inject private const RepoPodApiDao		podApiDao
+	@Inject private const Registry			registry
 	
 	new make(|This|in) { in(this) }
 
@@ -61,6 +62,8 @@ const class FanrRepo {
 			podSrcDao .create(RepoPodSrc (pod, podContents.srcContents))
 		if (!podContents.apiContents.isEmpty)
 			podApiDao .create(RepoPodApi (pod, podContents.apiContents))
+		registry.injectIntoFields(pod)
+		pod.validateDocumentLinks.save
 		return pod
 	}
 
@@ -81,7 +84,7 @@ const class FanrRepo {
 	}
 	
 	Void delete(RepoUser user, RepoPod pod) {
-		// FIXME: make configurable
+		// TODO: make deleting public pods configurable
 //		if (pod.isPublic)
 //			throw PodDeleteErr(Msgs.podDelete_cannotDeletePublicPods(pod.name))
 

@@ -9,50 +9,23 @@ const mixin PodEditPage : PrPage {
 
 					abstract RepoPod		pod
 	@Inject 		abstract RepoPodDao		podRepo
-	@Inject 		abstract RepoPodApiDao	podApiRepo
-	@Inject 		abstract RepoPodDocsDao	podDocsRepo
 	@Inject 		abstract FanrRepo		fanrRepo
 	@Inject 		abstract Registry		registry
-	@Inject 		abstract Fandoc			fandoc
 	@Inject { type=PodEditDetails# } 
 					abstract FormBean		podEditFormBean
 					abstract PodEditDetails	editDetails
 	@Inject { type=PodDeleteDetails# } 
 					abstract FormBean		podDeleteFormBean
-					abstract InvalidLink[]	invalidLinks
 
 	@InitRender
 	Void initRender(RepoPod pod) {
 		this.pod		 = pod
 		this.editDetails = PodEditDetails(pod)
-		
-		linkCtx		:= LinkResolverCtx(pod)
-		fandocUri	:= (FandocUri) registry.autobuild(FandocSummaryUri#, [pod.name, pod.version])
-		this.invalidLinks = InvalidLink.gatherInvalidLinks |->| {
-			InvalidLink.setWhereLinkIsFound(fandocUri.toSummaryUri)
-			fandoc.writeStrToHtml(pod.aboutFandoc, linkCtx)
-
-			podDocsRepo.get(pod._id, false).fandocPages.each |page, fileUri| {
-				InvalidLink.setWhereLinkIsFound(fandocUri.toDocUri(fileUri))
-				fandoc.writeStrToHtml(page.readAllStr, linkCtx)
-			}
-
-			podApiRepo.get(pod._id, false)?.allTypes?.each |type| {
-				linkCtx.type = type.name
-				InvalidLink.setWhereLinkIsFound(fandocUri.toApiUri(type.name))
-				fandoc.writeStrToHtml(type.doc.text, linkCtx)
-
-				type.slots.each |slot| {
-					InvalidLink.setWhereLinkIsFound(fandocUri.toApiUri(type.name, slot.name))
-					fandoc.writeStrToHtml(slot.doc.text, linkCtx)
-				}
-			}
-		}
 	}
 	
 	Str:Str[] invalidLinkMap() {
 		map := Str:Str[][:] { ordered = true }
-		invalidLinks.each |link| {
+		pod.invalidLinks.each |link| {
 			map.getOrAdd(link.where.toClientUrl.encode) { Str[,] }.add("<code>${link.link.toXml}</code> - ${link.msg.toXml}")
 		}
 		return map
@@ -64,6 +37,10 @@ const mixin PodEditPage : PrPage {
 
 	Str saveUrl() {
 		`/pods/${pod.name}/${pod.version}/edit/save`.encode
+	}
+
+	Str validateUrl() {
+		`/pods/${pod.name}/${pod.version}/edit/validate`.encode
 	}
 	
 	Str deleteUrl() {
@@ -82,6 +59,12 @@ const mixin PodEditPage : PrPage {
 		
 		alert.msg = Msgs.alert_podUpdated(pod)
 		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
+	}
+
+	@PageEvent { httpMethod="POST" }
+	Redirect? onValidate() {
+		pod.validateDocumentLinks.save
+		return Redirect.afterPost(podSummaryUrl.toClientUrl.plusSlash.plusName("edit"))
 	}
 
 	@PageEvent { httpMethod="POST" }

@@ -63,7 +63,7 @@ const class PodRoutes : Route {
 			return null
 		
 		if (fandocUri.validate == false) 
-			return HttpStatus(404, InvalidLink.invalidLinks.first.msg)	// FIXME: always null
+			return HttpStatus(404, "Could not validate: ${fandocUri.toUri.encode}")
 		
 		if (fandocUri is FandocSummaryUri)
 			return pages.renderPage(PodSummaryPage#, [fandocUri])
@@ -106,6 +106,17 @@ const class PodRoutes : Route {
 		
 		podEvent	:= chomp(reqPath)
 		
+		// --> /pods/afSlim/edit/save
+		// --> /pods/afSlim/1.1.14/edit/save
+		if (podSection == "edit" && podEvent == "save" && reqPath.isEmpty) {
+			if (userSession.isLoggedIn) {
+				if (userSession.user.owns(pod)) 
+					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onSave, null)
+				throw HttpStatusErr(401, "Unauthorised")
+			}
+			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+		}
+		
 		// --> /pods/afSlim/edit/delete
 		// --> /pods/afSlim/1.1.14/edit/delete
 		if (podSection == "edit" && podEvent == "delete" && reqPath.isEmpty) {
@@ -117,12 +128,12 @@ const class PodRoutes : Route {
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
 		}
 		
-		// --> /pods/afSlim/edit/save
-		// --> /pods/afSlim/1.1.14/edit/save
-		if (podSection == "edit" && podEvent == "save" && reqPath.isEmpty) {
+		// --> /pods/afSlim/edit/validate
+		// --> /pods/afSlim/1.1.14/edit/validate
+		if (podSection == "edit" && podEvent == "validate" && reqPath.isEmpty) {
 			if (userSession.isLoggedIn) {
 				if (userSession.user.owns(pod)) 
-					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onSave, null)
+					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onValidate, null)
 				throw HttpStatusErr(401, "Unauthorised")
 			}
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))

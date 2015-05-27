@@ -16,7 +16,10 @@
 		
 		
 		
-			h2.alert.alert-info	Edit Pod Details
+			h2.alert.alert-info	Pod Details
+			
+			p Editing pod details only changes what is displayed on this website, it does <i>not</i> alter the contents of the uploaded pod.  
+			
 			form.clearfix (action="${saveUrl}" method="post")
 				== podEditFormBean.renderErrors
 				== podEditFormBean.renderBean(editDetails)
@@ -29,7 +32,7 @@
 
 			h2#delete.alert.alert-danger	Delete Pod
 			
-			p	Use this form to delete the pod.
+			p	Use this form to delete the ${pod.meta.projectName} library.
 
 			form.clearfix (action="${deleteUrl}" method="post")
 				== podDeleteFormBean.renderErrors
@@ -38,18 +41,20 @@
 					button.btn.btn-danger (type="submit" name="delete") Delete
 
 			hr.visible-xs-block
-					
+
+
+
 		div.col-sm-6
-			-- if (invalidLinks.isEmpty)
+			-- if (pod.invalidLinks.isEmpty)
 				h2.alert.alert-success	Documentation Errors
 				
 				p No documentation / linking errors were found.
 				
 			
-			-- if (invalidLinks.size > 0)
+			-- if (pod.invalidLinks.size > 0)
 				h2.alert.alert-warning	Documentation Errors
 
-				p ${invalidLinks.size} document / linking errors were found:
+				p ${pod.invalidLinks.size} document / linking errors were found on ${format(pod.linksValidatedOn)}:
 				ul.list-unstyled;	-- invalidLinkMap.each |msgs, uri|
 					li
 						b
@@ -58,4 +63,7 @@
 							-- msgs.each
 								li;	== it
 
+			form.clearfix (action="${validateUrl}" method="post")
+				div.pull-right
+					button.btn.btn-warning (type="submit" name="validate") Re-Validate
 					

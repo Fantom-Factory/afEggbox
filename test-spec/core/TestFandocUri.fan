@@ -126,11 +126,11 @@ class TestFandocUri : RepoFixture {
 	}
 	
 	Void parseFandocUri(Str uri) {
-		InvalidLink.gatherInvalidLinks |->| {
+		InvalidLinks.gather |->| {
 			fandocUri := FandocUri.fromUri(reg, uri.toUri)
 			if (!fandocUri.validate) {
-				this.fandocUri = "${fandocUri?.toUri} - ${InvalidLink.invalidLinks}"
-				this.clientUrl = "${fandocUri?.toClientUrl} - ${InvalidLink.invalidLinks}"
+				this.fandocUri = "${fandocUri?.toUri} - ${InvalidLinks.invalidLinks}"
+				this.clientUrl = "${fandocUri?.toClientUrl} - ${InvalidLinks.invalidLinks}"
 				return
 			}
 			this.fandocUri = fandocUri.toUri.toStr
@@ -139,11 +139,11 @@ class TestFandocUri : RepoFixture {
 	}
 
 	Void parseClientUrl(Str uri) {
-		InvalidLink.gatherInvalidLinks |->| {
+		InvalidLinks.gather |->| {
 			fandocUri := FandocUri.fromClientUrl(reg, uri.toUri)
 			if (!fandocUri.validate) {
-				this.fandocUri = "${fandocUri?.toUri} - ${InvalidLink.invalidLinks}"
-				this.clientUrl = "${fandocUri?.toClientUrl} - ${InvalidLink.invalidLinks}"
+				this.fandocUri = "${fandocUri?.toUri} - ${InvalidLinks.invalidLinks}"
+				this.clientUrl = "${fandocUri?.toClientUrl} - ${InvalidLinks.invalidLinks}"
 				return
 			}
 			this.fandocUri = fandocUri.toUri.toStr
@@ -152,13 +152,13 @@ class TestFandocUri : RepoFixture {
 	}
 
 	Void parseFantomUri(Str uri) {
-		InvalidLink.gatherInvalidLinks |->| {
+		InvalidLinks.gather |->| {
 			pod := podDao["foo-2.0"]
 			ctx := LinkResolverCtx(pod) { it.type = "Bar" }
 			fandocUri := FandocUri.fromFantomUri(reg, ctx, uri)
 			if (!fandocUri.validate) {
-				this.fandocUri = "${fandocUri?.toUri} - ${InvalidLink.invalidLinks}"
-				this.clientUrl = "${fandocUri?.toClientUrl} - ${InvalidLink.invalidLinks}"
+				this.fandocUri = "${fandocUri?.toUri} - ${InvalidLinks.invalidLinks}"
+				this.clientUrl = "${fandocUri?.toClientUrl} - ${InvalidLinks.invalidLinks}"
 				return
 			}
 			this.fandocUri = fandocUri.toUri.toStr

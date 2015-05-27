@@ -16,6 +16,10 @@ const class DirtyCash {
 	}
 
 	Obj? cash(|->Obj?| func) {
+		// allow re-enterant caching
+		if (caching)
+			return func()
+			
 		try {
 			caching = true
 			return func()
@@ -36,7 +40,7 @@ const class DirtyCash {
 				totalHits   += hits
 				totalMisses += misses
 			}
-			per := 100 - ((totalMisses * 100).toFloat / totalHits)
+			per := (totalHits == 0 || totalMisses == 0) ? 0f : 100 - ((totalMisses * 100).toFloat / totalHits)
 			echo("  ".padr(idSize + 13, '-'))
 			echo("  ".padr(idSize + 2,  ' ') + " : ${totalHits.toStr.justr(3)} -> $totalMisses = " + per.toLocale("0.00") + "% effective!")
 			echo("\n")
@@ -45,7 +49,6 @@ const class DirtyCash {
 			cacheHits.clear
 			cacheMisses.clear
 		}
-		
 	}
 	
 	virtual Obj? get(Type type, Str id, |->Obj?| func) {
