@@ -23,5 +23,7 @@ class FandocModule {
 		config["anchor"]	= AnchorLinkResolver()
 		config["fantom"]	= config.autobuild(FantomLinkResolver#)
 		config["fandoc"]	= config.autobuild(FandocLinkResolver#)
+		config["pod"]		= config.autobuild(PodLinkResolver#)
+		config["fan"]		= config.autobuild(FanLinkResolver#)
 	}
 }

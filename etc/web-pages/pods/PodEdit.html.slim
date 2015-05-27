@@ -16,7 +16,7 @@
 		
 		
 		
-			h2.alert.alert-info	Pod Details
+			h2#edit.alert.alert-info	Pod Details
 			
 			p Editing pod details only changes what is displayed on this website, it does <i>not</i> alter the contents of the uploaded pod.  
 			
@@ -52,7 +52,7 @@
 				
 			
 			-- if (pod.invalidLinks.size > 0)
-				h2.alert.alert-warning	Documentation Errors
+				h2#validate.alert.alert-warning	Documentation Errors
 
 				p ${pod.invalidLinks.size} document / linking errors were found on ${format(pod.linksValidatedOn)}:
 				ul.list-unstyled;	-- invalidLinkMap.each |msgs, uri|

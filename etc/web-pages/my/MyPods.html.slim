@@ -28,7 +28,8 @@
 							-- if (pod.invalidLinks.isEmpty)
 								| -
 							-- else
-								span.badge.label.label-warning ${pod.invalidLinks.size}	
+								a (href="${podValidateUrl(pod)}" title="Goto pod validate page")
+									span.badge.label.label-warning ${pod.invalidLinks.size}	
 						td.text-nowrap
 							a.btn.btn-xs.btn-primary (href="${podEditUrl(pod)}" title="Goto pod edit page") Edit
 							| &nbsp;&nbsp;
