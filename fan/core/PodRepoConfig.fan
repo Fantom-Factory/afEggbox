@@ -2,25 +2,69 @@ using afIocEnv
 using afBeanUtils
 
 const class PodRepoConfig {
-	
+	private static const Log			log			:= PodRepoConfig#.pod.log
 	private static const TypeCoercer	typeCoercer	:= TypeCoercer()
 	
 	const Uri		mongoDbUrl
-	const Uri		adminEmail
-	const Bool		unsecured
+	const Uri?		publicUrl
+	const Str?		googleAccNo
+	const Str?		googleAccDomain
+//	const Uri?		adminEmail
+//	const Uri?		autoLoginEmail
+//	const Bool		unsecured
 	
 	private new makeInternal(|This|in) { in(this) }
 	
+	This validate() {
+		map := Str:Obj?[:] { ordered = true }
+		
+		if (googleAccNo != null)
+			if (googleAccDomain == null && publicUrl == null)
+				log.warn("If specifying a googleAccNo, a publicUrl or googleAccDomain should also be given.")
+
+		map["MongoDB URL"]				= mongoDbUrl
+		map["Public URL"]				= publicUrl
+		map["Google Account Number"]	= googleAccNo
+		map["Google Account Domain"]	= googleAccDomain
+		map["."]						= ""
+		map["Google Analytics Enabled"]	= googleAnalyticsEnabled
+		
+		msg := "\n\n"
+		msg += "Pod Repo Config\n"
+		msg += "===============\n"
+
+		keySize := map.keys.reduce(0) |Int size, key->Int| { size.max(key.size) } as Int
+		map.each |v, k| {
+			if (v != null) {
+				if (k.startsWith("."))
+					msg += "".padr(keySize + 1, '-') + " : $v\n"
+				else
+					msg += "$k ".padr(keySize + 1, '.') + " : $v\n"
+			}
+		}
+		log.info(msg)
+		return this
+	}
+	
+	Bool googleAnalyticsEnabled() {
+		googleAccNo != null && (googleAccDomain != null || publicUrl != null)
+	}
+	
 	static new make(IocEnv iocEnv) {
+		echo("ENV: ${iocEnv.env}")
+		echo("ENV: ${iocEnv.abbr}")
 		// set some defaults
 		configProps := ConfigProperty[
-			ConfigProperty(#mongoDbUrl,	"afPodRepo.mongoDbUrl",	`mongodb://localhost:27017/podrepo-dev`),
-			ConfigProperty(#adminEmail,	"afPodRepo.adminEmail",	`admin@fantomPodRepo.com`),
-			ConfigProperty(#unsecured,	"afPodRepo.unsecured",	true)
+			ConfigProperty(#mongoDbUrl,			"afPodRepo.mongoDbUrl",			`mongodb://localhost:27017/podrepo`),
+			ConfigProperty(#publicUrl,			"afPodRepo.publicUrl",			null),
+			ConfigProperty(#googleAccNo,		"afPodRepo.googleAccNo",		null),
+			ConfigProperty(#googleAccDomain,	"afPodRepo.googleAccDomain",	null),
+//			ConfigProperty(#adminEmail,			"afPodRepo.adminEmail",			null),
+//			ConfigProperty(#unsecured,			"afPodRepo.unsecured",	true)
 		]
 		
 		configFileName	:= (fromCmdArg(Env.cur.args, "-file") ?: fromCmdArg(Env.cur.args, "f")) ?: "config.properties"
-		configFile		:= File.os(configFileName)
+		configFile		:= File.os(configFileName).normalize
 		fileProps		:= configFile.exists ? configFile.readProps : Str:Str[:]
 
 		// override via environment variables
@@ -33,15 +77,15 @@ const class PodRepoConfig {
 		setFromCmdArgs(configProps, Env.cur.args)
 		
 		// override from Env specific props
-		setFromEnvVars(configProps, Env.cur.vars, iocEnv.env)
-		setFromPropsFile(configProps, fileProps,  iocEnv.env)
-		setFromCmdArgs(configProps, Env.cur.args, iocEnv.env)
+		setFromEnvVars(configProps, Env.cur.vars, iocEnv.abbr)
+		setFromPropsFile(configProps, fileProps,  iocEnv.abbr)
+		setFromCmdArgs(configProps, Env.cur.args, iocEnv.abbr)
 		
 		// create the properties
 		fieldVals := Field:Obj?[:]
 		configProps.each { fieldVals[it.field] = it.value }
 		itBlockFunc := Field.makeSetFunc(fieldVals)
-		return PodRepoConfig(itBlockFunc)
+		return PodRepoConfig(itBlockFunc).validate
 	}
 	
 	private static Void setFromEnvVars(ConfigProperty[] props, Str:Str envVars, Str? env := null) {
@@ -54,7 +98,7 @@ const class PodRepoConfig {
 	}
 
 	private static Void setFromPropsFile(ConfigProperty[] props, Str:Str fileProps, Str? env := null) {
-		setFromEnvVars(props, fileProps)
+		setFromEnvVars(props, fileProps, env)
 	}
 
 	private static Void setFromCmdArgs(ConfigProperty[] props, Str[] args, Str? env := null) {
