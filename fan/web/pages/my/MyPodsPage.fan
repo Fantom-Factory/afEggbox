@@ -47,6 +47,10 @@ const mixin MyPodsPage : PrMyPage {
 		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plus(`edit#delete`).encode
 	}
 
+	Str podValidateUrl(RepoPod pod) {
+		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plus(`edit#validate`).encode
+	}
+
 	private FandocUri fandocUri(RepoPod pod) {
 		registry.autobuild(FandocSummaryUri#, [pod.name, pod.version])
 	}

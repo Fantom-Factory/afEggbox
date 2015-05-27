@@ -97,7 +97,7 @@ const mixin InvalidLinkMsgs {
 	}
 	
 	static Str podNotFound(Str podName, Version? podVersion) {
-		"Pod ${podName}" + (podVersion ?: "") + " not found"
+		"Could not find pod ${podName}" + (podVersion ?: "")
 	}
 	
 	static Str invalidTypeSlotCombo() {
@@ -136,4 +136,7 @@ const mixin InvalidLinkMsgs {
 		"Document does not contain the heading ID #${headingId} Available headings: ${headings}"
 	}
 
+	static Str fanSchemeDocDirOnly() {
+		"fan:// scheme may only reference files in the `doc/` directory"
+	}
 }
