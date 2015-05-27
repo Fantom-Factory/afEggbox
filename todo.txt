@@ -16,18 +16,40 @@ Fandoc:
    - fan: scheme
    - pod: scheme
    
+   
+TODO
+====
 
 Breadcrumbs on User / user edit pages
+
 on mypods table, show / highlight public / private pods
 
+users to have a gravatar email field (defaults to normal)
+ - grab default details from gravatar (when save grav email field is diff and fields to be populated are empty)
+
+use icons / ogimages from pods
+ 
+/usersPage/ to view public profiles -> gravatar
+
+Sitemap.xml
+
+Atom feeds
+
+Email errors
+
+favicons
+
+site logo
+
+
+Future
+======
+
+Show stat list
+  new pods vs new updates
+email notifications of new pod uploads
 did you forget your password?
 email confirmation
-
-users to have a gravatar email field (defaults to normal)
-grab default details from gravatar (when save grav email field is diff and fields to be populated are empty)
-
-lib icons in pod
-
 upvote / star a pod
 
 Games:
@@ -36,12 +58,4 @@ Games:
  - public pods / private pods
  - download / install pods
  - no of downloads your pod get
- 
-email notifications of new pod uploads
-
-/usersPage/ to view public profiles -> gravatar
-
-new pods vs new updates
-
-
-
+  

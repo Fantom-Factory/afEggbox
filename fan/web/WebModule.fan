@@ -5,6 +5,7 @@ using afBedSheet
 using afDuvet
 using afFormBean::InputSkins
 using afFormBean::ErrorSkin
+using afGoogleAnalytics::GoogleAnalyticsConfigIds
 
 @SubModule { modules=[BedFrameModule#, FandocModule#] }
 class WebModule {
@@ -64,7 +65,6 @@ class WebModule {
 		methodAdvisors
 			.find { it.method.name.startsWith("renderPage") }
 			.addAdvice |invocation -> Obj?| { 
-			        
 				return dirtyCash.cash |->Obj?| { 
 					return invocation.invoke
 				}
@@ -72,11 +72,11 @@ class WebModule {
 	}
 	
 	@Contribute { serviceType=ApplicationDefaults# }
-	static Void contributeApplicationDefaults(Configuration config, IocEnv iocEnv) {
-//		if (iocEnv.isProd)
-//			config[BedSheetConfigIds.host]				= "http://www.fantomfactory.org"
-//		config[GoogleAnalyticsConfigIds.accountNumber]	= "UA-33997125-4"
-//		config[GoogleAnalyticsConfigIds.accountDomain]	= "//fantomfactory.org"
+	static Void contributeApplicationDefaults(Configuration config, PodRepoConfig repoConfig, IocEnv iocEnv) {
+		
+		config[BedSheetConfigIds.host]					= repoConfig.publicUrl
+		config[GoogleAnalyticsConfigIds.accountNumber]	= repoConfig.googleAccNo
+		config[GoogleAnalyticsConfigIds.accountDomain]	= repoConfig.googleAccDomain
 		
 		config[BedSheetConfigIds.fileAssetCacheControl]	= "max-age=${1day.toSec}"	// it's better than nothing!
 		
