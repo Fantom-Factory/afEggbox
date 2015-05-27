@@ -40,6 +40,7 @@ class WebModule {
 	static Void contributeValueEncoders(Configuration config) {
 		config[RepoPod#]	= config.autobuild(PodValueEncoder#)
 		config[RepoUser#]	= config.autobuild(UserValueEncoder#)
+		config[FandocUri#]	= config.autobuild(FandocUriValueEncoder#)
 	}
 	
 	@Contribute { serviceType=ScriptModules# }

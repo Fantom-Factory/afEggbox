@@ -10,7 +10,7 @@ class Build : BuildPod {
 
 		meta = [
 			"proj.name"		: "Fantom Pod Repository",
-			"afIoc.module"	: "afPodRepo::AppModule",
+			"afIoc.module"	: "afPodRepo::CoreModule",
 			"internal"		: "true",
 			"tags"			: "app",
 			"repo.private"	: "true"

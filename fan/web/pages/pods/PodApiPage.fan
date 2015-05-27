@@ -17,7 +17,6 @@ const mixin PodApiPage : PrPage {
 	}
 	
 	LinkResolverCtx ctx() {
-		// FIXME: should just take a FandocApiUri - don't set type
 		LinkResolverCtx(pod) { it.type = fandocUri.typeName }
 	}
 }

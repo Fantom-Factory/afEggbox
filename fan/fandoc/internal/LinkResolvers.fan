@@ -9,12 +9,19 @@ class LinkResolvers {
 		this.resolvers = resolvers
 	}
 	
-	Uri? resolve(Str uri, LinkResolverCtx ctx) {
-		InvalidLink.setLinkBeingResolved(uri)
-		links := InvalidLink.invalidLinks?.size
-		resolved := resolvers.eachWhile { it.resolve(uri, ctx) }
-		if (resolved == null && InvalidLink.invalidLinks?.size == links)
-			InvalidLink.invalidLink("Could not resolve link")
+	Uri? resolve(Str uriStr, LinkResolverCtx ctx) {
+		InvalidLinks.setLinkBeingResolved(uriStr)
+		links := InvalidLinks.invalidLinks?.size
+
+		try uriStr.toUri
+		catch {
+			InvalidLinks.add("Could not parse link as URI")
+			return null
+		}
+		
+		resolved := resolvers.eachWhile { it.resolve(uriStr, ctx) }
+		if (resolved == null && InvalidLinks.invalidLinks?.size == links)
+			InvalidLinks.add("Could not resolve link")
 		return resolved
 	}
 }

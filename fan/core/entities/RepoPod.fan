@@ -5,8 +5,10 @@ using fanr
 
 @Entity { name = "pod" }
 class RepoPod {
-	@Inject private const RepoUserDao?		userDao
-	@Inject private const RepoPodFileDao?	podFileDao
+	@Inject private RepoPodDao?		podDao
+	@Inject private RepoUserDao?	userDao
+	@Inject private RepoPodFileDao?	podFileDao
+	@Inject private InvalidLinks?	invalidLinkFinder
 
 	@Property{}	Str?			_id
 	@Property{}	Str				name
@@ -22,6 +24,8 @@ class RepoPod {
 					get { "${name} ${version}" }
 					private set { }
 				}
+	@Property{}	InvalidLink[]	invalidLinks
+	@Property{}	DateTime?		linksValidatedOn
 
 	new make(|This|f) { f(this) }
 	
@@ -37,9 +41,20 @@ class RepoPod {
 			it.&isPublic	= meta.isPublic		// don't worry if the two get out of sync, we only use the non-meta one
 			it.&isDeprecated= meta.isDeprecated	// don't worry if the two get out of sync, we only use the non-meta one
 			it.ownerId		= user._id
+			it.invalidLinks	= InvalidLink#.emptyList
 		}
 	}
 	
+	This save() {
+		(RepoPod) podDao.update(this)
+	}
+	
+	This validateDocumentLinks() {
+		invalidLinks = invalidLinkFinder.findInvalidLinks(this)
+		linksValidatedOn = DateTime.now
+		return this
+	}
+
 	Str:Obj toJsonObj() {
 		meta.meta
 	}
@@ -76,7 +91,6 @@ class RepoPod {
 			overview := (Heading?) null
 			foundOverview := false
 			elems := DocElem[,]
-			// FIXME: use Fandoc service
 			FandocParser().parseStr(podFd).children.find |kid->Bool| {
 				if (foundOverview) {
 					if ((kid.id == DocNodeId.heading) && ((Heading) kid).level == overview.level)
@@ -216,4 +230,12 @@ class RepoPodMeta {
 		if (meta[key] == null || meta[key].isEmpty)
 			throw PodPublishErr(Msgs.publish_missingPodMeta(key))
 	}
+}
+
+const class InvalidLink {
+	@Property{} const FandocUri	where
+	@Property{}	const Str		link
+	@Property{}	const Str		msg
+
+	new make(|This|in) { in(this) }
 }

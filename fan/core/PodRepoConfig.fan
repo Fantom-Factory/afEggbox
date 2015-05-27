@@ -73,11 +73,6 @@ const class PodRepoConfig {
 		}
 		return null
 	}
-	
-	static Void main() {
-		a:=PodRepoConfig(IocEnv())
-		echo(a.mongoDbUrl)
-	}
 }
 
 class ConfigProperty {

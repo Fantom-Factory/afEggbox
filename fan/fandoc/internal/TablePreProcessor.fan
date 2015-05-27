@@ -11,14 +11,12 @@ internal const class TablePreProcessor : PreTextProcessor {
 		
 		table := tableParser.parseTable(preText.splitLines)
 		
-		echo(table)
 		skin.table
 		if (!table.first.isEmpty) {
 			skin.thead
 			skin.tr
 			table.first.each { 
 				skin.th
-				// FIXME: need linkresolver
 				fandoc.writeStrToHtml(it, ctx, skin)
 				skin.thEnd
 			}
@@ -31,7 +29,6 @@ internal const class TablePreProcessor : PreTextProcessor {
 			skin.tr
 			row.each { 
 				skin.td
-				// FIXME: need linkresolver
 				fandoc.writeStrToHtml(it, ctx, skin)
 				skin.tdEnd }
 			skin.trEnd			
