@@ -5,7 +5,7 @@ using afPillow
 using syntax
 using web
 
-@Page { disableRouting = true }
+@Page { disableRoutes = true }
 const mixin PodSrcPage : PrPage {
 
 	@PageContext	abstract FandocSrcUri	fandocUri
@@ -14,5 +14,7 @@ const mixin PodSrcPage : PrPage {
 		fandocUri.pod
 	}
 	
-	override Bool isPublic() { pod.isPublic	}
+	Bool isPublic() {
+		pod.isPublic
+	}
 }

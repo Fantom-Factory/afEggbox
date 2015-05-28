@@ -2,7 +2,7 @@ using afIoc
 using afEfanXtra
 using afPillow
 
-@Page { disableRouting = true }
+@Page { disableRoutes = true }
 const mixin PodsPage : PrPage {
 
 	@Inject abstract Registry		registry

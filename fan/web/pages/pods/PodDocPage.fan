@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 using fandoc
 
-@Page { disableRouting = true }
+@Page { disableRoutes = true }
 const mixin PodDocPage : PrPage {
 
 	@PageContext	abstract FandocDocUri		fandocUri
@@ -21,5 +21,7 @@ const mixin PodDocPage : PrPage {
 		fandocUri.toApiUri.toClientUrl.encode
 	}
 	
-	override Bool isPublic() { pod.isPublic	}
+	Bool isPublic() {
+		pod.isPublic
+	}
 }

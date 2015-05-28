@@ -13,7 +13,7 @@ const class PodRoutes : Route {
 	new make(|This|in) { in(this) }
 	
 	** Returns a hint at what this route matches on. Used for debugging and in 404 / 500 error pages. 
-	override Str matchHint() { "GET - /pods/***" }
+	override Str matchHint() { "GET /pods/***" }
 
 	** Returns a hint at what response this route returns. Used for debugging and in 404 / 500 error pages. 
 	override Str responseHint() { "Pod Pages" }
