@@ -16,14 +16,16 @@ const mixin Layout : PrComponent {
 
 	abstract Str? title
 	abstract Str? pageId
+	abstract Bool isPublic
 
 	@Config { id="afIocEnv.isProd" }
 	@Inject abstract Bool	inProd
 
 	@InitRender
-	Void init(Str title) {
-		this.title 	= title
-		this.pageId = pageMeta.pageType.name.decapitalize
+	Void init(Bool isPublic, Str title) {
+		this.isPublic	= isPublic
+		this.title 		= title
+		this.pageId 	= pageMeta.pageType.name.decapitalize
 		
 		injector.injectStylesheet.fromLocalUrl(`/css/website.min.css`)
 		injector.injectRequireModule("bootstrap")
@@ -38,11 +40,7 @@ const mixin Layout : PrComponent {
 	}
 	
 	Bool googleAnalyticsEnabled() {
-		if (!repoConfig.googleAnalyticsEnabled)
-			return false
-
-		page := pages.getRenderingPage
-		return page is PrPage && ((PrPage) page).isPublic
+		repoConfig.googleAnalyticsEnabled ? isPublic : false
 	}
 }
 

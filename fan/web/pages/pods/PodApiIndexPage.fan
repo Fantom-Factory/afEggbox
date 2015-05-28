@@ -3,7 +3,7 @@ using afBedSheet
 using afEfanXtra
 using afPillow
 
-@Page { disableRouting = true }
+@Page { disableRoutes = true }
 const mixin PodApiIndexPage : PrPage {
 
 	@PageContext	abstract FandocApiUri	fandocUri
@@ -12,6 +12,7 @@ const mixin PodApiIndexPage : PrPage {
 		fandocUri.pod
 	}
 
-	override Bool isPublic() { pod.isPublic	}
-
+	Bool isPublic() {
+		pod.isPublic
+	}
 }

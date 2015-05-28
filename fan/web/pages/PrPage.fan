@@ -16,9 +16,4 @@ const mixin PrPage : PrComponent {
 	Str podsUrl() {
 		pages[PodsPage#].pageUrl.encode
 	}
-	
-	** Public pages may be logged with google analytics
-	virtual Bool isPublic() {
-		true
-	}
 }

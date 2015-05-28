@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 using afFormBean
 
-@Page { disableRouting = true }
+@Page { disableRoutes = true }
 const mixin PodEditPage : PrPage {
 
 					abstract RepoPod		pod
@@ -16,8 +16,6 @@ const mixin PodEditPage : PrPage {
 					abstract PodEditDetails	editDetails
 	@Inject { type=PodDeleteDetails# } 
 					abstract FormBean		podDeleteFormBean
-
-	override Bool isPublic() { false }
 
 	@InitRender
 	Void initRender(RepoPod pod) {
@@ -48,6 +46,10 @@ const mixin PodEditPage : PrPage {
 	
 	Str deleteUrl() {
 		`/pods/${pod.name}/${pod.version}/edit/delete`.encode
+	}
+
+	Bool isPublic() {
+		pod.isPublic
 	}
 
 	@PageEvent { httpMethod="POST" }

@@ -1,4 +1,4 @@
--- app.renderLayout("Pods")
+-- app.renderLayout(isPublic, "Pods")
 
 	== app.renderPodBreadcrumbs(fandocUri)
 
@@ -19,7 +19,7 @@
 			pre |
 				depends = ["sys 1.0", ..., "afBedSheet 1.4.10 - 1.4"]
 		
-			h2	Pod Information
+			h2	Information
 			p	Meta information from the Fantom Pod:
 			ul
 				li	Published by - Micky Mouse
@@ -37,3 +37,7 @@
 				a.btn.btn-primary (href="${editUrl}") Edit Pod Details
 			== app.renderPodToc(fandocUri)
 		
+			h3	Other Versions
+			ul.list-unstyled
+				li	2.00
+				li	1.87

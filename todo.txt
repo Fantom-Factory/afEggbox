@@ -15,37 +15,34 @@ Fandoc:
    - fandoc: scheme
    - fan: scheme
    - pod: scheme
-   
-   
+
+ 
+
 TODO
 ====
+pod summary pages
 
 users to have a gravatar email field (defaults to normal)
  - grab default details from gravatar (when save grav email field is diff and fields to be populated are empty)
-
-use icons / ogimages from pods
- 
 /usersPage/ to view public profiles -> gravatar
-
+user page
+ - list pods published
+ 
 Sitemap.xml
 
 Atom feeds
 
 Email errors
 
-favicons
-
 site logo
-
-help pages
-
-pod summary pages
+favicons
+use icons / ogimages from pods
 
 front page
-
-user page
+help pages
 
 page titles
+
 
 
 Future
