@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 using afFormBean
 
-@Page { disableRoutes = true }
+@Page { disableRouting = true }
 const mixin PodEditPage : PrPage {
 
 					abstract RepoPod		pod
@@ -17,12 +17,15 @@ const mixin PodEditPage : PrPage {
 	@Inject { type=PodDeleteDetails# } 
 					abstract FormBean		podDeleteFormBean
 
+	override Bool isPublic() { false }
+
 	@InitRender
 	Void initRender(RepoPod pod) {
 		this.pod		 = pod
 		this.editDetails = PodEditDetails(pod)
 	}
 	
+
 	Str:Str[] invalidLinkMap() {
 		map := Str:Str[][:] { ordered = true }
 		pod.invalidLinks.each |link| {

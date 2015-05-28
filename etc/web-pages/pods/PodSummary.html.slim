@@ -2,17 +2,38 @@
 
 	== app.renderPodBreadcrumbs(fandocUri)
 
-	-- if (loggedIn && loggedInUser.owns(pod))
-		div.pull-right
-			a.btn.btn-primary (href="${editUrl}") Edit Pod Details
-
 	div.row
 		article.col-sm-9
 			h1.podHeading	${pod.meta.projectName} ${pod.version}
 				div.small	${pod.meta.summary}
-		
+
 			== aboutHtml
+		
+			h2	Install
+			p	To install ${pod.meta.projectName} with the Fantom Repository Manager (<a class="externalLink" href="http://fantom.org/doc/docFanr/Tool.html#install">fanr</a>), cut'n'paste the following into a command prompt, terminal or shell: 
+			pre |
+				fanr install -r http://repo.status302.com/fanr/ afBedSheet
+			
+			h2	Configure
+			p	To use ${pod.meta.projectName} in a Fantom project, add it as dependency in the project's <code>build.fan</code>:
+			pre |
+				depends = ["sys 1.0", ..., "afBedSheet 1.4.10 - 1.4"]
+		
+			h2	Pod Information
+			p	Meta information from the Fantom Pod:
+			ul
+				li	Published by - Micky Mouse
+				li	Organisation - Alien-Factory
+				li	File size - 334.56 kB
+				li	Licence - The MIT Licence
+				li	Built on - 25 Apr 2015
+				li	Source code at https://bitbucket.org/AlienFactory/afbedsheet
+				li	Tags - Web
+				li	Depends on - afBeanUtils, afConcurrent, afIoc, afIocConfig, afIocEnv, afPlastic, concurrent, inet, util, web, webmod, wisp
+				li	Used by - afBedNap, afBounce, afColdFeet, afDuvet, afFormBean, afPillow, afSitemap
 
 		nav.col-sm-3.hidden-xs.contents
+			-- if (loggedIn && loggedInUser.owns(pod))
+				a.btn.btn-primary (href="${editUrl}") Edit Pod Details
 			== app.renderPodToc(fandocUri)
 		

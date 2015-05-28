@@ -27,8 +27,6 @@ use icons / ogimages from pods
  
 /usersPage/ to view public profiles -> gravatar
 
-google anal
-
 Sitemap.xml
 
 Atom feeds

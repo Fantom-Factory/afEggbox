@@ -41,9 +41,8 @@ const mixin Layout : PrComponent {
 		if (!repoConfig.googleAnalyticsEnabled)
 			return false
 
-		// FIXME: how to tell if a page is public or private?
-		
-		return false
+		page := pages.getRenderingPage
+		return page is PrPage && ((PrPage) page).isPublic
 	}
 }
 

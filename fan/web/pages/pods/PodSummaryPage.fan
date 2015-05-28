@@ -3,7 +3,7 @@ using afBedSheet
 using afEfanXtra
 using afPillow
 
-@Page { disableRoutes = true }
+@Page { disableRouting = true }
 const mixin PodSummaryPage : PrPage {
 
 	@PageContext	abstract FandocSummaryUri	fandocUri
@@ -22,4 +22,5 @@ const mixin PodSummaryPage : PrPage {
 		fandocUri.toClientUrl.plusSlash.plusName("edit").encode
 	}
 
+	override Bool isPublic() { pod.isPublic	}
 }
