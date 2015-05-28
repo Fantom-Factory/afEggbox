@@ -168,48 +168,48 @@ class RepoPodMeta {
 	}
 
 	Bool isInternal {
-		get { Bool.fromStr(meta["repo.internal"] ?: "false", false) ?: false }
-		set { meta["repo.internal"] = it.toStr }
+		get { get("repo.internal")?.toBool(false) ?: false }
+		set { set("repo.internal", it)	}
 	}
 
 	Str summary {
-		get { meta["pod.summary"] }
-		set { meta["pod.summary"] = it }
+		get { get("pod.summary") ?: ""	}
+		set { set("pod.summary", it)	}
 	}
 	
 	Str projectName {
-		get { meta["proj.name"] ?: meta["pod.name"] }
-		set { meta["proj.name"] = it }
+		get { get("proj.name") ?: get("pod.name") }
+		set { set("proj.name", it)		}
 	}
 
 	Uri? projectUrl {
-		get { meta["proj.uri"]?.toUri }
-		set { meta["proj.uri"] = it.toStr }
+		get { get("proj.uri")?.toUri	}
+		set { set("proj.uri", it)		}
 	}
 	
 	Str? licenceName {
-		get { meta["licence.name"] }
-		set { meta["licence.name"] = it }
+		get { get("licence.name")		}
+		set { set("licence.name", it)	}
 	}
 
 	Str? orgName {
-		get { meta["org.name"] }
-		set { meta["org.name"] = it }
+		get { get("org.name")			}
+		set { set("org.name", it)		}
 	}
 
 	Uri? orgUrl {
-		get { meta["org.uri"]?.toUri }
-		set { meta["org.uri"] = it.toStr }
+		get { get("org.uri")?.toUri		}
+		set { set("org.uri", it)		}
 	}
 
 	Str? vcsName {
-		get { meta["vcs.name"] }
-		set { meta["vcs.name"] = it }
+		get { get("vcs.name")			}
+		set { set("vcs.name", it)		}
 	}
 
 	Uri? vcsUrl {
-		get { meta["vcs.uri"]?.toUri }
-		set { meta["vcs.uri"] = it.toStr }
+		get { get("vcs.uri")?.toUri		}
+		set { set("vcs.uri", it)		}
 	}
 		
 	@Operator
@@ -218,8 +218,12 @@ class RepoPodMeta {
 	}
 	
 	@Operator
-	Void set(Str key, Str val) {
-		meta[key] = val
+	Void set(Str key, Obj? value) {
+		val := value?.toStr?.trimToNull
+		if (val == null)
+			meta.remove(key)
+		else
+			meta[key] = val
 	}
 	
 	Bool containsKey(Str key) {

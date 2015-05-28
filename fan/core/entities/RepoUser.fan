@@ -10,8 +10,14 @@ class RepoUser {
 	@HtmlInput { type="static" }
 	@Property{}	Uri		email
 	
+	@HtmlInput { type="email" }
+	@Property{}	Uri?	gravatarEmail
+	
 	@HtmlInput { type="text"; required=true; minLength=3; maxLength=128 }
 	@Property{}	Str		screenName
+
+	@HtmlInput { type="textarea"; minLength=3; maxLength=1024 }
+	@Property{}	Str?	aboutMe
 
 	@Property{}	Str		userSalt
 	@Property{}	Str		userSecret

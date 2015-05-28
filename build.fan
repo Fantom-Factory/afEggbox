@@ -38,7 +38,7 @@ class Build : BuildPod {
 			// ---- Web -------------------------
 			"afBedSheet   1.4.8  - 1.4",
 			"afEfanXtra   1.1.2  - 1.1",
-			"afPillow     1.0.22 - 1.0",
+			"afPillow     1.0.23 - 1.0",
 			"afDuvet      1.0.8  - 1.0",
 			"afSlim       1.1.16 - 1.1",
 			"afFormBean   0+",
