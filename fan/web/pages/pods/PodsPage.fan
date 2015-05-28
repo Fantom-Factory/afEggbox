@@ -31,10 +31,6 @@ const mixin PodsPage : PrPage {
 		return ""
 	}
 	
-	Str userUrl(RepoUser user) {
-		pages[UsersPage#].withContext([user]).pageUrl.encode
-	}
-
 	private FandocUri fandocUri(RepoPod pod) {
 		registry.autobuild(FandocSummaryUri#, [pod.name, pod.version])
 	}

@@ -18,6 +18,7 @@ class CoreModule {
 		defs.add(RepoPodApiDao#)
 		
 		defs.add(DirtyCash#)
+		defs.add(CorePods#)
 	}
 
 	@Build

@@ -25,6 +25,10 @@ const mixin PrComponent : EfanComponent {
 	Str pageUrl(Type pageType, Obj?[]? pageCtx := null) {
 		pages[pageType].withContext(pageCtx).pageUrl.encode
 	}
+
+	Str userUrl(RepoUser user) {
+		pageUrl(UsersPage#, [user])
+	}
 	
 	** TODO: we could make this a contributable service
 	** this is great, because you can't add format methods to Dates and other objs outside of your control

@@ -31,10 +31,10 @@ internal const class FandocLinkResolver : LinkResolver {
 
 
 abstract const class FandocUri {
-	private static	const Str[] corePodNames := "docIntro docLang docFanr docTools build compiler compilerDoc compilerJava compilerJs concurrent dom email fandoc fanr fansh flux fluxText fwt gfx inet obix sql syntax sys util web webfwt webmod wisp xml".lower.split
 	@Inject const Fandoc		fandocRenderer
 	@Inject const Registry		reg
 	@Inject const RepoPodDao	podDao
+	@Inject const CorePods		corePods
 			const Str 			podName
 			const Version?		podVersion
 
@@ -141,9 +141,10 @@ abstract const class FandocUri {
 		
 		podDao 		:= (RepoPodDao)		reg.serviceById(RepoPodDao#.qname)
 		podApiDao	:= (RepoPodApiDao)	reg.serviceById(RepoPodApiDao#.qname)
+		corePods	:= (CorePods)		reg.serviceById(CorePods#.qname)
 		pod 		:= podDao.findOne(podName) 
 		
-		if (pod == null && corePodNames.contains(podName.lower)) {
+		if (pod == null && corePods.isCorePod(podName)) {
 			slotName	:= (Str?) null
 			if (typeName.contains(".") && typeName.split('.').size == 2 && typeName[0].isUpper) {
 				slotName = typeName.split('.').getSafe(1)
@@ -191,7 +192,7 @@ abstract const class FandocUri {
 	}
 
 	Bool isCorePod() {
-		podDao.findOne(podName, podVersion) == null && corePodNames.contains(podName.lower)
+		podDao.findOne(podName, podVersion) == null && corePods.isCorePod(podName)
 	}
 
 	abstract FandocUri? toParentUri()
