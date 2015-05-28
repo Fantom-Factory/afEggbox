@@ -8,6 +8,7 @@ const mixin RepoPodDao : EntityDao {
 	@Operator
 	abstract RepoPod?		get(Str name, Bool checked := true)
 	abstract RepoPod[]		findAll()
+	abstract RepoPod[]		findAllVersions(Str name)
 	abstract RepoPod? 		findOne(Str name, Version? version := null)
 
 	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)
@@ -59,6 +60,10 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 
 	override RepoPod[] findAll() {
 		datastore.query.orderBy("_id").findAll
+	}
+	
+	override RepoPod[] findAllVersions(Str name) {
+		datastore.query(field("name").eq(name)).orderBy("-_id").findAll
 	}
 	
 	override RepoPod? findOne(Str name, Version? version := null) {

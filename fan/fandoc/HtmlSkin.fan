@@ -98,8 +98,12 @@ internal class BootstrapHtmlSkin : DefaultHtmlSkin {
 	override This a(Uri href, Bool broken) {
 		if (broken)
 			w("<a").attr("class", "brokenLink").attr("rel", "nofollow").attr("href", href).attr("title", "Broken Link").w(">")
-		else
-			w("<a").attr("href", href).w(">")
+		else {
+			w("<a")
+			if (href.isAbs)
+				attr("class", "externalLink")
+			attr("href", href).w(">")
+		}
 		return this
 	}
 	

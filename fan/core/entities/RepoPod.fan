@@ -9,6 +9,7 @@ class RepoPod {
 	@Inject private RepoUserDao?	userDao
 	@Inject private RepoPodFileDao?	podFileDao
 	@Inject private InvalidLinks?	invalidLinkFinder
+	@Inject private Registry?		registry
 
 	@Property{}	Str?			_id
 	@Property{}	Str				name
@@ -76,8 +77,16 @@ class RepoPod {
 		return summary
 	}
 	
+	Depend[] dependsOn() {
+		meta["pod.depends"].split(';').map { Depend(it, false) }.exclude { it == null }.sort |Depend p1, Depend p2 -> Int| { p1.name <=> p2.name }
+	}
+	
 	RepoUser owner() {
 		userDao[ownerId]
+	}
+	
+	FandocSummaryUri toSummaryUri() {
+		registry.autobuild(FandocSummaryUri#, [name, version])
 	}
 	
 	private Str findAboutFandoc(Str:Str metaProps, Uri:Buf contents) {

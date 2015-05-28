@@ -11,33 +11,57 @@
 		
 			h2	Install
 			p	To install ${pod.meta.projectName} with the Fantom Repository Manager (<a class="externalLink" href="http://fantom.org/doc/docFanr/Tool.html#install">fanr</a>), cut'n'paste the following into a command prompt, terminal or shell: 
-			pre |
-				fanr install -r http://repo.status302.com/fanr/ afBedSheet
+				
+			a [href="#" onclick="return copyInstallText();" onmouseup="return false;" title="Click to hightlight, Ctrl+C to copy"]
+				pre.installText
+					input [type="text" readonly="readonly" value="fanr install -r http://repo.fantomfactory.org/fanr/ ${pod.name}" onfocus="return copyInstallText();" onmouseup="return false;"]
+					//i.fa.fa-clipboard.copyIcon
 			
 			h2	Configure
 			p	To use ${pod.meta.projectName} in a Fantom project, add it as dependency in the project's <code>build.fan</code>:
 			pre |
-				depends = ["sys 1.0", ..., "afBedSheet 1.4.10 - 1.4"]
+				depends = ["sys 1.0", ..., "${pod.name} ${Version(pod.version.segments[0..2])} - ${Version(pod.version.segments[0..1])}"]
 		
 			h2	Information
-			p	Meta information from the Fantom Pod:
+			p	Meta information on the ${pod.meta.projectName} pod:
 			ul
-				li	Published by - Micky Mouse
-				li	Organisation - Alien-Factory
-				li	File size - 334.56 kB
-				li	Licence - The MIT Licence
-				li	Built on - 25 Apr 2015
-				li	Source code at https://bitbucket.org/AlienFactory/afbedsheet
-				li	Tags - Web
-				li	Depends on - afBeanUtils, afConcurrent, afIoc, afIocConfig, afIocEnv, afPlastic, concurrent, inet, util, web, webmod, wisp
-				li	Used by - afBedNap, afBounce, afColdFeet, afDuvet, afFormBean, afPillow, afSitemap
+				li	Published by - 
+					a (href="${userUrl(pod.owner)}") ${pod.owner.screenName}
+				-- if (pod.meta.orgName != null)
+					li	Organisation - 
+						-- if (pod.meta.orgUrl != null)
+							a.externalLink (href="${pod.meta.orgUrl.encode}") ${pod.meta.orgName}
+						-- else
+							| ${pod.meta.orgName}
+				li	File size - $${toFileSize(pod.fileSize)}
+				-- if (pod.meta.licenceName != null)
+					li	Licence - ${pod.meta.licenceName}
+				li	Built on - ${format(pod.builtOn)}
+				-- if (pod.meta.vcsUrl != null)
+					li	Source code available 
+						-- if (pod.meta.vcsName != null)
+							| via ${pod.meta.vcsName} 
+						| at 
+						a.externalLink (href="${pod.meta.vcsUrl.encode}") ${pod.meta.vcsUrl}
+				//li	Tags - Web
+				li	Depends on - 
+					== pod.dependsOn.join(", ") { linkToPod(it) }
+				//li	Used by - afBedNap, afBounce, afColdFeet, afDuvet, afFormBean, afPillow, afSitemap
 
 		nav.col-sm-3.hidden-xs.contents
 			-- if (loggedIn && loggedInUser.owns(pod))
 				a.btn.btn-primary (href="${editUrl}") Edit Pod Details
 			== app.renderPodToc(fandocUri)
 		
-			h3	Other Versions
-			ul.list-unstyled
-				li	2.00
-				li	1.87
+			-- versions := podDao.findAllVersions(pod.name)
+			-- if (versions.size > 1)
+				h3	${versions.size} Other Versions
+				ul
+					-- versions.each
+						li;	a (href="${it.toSummaryUri.toClientUrl.encode}") ${it.version}
+
+	script |
+		function copyInstallText() {
+			document.querySelector(".installText input").select();
+			return false;
+		}

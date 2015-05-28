@@ -35,10 +35,6 @@ const mixin MyPodsPage : PrMyPage {
 		return ""
 	}
 
-	Str userUrl(RepoUser user) {
-		pages[UsersPage#].withContext([user]).pageUrl.encode
-	}
-
 	Str podEditUrl(RepoPod pod) {
 		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plusName("edit").encode
 	}

@@ -14,6 +14,6 @@ const mixin PrPage : PrComponent {
 	}
 	
 	Str podsUrl() {
-		pages[PodsPage#].pageUrl.encode
+		pageUrl(PodsPage#)
 	}
 }
