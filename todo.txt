@@ -20,17 +20,16 @@ Fandoc:
 
 TODO
 ====
-page titles
+add pod version to page titles
 
-user page
- - list pods published
+admin user
+auto login
 
 add atom feed links + autodiscovery
 
 seo pod summary page
 
-admin user
-auto login
+ID anchor offset hack
 
 site logo
 favicons
@@ -63,6 +62,7 @@ did you forget your password?
 email confirmation
 upvote / star a pod
 contents.fog
+Remember me login checkbox
 
 Games:
  - No of pods uploaded
