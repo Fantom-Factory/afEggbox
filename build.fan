@@ -45,9 +45,11 @@ class Build : BuildPod {
 			"afColdFeet   1.3.4  - 1.3",
 			"afSitemap    1.0.0  - 1.0",
 			"afGoogleAnalytics 0.0  - 1.0",
+			"afAtom       1.0.0  - 1.0",
 
 			"syntax       1.0.67 - 1.0",
 			"web          1.0.67 - 1.0",
+			"xml          1.0.67 - 1.0",
 
 			// ---- Test ------------------------
 			"util         1.0.67 - 1.0",

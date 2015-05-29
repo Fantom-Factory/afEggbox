@@ -249,6 +249,11 @@ class RepoPodMeta {
 		get { get("vcs.uri")?.toUri		}
 		set { set("vcs.uri", it)		}
 	}
+
+	Str? tags {
+		get { get("repo.tags")			}
+		set { set("repo.tags", it)		}
+	}
 		
 	@Operator
 	Str? get(Str key) {

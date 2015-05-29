@@ -9,6 +9,7 @@ const class PodRoutes : Route {
 	@Inject	private const RepoPodDao	podDao
 	@Inject private const Backdoor		backdoor
 	@Inject private const Registry		reg
+	@Inject private const AtomFeedPages	atomPages
 
 	new make(|This|in) { in(this) }
 	
@@ -34,13 +35,19 @@ const class PodRoutes : Route {
 		if (podName == null)
 			return pages.renderPage(PodsPage#)
 		
+		if (reqPath.isEmpty && podName == "feed.atom")
+			return atomPages.generateAll
+		
 		podVersion	:= Version((reqPath.isEmpty ? null : reqPath.first) ?: "", false)
 		if (podVersion != null)	chomp(reqPath)
 		podSection	:= chomp(reqPath)
 
+		if (reqPath.isEmpty && podSection == "feed.atom")
+			return atomPages.generateForPod(podName)			
+
 		// --> /pods/afSlim/edit
 		// --> /pods/afSlim/1.1.14/edit
-		if (podSection == "edit" && reqPath.isEmpty) {
+		if (reqPath.isEmpty && podSection == "edit") {
 			if (!userSession.isLoggedIn && backdoor.isOpen)
 				backdoor.login
 

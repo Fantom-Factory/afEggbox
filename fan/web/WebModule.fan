@@ -15,6 +15,8 @@ class WebModule {
 		defs.add(ErrorSkin#, BootstrapErrorSkin#)
 		defs.add(Backdoor#)
 		defs.add(SitemapPages#)
+		defs.add(AtomFeedPages#)
+		defs.add(AtomFeedGenerator#)
 	}
 
 	@Contribute { serviceType=Routes# }
