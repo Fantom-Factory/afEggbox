@@ -10,13 +10,16 @@ class RepoUser {
 	@HtmlInput { type="static" }
 	@Property{}	Uri		email
 	
-	@HtmlInput { type="email" }
-	@Property{}	Uri?	gravatarEmail
-	
 	@HtmlInput { type="text"; required=true; minLength=3; maxLength=128 }
 	@Property{}	Str		screenName
 
-	@HtmlInput { type="textarea"; minLength=3; maxLength=1024 }
+	@HtmlInput { type="email"; minLength=3; maxLength=128 }
+	@Property{}	Uri?	gravatarEmail
+	
+	@HtmlInput { type="text"; minLength=3; maxLength=128 }
+	@Property{}	Str?	realName
+
+	@HtmlInput { type="textarea"; minLength=3; maxLength=2048 }
 	@Property{}	Str?	aboutMe
 
 	@Property{}	Str		userSalt
@@ -43,7 +46,7 @@ class RepoUser {
 	
 	Str gravatarUrl() {
 		// identicon, monsterid, wavatar, retro
-		hash := email.toStr.trim.lower.toBuf.toDigest("MD5").toHex
+		hash := (gravatarEmail ?: email).toStr.trim.lower.toBuf.toDigest("MD5").toHex
 		return `http://www.gravatar.com/avatar/${hash}`.plusQuery(["s":"120", "d":"monsterid", "r":"x"]).encode
 	}
 

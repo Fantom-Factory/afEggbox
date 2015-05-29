@@ -47,11 +47,10 @@ const class FanrRepo {
 		}
 		
 		if (pod.isPublic) {
-			if (pod.meta.licenceName == null || pod.meta.licenceName.isEmpty)
-				throw PodPublishErr(Msgs.publish_missingPublicPodMeta("licence.name' or 'license.name"))
-			if ((pod.meta.vcsUrl == null || pod.meta.vcsUrl.toStr.isEmpty) && (pod.meta.orgUrl == null || pod.meta.orgUrl.toStr.isEmpty))
-				throw PodPublishErr(Msgs.publish_missingPublicPodMeta("vcs.uri' or 'org.uri"))
-		}	
+			errs := pod.validateForPublicUse
+			if (errs.size > 0)
+				throw PodPublishErr(errs.first)
+		}
 
 		// all good - commit the data to the database
 		pod 	 = podDao.create(pod)

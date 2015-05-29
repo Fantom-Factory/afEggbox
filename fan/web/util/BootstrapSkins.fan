@@ -15,10 +15,11 @@ const mixin BootstrapSkin : InputSkin {
 		html	+= """<div class="form-group${errCss}">"""
 		html	+= """<label for="${skinCtx.name}">${skinCtx.label}</label>"""
 		html	+= inputStr(attrs)
-		html	+= """</div>"""
 
 		if (hint != null)
-			html += """<span id="${skinCtx.name}-helpBlock" class="help-block">${hint}</span>"""				
+			html += """<span id="${skinCtx.name}-helpBlock" class="help-block">${hint}</span>"""
+
+		html	+= """</div>"""
 
 		return html + "\n"
 	}
@@ -50,12 +51,19 @@ const class BootstrapStaticSkin : BootstrapSkin {
 
 const class BootstrapCheckboxSkin : BootstrapSkin {
 	override Str render(SkinCtx skinCtx) {
+		hint	:= skinCtx.input.hint ?: skinCtx.msg("field.${skinCtx.name}.hint")
 		checked := (skinCtx.value == "true" || skinCtx.value == "on") ? " checked" : Str.defVal
+		attMap	:= hint == null ? Str:Str[:] : ["aria-describedby" : "${skinCtx.name}-helpBlock"]
+		attrs	:= skinCtx.renderAttributes(attMap)
 		html	:= Str.defVal
 		html	+= """<div class="checkbox">"""
 		html	+= """<label>"""
-		html	+= """<input type="checkbox" ${skinCtx.renderAttributes}${checked}> ${skinCtx.label}"""
+		html	+= """<input type="checkbox" ${attrs}${checked}> ${skinCtx.label}"""
 		html	+= """</label>"""
+
+		if (hint != null)
+			html += """<span id="${skinCtx.name}-helpBlock" class="help-block">${hint}</span>"""
+		
 		html	+= """</div>"""
 		return html + "\n"
 	}

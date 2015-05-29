@@ -58,6 +58,13 @@ const mixin PodEditPage : PrPage {
 			return null
 
 		podEditFormBean.updateBean(editDetails)
+		if (pod.isPublic) {
+			errs := pod.validateForPublicUse
+			if (errs.size > 0) {
+				podEditFormBean.errorMsgs.addAll(errs)
+				return null
+			}
+		}		
 		
 		podRepo.update(pod)
 //		userActivity.logPodUpdated
@@ -105,24 +112,6 @@ class PodEditDetails {
 		this.pod = pod
 	}
 
-	@HtmlInput { type="checkbox" }
-	Bool isPublic {
-		get { pod.isPublic }
-		set { pod.isPublic = it	}
-	}
-
-	@HtmlInput { type="checkbox" }
-	Bool isDeprecated {
-		get { pod.isDeprecated }
-		set { pod.isDeprecated = it }
-	}
-
-	@HtmlInput { type="checkbox" }
-	Bool isInternal {
-		get { pod.meta.isInternal }
-		set { pod.meta.isInternal = it }
-	}
-
 	@HtmlInput { type="text"; placeholder="Project Name"; attributes="autocomplete=\"off\""; minLength=3; maxLength=128 }
 	Str projectName {
 		get { pod.meta.projectName }
@@ -141,6 +130,24 @@ class PodEditDetails {
 		set { pod.meta.summary  = it }
 	}
 
+	@HtmlInput { type="checkbox" }
+	Bool isPublic {
+		get { pod.isPublic }
+		set { pod.isPublic = it	}
+	}
+
+	@HtmlInput { type="checkbox" }
+	Bool isDeprecated {
+		get { pod.isDeprecated }
+		set { pod.isDeprecated = it }
+	}
+
+	@HtmlInput { type="checkbox" }
+	Bool isInternal {
+		get { pod.meta.isInternal }
+		set { pod.meta.isInternal = it }
+	}
+
 	@HtmlInput { type="text"; placeholder="Organisation Name"; minLength=3; maxLength=256 }
 	Str organisationName {
 		get { pod.meta.orgName ?: "" }
@@ -153,8 +160,8 @@ class PodEditDetails {
 		set { pod.meta.orgUrl  = it }
 	}
 
-	@HtmlInput { type="text"; placeholder="licenceName"; minLength=3; maxLength=128 }
-	Str? licenceName {
+	@HtmlInput { type="text"; placeholder="Licence Name"; minLength=3; maxLength=128 }
+	Str licenceName {
 		get { pod.meta.licenceName ?: "" }
 		set { pod.meta.licenceName  = it }
 	}
