@@ -18,16 +18,19 @@
 					tr
 						th	Name
 						th	Version
-						th	Built On
+						th.text-nowrap	Built On
 						th	Summary
 						th	Published by
 						th	Documentation
 					-- allPods.each |pod|
 						tr
-							td;	a (href="${podSummaryUrl(pod)}") ${pod.name}
+							td.text-nowrap;	a (href="${podSummaryUrl(pod)}") ${pod.name}
 							// / ${pod.projectName}
-							td	${pod.version}
-							td	${pod.builtOn.toLocale("DDD MMM YYYY")}
+							td.text-nowrap	${pod.version}
+							td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
 							td	${pod.summary}
-							td;	a (href="${userUrl(pod.owner)}") ${pod.owner.screenName}
+							td.text-nowrap
+								a (href="${userUrl(pod.owner)}")
+									img.img-rounded (src="${pod.owner.gravatarImageUrl(20)}")
+									|  ${pod.owner.screenName}
 							td;	== podDocsHtml(pod)

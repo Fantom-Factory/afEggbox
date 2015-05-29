@@ -6,14 +6,35 @@
 
 	div.row
 		article.col-sm-9
+			img.img-thumbnail.pull-right (src="${user.gravatarImageUrl(110)}")
 			h1.podHeading
 				span	user
-				== user.screenName
+				| ${user.screenName} 
+				-- if (user.realName != null && !user.realName.equalsIgnoreCase(user.screenName)) 
+					small()	 (${user.realName})
+				
+			-- if (user.aboutMe != null)
+				h2	About Me
+				== user.aboutMeHtml	
 
-			div email:			${user.email}
-			div screen Name:	${user.screenName}
-			div image:
-				img (src="${user.gravatarUrl}")
+			-- if (allPods.size > 0)
+				h2	Public Published Pods
+				p	${user.realName ?: user.screenName} has published ${podDao.versionCount(user)} version(s) of ${allPods.size} pod(s).
+				div.table-responsive
+					table.table.table-striped.table-condensed
+						tr
+							th	Name
+							th	Version
+							th.text-nowrap	Built On
+							th	Summary
+							th	Documentation
+						-- allPods.each |pod|
+							tr
+								td.text-nowrap;	a (href="${podSummaryUrl(pod)}") ${pod.name}
+								td.text-nowrap	${pod.version}
+								td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
+								td				${pod.summary}
+								td.text-nowrap;	== podDocsHtml(pod)
 
 		nav.col-sm-3.hidden-xs.contents
 			-- if (loggedIn && loggedInUser == user)

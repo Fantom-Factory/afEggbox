@@ -1,10 +1,13 @@
 using fandoc
 
 class LinkResolverCtx {
-	RepoPod			pod
+	RepoPod?		pod
 	Str?			type
 	Doc?			doc
 	
+	// Users aboutMe has no pod ctx
+	new make() { }
+
 	new makeWithPod(RepoPod pod) { 
 		this.pod = pod 
 	}

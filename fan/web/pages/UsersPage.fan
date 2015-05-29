@@ -8,9 +8,32 @@ using afSitemap
 const mixin UsersPage : PrPage, SitemapSource {
 	
 	@Inject			abstract BedSheetServer	bedServer
+	@Inject 		abstract RepoPodDao		podDao
 	@Inject			abstract RepoUserDao	userDao
 	@PageContext	abstract RepoUser		user
-	
+					abstract RepoPod[]		allPods
+
+	@BeforeRender
+	Void beforeRender() {
+		allPods = podDao.findPublic(userSession.user)
+	}
+
+	Str podSummaryUrl(RepoPod pod) {
+		pod.toSummaryUri.toClientUrl.encode
+	}
+
+	Str podDocsHtml(RepoPod pod) {
+		apiUri := pod.toSummaryUri.toApiUri
+		docUri := pod.toSummaryUri.toDocUri
+		if (apiUri.hasApi && docUri.hasDoc)
+			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a> / <a href=\"${docUri.toClientUrl.encode}\">User Guide</a>" 
+		if (apiUri.hasApi)
+			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a>" 
+		if (docUri.hasDoc)
+			return "<a href=\"${docUri.toClientUrl.encode}\">User Guide</a>"
+		return ""
+	}
+
 	override SitemapUrl[] sitemapUrls() {
 		userDao.findAll.map |user| {
 			SitemapUrl(bedServer.toAbsoluteUrl(Uri.decode(userUrl(user)))) {

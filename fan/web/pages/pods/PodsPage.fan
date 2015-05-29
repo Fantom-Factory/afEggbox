@@ -12,7 +12,6 @@ const mixin PodsPage : PrPage {
 	@InitRender
 	Void initRender() {
 		allPods = podDao.findPublic(userSession.user)
-		injector.injectRequireModule("fileInput")
 	}
 	
 	Str podSummaryUrl(RepoPod pod) {
