@@ -18,6 +18,7 @@ const class Indexes {
 
 		podCol.index("_name_")			.ensure(["name"			: Index.ASC])
 		podCol.index("_ownerId_")		.ensure(["ownerId"		: Index.ASC])
+		podCol.index("_builtOn_")		.ensure(["builtOn"		: Index.DESC])
 		podCol.index("_isPublic_")		.ensure(["isPublic"		: Index.ASC])
 		podCol.index("_isDeprecated_")	.ensure(["isDeprecated"	: Index.ASC])
 

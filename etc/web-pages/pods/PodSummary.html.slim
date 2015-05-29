@@ -55,7 +55,7 @@
 				a.btn.btn-primary (href="${editUrl}") Edit Pod Details
 			== app.renderPodToc(fandocUri)
 		
-			-- versions := podDao.findAllVersions(pod.name)
+			-- versions := podDao.findVersions(pod.name, null)
 			-- if (versions.size > 1)
 				h3	${versions.size} Other Versions
 				ul

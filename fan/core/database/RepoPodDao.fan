@@ -8,10 +8,11 @@ const mixin RepoPodDao : EntityDao {
 	@Operator
 	abstract RepoPod?		get(Str name, Bool checked := true)
 	abstract RepoPod[]		findAll()
-	abstract RepoPod[]		findAllVersions(Str name)
+	abstract RepoPod[]		findVersions(Str name, Int? limit)
 	abstract RepoPod? 		findOne(Str name, Version? version := null)
 
 	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)
+	abstract RepoPod[] 		findPublicLatest(Int limit)
 	abstract RepoPod[] 		findPrivate(RepoUser loggedInUser)
 
 	** used for fanr queries
@@ -62,8 +63,8 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		datastore.query.orderBy("_id").findAll
 	}
 	
-	override RepoPod[] findAllVersions(Str name) {
-		datastore.query(field("name").eq(name)).orderBy("-_id").findAll
+	override RepoPod[] findVersions(Str name, Int? limit) {
+		datastore.query(field("name").eq(name)).orderBy("-_id").limit(limit).findAll
 	}
 	
 	override RepoPod? findOne(Str name, Version? version := null) {
@@ -79,6 +80,11 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		if (user != null)
 			query	= Query().or([query, field("ownerId").eq(user._id)])
 		return reduceByVersion(query)
+	}
+	
+	override RepoPod[] findPublicLatest(Int limit) {
+		query := Query().field("isPublic").eq(true).field("isDeprecated").eq(false)
+		return datastore.query(query).orderByIndex("_builtOn_").limit(limit).findAll
 	}
 	
 	override RepoPod[] findPrivate(RepoUser user) {
