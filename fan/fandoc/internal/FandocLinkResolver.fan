@@ -263,7 +263,7 @@ const class FandocSummaryUri : FandocUri {
 	}
 	
 	override Str title() {
-		pod.meta.projectName
+		pod.projectName
 	}
 
 	override FandocUri? toParentUri() {

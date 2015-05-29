@@ -4,13 +4,16 @@
 
 	div.row
 		article.col-sm-9
-			h1.podHeading	${pod.meta.projectName} ${pod.version}
-				div.small	${pod.meta.summary}
+			h1.podHeading	${pod.projectName} ${pod.version}
+				div.small	${pod.summary}
+
+			-- if (pod.meta.isInternal)
+				p;	i	${pod.projectName} is a support library that aids ${pod.meta.orgName ?: pod.owner.screenName} in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.
 
 			== aboutHtml
 		
 			h2	Install
-			p	To install ${pod.meta.projectName} with the Fantom Repository Manager (<a class="externalLink" href="http://fantom.org/doc/docFanr/Tool.html#install">fanr</a>), cut'n'paste the following into a command prompt, terminal or shell: 
+			p	To install ${pod.projectName} with the Fantom Repository Manager (<a class="externalLink" href="http://fantom.org/doc/docFanr/Tool.html#install">fanr</a>), cut'n'paste the following into a command prompt, terminal or shell: 
 				
 			a [href="#" onclick="return copyInstallText();" onmouseup="return false;" title="Click to hightlight, Ctrl+C to copy"]
 				pre.installText
@@ -18,11 +21,11 @@
 					//i.fa.fa-clipboard.copyIcon
 			
 			h2	Configure
-			p	To use ${pod.meta.projectName} in a Fantom project, add it as dependency in the project's <code>build.fan</code>:
+			p	To use ${pod.projectName} in a Fantom project, add a dependency to the project's <code>build.fan</code>:
 			== syntaxWriter.writeSyntax("""depends = ["sys 1.0", ..., "${pod.name} ${Version(pod.version.segments[0..2])} - ${Version(pod.version.segments[0..1])}"]""", "fan", false)
 		
 			h2	Information
-			p	Meta information on the ${pod.meta.projectName} pod:
+			p	Meta information on the ${pod.projectName} pod:
 			ul
 				li	Published by - 
 					a (href="${userUrl(pod.owner)}") ${pod.owner.screenName}

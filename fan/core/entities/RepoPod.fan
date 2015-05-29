@@ -91,6 +91,10 @@ class RepoPod {
 		podFileDao.get(_id, true).data
 	}
 	
+	Str projectName() {
+		meta.projectName
+	}
+	
 	Str summary() {
 		summary := meta.summary
 		if (isDeprecated)

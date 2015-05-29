@@ -75,7 +75,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 
 	override RepoPod[] findPublic(RepoUser? user) {
-		query		:= Query().field("isPublic").eq(true)
+		query		:= Query().field("isPublic").eq(true).field("isDeprecated").eq(false)
 		if (user != null)
 			query	= Query().or([query, field("ownerId").eq(user._id)])
 		return reduceByVersion(query)

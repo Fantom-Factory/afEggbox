@@ -25,7 +25,7 @@
 					-- allPods.each |pod|
 						tr
 							td;	a (href="${podSummaryUrl(pod)}") ${pod.name}
-							// / ${pod.meta.projectName}
+							// / ${pod.projectName}
 							td	${pod.version}
 							td	${pod.builtOn.toLocale("DDD MMM YYYY")}
 							td	${pod.summary}
