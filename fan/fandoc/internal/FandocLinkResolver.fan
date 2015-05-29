@@ -503,7 +503,7 @@ const class FandocSrcUri : FandocUri {
 	override Uri? baseUri() {
 		uri := `api/${typeName}/src`
 		if (slotName != null)
-			uri = uri.plusName("${uri.name}#line${slot.loc.line}")
+			uri = uri.parent + `${uri.name}#line${slot.loc.line}`
 		return uri
 	}
 

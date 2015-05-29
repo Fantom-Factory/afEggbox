@@ -32,7 +32,7 @@ const mixin Layout : PrComponent {
 	}
 	
 	Str pageTitle() {
-		"${title} :: Pod-Repo"
+		title
 	}
 
 	Str env() {
