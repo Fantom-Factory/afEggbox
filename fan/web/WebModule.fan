@@ -14,6 +14,7 @@ class WebModule {
 		defs.add(Alert#)
 		defs.add(ErrorSkin#, BootstrapErrorSkin#)
 		defs.add(Backdoor#)
+		defs.add(SitemapPages#)
 	}
 
 	@Contribute { serviceType=Routes# }

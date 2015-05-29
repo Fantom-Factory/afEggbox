@@ -3,8 +3,9 @@ using afBedSheet
 using afFormBean
 using afEfanXtra
 using afPillow
+using afSitemap
 
-const mixin MyPodsPage : PrMyPage {
+const mixin MyPodsPage : PrMyPage, SitemapExempt {
 	
 	@Inject abstract Registry		registry
 	@Inject abstract FanrRepo		fanrRepo

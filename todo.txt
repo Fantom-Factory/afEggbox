@@ -29,8 +29,6 @@ Sitemap.xml
 
 Atom feeds
 
-Email errors
-
 site logo
 favicons
 use icons / ogimages from pods
