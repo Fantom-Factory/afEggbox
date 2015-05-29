@@ -1,6 +1,7 @@
 using afIoc
 using afMorphia
 using afFormBean::HtmlInput
+using afButter
 
 @Entity { name = "user" }
 class RepoUser {
@@ -46,8 +47,40 @@ class RepoUser {
 	
 	Str gravatarUrl() {
 		// identicon, monsterid, wavatar, retro
-		hash := (gravatarEmail ?: email).toStr.trim.lower.toBuf.toDigest("MD5").toHex
-		return `http://www.gravatar.com/avatar/${hash}`.plusQuery(["s":"120", "d":"monsterid", "r":"x"]).encode
+		`http://www.gravatar.com/avatar/${gravatarHash}`.plusQuery(["s":"120", "d":"monsterid", "r":"x"]).encode
+	}
+
+	Uri gravatarJsonUri() {
+		`http://www.gravatar.com/${gravatarHash}.json`
+	}
+
+	Str gravatarHash() {
+		(gravatarEmail ?: email).encode.trim.lower.toBuf.toDigest("MD5").toHex
+	}
+	
+	This populateFromGravatar() {
+		butt := ButterDish(Butter.churnOut)
+		butt.errOn4xx.enabled = false
+		butt.errOn5xx.enabled = false
+		req	 := ButterRequest(gravatarJsonUri)
+		req.headers.userAgent = "afButter/1.1"	// required else Gravatar gives us the 403 finger
+		res  := butt.sendRequest(req)
+		if (res.statusCode == 200) {
+			try {
+			json := res.body.jsonMap
+			name := json->get("entry")?->getSafe(0)?->get("name")?->get("formatted")
+			abut := json->get("entry")?->getSafe(0)?->get("aboutMe")
+			if (realName?.trimToNull == null)
+				realName = name
+			if (aboutMe?.trimToNull == null)
+				aboutMe = abut
+				
+			} catch (Err err) {
+				// I don't trust the gravatar API
+				typeof.pod.log.warn("Could not parse Gravatar response for ${gravatarJsonUri}", err)
+			}
+		}
+		return this
 	}
 
 	override Str toStr() { email.toStr }

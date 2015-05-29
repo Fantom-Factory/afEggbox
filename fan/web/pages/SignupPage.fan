@@ -42,7 +42,8 @@ const mixin SignupPage : PrPage {
 			return null
 		}
 
-		user = userDao.create(signUpDetails.toUser)
+		user = signUpDetails.toUser.populateFromGravatar
+		userDao.create(user)
 		userSession.loginAs(user)
 //		userActivity.logLoggedIn
 		

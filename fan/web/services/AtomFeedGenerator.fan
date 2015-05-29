@@ -85,7 +85,7 @@ class AtomPodWrapper : AtomEntryWrapper {
 		
 		if (pod.meta.orgName != null)
 			entry.authors.add(Person(pod.meta.orgName) {
-				it.uri	= pod.meta.orgUrl
+				it.uri	= pod.meta.orgUrl ?: `/users/${pod.owner.screenName}`
 			})
 		
 		if (pod.meta.projectUrl != null)

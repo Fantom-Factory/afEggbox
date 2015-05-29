@@ -26,7 +26,6 @@ user page
  - list pods published
 
 add atom feed links + autodiscovery
-Atom feeds
 
 site logo
 favicons
@@ -34,6 +33,8 @@ use icons / ogimages from pods
 
 front page
 help pages
+
+Download link on summary page
 
 Download Pod Data
 User activity Data
