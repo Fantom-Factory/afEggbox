@@ -20,14 +20,11 @@ Fandoc:
 
 TODO
 ====
-pod summary pages
+page titles
 
-users to have a gravatar email field (defaults to normal)
- - grab default details from gravatar (when save grav email field is diff and fields to be populated are empty)
-/usersPage/ to view public profiles -> gravatar
 user page
  - list pods published
- 
+
 Sitemap.xml
 
 Atom feeds
@@ -41,12 +38,16 @@ use icons / ogimages from pods
 front page
 help pages
 
-page titles
+Download Pod Data
+User activity Data
 
+Show contact email address:
+	help.me@fantomfactory.org
 
 
 Future
 ======
+User, grab default details from gravatar -> have a Populate button
 
 Show stat list
   new pods vs new updates

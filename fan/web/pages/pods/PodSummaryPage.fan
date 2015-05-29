@@ -10,6 +10,7 @@ const mixin PodSummaryPage : PrPage {
 
 	@Inject			abstract Registry			registry
 	@Inject			abstract RepoPodDao			podDao
+	@Inject			abstract SyntaxWriter		syntaxWriter
 	@PageContext	abstract FandocSummaryUri	fandocUri
 	
 		// TODO: seo this page!

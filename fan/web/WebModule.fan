@@ -74,9 +74,12 @@ class WebModule {
 	@Contribute { serviceType=ApplicationDefaults# }
 	static Void contributeApplicationDefaults(Configuration config, PodRepoConfig repoConfig, IocEnv iocEnv) {
 		
-		config[BedSheetConfigIds.host]					= repoConfig.publicUrl
-		config[GoogleAnalyticsConfigIds.accountNumber]	= repoConfig.googleAccNo
-		config[GoogleAnalyticsConfigIds.accountDomain]	= repoConfig.googleAccDomain
+		if (repoConfig.publicUrl != null)
+			config[BedSheetConfigIds.host]					= repoConfig.publicUrl
+		if (repoConfig.googleAccNo != null)
+			config[GoogleAnalyticsConfigIds.accountNumber]	= repoConfig.googleAccNo
+		if (repoConfig.googleAccDomain != null)
+			config[GoogleAnalyticsConfigIds.accountDomain]	= repoConfig.googleAccDomain
 		
 		config[BedSheetConfigIds.fileAssetCacheControl]	= "max-age=${1day.toSec}"	// it's better than nothing!
 		
