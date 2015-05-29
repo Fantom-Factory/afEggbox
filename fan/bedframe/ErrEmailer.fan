@@ -7,9 +7,10 @@ using concurrent
 
 const class ErrEmailer {
 	@Inject private const Log 				log
-	@Inject private const Registry			reg
 	@Inject private const HttpRequest		req
 	@Inject private const BedSheetServer	bedServer
+	@Inject private const PodRepoConfig		repoConfig
+	@Inject private const ErrPrinterStr		errPrinter
 			private const Synchronized		lock
 	
 	@Config { id="afIocEnv.isProd" }
@@ -21,7 +22,7 @@ const class ErrEmailer {
 	}
 	
 	Void emailErr(Err err) {
-		if (!inProd)	return
+		if (!inProd || !repoConfig.errorEmailsEnabled)	return
 		
 		// pass in 'req.absUri' 'cos the new thread ain't got no HTTP request!
 		reqUri := bedServer.toAbsoluteUrl(req.url)
@@ -30,7 +31,7 @@ const class ErrEmailer {
 		general += "  Timestamp: " + DateTime.now.toLocale("DD MMM YYYY, hh:mm:ss.fff") + "\n" 
 		general += "  Uri: ${reqUri}\n" 
 		general += "\n" 
-		email 	:= general + printErr(err)
+		email 	:= general + errPrinter.errToStr(err)
 		
 		// Let's send those emails one at a time please!
 		lock.synchronized |->| {
@@ -47,13 +48,13 @@ const class ErrEmailer {
 			appName	:= bedServer.appPod?.meta?.get("proj.name") ?: "Unknown"
 			
 			email := Email {
-				to		= ["steve.eynon@alienfactory.co.uk"]
-				from	= "${podName}@fantomfactory.org"
+				to		= [repoConfig.errorEmailsSendTo ?: "null"]
+				from	= "${podName}@${bedServer.host.host}"
 				subject	= "${appName} Error :: $err.msg"
 				body	= TextPart { text = emailBody }
 			}
 			
-			makeClient.send(email)
+			repoConfig.errorEmailsSmtpClient.send(email)
 			
 			endTime		:= DateTime.nowTicks
 			duration	:= endTime.minus(startTime).toDuration
@@ -63,30 +64,5 @@ const class ErrEmailer {
 			log.err("Could not send error email", oops)
 		}
 	}
-	
-	Str printErr(Err err) {
-		type	:= Type.find("afBedSheet::ErrPrinterStr")
-		printer	:= reg.dependencyByType(type)
-		str		:= type.method("errToStr").callOn(printer, [err])
-		return str
-	}
-	
-	SmtpClient makeClient() {
-		// https://www.fastmail.fm/help/remote_email_access_server_names_and_ports.html
-		// Server: mail.messagingengine.com
-		// Port: 465
-		// SSL/TLS Encryption: Enabled (but not STARTTLS)
-		// Authentication: PLAIN (Our SMTP ports are for authenticated SMTP only; you'll need to make sure your software supports authenticated SMTP and also set up a username and password)
-		// Username: your FastMail username/login name/email address (must include @fastmail.fm part)
-		// Password: your FastMail password
-		// Alternatively, if you're client supports STARTTLS only, you can use port 587 with STARTTLS enabled. 
-		SmtpClient {
-			host		= "mail.messagingengine.com"
-			port		= 465
-			username	= "xxxxxx"
-			password	= "xxxxxx"
-			ssl			= true
-		}
-    }
 }
 
