@@ -9,7 +9,7 @@
 		div.col-sm-12
 			h1.podHeading
 				span edit
-				| ${pod.meta.projectName} ${pod.version}
+				| ${pod.projectName} ${pod.version}
 
 	div.row
 		div.col-sm-6
@@ -32,7 +32,7 @@
 
 			h2#delete.alert.alert-danger	Delete Pod
 			
-			p	Use this form to delete the ${pod.meta.projectName} library.
+			p	Use this form to delete the ${pod.projectName} library.
 
 			form.clearfix (action="${deleteUrl}" method="post")
 				== podDeleteFormBean.renderErrors
