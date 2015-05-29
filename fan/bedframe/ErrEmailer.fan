@@ -22,7 +22,7 @@ const class ErrEmailer {
 	}
 	
 	Void emailErr(Err err) {
-		if (!inProd || !repoConfig.errorEmailsEnabled)	return
+		if (!repoConfig.errorEmailsEnabled)	return
 		
 		// pass in 'req.absUri' 'cos the new thread ain't got no HTTP request!
 		reqUri := bedServer.toAbsoluteUrl(req.url)
@@ -41,17 +41,20 @@ const class ErrEmailer {
 	
 	private Void doEmailErr(Uri reqUri, Str emailBody, Err err) {
 		try {
-			log.info("Sending error email...")
 			startTime	:= DateTime.nowTicks
 	
 			podName := bedServer.appPod ?: "unknown"
 			appName	:= bedServer.appPod?.meta?.get("proj.name") ?: "Unknown"
+			to		:= repoConfig.errorEmailsSendTo?.toStr ?: "null"
+			from	:= "${podName}@${bedServer.host.host}"
+
+			log.info("Sending error email to ${to} from ${from} ...")
 			
 			email := Email {
-				to		= [repoConfig.errorEmailsSendTo ?: "null"]
-				from	= "${podName}@${bedServer.host.host}"
-				subject	= "${appName} Error :: $err.msg"
-				body	= TextPart { text = emailBody }
+				it.to		= [to]
+				it.from		= from
+				it.subject	= "${appName} Error :: $err.msg"
+				it.body		= TextPart { text = emailBody }
 			}
 			
 			repoConfig.errorEmailsSmtpClient.send(email)

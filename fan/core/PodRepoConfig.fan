@@ -73,10 +73,16 @@ const class PodRepoConfig {
 			if (googleAccDomain == null && publicUrl == null)
 				log.warn("If specifying a googleAccNo, a publicUrl or googleAccDomain should also be given.")
 
-		map["MongoDB URL"]				= mongoDbUrl
-		map["Public URL"]				= publicUrl
-		map["Google Account Number"]	= googleAccNo
-		map["Google Account Domain"]	= googleAccDomain
+		map["MongoDB URL"]					= mongoDbUrl
+		map["Public URL"]					= publicUrl
+		map["Google Account Number"]		= googleAccNo
+		map["Google Account Domain"]		= googleAccDomain
+		map["Error Emails Smtp Host"]		= errorEmailsSmtpHost
+		map["Error Emails Smtp Port"]		= errorEmailsSmtpPort
+		map["Error Emails Smtp Username"]	= errorEmailsSmtpUsername
+		map["Error Emails Smtp Password"]	= errorEmailsSmtpPassword
+		map["Error Emails Smtp Ssl"]		= errorEmailsSmtpSsl
+		map["Error Emails Send To"]			= errorEmailsSendTo
 		map["."]						= ""
 		map["Google Analytics Enabled"]	= googleAnalyticsEnabled
 		map["Error Emailing Enabled"]	= errorEmailsEnabled
