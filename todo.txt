@@ -27,6 +27,11 @@ user page
 
 add atom feed links + autodiscovery
 
+seo pod summary page
+
+admin user
+auto login
+
 site logo
 favicons
 use icons / ogimages from pods
@@ -42,6 +47,9 @@ User activity Data
 Show contact email address:
 	help.me@fantomfactory.org
 
+install MongoDB on VM
+
+tidy pod upload validation errors
 
 
 Future
@@ -54,6 +62,7 @@ email notifications of new pod uploads
 did you forget your password?
 email confirmation
 upvote / star a pod
+contents.fog
 
 Games:
  - No of pods uploaded

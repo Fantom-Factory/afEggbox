@@ -18,14 +18,20 @@ class RepoUser {
 	@Property{}	Uri?	gravatarEmail
 	
 	@HtmlInput { type="text"; minLength=3; maxLength=128 }
-	@Property{}	Str?	realName
+	@Property{}	Str?	realName {
+		set { &realName = it?.trimToNull }
+	}
 
 	@HtmlInput { type="textarea"; minLength=3; maxLength=2048 }
-	@Property{}	Str?	aboutMe
+	@Property{}	Str?	aboutMe {
+		set { &aboutMe = it?.trimToNull }
+	}
 
 	@Property{}	Str		userSalt
 	@Property{}	Str		userSecret
 
+	@Inject{} Fandoc?		fandocRenderer
+	
 	new make(|This| in) { in(this) }
 	
 	new makeNewUser(Uri email, Str password, |This|? f := null) {
@@ -45,9 +51,13 @@ class RepoUser {
 		pod.ownerId == _id
 	}
 	
-	Str gravatarUrl() {
+	Str aboutMeHtml() {
+		fandocRenderer.writeStrToHtml(aboutMe, LinkResolverCtx())
+	}
+	
+	Str gravatarImageUrl(Int size) {
 		// identicon, monsterid, wavatar, retro
-		`http://www.gravatar.com/avatar/${gravatarHash}`.plusQuery(["s":"120", "d":"monsterid", "r":"x"]).encode
+		`http://www.gravatar.com/avatar/${gravatarHash}`.plusQuery(["s":size.toStr, "d":"monsterid", "r":"x"]).encode
 	}
 
 	Uri gravatarJsonUri() {
