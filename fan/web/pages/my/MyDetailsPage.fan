@@ -3,8 +3,9 @@ using afBedSheet
 using afFormBean
 using afEfanXtra
 using afPillow
+using afSitemap
 
-const mixin MyDetailsPage : PrMyPage {
+const mixin MyDetailsPage : PrMyPage, SitemapExempt {
 	
 	@Inject abstract RepoUserDao	userDao
 	@Inject { type=RepoUser# } 

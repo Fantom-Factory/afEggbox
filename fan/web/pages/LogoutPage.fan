@@ -1,10 +1,8 @@
-using afIoc
 using afBedSheet
 using afEfanXtra
-using afPillow
-using afFormBean
+using afSitemap
 
-const mixin LogoutPage : PrPage {
+const mixin LogoutPage : PrPage, SitemapExempt {
 
 	@InitRender
 	Void initRender() {
