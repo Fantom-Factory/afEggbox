@@ -4,6 +4,7 @@ using afFormBean
 using afEfanXtra
 using afPillow
 using afSitemap
+using afButter
 
 const mixin MyDetailsPage : PrMyPage, SitemapExempt {
 	
@@ -26,7 +27,7 @@ const mixin MyDetailsPage : PrMyPage, SitemapExempt {
 		if (!formBean.validateForm(httpRequest.body.form))
 			return null
 
-		formBean.updateBean(loggedInUser)
+		formBean.updateBean(user)
 		
 		existing := userDao.getByScreenName(user.screenName, false)
 		if (existing != null && existing._id != loggedInUser._id) {
@@ -34,9 +35,13 @@ const mixin MyDetailsPage : PrMyPage, SitemapExempt {
 			return null
 		}
 		
-		userDao.update(loggedInUser)
+		if (user.gravatarEmail != null && user.gravatarEmail != loggedInUser.gravatarEmail)
+			if ((user.aboutMe?.trimToNull == null && user.aboutMe?.trimToNull == null) || (user.realName?.trimToNull == null && user.realName?.trimToNull == null))
+				user.populateFromGravatar
+		
+		userDao.update(user)
 
-		alert.msg = Msgs.alert_userDetailsSaved(loggedInUser)
+		alert.msg = Msgs.alert_userDetailsSaved(user)
 		return Redirect.afterPost(pages[MyDetailsPage#].pageUrl)
 	}
 }
