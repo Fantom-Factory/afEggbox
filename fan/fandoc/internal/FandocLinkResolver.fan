@@ -265,6 +265,10 @@ const class FandocSummaryUri : FandocUri {
 		fandocRenderer.writeStrToHtml(pod.aboutFandoc, LinkResolverCtx(pod))
 	}
 	
+	Uri toDownloadUrl() {
+		toClientUrl.plusName("download")
+	}
+	
 	override Str title() {
 		pod.projectName
 	}
@@ -295,7 +299,7 @@ const class FandocApiUri : FandocUri {
 		this.slotName	= slotName
 	}
 	
-	Bool hasApi() {
+	Bool exists() {
 		validate
 	}
 
@@ -539,7 +543,7 @@ const class FandocDocUri : FandocUri {
 		reg.autobuild(FandocDocAsset#, [this])
 	}
 	
-	Bool hasDoc() {
+	Bool exists() {
 		validate
 	}
 	

@@ -10,6 +10,7 @@ const class PodRoutes : Route {
 	@Inject private const Backdoor		backdoor
 	@Inject private const Registry		reg
 	@Inject private const AtomFeedPages	atomPages
+	@Inject private const HttpResponse	httpResponse
 
 	new make(|This|in) { in(this) }
 	
@@ -47,7 +48,7 @@ const class PodRoutes : Route {
 
 		// --> /pods/afSlim/edit
 		// --> /pods/afSlim/1.1.14/edit
-		if (reqPath.isEmpty && podSection == "edit") {
+		if (reqPath.isEmpty && (podSection == "edit" || podSection == "download")) {
 			if (!userSession.isLoggedIn && backdoor.isOpen)
 				backdoor.login
 
@@ -59,7 +60,12 @@ const class PodRoutes : Route {
 				}
 
 				if (userSession.user.owns(pod)) 
-					return pages.renderPage(PodEditPage#, [pod])
+					if (podSection == "edit")
+						return pages.renderPage(PodEditPage#, [pod])
+					if (podSection == "download") {
+						httpResponse.saveAsAttachment("${pod.name}.pod")
+						return PodDownloadAsset(pod.podFileDao, pod)
+					}
 				throw HttpStatusErr(401, "Unauthorised")
 			}
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))

@@ -7,7 +7,7 @@ using fanr
 class RepoPod {
 	@Inject private RepoPodDao?		podDao
 	@Inject private RepoUserDao?	userDao
-	@Inject private RepoPodFileDao?	podFileDao
+	@Inject internal RepoPodFileDao?podFileDao
 	@Inject private InvalidLinks?	invalidLinkFinder
 	@Inject private Registry?		registry
 
@@ -93,6 +93,10 @@ class RepoPod {
 	
 	Str projectName() {
 		meta.projectName
+	}
+	
+	Str title() {
+		"${projectName} ${version}"
 	}
 	
 	Str summary() {

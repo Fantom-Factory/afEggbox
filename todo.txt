@@ -17,14 +17,21 @@ Fandoc:
    - pod: scheme
 
 RSS feed for both site and individual pods
- 
+
+
+
 email reza
 
 TODO
 ====
+Download link on summary page
+
 add pod version to page titles
 
-seo pod summary page
+Tidy up Fat Footer
+ - Show contact email address: help.me@fantomfactory.org
+
+tidy pod upload validation errors
 
 ID anchor offset hack
 
@@ -34,18 +41,12 @@ favicons
 front page
 help pages
 
-Download link on summary page
-
 Download Pod Data
 User activity Data
 
-Tidy up Fat Footer
- - Show contact email address: help.me@fantomfactory.org
-
 install MongoDB on VM
 
-tidy pod upload validation errors
-
+use fontello
 
 
 Future

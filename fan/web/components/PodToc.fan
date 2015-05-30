@@ -29,7 +29,7 @@ const mixin PodToc : EfanComponent {
 		}
 		
 		apiUri := fandocUri.toApiUri
-		if (apiUri.hasApi)
+		if (apiUri.exists)
 			if (fandocUri is FandocApiUri && (fandocUri as FandocApiUri).typeName == null)
 				html.add("<h4 class=\"text-muted\">").add("API").add("</h4>")
 			else {
@@ -37,7 +37,7 @@ const mixin PodToc : EfanComponent {
 			}
 		
 		docUri := fandocUri.toDocUri
-		if (docUri.hasDoc) {
+		if (docUri.exists) {
 			contents := docUri.pageContents
 	
 			contents.each |title, page| { 

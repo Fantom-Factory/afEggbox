@@ -14,7 +14,7 @@ const mixin PodIcon : EfanComponent {
 	
 	override Str renderTemplate() {
 		iconUri := fandocUri.toDocUri(`/doc/icon.png`)
-		if (!iconUri.hasDoc)
+		if (!iconUri.exists)
 			return ""
 		
 		return """<img class="podIcon" src="${iconUri.toAsset.clientUrl.encode}">"""

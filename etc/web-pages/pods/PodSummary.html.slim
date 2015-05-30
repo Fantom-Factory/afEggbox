@@ -1,4 +1,4 @@
--- app.renderLayout(isPublic, "${pod.projectName} Summary")
+-- app.renderLayout(isPublic, "${pod.title} - Summary")
 
 	== app.renderPodBreadcrumbs(fandocUri)
 
@@ -20,6 +20,14 @@
 				pre.installText
 					input [type="text" readonly="readonly" value="fanr install -r http://repo.fantomfactory.org/fanr/ ${pod.name}" onfocus="return copyInstallText();" onmouseup="return false;"]
 					//i.fa.fa-clipboard.copyIcon
+			
+			p	Or to install manually, download the pod file and copy it to the <code>%FAN_HOME%/lib/fan/</code> directory.
+			
+			p.downloadPod
+				i.fa.fa-download.fa-lg
+				a (href="${fandocUri.toDownloadUrl.encode}" rel="nofollow")
+					|  ${pod.name}.pod 
+					small() ($${toFileSize(pod.fileSize)})
 			
 			h2	Configure
 			p	To use ${pod.projectName} in a Fantom project, add a dependency to the project's <code>build.fan</code>:

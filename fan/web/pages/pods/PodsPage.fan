@@ -21,11 +21,11 @@ const mixin PodsPage : PrPage {
 	Str podDocsHtml(RepoPod pod) {
 		apiUri := fandocUri(pod).toApiUri
 		docUri := fandocUri(pod).toDocUri
-		if (apiUri.hasApi && docUri.hasDoc)
+		if (apiUri.exists && docUri.exists)
 			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a> / <a href=\"${docUri.toClientUrl.encode}\">User Guide</a>" 
-		if (apiUri.hasApi)
+		if (apiUri.exists)
 			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a>" 
-		if (docUri.hasDoc)
+		if (docUri.exists)
 			return "<a href=\"${docUri.toClientUrl.encode}\">User Guide</a>"
 		return ""
 	}
