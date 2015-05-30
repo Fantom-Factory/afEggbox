@@ -38,6 +38,9 @@ public const class FantomLinkResolver : LinkResolver {
 		if (fandocUri.validate == false)
 			return null
 		
+		if (fandocUri is FandocDocUri && ((FandocDocUri) fandocUri).isAsset)
+			return ((FandocDocUri) fandocUri).toAsset.clientUrl
+
 		return fandocUri.toClientUrl
 	}	
 }

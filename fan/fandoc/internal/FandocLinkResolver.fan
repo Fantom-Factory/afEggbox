@@ -19,6 +19,9 @@ internal const class FandocLinkResolver : LinkResolver {
 		if (fandocUri.validate == false)
 			return null
 		
+		if (fandocUri is FandocDocUri && ((FandocDocUri) fandocUri).isAsset)
+			return ((FandocDocUri) fandocUri).toAsset.clientUrl
+
 		return fandocUri.toClientUrl
 	}
 }
@@ -526,6 +529,14 @@ const class FandocDocUri : FandocUri {
 	new make(Str podName, Version? podVersion, Uri fileUri, Str? headingId, |This| in) : super(podName, podVersion, in) { 
 		this.fileUri 	= fileUri
 		this.headingId	= headingId
+	}
+	
+	Bool isAsset() {
+		fileUri.ext != "fandoc"
+	}
+	
+	FandocDocAsset toAsset() {
+		reg.autobuild(FandocDocAsset#, [this])
 	}
 	
 	Bool hasDoc() {
