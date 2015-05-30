@@ -24,7 +24,7 @@
 					th.text-nowrap.text-centre	Doc Errs
 					th	Actions
 				-- allPods.each |pod|
-					tr
+					tr.${pod.ownerId == loggedInUser._id ? "" : "bg-danger"}
 						td.text-nowrap;	a (href="${podSummaryUrl(pod)}") ${pod.name}
 						td.text-nowrap	${pod.version}
 						td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}

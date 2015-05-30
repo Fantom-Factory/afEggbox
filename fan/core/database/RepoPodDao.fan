@@ -90,11 +90,11 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 	
 	override RepoPod[] findPrivateOwned(RepoUser user) {
-		return reduceByVersion(field("ownerId").eq(user._id))
+		user.isAdmin ? reduceByVersion(null) : reduceByVersion(field("ownerId").eq(user._id))
 	}
 	
 	override RepoPod[] findPublicOwned(RepoUser user) {
-		return reduceByVersion(field("ownerId").eq(user._id).field("isPublic").eq(true))
+		reduceByVersion(field("ownerId").eq(user._id).field("isPublic").eq(true))
 	}
 	
 	override Int countPublicVersions(RepoUser user) {
@@ -117,16 +117,19 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		return datastore.insert(repoPod)
 	}
 	
-	private RepoPod[] reduceByVersion(Query query) {
+	private RepoPod[] reduceByVersion(Query? query) {
 		// need to ensure the collection exists else you get a "Mongo ns does not exist" Err
 		// so just ensure the indexes and job done		
 		mapFunc 	:= Code("function () { emit(this.name, this); }")
 		reduceFunc	:= Code(reduceByVersionFunc)
-		output 		:= datastore.collection.mapReduce(mapFunc, reduceFunc, [
-			"query"	: query.toMongo(datastore),
+		options		:= [
+			"query"	: query?.toMongo(datastore),
 			"sort"	: ["_name_" : 1]
-		])
-		pods := (([Str:Obj?][]) output["results"]).map { it["value"] }
+		]
+		if (query == null)
+			options.remove("query")
+		output 	:= datastore.collection.mapReduce(mapFunc, reduceFunc, options)
+		pods 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
 		return pods.map { datastore.fromMongoDoc(it) }
 	}
 
