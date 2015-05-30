@@ -79,7 +79,7 @@ const class PodRoutes : Route {
 			fandocDocUri := (FandocDocUri) fandocUri 
 			if (fandocDocUri.fileUri.ext == "fandoc")
 				return pages.renderPage(PodDocPage#, [fandocUri])
-			return FandocDocAsset(fandocDocUri)
+			return fandocDocUri.toAsset
 		}
 		
 		if (fandocUri is FandocSrcUri)
@@ -167,24 +167,5 @@ const class PodRoutes : Route {
 			buf.addChar(char)
 		}
 		return buf.toStr
-	}
-}
-
-const class FandocDocAsset : Asset {
-			 const 	FandocDocUri	fandocUri
-	override const 	Bool			exists		:= true
-	override const 	DateTime?		modified 
-	override const 	Int?			size 
-	override const 	MimeType?		contentType
-
-	new make(FandocDocUri fandocUri) {
-		this.fandocUri 	= fandocUri
-		this.modified	= fandocUri.pod.builtOn.floor(1sec)
-		this.size		= fandocUri.content.size
-		this.contentType= fandocUri.fileUri.mimeType
-	}
-
-	override InStream? in() {
-		fandocUri.content.in
 	}
 }

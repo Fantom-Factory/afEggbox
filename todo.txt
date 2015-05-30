@@ -24,8 +24,6 @@ TODO
 ====
 add pod version to page titles
 
-add atom feed links + autodiscovery
-
 seo pod summary page
 
 ID anchor offset hack
@@ -71,3 +69,5 @@ Games:
  - no of downloads your pod get
   
 http://avatars.io/ support
+
+make work in non-root env - see docAssets, RSS urls, etc

@@ -17,7 +17,7 @@ const mixin PodIcon : EfanComponent {
 		if (!iconUri.hasDoc)
 			return ""
 		
-		return """<img class="podIcon" src="${iconUri.toClientUrl.encode}">"""
+		return """<img class="podIcon" src="${iconUri.toAsset.clientUrl.encode}">"""
 	}
 	
 }

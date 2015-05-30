@@ -13,8 +13,28 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract SyntaxWriter		syntaxWriter
 	@PageContext	abstract FandocSummaryUri	fandocUri
 	
-		// TODO: seo this page!
-	
+	** Need to wait until *after* layout has rendered to find the HTML tag.
+//	@AfterRender
+//	Void afterRender(StrBuf buf) {
+//		ogasset1	:= fileHandler.fromLocalUrl(`/images/pods/${data.podName}.ogimage.png`, false)
+//		ogasset2	:= ogasset1 ?: fileHandler.fromLocalUrl(`/images/AlienFactory-avatar.png`)
+//		ogimage		:= bedServer.toAbsoluteUrl(ogasset2.clientUrl)
+//		htmlIndex	:= buf.toStr.index("<html ") + "<html ".size
+//		absPageUrl	:= bedServer.toAbsoluteUrl(data.clientUrl)
+//
+//		// ---- Open Graph Meta ---- Mandatory
+//		buf.insert(htmlIndex, "prefix=\"og: http://ogp.me/ns#\" ")
+//		injector.injectMeta.withProperty("og:type"	).withContent("website")
+//		injector.injectMeta.withProperty("og:title"	).withContent("${data.projectName} ${data.version}")
+//		injector.injectMeta.withProperty("og:url"	).withContent(absPageUrl.encode)
+//		injector.injectMeta.withProperty("og:image"	).withContent(ogimage.encode)
+//		
+//		// ---- Open Graph Meta ---- Optional
+//		injector.injectMeta.withProperty("og:description"	).withContent(data.summary)
+//		injector.injectMeta.withProperty("og:locale"		).withContent("en_GB")
+//		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom-Factory")
+//	}
+
 	RepoPod pod() {
 		fandocUri.pod
 	}

@@ -40,6 +40,11 @@ class WebModule {
 		config.set("AuthMiddleware", config.autobuild(AuthenticationMiddleware#)).before("afBedSheet.routes")
 	}
 
+	@Contribute { serviceType=ClientAssetProducers# }
+	static Void contributeAssetProducers(Configuration config) {
+		config["podAssetProducer"] = config.autobuild(PodAssetProducer#)
+	}
+
 	@Contribute { serviceType=ValueEncoders# }
 	static Void contributeValueEncoders(Configuration config) {
 		config[RepoPod#]	= config.autobuild(PodValueEncoder#)
