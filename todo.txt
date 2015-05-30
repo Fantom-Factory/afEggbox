@@ -24,16 +24,9 @@ email reza
 
 TODO
 ====
-Download link on summary page
-
-add pod version to page titles
-
-Tidy up Fat Footer
- - Show contact email address: help.me@fantomfactory.org
+use fontello
 
 tidy pod upload validation errors
-
-ID anchor offset hack
 
 site logo
 favicons
@@ -46,7 +39,6 @@ User activity Data
 
 install MongoDB on VM
 
-use fontello
 
 
 Future

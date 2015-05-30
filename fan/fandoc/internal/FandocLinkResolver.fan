@@ -194,11 +194,16 @@ abstract const class FandocUri {
 		path.isEmpty ? null : path.removeAt(0) 
 	}
 
+	Bool isLatest() {
+		podVersion == null || podVersion == podDao.findOne(podName)?.version
+	}
+
 	Bool isCorePod() {
 		podDao.findOne(podName, podVersion) == null && corePods.isCorePod(podName)
 	}
 
 	abstract FandocUri? toParentUri()
+	abstract FandocUri toLatest()
 
 	FandocSummaryUri toSummaryUri() {
 		reg.autobuild(FandocSummaryUri#, [podName, podVersion])
@@ -268,9 +273,13 @@ const class FandocSummaryUri : FandocUri {
 	Uri toDownloadUrl() {
 		toClientUrl.plusName("download")
 	}
-	
+		
 	override Str title() {
-		pod.projectName
+		"${pod.projectName} ${pod.version}"
+	}
+
+	override FandocUri toLatest() {
+		reg.autobuild(FandocSummaryUri#, [podName, null])
 	}
 
 	override FandocUri? toParentUri() {
@@ -299,6 +308,10 @@ const class FandocApiUri : FandocUri {
 		this.slotName	= slotName
 	}
 	
+	override FandocUri toLatest() {
+		reg.autobuild(FandocApiUri#, [podName, null, typeName, slotName])
+	}
+
 	Bool exists() {
 		validate
 	}
@@ -443,7 +456,11 @@ const class FandocSrcUri : FandocUri {
 		this.typeName = typeName
 		this.slotName = slotName
 	}
-	
+
+	override FandocUri toLatest() {
+		reg.autobuild(FandocSrcUri#, [podName, null, typeName, slotName])
+	}
+
 	Str qname() {
 		"${podName}::${typeName}"
 	}
@@ -535,6 +552,10 @@ const class FandocDocUri : FandocUri {
 		this.headingId	= headingId
 	}
 	
+	override FandocUri toLatest() {
+		reg.autobuild(FandocDocUri#, [podName, null, fileUri, headingId])
+	}
+
 	Bool isAsset() {
 		fileUri.ext != "fandoc"
 	}

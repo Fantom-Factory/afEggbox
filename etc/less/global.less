@@ -135,3 +135,11 @@ li > div.syntax {
 		font-weight:	normal;
 	}
 }
+
+// see http://stackoverflow.com/a/22655654/1532548
+:target:before {
+	content:		"";
+	display:		block;
+	height:			@navbar-height + @navbar-margin-bottom;
+	margin:			-(@navbar-height + @navbar-margin-bottom) 0 0 0;
+}
