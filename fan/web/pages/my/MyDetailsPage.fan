@@ -41,7 +41,7 @@ const mixin MyDetailsPage : PrMyPage, SitemapExempt {
 		
 		userDao.update(user)
 
-		alert.msg = Msgs.alert_userDetailsSaved(user)
+		alert.success = Msgs.alert_userDetailsSaved(user)
 		return Redirect.afterPost(pages[MyDetailsPage#].pageUrl)
 	}
 }

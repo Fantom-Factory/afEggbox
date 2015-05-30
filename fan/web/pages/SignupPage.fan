@@ -7,17 +7,21 @@ using afFormBean
 const mixin SignupPage : PrPage {
 
 	@Inject abstract RepoUserDao	userDao
+	@Inject	abstract HttpSession	httpSession
 //	@Inject	abstract SystemActivity	systemActivity
 //	@Inject abstract UserActivity	userActivity
-//	@Inject	abstract FlashMsg		flash
 	@Inject { type=SignUpDetails# } 
 			abstract FormBean		formBean
 			abstract SignUpDetails?	signUpDetails
 
 	@BeforeRender
-	Void initRender() {
+	Void beforeRender() {
 		signUpDetails = SignUpDetails()
 		formBean.formFields[SignUpDetails#password].formValue = ""
+		
+		// TODO: use httpSession.flashExists when BedSheet is released 
+		if (httpSession.exists && httpSession.containsKey("afBedSheet.flash") && httpSession.flash["signUp.email"] != null)
+			signUpDetails.email = httpSession.flash["signUp.email"]
 	}
 
 	Str signUpUrl() {
@@ -47,7 +51,7 @@ const mixin SignupPage : PrPage {
 		userSession.loginAs(user)
 //		userActivity.logLoggedIn
 		
-		alert.msg = Msgs.alert_userSignedUp(user)
+		alert.success = Msgs.alert_userSignedUp(user)
 		return Redirect.afterPost(pages[UsersPage#].withContext([user.screenName]).pageUrl)
 	}
 }

@@ -16,11 +16,8 @@ const class PodRepoConfig {
 	const Str?		errorEmailsSmtpPassword
 	const Bool		errorEmailsSmtpSsl
 	const Uri?		errorEmailsSendTo
-	
-	
-//	const Uri?		adminEmail
-//	const Uri?		autoLoginEmail
-//	const Bool		unsecured
+	const Uri?		autoLoginEmail
+	const Uri?		adminEmail
 	
 	private new makeInternal(|This|in) { in(this) }
 	
@@ -36,9 +33,8 @@ const class PodRepoConfig {
 			ConfigProperty(#errorEmailsSmtpPassword,	"afPodRepo.errorEmails.smtpPassword",	null),
 			ConfigProperty(#errorEmailsSmtpSsl,			"afPodRepo.errorEmails.smtpSsl",		false),
 			ConfigProperty(#errorEmailsSendTo,			"afPodRepo.errorEmails.sendTo",			null),
-			
-//			ConfigProperty(#adminEmail,			"afPodRepo.adminEmail",			null),
-//			ConfigProperty(#unsecured,			"afPodRepo.unsecured",	true)
+			ConfigProperty(#autoLoginEmail,				"afPodRepo.autoLoginEmail",				null),
+			ConfigProperty(#adminEmail,					"afPodRepo.adminEmail",					null),
 		]
 		
 		configFileName	:= (fromCmdArg(Env.cur.args, "-file") ?: fromCmdArg(Env.cur.args, "f")) ?: "config.properties"
@@ -83,9 +79,13 @@ const class PodRepoConfig {
 		map["Error Emails Smtp Password"]	= errorEmailsSmtpPassword
 		map["Error Emails Smtp Ssl"]		= errorEmailsSmtpSsl
 		map["Error Emails Send To"]			= errorEmailsSendTo
-		map["."]						= ""
-		map["Google Analytics Enabled"]	= googleAnalyticsEnabled
-		map["Error Emailing Enabled"]	= errorEmailsEnabled
+		map["Auto Login Email"]				= autoLoginEmail
+		map["Admin Email"]					= adminEmail
+		map["."]							= ""
+		map["Google Analytics Enabled"]		= googleAnalyticsEnabled
+		map["Error Emailing Enabled"]		= errorEmailsEnabled
+		map["Auto Login Enabled"]			= autoLoginEnabled
+		map["Admin Enabled"]				= adminEnabled
 		
 		msg := "\n\n"
 		msg += "Pod Repo Config\n"
@@ -110,6 +110,14 @@ const class PodRepoConfig {
 
 	Bool errorEmailsEnabled() {
 		errorEmailsSmtpHost != null
+	}
+
+	Bool autoLoginEnabled() {
+		autoLoginEmail != null
+	}
+
+	Bool adminEnabled() {
+		adminEmail != null
 	}
 
 	SmtpClient errorEmailsSmtpClient() {

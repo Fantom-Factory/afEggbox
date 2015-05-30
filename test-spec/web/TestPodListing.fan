@@ -79,7 +79,7 @@ class TestPodListing : WebFixture {
 
 	Void listPrivatePods() {
 		user := getOrMakeUser("mouse")
-		pods = podDao.findPrivate(user).map { Str[it.name, it.version.toStr] }
+		pods = podDao.findPrivateOwned(user).map { Str[it.name, it.version.toStr] }
 	}
 
 	Void listPublicPodsForUser() {

@@ -9,9 +9,9 @@
 			img.img-thumbnail.pull-right (src="${user.gravatarImageUrl(110)}")
 			h1.podHeading
 				span	user
-				| ${user.screenName} 
+				| ${user.realName ?: user.screenName} 
 				-- if (user.realName != null && !user.realName.equalsIgnoreCase(user.screenName)) 
-					small()	 (${user.realName})
+					small()	 (${user.screenName})
 				
 			-- if (user.aboutMe != null)
 				h2	About Me
@@ -19,7 +19,7 @@
 
 			-- if (allPods.size > 0)
 				h2	Public Published Pods
-				p	${user.realName ?: user.screenName} has published ${podDao.versionCount(user)} version(s) of ${allPods.size} pod(s).
+				p	${user.realName ?: user.screenName} has published ${podDao.countPublicVersions(user)} version(s) of ${allPods.size} public pod(s).
 				div.table-responsive
 					table.table.table-striped.table-condensed
 						tr

@@ -20,6 +20,7 @@ Fandoc:
 
 TODO
 ====
+email reza
 add pod version to page titles
 
 admin user
@@ -43,12 +44,13 @@ Download link on summary page
 Download Pod Data
 User activity Data
 
-Show contact email address:
-	help.me@fantomfactory.org
+Tidy up Fat Footer
+ - Show contact email address: help.me@fantomfactory.org
 
 install MongoDB on VM
 
 tidy pod upload validation errors
+
 
 
 Future

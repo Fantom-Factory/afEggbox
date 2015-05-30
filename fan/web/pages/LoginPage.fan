@@ -12,7 +12,7 @@ const mixin LoginPage : PrPage {
 			abstract LoginDetails?	loginDetails
 
 	@BeforeRender
-	Void initRender() {
+	Void beforeRender() {
 		loginDetails = LoginDetails()
 		formBean.formFields[LoginDetails#password].formValue = ""
 	}
@@ -46,7 +46,7 @@ const mixin LoginPage : PrPage {
 		userSession.loginAs(user)
 //		userActivity.logLoggedIn
 		
-		alert.msg = Msgs.alert_userLoggedIn(user)
+		alert.success = Msgs.alert_userLoggedIn(user)
 		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 	}
 }

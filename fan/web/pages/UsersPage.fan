@@ -15,7 +15,7 @@ const mixin UsersPage : PrPage, SitemapSource {
 
 	@BeforeRender
 	Void beforeRender() {
-		allPods = podDao.findPublic(userSession.user)
+		allPods = podDao.findPublicOwned(user)
 	}
 
 	Str podSummaryUrl(RepoPod pod) {

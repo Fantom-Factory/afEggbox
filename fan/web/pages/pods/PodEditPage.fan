@@ -69,7 +69,7 @@ const mixin PodEditPage : PrPage {
 		podRepo.update(pod)
 //		userActivity.logPodUpdated
 		
-		alert.msg = Msgs.alert_podUpdated(pod)
+		alert.success = Msgs.alert_podUpdated(pod)
 		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 	}
 
@@ -95,7 +95,7 @@ const mixin PodEditPage : PrPage {
 			fanrRepo.delete(loggedInUser, pod)
 	//		userActivity.logPodDeleted
 			
-			alert.msg = Msgs.alert_podDeleted(pod)
+			alert.success = Msgs.alert_podDeleted(pod)
 			return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 
 		} catch (PodDeleteErr err) {

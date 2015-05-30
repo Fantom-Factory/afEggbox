@@ -16,7 +16,7 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 
 	@InitRender
 	Void initRender() {
-		allPods = podDao.findPrivate(userSession.user)
+		allPods = podDao.findPrivateOwned(userSession.user)
 		injector.injectRequireModule("fileInput")
 	}
 	
@@ -68,7 +68,7 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 
 //			userActivity.logLoggedIn
 			if (pod != null)
-				alert.msg = Msgs.alert_userUploadedPod(pod)
+				alert.success = Msgs.alert_userUploadedPod(pod)
 			return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 
 		} catch (PodPublishErr err) {

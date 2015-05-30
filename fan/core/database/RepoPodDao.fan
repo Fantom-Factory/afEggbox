@@ -11,10 +11,11 @@ const mixin RepoPodDao : EntityDao {
 	abstract RepoPod[]		findVersions(Str name, Int? limit)
 	abstract RepoPod? 		findOne(Str name, Version? version := null)
 
-	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)
-	abstract RepoPod[] 		findPublicLatest(Int limit)
-	abstract RepoPod[] 		findPrivate(RepoUser loggedInUser)
-	abstract Int	 		versionCount(RepoUser user)
+	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)			// for All Pods page
+	abstract RepoPod[] 		findPublicVersions(Int limit)				// for main public atom feed
+	abstract RepoPod[] 		findPrivateOwned(RepoUser loggedInUser)		// for My Pods page
+	abstract RepoPod[] 		findPublicOwned(RepoUser loggedInUser)		// for Users page
+	abstract Int	 		countPublicVersions(RepoUser loggedInUser)	// for Users page
 
 	** used for fanr queries
 	abstract RepoPod[] 		query(|Cursor->Obj?| f)
@@ -83,18 +84,22 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		return reduceByVersion(query)
 	}
 	
-	override RepoPod[] findPublicLatest(Int limit) {
+	override RepoPod[] findPublicVersions(Int limit) {
 		query := Query().field("isPublic").eq(true).field("isDeprecated").eq(false)
 		return datastore.query(query).orderByIndex("_builtOn_").limit(limit).findAll
 	}
 	
-	override Int versionCount(RepoUser user) {
-		query := Query().field("isPublic").eq(true).field("ownerId").eq(user._id)
-		return datastore.query(query).findCount		
+	override RepoPod[] findPrivateOwned(RepoUser user) {
+		return reduceByVersion(field("ownerId").eq(user._id))
 	}
 	
-	override RepoPod[] findPrivate(RepoUser user) {
-		return reduceByVersion(field("ownerId").eq(user._id))
+	override RepoPod[] findPublicOwned(RepoUser user) {
+		return reduceByVersion(field("ownerId").eq(user._id).field("isPublic").eq(true))
+	}
+	
+	override Int countPublicVersions(RepoUser user) {
+		query := Query().field("isPublic").eq(true).field("ownerId").eq(user._id)
+		return datastore.query(query).findCount		
 	}
 
 	override RepoPod[] query(|Cursor->Obj?| f) {
