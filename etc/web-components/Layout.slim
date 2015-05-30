@@ -43,11 +43,10 @@ html (xmlns:svg="http://www.w3.org/2000/svg")
 
 		main#${pageId}.container
 			-- if (alert.msgExists)
-				div.alert.alert-success.alert-dismissible (role="alert")
+				div.alert.alert-${alert.level.lower}.alert-dismissible (role="alert")
 					button.close (type="button" data-dismiss="alert" aria-label="Close")
 						span (aria-hidden="true") &times;
-					span.t-alertMsg
-						== alert.msg
+					span.t-alertMsg	${alert.message}
 
 			-- renderBody
 

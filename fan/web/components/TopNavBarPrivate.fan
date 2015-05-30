@@ -18,7 +18,7 @@ const mixin TopNavBarPrivate : PrComponent {
 
 	Str userLink(Str name) {
 		html := (pageMeta.pageType == UsersPage# && pageMeta.pageContext.first == loggedInUser.screenName) ? """<li class="active">""" : "<li>"
-		html += """<a href="${pageUrl(UsersPage#, [loggedInUser])}">${name}</a>"""
+		html += loggedInUser.isAdmin ? """<a title="Admin User" href="${pageUrl(UsersPage#, [loggedInUser])}"><span class="text-danger">${name}</span></a>""" : """<a href="${pageUrl(UsersPage#, [loggedInUser])}">${name}</a>"""
 		html += "</li>"
 		return html
 	}

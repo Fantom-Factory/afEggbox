@@ -8,7 +8,7 @@ const mixin LogoutPage : PrPage, SitemapExempt {
 	Void initRender() {
 		user := userSession.logout
 		if (user != null)
-			alert.msg = Msgs.alert_userLoggedOut(user)
+			alert.success = Msgs.alert_userLoggedOut(user)
 		throw ReProcessErr(Redirect.afterPost(pages[LoginPage#].pageUrl))
 	}
 	

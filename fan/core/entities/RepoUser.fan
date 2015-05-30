@@ -30,7 +30,8 @@ class RepoUser {
 	@Property{}	Str		userSalt
 	@Property{}	Str		userSecret
 
-	@Inject{} Fandoc?		fandocRenderer
+	@Inject{} Fandoc?			fandocRenderer
+	@Inject{} PodRepoConfig?	repoConfig
 	
 	new make(|This| in) { in(this) }
 	
@@ -48,7 +49,11 @@ class RepoUser {
 	}
 	
 	Bool owns(RepoPod pod) {
-		pod.ownerId == _id
+		pod.ownerId == _id || isAdmin
+	}
+	
+	Bool isAdmin() {
+		repoConfig != null && (repoConfig.autoLoginEnabled && repoConfig.autoLoginEmail == email)
 	}
 	
 	Str aboutMeHtml() {

@@ -9,7 +9,7 @@ const class AtomFeedPages {
 	new make(|This|in) { in(this) }
 	
 	Text generateAll() {
-		pods := podDao.findPublicLatest(50)
+		pods := podDao.findPublicVersions(20)
 		feed := atomFeedGen.generate(`/pods/feed.atom`, pods, "Fantom Pod Repository", "3rd Party Libraries for the Fantom language", "Fantom Pods")
 		return Text.fromContentType(feed, MimeType("application/atom+xml"))
 	}
