@@ -1,5 +1,11 @@
 -- app.renderLayout(isPublic, "${pod.projectName} Edit")
 
+	-- if (pod.owner != loggedInUser)
+		div.alert.alert-danger.alert-dismissible (role="alert")
+			button.close (type="button" data-dismiss="alert" aria-label="Close")
+				span (aria-hidden="true") &times;
+			span.t-alertMsg	This pod is owned by ${pod.owner.screenName} 
+
 	ol.breadcrumb
 		li;	a (href="${podsUrl}")	Pods
 		li;	a (href="${podSummaryUrl.toClientUrl.encode}")	${podSummaryUrl.title}

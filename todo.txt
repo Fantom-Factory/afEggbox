@@ -24,7 +24,6 @@ email reza
 add pod version to page titles
 
 admin user
-auto login
 
 add atom feed links + autodiscovery
 
