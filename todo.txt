@@ -16,14 +16,13 @@ Fandoc:
    - fan: scheme
    - pod: scheme
 
+RSS feed for both site and individual pods
  
+email reza
 
 TODO
 ====
-email reza
 add pod version to page titles
-
-admin user
 
 add atom feed links + autodiscovery
 
@@ -33,7 +32,6 @@ ID anchor offset hack
 
 site logo
 favicons
-use icons / ogimages from pods
 
 front page
 help pages
@@ -72,3 +70,4 @@ Games:
  - download / install pods
  - no of downloads your pod get
   
+http://avatars.io/ support
