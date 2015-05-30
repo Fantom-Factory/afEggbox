@@ -95,10 +95,6 @@ class RepoPod {
 		meta.projectName
 	}
 	
-	Str title() {
-		"${projectName} ${version}"
-	}
-	
 	Str summary() {
 		summary := meta.summary
 		if (isDeprecated)

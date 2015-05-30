@@ -7,12 +7,18 @@ footer#fatFooter.clearfix.hidden-print
 		div.row
 			// .col-xs-12 gives horizontal padding on small screens
 			div.col-xs-12
-				a (href="http://www.fantom.org/")
-					img (src="http://img.shields.io/badge/developed%20in-Fantom-lightgray.svg" alt="Developed in: Fantom")
-				| &nbsp;&nbsp;
-				a (href="http://www.fantomfactory.org/pods/afBedSheet")
-					img (src="http://img.shields.io/badge/powered%20by-BedSheet-green.svg" alt="Powered by: BedSheet")
+				-- if (repoConfig.contactEnabled)
+					p.pull-right
+						| Contact ${repoConfig.contactName} at:
+						br
+						a#contactUs (href="#" data-unscramble="${repoConfig.contactEmail.encode.reverse}") ${"".padl('-', repoConfig.contactEmail.encode.size)}
+
+				p	Fantom Pod Repository ${FatFooter#.pod.version} - © ${Date.today.year} Alien-Factory
+					br
+					a (href="http://www.fantom.org/")
+						img (src="http://img.shields.io/badge/developed%20in-Fantom-lightgray.svg" alt="Developed in: Fantom")
+					| &nbsp;&nbsp;
+					a (href="http://www.fantomfactory.org/pods/afBedSheet")
+						img (src="http://img.shields.io/badge/powered%20by-BedSheet-green.svg" alt="Powered by: BedSheet")
 	
-				div.pull-right
-					| © ${Date.today.year} Alien-Factory
-		
+			p	&nbsp;

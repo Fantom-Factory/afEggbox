@@ -17,6 +17,10 @@ const mixin PodBreadcrumbs : PrComponent {
 
 	override Str renderTemplate() {
 		html := StrBuf()
+
+		if (!fandocUri.isLatest)
+			html.add("""<div class="alert alert-warning" role="alert"><b>Warning:</b> This page pertains to an older version of ${fandocUri.pod.projectName}. <a href="${fandocUri.toLatest.toClientUrl.encode}">Click here for the latest.</a></div>""")
+
 		html.add("<ol class=\"breadcrumb\">")
 		html.add("<li>")
 		html.add("<a href=\"${podsUrl}\">Pods</a>")
@@ -46,6 +50,7 @@ const mixin PodBreadcrumbs : PrComponent {
 		html.add("""<a href="${href}" class="podRssFeed" title="RSS Feed for ${fandocUri.pod.projectName}"><i class="fa fa-rss-square fa-lg rss"></i></a>""")
 		
 		html.add("</ol>")
+
 		return html.toStr
 	}
 	

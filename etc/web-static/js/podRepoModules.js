@@ -25,3 +25,33 @@ define("fileInput", ["jquery"], function($) {
 	});
 });
 
+
+
+// ---- Unscramble Module -------------------------------------------------------------------------
+
+define("unscramble", [], function () {
+
+	var randomise = function (strLength) {
+		var text = "";
+    	var possible = "!#$%()*+-/:=?@~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+-/:=?@~";
+    	for( var i=0; i < strLength; i++ )
+    	    text += possible.charAt(Math.floor(Math.random() * possible.length));
+    	return text;
+	}
+
+	var countdown = function (element, secret, cnt) {
+		var text = secret.substr(0, cnt) + randomise(secret.length - cnt);
+		element.innerHTML = text;
+		element.href = "mailto:" + text;
+		if (cnt++ <= secret.length)
+			setTimeout(function() {
+				countdown(element, secret, cnt);
+			}, 100);
+	}
+
+	return function(elementId) {
+		var element = document.getElementById(elementId);
+		var secret = element.getAttribute("data-unscramble").split("").reverse().join("");
+		countdown(element, secret, 0);
+	}
+});
