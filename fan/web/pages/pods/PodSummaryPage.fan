@@ -11,29 +11,35 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract Registry			registry
 	@Inject			abstract RepoPodDao			podDao
 	@Inject			abstract SyntaxWriter		syntaxWriter
+	@Inject			abstract BedSheetServer		bedServer
 	@PageContext	abstract FandocSummaryUri	fandocUri
 	
 	** Need to wait until *after* layout has rendered to find the HTML tag.
-//	@AfterRender
-//	Void afterRender(StrBuf buf) {
-//		ogasset1	:= fileHandler.fromLocalUrl(`/images/pods/${data.podName}.ogimage.png`, false)
-//		ogasset2	:= ogasset1 ?: fileHandler.fromLocalUrl(`/images/AlienFactory-avatar.png`)
-//		ogimage		:= bedServer.toAbsoluteUrl(ogasset2.clientUrl)
-//		htmlIndex	:= buf.toStr.index("<html ") + "<html ".size
-//		absPageUrl	:= bedServer.toAbsoluteUrl(data.clientUrl)
-//
-//		// ---- Open Graph Meta ---- Mandatory
-//		buf.insert(htmlIndex, "prefix=\"og: http://ogp.me/ns#\" ")
-//		injector.injectMeta.withProperty("og:type"	).withContent("website")
-//		injector.injectMeta.withProperty("og:title"	).withContent("${data.projectName} ${data.version}")
-//		injector.injectMeta.withProperty("og:url"	).withContent(absPageUrl.encode)
-//		injector.injectMeta.withProperty("og:image"	).withContent(ogimage.encode)
-//		
-//		// ---- Open Graph Meta ---- Optional
-//		injector.injectMeta.withProperty("og:description"	).withContent(data.summary)
-//		injector.injectMeta.withProperty("og:locale"		).withContent("en_GB")
-//		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom-Factory")
-//	}
+	@AfterRender
+	Void afterRender(StrBuf buf) {
+		pod			:= fandocUri.pod
+		ogasset		:= fandocUri.toDocUri(`/doc/ogimage.png`)
+		ogimage		:= ogasset.exists ? ogasset.toAsset.clientUrl.encode : null		
+		htmlIndex	:= buf.toStr.index("<html ") + "<html ".size
+		absPageUrl	:= bedServer.toAbsoluteUrl(fandocUri.toClientUrl)
+
+		// ---- Open Graph Meta ---- Mandatory
+		buf.insert(htmlIndex, "prefix=\"og: http://ogp.me/ns#\" ")
+		injector.injectMeta.withProperty("og:type"	).withContent("website")
+		injector.injectMeta.withProperty("og:title"	).withContent("${pod.projectName} ${pod.version}")
+		injector.injectMeta.withProperty("og:url"	).withContent(absPageUrl.encode)
+		if (ogimage != null)	// TODO: have a default image
+			injector.injectMeta.withProperty("og:image"	).withContent(ogimage)
+		
+		// ---- Open Graph Meta ---- Optional
+		injector.injectMeta.withProperty("og:description"	).withContent(fandocUri.pod.summary)
+		injector.injectMeta.withProperty("og:locale"		).withContent("en_GB")
+		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
+		
+		metaDesc := "${pod.projectName} by ${pod.meta.orgName ?: pod.owner.screenName} :: ${pod.summary}"
+		injector.injectMeta.withName("description").withContent(metaDesc)
+
+	}
 
 	RepoPod pod() {
 		fandocUri.pod

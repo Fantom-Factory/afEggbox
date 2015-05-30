@@ -76,11 +76,11 @@ const class InvalidLinks {
 
 const mixin InvalidLinkMsgs {
 		
-	static Str pathSegmentNotPods(Str pods) {
+	static Str pathSegmentNotPods(Str? pods) {
 		"Path segment `/${pods}` should be `/pods`"
 	}
 	
-	static Str invalidPodName(Str podName) {
+	static Str invalidPodName(Str? podName) {
 		"Invalid pod name '${podName}'"
 	}
 	

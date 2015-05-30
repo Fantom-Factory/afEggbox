@@ -1,4 +1,4 @@
--- app.renderLayout(isPublic, "${pod.projectName} ${fandocUri.title}")
+-- app.renderLayout(isPublic, "${pod.title} - ${fandocUri.title}")
 
 	== app.renderPodBreadcrumbs(fandocUri)
 
@@ -6,7 +6,7 @@
 		article.col-sm-9
 			== app.renderPodIcon(fandocUri)
 			h1.podHeading
-				span ${pod.projectName} ${pod.version}
+				span ${pod.title}
 				== fandocUri.title
 				
 			-- if (pod.meta.isInternal)
