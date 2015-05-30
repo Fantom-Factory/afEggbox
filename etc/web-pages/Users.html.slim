@@ -36,6 +36,6 @@
 								td				${pod.summary}
 								td.text-nowrap;	== podDocsHtml(pod)
 
-		nav.col-sm-3.hidden-xs.contents
+		nav.col-sm-3.hidden-xs
 			-- if (loggedIn && loggedInUser == user)
 				a.btn.btn-primary (href="${pages[MyDetailsPage#].pageUrl.encode}") Edit User Details

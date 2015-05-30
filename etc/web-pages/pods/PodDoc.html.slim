@@ -4,6 +4,7 @@
 
 	div.row
 		article.col-sm-9
+			== app.renderPodIcon(fandocUri)
 			h1.podHeading
 				span ${pod.projectName} ${pod.version}
 				== fandocUri.title
@@ -12,5 +13,6 @@
 				p;	i	${pod.projectName} is a support library that aids ${pod.meta.orgName ?: pod.owner.screenName} in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.
 			== docHtml
 
-		nav.col-sm-3.hidden-xs.contents
+		nav.col-sm-3
+			hr.visible-xs
 			== app.renderPodToc(fandocUri)

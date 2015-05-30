@@ -1,7 +1,7 @@
 
-//@colour-rss:			@brand-warning;
-//@colour-white:			#FFFFFF;
-//@colour-black:			#131313;
+@colour-rss:			#FF9030;
+//@colour-white:		#FFFFFF;
+//@colour-black:		#131313;
 
 /* ---- Globals --------------------------------------------------------------------------------- */
 
@@ -31,26 +31,6 @@ ol, ul {
 
 .display-none {
 	display:			none;
-}
-
-//.externalLink:after {
-//	content:		"\A0\E80C";
-//	font-family:	"factoryicons";
-//	font-size:		smaller;
-//}
-
-.podHeading {
-	color:			#3d6ba0;
-	padding-bottom:	@line-height-computed * 0.5;
-	margin-bottom:	@line-height-computed * 1.5;
-	border-bottom:	1px solid @page-header-border-color;
-
-	> span {
-		display:		block;
-		color:			#4c697e;
-		font-size:		60%;
-		font-weight:	normal;
-	}
 }
 
 
@@ -113,4 +93,45 @@ li > div.syntax {
 // Labels as badges - see http://stackoverflow.com/a/26495054/1532548
 .badge {
 	border-radius:	1em;
+}
+
+/* ---- Other ----------------------------------------------------------------------------------- */
+
+.podIcon {
+	.img-thumbnail;
+	.pull-right;
+	width:			110px;
+	height:			110px;
+	margin-left:	@padding-base-horizontal;
+}
+
+.podRssFeed {
+	.pull-right;
+}
+
+.externalLink:after {
+	content:		"\A0\F08E";
+	font-family:	"FontAwesome";
+	font-size:		90%;
+}
+
+.rss {
+	color:			@colour-rss;
+}
+.rss:hover {
+	color:			darken(@colour-rss, 20%);
+}
+
+.podHeading {
+	color:			#3d6ba0;
+	padding-bottom:	@line-height-computed * 0.5;
+	margin-bottom:	@line-height-computed * 1.5;
+	border-bottom:	1px solid @page-header-border-color;
+
+	> span {
+		display:		block;
+		color:			#4c697e;
+		font-size:		60%;
+		font-weight:	normal;
+	}
 }

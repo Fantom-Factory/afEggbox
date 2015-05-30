@@ -4,6 +4,7 @@
 
 	div.row
 		article.col-sm-9.api
+			== app.renderPodIcon(fandocUri)
 			h1.podHeading
 				span	pod
 				== pod.name
@@ -50,7 +51,8 @@
 							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
 							td;	== uri.typeFirstSentenceHtml
 
-		nav.col-sm-3.hidden-xs.contents
+		nav.col-sm-3
+			hr.visible-xs
 			== app.renderPodToc(fandocUri)
 
 			h3	All Types

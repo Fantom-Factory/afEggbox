@@ -13,7 +13,10 @@ header.navbar.navbar-default.navbar-fixed-top
 			ul.nav.navbar-nav
 				== pageLink(PodsPage#,	"All Pods")
 
+
 			ul.nav.navbar-nav.navbar-right
+				li;	a (href="/pods/feed.atom" title="Pod Repository RSS Feed")
+					i.fa.fa-rss-square.fa-lg.rss
 				li.dropdown
 					a.dropdown-toggle (href="#" data-toggle="dropdown" role="button" aria-expanded="false")	Help
 						span.caret

@@ -6,6 +6,7 @@
 
 	div.row
 		article.col-sm-9.api
+			== app.renderPodIcon(fandocUri)
 			h1.podHeading
 				span; == DocFlags.toTypeDis(type.flags)
 				== type.qname
@@ -81,7 +82,8 @@
 						-- slotUri := fandocUri.toApiUri(type.name, slot.name)
 						== slotUri.slotHtml
 	
-		nav.col-sm-3.hidden-xs.contents
+		nav.col-sm-3
+			hr.visible-xs
 			== app.renderPodToc(fandocUri)
 
 			h3	Source

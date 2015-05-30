@@ -2,10 +2,9 @@ using afIoc::Inject
 using afEfanXtra
 using afPillow
 
-const mixin PodBreadcrumbs : EfanComponent {
+const mixin PodBreadcrumbs : PrComponent {
 
-	@Inject	abstract Pages	 	pages
-			abstract FandocUri	fandocUri
+	abstract FandocUri	fandocUri
 	
 	@InitRender
 	Void initRender(FandocUri fandocUri) {
@@ -36,6 +35,15 @@ const mixin PodBreadcrumbs : EfanComponent {
 			html.add("</li>")
 		}
 		html.add("<li class=\"active\">${uris.last.title.toXml}</li>")
+		
+		href := fandocUri.toSummaryUri.toClientUrl.plusSlash.plusName("feed.atom").encode
+		injector.injectLink
+			.setAttr("rel",		"alternate")
+			.setAttr("type",	"application/atom+xml")
+			.setAttr("title",	"${fandocUri.pod.projectName} Versions")
+			.setAttr("href",	href)
+
+		html.add("""<a href="${href}" class="podRssFeed" title="RSS Feed for ${fandocUri.pod.projectName}"><i class="fa fa-rss-square fa-lg rss"></i></a>""")
 		
 		html.add("</ol>")
 		return html.toStr
