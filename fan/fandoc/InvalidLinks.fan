@@ -20,7 +20,7 @@ const class InvalidLinks {
 				InvalidLinks.setWhereLinkIsFound(fandocUri.toSummaryUri)
 				fandoc.writeStrToHtml(pod.aboutFandoc, linkCtx)
 	
-				podDocsRepo.get(pod._id, false).fandocPages.each |page, fileUri| {
+				podDocsRepo.get(pod._id, false)?.fandocPages?.each |page, fileUri| {
 					InvalidLinks.setWhereLinkIsFound(fandocUri.toDocUri(fileUri))
 					fandoc.writeStrToHtml(page, linkCtx)
 				}

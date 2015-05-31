@@ -298,4 +298,8 @@ const class InvalidLink {
 	@Property{}	const Str		msg
 
 	new make(|This|in) { in(this) }
+	
+	override Str toStr() {
+		"$link - $msg"
+	}
 }

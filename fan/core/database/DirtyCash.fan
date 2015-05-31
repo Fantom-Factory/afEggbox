@@ -27,28 +27,33 @@ const class DirtyCash {
 		} finally {
 			caching = false
 			
-			totalHits   := 0
-			totalMisses := 0
-			idSize := (Int) cache.keys.reduce(0) |Int size, Str key->Int| {
-				size.max(key.size)
-			}
-			echo("\nDirty Cache Results:")
-			cache.keys.each |Str k| {
-				hits	:= (Int) cacheHits  .get(k, 0)
-				misses	:= (Int) cacheMisses.get(k, 0)
-				echo("  ${k.justl(idSize)} : ${hits.toStr.justr(3)} -> $misses")
-				totalHits   += hits
-				totalMisses += misses
-			}
-			per := (totalHits == 0 || totalMisses == 0) ? 0f : 100 - ((totalMisses * 100).toFloat / totalHits)
-			echo("  ".padr(idSize + 13, '-'))
-			echo("  ".padr(idSize + 2,  ' ') + " : ${totalHits.toStr.justr(3)} -> $totalMisses = " + per.toLocale("0.00") + "% effective!")
-			echo("\n")
-			
+//			logCash
+						
 			cache.clear
 			cacheHits.clear
 			cacheMisses.clear
 		}
+	}
+	
+	private Void logCash() {
+		totalHits   := 0
+		totalMisses := 0
+		idSize := (Int) cache.keys.reduce(0) |Int size, Str key->Int| {
+			size.max(key.size)
+		}
+		
+		echo("\nDirty Cache Results:")
+		cache.keys.each |Str k| {
+			hits	:= (Int) cacheHits  .get(k, 0)
+			misses	:= (Int) cacheMisses.get(k, 0)
+			echo("  ${k.justl(idSize)} : ${hits.toStr.justr(3)} -> $misses")
+			totalHits   += hits
+			totalMisses += misses
+		}
+		per := (totalHits == 0 || totalMisses == 0) ? 0f : 100 - ((totalMisses * 100).toFloat / totalHits)
+		echo("  ".padr(idSize + 13, '-'))
+		echo("  ".padr(idSize + 2,  ' ') + " : ${totalHits.toStr.justr(3)} -> $totalMisses = " + per.toLocale("0.00") + "% effective!")
+		echo("\n")		
 	}
 	
 	virtual Obj? get(Type type, Str id, |->Obj?| func) {

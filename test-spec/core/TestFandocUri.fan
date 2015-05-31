@@ -128,6 +128,8 @@ class TestFandocUri : RepoFixture {
 	Void parseFandocUri(Str uri) {
 		InvalidLinks.gather |->| {
 			fandocUri := FandocUri.fromUri(reg, uri.toUri)
+			InvalidLinks.setLinkBeingResolved(uri)
+			InvalidLinks.setWhereLinkIsFound(fandocUri)
 			if (!fandocUri.validate) {
 				this.fandocUri = "${fandocUri?.toUri} - ${InvalidLinks.invalidLinks}"
 				this.clientUrl = "${fandocUri?.toClientUrl} - ${InvalidLinks.invalidLinks}"
@@ -141,6 +143,8 @@ class TestFandocUri : RepoFixture {
 	Void parseClientUrl(Str uri) {
 		InvalidLinks.gather |->| {
 			fandocUri := FandocUri.fromClientUrl(reg, uri.toUri)
+			InvalidLinks.setLinkBeingResolved(uri)
+			InvalidLinks.setWhereLinkIsFound(fandocUri)
 			if (!fandocUri.validate) {
 				this.fandocUri = "${fandocUri?.toUri} - ${InvalidLinks.invalidLinks}"
 				this.clientUrl = "${fandocUri?.toClientUrl} - ${InvalidLinks.invalidLinks}"
@@ -156,6 +160,8 @@ class TestFandocUri : RepoFixture {
 			pod := podDao["foo-2.0"]
 			ctx := LinkResolverCtx(pod) { it.type = "Bar" }
 			fandocUri := FandocUri.fromFantomUri(reg, ctx, uri)
+			InvalidLinks.setLinkBeingResolved(uri)
+			InvalidLinks.setWhereLinkIsFound(fandocUri)
 			if (!fandocUri.validate) {
 				this.fandocUri = "${fandocUri?.toUri} - ${InvalidLinks.invalidLinks}"
 				this.clientUrl = "${fandocUri?.toClientUrl} - ${InvalidLinks.invalidLinks}"
