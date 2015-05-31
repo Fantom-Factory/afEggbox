@@ -64,8 +64,6 @@
 
 		nav.col-sm-3
 			hr.visible-xs
-			-- if (loggedIn && loggedInUser.owns(pod))
-				a.btn.btn-primary (href="${editUrl}") Edit Pod Details
 			== app.renderPodToc(fandocUri)
 		
 			-- versions := podDao.findVersions(pod.name, null)

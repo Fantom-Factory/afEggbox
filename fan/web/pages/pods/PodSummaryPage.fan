@@ -19,7 +19,7 @@ const mixin PodSummaryPage : PrPage {
 	Void afterRender(StrBuf buf) {
 		pod			:= fandocUri.pod
 		ogasset		:= fandocUri.toDocUri(`/doc/ogimage.png`)
-		ogimage		:= ogasset.exists ? ogasset.toAsset.clientUrl.encode : null		
+		ogimage		:= ogasset.exists ? ogasset.toAsset.clientUrl : fileHandler.fromLocalUrl(`/images/ogimage.png`).clientUrl
 		htmlIndex	:= buf.toStr.index("<html ") + "<html ".size
 		absPageUrl	:= bedServer.toAbsoluteUrl(fandocUri.toClientUrl)
 
@@ -28,8 +28,7 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectMeta.withProperty("og:type"	).withContent("website")
 		injector.injectMeta.withProperty("og:title"	).withContent("${pod.projectName} ${pod.version}")
 		injector.injectMeta.withProperty("og:url"	).withContent(absPageUrl.encode)
-		if (ogimage != null)	// TODO: have a default pod ogimage
-			injector.injectMeta.withProperty("og:image"	).withContent(ogimage)
+		injector.injectMeta.withProperty("og:image"	).withContent(ogimage.encode)
 		
 		// ---- Open Graph Meta ---- Optional
 		injector.injectMeta.withProperty("og:description"	).withContent(fandocUri.pod.summary)
@@ -47,10 +46,6 @@ const mixin PodSummaryPage : PrPage {
 
 	Str aboutHtml() {
 		fandocUri.aboutHtml
-	}
-
-	Str editUrl() {
-		fandocUri.toClientUrl.plusSlash.plusName("edit").encode
 	}
 
 	Bool isPublic() {

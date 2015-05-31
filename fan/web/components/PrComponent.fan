@@ -66,5 +66,5 @@ const mixin PrComponent : EfanComponent {
 
 	RepoUser? loggedInUser() {
 		userSession.user
-	}
+	}	
 }

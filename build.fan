@@ -38,7 +38,7 @@ class Build : BuildPod {
 			// ---- Web -------------------------
 			"afBedSheet   1.4.8  - 1.4",
 			"afEfanXtra   1.1.2  - 1.1",
-			"afPillow     1.0.23 - 1.0",
+			"afPillow     1.0.22 - 1.0",
 			"afDuvet      1.0.8  - 1.0",
 			"afSlim       1.1.16 - 1.1",
 			"afFormBean   0+",
@@ -61,7 +61,7 @@ class Build : BuildPod {
 		srcDirs = [`test-spec/`, `test-spec/web/`, `test-spec/web/login/`, `test-spec/utils/`, `test-spec/fanr/`, `test-spec/core/`, `fan/`, `fan/web/`, `fan/web/util/`, `fan/web/services/`, `fan/web/pages/`, `fan/web/pages/pods/`, `fan/web/pages/my/`, `fan/web/pages/help/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/fanr/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`, `fan/bedframe/`]
 		resDirs = [`res/`, `test/res/`]
 	}
-	
+
 	
 	@Target { help = "Heroku pre-compile hook, use to install dependencies" }
 	Void herokuPreCompile() {
@@ -94,8 +94,12 @@ class Build : BuildPod {
 		// abort build if something went wrong
 		if (status != 0) Env.cur.exit(status)
 
-		(scriptDir + `lib-fan/afBedSheet.pod`).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
-		(scriptDir + `lib-fan/afFormBean.pod`).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+//		(scriptDir + `lib-fan/afBedSheet.pod`).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+		(scriptDir + `lib-fan/afAtom.pod`		).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+		(scriptDir + `lib-fan/afButter.pod`		).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+		(scriptDir + `lib-fan/afFormBean.pod`	).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+		(scriptDir + `lib-fan/afMorphia.pod`	).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+		(scriptDir + `lib-fan/afSlim.pod`		).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
 	}
 
 	private Void patchMimeTypes(Str:Str extToMimeTypes) {

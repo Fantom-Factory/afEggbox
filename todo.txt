@@ -24,11 +24,7 @@ email reza
 
 TODO
 ====
-Smoke test
-
 install MongoDB on VM
-
-favicons
 
 front page
 help pages -> security
@@ -39,6 +35,12 @@ help pages -> security
 
 Future
 ======
+Smoke test
+
+better ogimage
+
+ID Linking via JS
+
 User, grab default details from gravatar -> have a Populate button
 
 Show stat list

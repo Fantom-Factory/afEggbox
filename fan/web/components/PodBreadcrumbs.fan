@@ -49,9 +49,15 @@ const mixin PodBreadcrumbs : PrComponent {
 
 		html.add("""<a href="${href}" class="podRssFeed" title="RSS Feed for ${fandocUri.pod.projectName}"><i class="fa fa-rss-square fa-lg rss"></i></a>""")
 		
+		if (loggedIn && loggedInUser.owns(fandocUri.pod))
+			html.add("""<a href="${editUrl}" class="btn btn-primary btn-xs pull-right">&nbsp;&nbsp;Edit Pod&nbsp;&nbsp;</a>&nbsp;&nbsp;""")
+		
 		html.add("</ol>")
 
 		return html.toStr
 	}
 	
+	Str editUrl() {
+		fandocUri.toSummaryUri.toClientUrl.plusSlash.plusName("edit").encode
+	}
 }

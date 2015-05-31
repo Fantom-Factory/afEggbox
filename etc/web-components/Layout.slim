@@ -11,6 +11,10 @@ html (xmlns:svg="http://www.w3.org/2000/svg")
 		// Atom Feed
 		link (rel="alternate" type="application/atom+xml" title="Fantom Pod Respository" href="/pods/feed.atom")
 		
+		// Google Web Master Tools
+		-- if (isIndexPage)
+			meta (name="google-site-verification" content="j2bYSt75mVPPEDdKvO7e7hkHXesAWP3rfHSf5ZkFzXU") 
+		
 		// http://realfavicongenerator.net/
 		link (rel="shortcut icon" href="/favicon.ico")
 		link (rel="manifest" href="/favicons/manifest.json")

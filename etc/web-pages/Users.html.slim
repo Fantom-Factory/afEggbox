@@ -3,6 +3,8 @@
 	ol.breadcrumb
 		li.active	Users
 		li.active	${user.screenName}
+		-- if (loggedIn && loggedInUser == user)
+			a.btn.btn-primary.btn-xs.pull-right (href="${pages[MyDetailsPage#].pageUrl.encode}") &nbsp;&nbsp;Edit User&nbsp;&nbsp;
 
 	div.row
 		article.col-sm-9
@@ -37,5 +39,3 @@
 								td.text-nowrap;	== podDocsHtml(pod)
 
 		nav.col-sm-3.hidden-xs
-			-- if (loggedIn && loggedInUser == user)
-				a.btn.btn-primary (href="${pages[MyDetailsPage#].pageUrl.encode}") Edit User Details
