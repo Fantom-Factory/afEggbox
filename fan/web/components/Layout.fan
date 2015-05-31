@@ -43,5 +43,9 @@ const mixin Layout : PrComponent {
 	Bool googleAnalyticsEnabled() {
 		repoConfig.googleAnalyticsEnabled ? isPublic : false
 	}
+	
+	Bool isIndexPage() {
+		pageMeta.pageType == IndexPage#
+	}
 }
 
