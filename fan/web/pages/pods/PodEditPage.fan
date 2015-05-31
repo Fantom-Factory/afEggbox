@@ -59,11 +59,17 @@ const mixin PodEditPage : PrPage {
 
 		podEditFormBean.updateBean(editDetails)
 		if (pod.isPublic) {
-			errs := pod.validateForPublicUse
-			if (errs.size > 0) {
-				podEditFormBean.errorMsgs.addAll(errs)
-				return null
+			if (editDetails.summary.isEmpty)
+				podEditFormBean.formFields[PodEditDetails#summary].errMsg = "Public pods must have a summary"
+			if (editDetails.licenceName.isEmpty)
+				podEditFormBean.formFields[PodEditDetails#summary].errMsg = "Public pods must have a licence"
+			if (editDetails.organisationUrl.toStr.isEmpty && editDetails.sourceCodeManagementUrl.toStr.isEmpty) {
+				podEditFormBean.errorMsgs.add("Public pods must have an Org URL or a Source Code URL")
+				podEditFormBean.formFields[PodEditDetails#organisationUrl].invalid = true
+				podEditFormBean.formFields[PodEditDetails#sourceCodeManagementUrl].invalid = true
 			}
+			if (podEditFormBean.hasErrors)
+				return null
 		}		
 		
 		podRepo.update(pod)
@@ -112,19 +118,19 @@ class PodEditDetails {
 		this.pod = pod
 	}
 
-	@HtmlInput { type="text"; placeholder="Project Name"; attributes="autocomplete=\"off\""; minLength=3; maxLength=128 }
+	@HtmlInput { type="text"; attributes="autocomplete=\"off\""; minLength=3; maxLength=128 }
 	Str projectName {
 		get { pod.meta.projectName }
 		set { pod.meta.projectName  = it }
 	}
 
-	@HtmlInput { type="url"; placeholder="Project URL"; minLength=3; maxLength=512 }
+	@HtmlInput { type="url"; minLength=3; maxLength=512 }
 	Uri projectUrl {
 		get { pod.meta.projectUrl ?: `` }
 		set { pod.meta.projectUrl  = it }
 	}
 
-	@HtmlInput { type="textarea"; placeholder="Summary"; attributes="rows=\"3\""; minLength=3; maxLength=1024; hint="Summaries generally don't include the pod or project name" }
+	@HtmlInput { type="textarea"; attributes="rows=\"3\""; minLength=3; maxLength=1024 }
 	Str summary {
 		get { pod.meta.summary }
 		set { pod.meta.summary  = it }
@@ -148,31 +154,31 @@ class PodEditDetails {
 		set { pod.meta.isInternal = it }
 	}
 
-	@HtmlInput { type="text"; placeholder="Organisation Name"; minLength=3; maxLength=256 }
+	@HtmlInput { type="text"; minLength=3; maxLength=256 }
 	Str organisationName {
 		get { pod.meta.orgName ?: "" }
 		set { pod.meta.orgName  = it }
 	}
 
-	@HtmlInput { type="url"; placeholder="Organisation URL"; minLength=3; maxLength=512 }
+	@HtmlInput { type="url"; minLength=3; maxLength=512 }
 	Uri organisationUrl {
 		get { pod.meta.orgUrl ?: `` }
 		set { pod.meta.orgUrl  = it }
 	}
 
-	@HtmlInput { type="text"; placeholder="Licence Name"; minLength=3; maxLength=128 }
+	@HtmlInput { type="text"; minLength=3; maxLength=128 }
 	Str licenceName {
 		get { pod.meta.licenceName ?: "" }
 		set { pod.meta.licenceName  = it }
 	}
 
-	@HtmlInput { type="text"; placeholder="Source Code Management"; minLength=3; maxLength=128 }
+	@HtmlInput { type="text"; minLength=3; maxLength=128 }
 	Str sourceCodeManagement {
 		get { pod.meta.vcsName ?: "" }
 		set { pod.meta.vcsName  = it }
 	}
 
-	@HtmlInput { type="url"; placeholder="Source Code Management URL"; minLength=3; maxLength=512 }
+	@HtmlInput { type="url"; minLength=3; maxLength=512 }
 	Uri sourceCodeManagementUrl {
 		get { pod.meta.vcsUrl ?: `` }
 		set { pod.meta.vcsUrl  = it }
