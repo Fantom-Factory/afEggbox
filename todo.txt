@@ -26,7 +26,8 @@ TODO
 ====
 use fontello
 
-tidy pod upload validation errors
+Smoke test
+
 Download Pod Data
 User activity Data
 install MongoDB on VM
