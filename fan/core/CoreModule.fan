@@ -16,6 +16,7 @@ class CoreModule {
 		defs.add(RepoPodDocsDao#)
 		defs.add(RepoPodSrcDao#)
 		defs.add(RepoPodApiDao#)
+		defs.add(RepoPodDownloadDao#)
 		
 		defs.add(DirtyCash#)
 		defs.add(CorePods#)
