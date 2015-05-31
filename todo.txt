@@ -27,6 +27,9 @@ TODO
 use fontello
 
 tidy pod upload validation errors
+Download Pod Data
+User activity Data
+install MongoDB on VM
 
 site logo
 favicons
@@ -34,10 +37,7 @@ favicons
 front page
 help pages
 
-Download Pod Data
-User activity Data
 
-install MongoDB on VM
 
 
 
