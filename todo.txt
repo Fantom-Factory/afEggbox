@@ -26,15 +26,16 @@ TODO
 ====
 Smoke test
 
-Download Pod Data
 User activity Data
 install MongoDB on VM
+
+seo index page
 
 site logo
 favicons
 
 front page
-help pages
+help pages -> security
 
 
 
@@ -63,3 +64,9 @@ Games:
 http://avatars.io/ support
 
 make work in non-root env - see docAssets, RSS urls, etc
+
+Delete user account
+
+404 page
+
+MongoDB text search

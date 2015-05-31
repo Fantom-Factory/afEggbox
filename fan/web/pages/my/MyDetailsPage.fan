@@ -4,7 +4,6 @@ using afFormBean
 using afEfanXtra
 using afPillow
 using afSitemap
-using afButter
 
 const mixin MyDetailsPage : PrMyPage, SitemapExempt {
 	
@@ -40,7 +39,8 @@ const mixin MyDetailsPage : PrMyPage, SitemapExempt {
 				user.populateFromGravatar
 		
 		userDao.update(user)
-
+		logUserActivity(LogMsgs.updatedUser)
+		
 		alert.success = Msgs.alert_userDetailsSaved(user)
 		return Redirect.afterPost(pages[MyDetailsPage#].pageUrl)
 	}

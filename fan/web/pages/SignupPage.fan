@@ -6,10 +6,9 @@ using afFormBean
 
 const mixin SignupPage : PrPage {
 
+	@Inject abstract Registry		registry
 	@Inject abstract RepoUserDao	userDao
 	@Inject	abstract HttpSession	httpSession
-//	@Inject	abstract SystemActivity	systemActivity
-//	@Inject abstract UserActivity	userActivity
 	@Inject { type=SignUpDetails# } 
 			abstract FormBean		formBean
 			abstract SignUpDetails?	signUpDetails
@@ -39,17 +38,23 @@ const mixin SignupPage : PrPage {
 
 		signUpDetails = formBean.createBean
 		
-		user := userDao.getByEmail(signUpDetails.email, false)
-		if (user != null) {
-//			systemActivity.logFailedLogin(loginDetails.email, loginDetails.password)
-			formBean.errorMsgs.add(Msgs.signup_emailTaken(user.email))
+		existing := userDao.getByEmail(signUpDetails.email, false)
+		if (existing != null) {
+			formBean.errorMsgs.add(Msgs.signup_emailTaken(existing.email))
 			return null
 		}
+		
+		user := signUpDetails.toUser
+		orig := user.screenName
+		while (userDao.getByScreenName(user.screenName, false) != null) {
+			user.screenName = orig + " " + Int.random(0..9999).toStr
+		}
 
-		user = signUpDetails.toUser.populateFromGravatar
+		registry.injectIntoFields(user)
+		user.populateFromGravatar
 		userDao.create(user)
 		userSession.loginAs(user)
-//		userActivity.logLoggedIn
+		logUserActivity(LogMsgs.signedUp)
 		
 		alert.success = Msgs.alert_userSignedUp(user)
 		return Redirect.afterPost(pages[UsersPage#].withContext([user.screenName]).pageUrl)

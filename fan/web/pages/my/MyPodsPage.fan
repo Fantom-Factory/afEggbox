@@ -66,9 +66,10 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 					pod = fanrRepo.publish(userSession.user, in)
 	        }
 
-//			userActivity.logLoggedIn
-			if (pod != null)
+			if (pod != null) {
+				logUserPodActivity(pod, LogMsgs.uploadedPod, pod._id)
 				alert.success = Msgs.alert_userUploadedPod(pod)
+			}
 			return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
 
 		} catch (PodPublishErr err) {

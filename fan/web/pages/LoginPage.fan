@@ -38,13 +38,13 @@ const mixin LoginPage : PrPage {
 			return null			
 		}
 		if(user.generateSecret(loginDetails.password) != user.userSecret) {
-//			systemActivity.logFailedLogin(loginDetails.email, loginDetails.password)
+			logActivity(LogMsgs.loginFailed, "${loginDetails.email} / ${loginDetails.password}")
 			formBean.errorMsgs.add(Msgs.login_incorrectPassword)
 			return null
 		}
 		
 		userSession.loginAs(user)
-//		userActivity.logLoggedIn
+		logUserActivity(LogMsgs.loggedIn)
 		
 		alert.success = Msgs.alert_userLoggedIn(user)
 		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)

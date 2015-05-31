@@ -32,6 +32,7 @@ class RepoUser {
 
 	@Inject{} Fandoc?			fandocRenderer
 	@Inject{} PodRepoConfig?	repoConfig
+	@Inject{} RepoActivityDao?	activityDao
 	
 	new make(|This| in) { in(this) }
 	
@@ -77,23 +78,30 @@ class RepoUser {
 		butt := ButterDish(Butter.churnOut)
 		butt.errOn4xx.enabled = false
 		butt.errOn5xx.enabled = false
-		req	 := ButterRequest(gravatarJsonUri)
-		req.headers.userAgent = "afButter/1.1"	// required else Gravatar gives us the 403 finger
-		res  := butt.sendRequest(req)
-		if (res.statusCode == 200) {
-			try {
-			json := res.body.jsonMap
-			name := json->get("entry")?->getSafe(0)?->get("name")?->get("formatted")
-			abut := json->get("entry")?->getSafe(0)?->get("aboutMe")
-			if (realName?.trimToNull == null)
-				realName = name
-			if (aboutMe?.trimToNull == null)
-				aboutMe = abut
-				
-			} catch (Err err) {
-				// I don't trust the gravatar API
-				typeof.pod.log.warn("Could not parse Gravatar response for ${gravatarJsonUri}", err)
+		try {
+			req	 := ButterRequest(gravatarJsonUri)
+			req.headers.userAgent = "afButter/1.1"	// required else Gravatar gives us the 403 finger
+			res  := butt.sendRequest(req)
+			if (res.statusCode == 200) {
+				try {
+					json := res.body.jsonMap
+					name := json->get("entry")?->getSafe(0)?->get("name")?->get("formatted")
+					abut := json->get("entry")?->getSafe(0)?->get("aboutMe")
+					if (realName?.trimToNull == null)
+						realName = name
+					if (aboutMe?.trimToNull == null)
+						aboutMe = abut
+					
+				} catch (Err err) {
+					// I don't trust the gravatar API
+					msg := "Could not parse Gravatar response for ${gravatarJsonUri}"
+					activityDao.warn(msg, err)
+				}
 			}
+		} catch (Err err) {
+			// I don't trust external websites
+			msg := "Could not contact Gravatar at ${gravatarJsonUri}"
+			activityDao.warn(msg, err)
 		}
 		return this
 	}

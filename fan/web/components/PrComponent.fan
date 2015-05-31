@@ -10,13 +10,14 @@ using afBedSheet::FileHandler
 @Abstract
 const mixin PrComponent : EfanComponent {
 
-	@Inject	abstract Pages	 		pages
-	@Inject abstract HtmlInjector	injector
-	@Inject abstract HttpRequest	httpRequest
-	@Inject	abstract FileHandler	fileHandler
-	@Inject	abstract PageMeta		pageMeta
-	@Inject	abstract UserSession	userSession
-	@Inject	abstract LinkResolvers	linkResolvers
+	@Inject	abstract Pages	 			pages
+	@Inject abstract HtmlInjector		injector
+	@Inject abstract HttpRequest		httpRequest
+	@Inject	abstract FileHandler		fileHandler
+	@Inject	abstract PageMeta			pageMeta
+	@Inject	abstract UserSession		userSession
+	@Inject	abstract LinkResolvers		linkResolvers
+	@Inject	abstract RepoActivityDao	activityDao
 	
 //	Str assetUrl(Uri localUrl) {
 //		fileHandler.fromLocalUrl(localUrl).clientUrl.encode 
@@ -45,6 +46,18 @@ const mixin PrComponent : EfanComponent {
 		}
 
 		throw ArgErr("WTF is a ${obj.typeof}??? Hints: ${hints} - $obj")
+	}
+	
+	Void logActivity(Str what, Str? detail := null) {
+		activityDao.create(RepoActivity(what, detail))
+	}
+
+	Void logUserActivity(Str what, Str? detail := null) {
+		activityDao.create(RepoActivity(loggedInUser, what, detail))
+	}
+
+	Void logUserPodActivity(RepoPod pod, Str what, Str? detail := null) {
+		activityDao.create(RepoActivity(loggedInUser, pod, what, detail))
 	}
 	
 	Bool loggedIn() {
