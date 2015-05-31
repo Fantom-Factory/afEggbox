@@ -10,6 +10,8 @@ const class FanrHandler {
 	@Inject private const RepoUserDao	userDao
 	@Inject private const HttpRequest	req
 	@Inject private const HttpResponse	res
+	@Inject private const Log			log
+	@Inject private const RepoPodDownloadDao	podDownloadDao
 
 	** Dir to store temp files, defaults to 'Env.tempDir'
 	const File tempDir := Env.cur.tempDir
@@ -61,7 +63,10 @@ const class FanrHandler {
 		if (pod == null)
 			sendErr(404, "Pod not found: $podName $podVersion")
 
-	    res.headers.contentType 	= MimeType("application/zip")
+		try	podDownloadDao.create(RepoPodDownload(pod, "fanr", user))
+		catch (Err err)	log.warn("Could not save download details: ${err.typeof} - ${err.msg}", err)
+
+		res.headers.contentType 	= MimeType("application/zip")
 	    res.headers.contentLength	= pod.fileSize
 
 	    return pod.loadFile.in

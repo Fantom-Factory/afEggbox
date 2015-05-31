@@ -10,6 +10,9 @@ const class Indexes {
 
 	@Inject { type=RepoUser# }
 	private const Collection userCol
+
+	@Inject { type=RepoPodDownload# }
+	private const Collection podDownloadCol
 	
 	new make(|This|in) { in(this) } 
 	
@@ -22,7 +25,9 @@ const class Indexes {
 		podCol.index("_isPublic_")		.ensure(["isPublic"		: Index.ASC])
 		podCol.index("_isDeprecated_")	.ensure(["isDeprecated"	: Index.ASC])
 
-		userCol.index("_email_")	.ensure(["email"	: Index.ASC])
+		userCol.index("_email_")		.ensure(["email"		: Index.ASC])
+		
+		podDownloadCol.index("_when_")	.ensure(["when"			: Index.ASC])
 		
 		// we can't run mapReduce commands on a collection that doesn't exist
 		// i.e. the /pods page throws a MongoDB Err if there are no pods
