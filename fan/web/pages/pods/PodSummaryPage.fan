@@ -28,7 +28,7 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectMeta.withProperty("og:type"	).withContent("website")
 		injector.injectMeta.withProperty("og:title"	).withContent("${pod.projectName} ${pod.version}")
 		injector.injectMeta.withProperty("og:url"	).withContent(absPageUrl.encode)
-		if (ogimage != null)	// TODO: have a default image
+		if (ogimage != null)	// TODO: have a default pod ogimage
 			injector.injectMeta.withProperty("og:image"	).withContent(ogimage)
 		
 		// ---- Open Graph Meta ---- Optional

@@ -16,9 +16,16 @@ internal const class RepoActivityDaoImpl : RepoActivityDao {
 	@Inject
 	override const IntSequences	intSeqs
 	
-	@Inject	private const Log	log
+	@Inject	private const Log			log
+	@Inject	private const PodRepoConfig	repoConfig
 
 	new make(|This| in) { in(this) }
+	
+	override RepoActivity create(Obj entity) {
+		repoConfig.logActivityEnabled
+			? EntityDao.super.create(entity)
+			: entity
+	}
 	
 	override RepoActivity? get(Int id, Bool checked := true) {
 		datastore.query(field("_id").eq(id)).findOne(checked)

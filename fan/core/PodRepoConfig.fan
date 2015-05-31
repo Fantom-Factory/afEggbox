@@ -20,6 +20,8 @@ const class PodRepoConfig {
 	const Uri?		adminEmail
 	const Str?		contactName
 	const Uri?		contactEmail
+	const Bool		logDownloads
+	const Bool		logActivity
 	
 	private new makeInternal(|This|in) { in(this) }
 	
@@ -39,6 +41,8 @@ const class PodRepoConfig {
 			ConfigProperty(#adminEmail,					"afPodRepo.adminEmail",					null),
 			ConfigProperty(#contactName,				"afPodRepo.contactName",				null),
 			ConfigProperty(#contactEmail,				"afPodRepo.contactEmail",				null),
+			ConfigProperty(#logDownloads,				"afPodRepo.logDownloads",				false),
+			ConfigProperty(#logActivity,				"afPodRepo.logActivity",				false),
 		]
 		
 		configFileName	:= (fromCmdArg(Env.cur.args, "-file") ?: fromCmdArg(Env.cur.args, "f")) ?: "config.properties"
@@ -87,12 +91,16 @@ const class PodRepoConfig {
 		map["Admin Email"]					= adminEmail
 		map["Contact Name"]					= contactName
 		map["Contact Email"]				= contactEmail
+		map["Log Downloads"]				= logDownloads
+		map["Log Activity"]					= logActivity
 		map["."]							= ""
 		map["Google Analytics Enabled"]		= googleAnalyticsEnabled
 		map["Error Emailing Enabled"]		= errorEmailsEnabled
 		map["Auto Login Enabled"]			= autoLoginEnabled
 		map["Admin Enabled"]				= adminEnabled
 		map["Contact Enabled"]				= contactEnabled
+		map["Log Downloads Enabled"]		= logDownloadsEnabled
+		map["Log Activity Enabled"]			= logActivityEnabled
 		
 		msg := "\n\n"
 		msg += "Pod Repo Config\n"
@@ -129,6 +137,14 @@ const class PodRepoConfig {
 
 	Bool contactEnabled() {
 		contactName != null && contactEmail != null
+	}
+	
+	Bool logDownloadsEnabled() {
+		logDownloads
+	}
+
+	Bool logActivityEnabled() {
+		logActivity
 	}
 
 	SmtpClient errorEmailsSmtpClient() {
