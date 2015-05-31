@@ -1,5 +1,9 @@
 
 #podSummaryPage {
+	h2, h3 {
+		margin-top:			@line-height-computed * 2;
+	}
+
 	.installText {
 		cursor:				pointer;
 		
@@ -12,13 +16,13 @@
 			overflow:			hidden;
 			text-overflow:		ellipsis;
 			box-sizing:			border-box;
-			//padding-right:		@padding-large-horizontal + 16px;
+			padding-right:		@padding-large-horizontal + 16px;
 			position:			relative;	// to position icon
 		}
-		//.copyIcon {
-		//	position:			absolute;
-		//	right:				@padding-large-horizontal + 8px;
-		//}
+		.copyIcon {
+			position:			absolute;
+			right:				@padding-large-horizontal + 8px;
+		}
 	}
 	
 	.downloadPod {
