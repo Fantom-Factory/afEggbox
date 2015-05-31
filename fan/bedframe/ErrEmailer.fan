@@ -11,6 +11,7 @@ const class ErrEmailer {
 	@Inject private const BedSheetServer	bedServer
 	@Inject private const PodRepoConfig		repoConfig
 	@Inject private const ErrPrinterStr		errPrinter
+	@Inject private const RepoActivityDao	activityDao
 			private const Synchronized		lock
 	
 	@Config { id="afIocEnv.isProd" }
@@ -64,7 +65,7 @@ const class ErrEmailer {
 			log.warn("Sent error email to `${email.to.join}` in ${duration.toSec} secs")
 			
 		} catch (Err oops) {
-			log.err("Could not send error email", oops)
+			activityDao.warn("Could not send error email", oops)
 		}
 	}
 }

@@ -35,29 +35,32 @@
 		
 			h2	Information
 			p	Meta information on the ${pod.projectName} pod:
-			ul
-				li	Published by - 
-					a (href="${userUrl(pod.owner)}") ${pod.owner.screenName}
+
+			dl.dl-horizontal
+				dt	Published by 
+				dd;	a (href="${userUrl(pod.owner)}") ${pod.owner.screenName}
 				-- if (pod.meta.orgName != null)
-					li	Organisation - 
-						-- if (pod.meta.orgUrl != null)
-							a.externalLink (href="${pod.meta.orgUrl.encode}") ${pod.meta.orgName}
-						-- else
-							| ${pod.meta.orgName}
-				li	File size - $${toFileSize(pod.fileSize)}
+					dt	Organisation 
+					-- if (pod.meta.orgUrl != null)
+						dd;	a.externalLink (href="${pod.meta.orgUrl.encode}") ${pod.meta.orgName}
+					-- else
+						dd ${pod.meta.orgName}
+				dt	Pod file size
+				dd	$${toFileSize(pod.fileSize)}
 				-- if (pod.meta.licenceName != null)
-					li	Licence - ${pod.meta.licenceName}
-				li	Built on - ${format(pod.builtOn)}
+					dt	Licence
+					dd	${pod.meta.licenceName}
+				dt	Built on
+				dd	${format(pod.builtOn)}
 				-- if (pod.meta.vcsUrl != null)
-					li	Source code available 
+					dt	Source code
+					dd	 
 						-- if (pod.meta.vcsName != null)
 							| via ${pod.meta.vcsName} 
 						| at 
 						a.externalLink (href="${pod.meta.vcsUrl.encode}") ${pod.meta.vcsUrl}
-				//li	Tags - Web
-				li	Depends on - 
-					== pod.dependsOn.join(", ") { linkToPod(it) }
-				//li	Used by - afBedNap, afBounce, afColdFeet, afDuvet, afFormBean, afPillow, afSitemap
+				dt	Depends on 
+				dd;	== pod.dependsOn.join(", ") { linkToPod(it) }
 
 		nav.col-sm-3
 			hr.visible-xs
