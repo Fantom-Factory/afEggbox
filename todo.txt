@@ -24,8 +24,6 @@ email reza
 
 TODO
 ====
-use fontello
-
 Smoke test
 
 Download Pod Data
