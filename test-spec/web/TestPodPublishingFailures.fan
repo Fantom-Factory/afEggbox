@@ -25,7 +25,9 @@ class TestPodPublishingFailures : WebFixture {
 		"pod.summary" : "Widgets for me!",
 		"pod.depends" : "sys 1.0",
 		"build.ts"	  : "2006-06-06T06:06:00Z UTC",
-		"private"	  : "true"
+		"private"	  : "true",
+		"licence.name": "MIP",
+		"vcs.uri"	  : "wotever"
 	]
 	
 	Void podSizeTooBig() {

@@ -25,7 +25,7 @@ using afBounce
 **   ----  
 **   micky.mouse@disney.com 
 ** 
-** On signing up I should be taken to the [My Details Page]`eq:renderedPageName` and see the message:
+** On signing up I should be taken to the [Users Page]`eq:renderedPageName` and see the message:
 ** 
 **   eq:alertMsg
 **   Hi Micky Mouse, welcome the Fantom Pod Repository!
