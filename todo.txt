@@ -26,12 +26,8 @@ TODO
 ====
 Smoke test
 
-User activity Data
 install MongoDB on VM
 
-seo index page
-
-site logo
 favicons
 
 front page

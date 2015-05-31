@@ -14,8 +14,16 @@ internal const class RepoPodDownloadDaoImpl : RepoPodDownloadDao {
 	@Inject
 	override const IntSequences	intSeqs
 
+	@Inject	private const PodRepoConfig	repoConfig
+
 	new make(|This| in) { in(this) }
 	
+	override RepoActivity create(Obj entity) {
+		repoConfig.logDownloadsEnabled
+			? EntityDao.super.create(entity)
+			: entity
+	}
+
 	override RepoPodDownload? get(Int id, Bool checked := true) {
 		datastore.query(field("_id").eq(id)).findOne(checked)
 	}
