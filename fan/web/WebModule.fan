@@ -63,10 +63,9 @@ class WebModule {
 	static Void contributeRequireJsConfigTweaks(Configuration conf) {
 		conf["app.bundles"] = |Str:Obj? config| {
 			bundles := (Str:Str[]) config.getOrAdd("bundles") { [Str:Str[]][:] }
-			bundles["podRepoModules"] = "fileInput unscramble rowLink".split
+			bundles["podRepoModules"] = "fileInput unscramble rowLink anchorJS".split
 		}
 	}
-	
 	
 	@Advise { serviceId="afPillow::Pages" }
 	static Void addTransations(MethodAdvisor[] methodAdvisors, DirtyCash dirtyCash) {

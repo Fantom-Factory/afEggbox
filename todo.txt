@@ -29,8 +29,6 @@ install MongoDB on VM
 front page
 help pages -> security
 
-http://jasny.github.io/bootstrap/javascript/
-
 Smoke test
 
 better ogimage

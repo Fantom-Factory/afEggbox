@@ -44,7 +44,9 @@
 			dl
 				-- type.slots.each |slot|
 					-- slotSrcUri := fandocUri.toSrcUri(type.name, slot.name)
-					dt#${slot.name}	$slot.name
+					dt
+						// put the ID in a div - 'cos the ID top offset fix don't work on dt tags
+						div#${slot.name}.id	$slot.name
 					dd
 						-- if (slotSrcUri.hasSrc)
 							p.src

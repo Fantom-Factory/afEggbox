@@ -8,6 +8,11 @@ const mixin PodApiPage : PrPage {
 
 	@PageContext	abstract FandocApiUri		fandocUri
 	
+//	@BeforeRender
+//	Void beforeRender() {
+//		injector.injectRequireModule("anchorJS", null, ["dt"])
+//	}
+
 	RepoPod pod() {
 		fandocUri.pod
 	}
