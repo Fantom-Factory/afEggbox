@@ -25,7 +25,7 @@
 					th.text-centre	Actions
 				-- allPods.each |pod|
 					tr.${pod.ownerId == loggedInUser._id ? "" : "bg-danger"}
-						td.text-nowrap;	a (href="${podSummaryUrl(pod)}") ${pod.name}
+						td.text-nowrap;b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName}
 						td.text-nowrap	${pod.version}
 						td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
 						td.text-centre;	== pod.isPublic ? "\u2611" : "" // "\u2610";

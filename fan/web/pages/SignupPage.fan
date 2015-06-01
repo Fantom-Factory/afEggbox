@@ -66,7 +66,7 @@ class SignUpDetails {
 	@HtmlInput { type="email"; placeholder="email"; required=true; minLength=3; maxLength=128 }
 	Uri?	email
 
-	@HtmlInput { type="text"; placeholder="password"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=128 }
+	@HtmlInput { type="password"; placeholder="password"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=128 }
 	Str?	password
 
 	RepoUser toUser() {

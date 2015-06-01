@@ -38,8 +38,8 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		"""function (key, pods) { 
 		       function sortByVersion(podA, podB) {
 		           var i, cmp, len, re = /(\\.0)+[^\\.]*\$/;
-		           var a = (podA.version + '').replace(re, '').split('.');
-		           var b = (podB.version + '').replace(re, '').split('.');
+		           var a = (podA.meta['pod\\\\u002eversion'] + '').replace(re, '').split('.');
+		           var b = (podB.meta['pod\\\\u002eversion'] + '').replace(re, '').split('.');
 		           len = Math.min(a.length, b.length);
 		           for (i = 0; i < len; i++) {
 		               cmp = parseInt(a[i], 10) - parseInt(b[i], 10);
@@ -66,26 +66,28 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 	
 	override RepoPod[] findVersions(Str name, Int? limit) {
-		datastore.query(field("name").eq(name)).orderBy("-_id").limit(limit).findAll
+		datastore.query(field("meta.pod\\u002ename").eq(name)).orderByIndex("_builtOn_").limit(limit).findAll
 	}
 	
 	override RepoPod? findOne(Str name, Version? version := null) {
 		dirtyCache.get(RepoPod#, _id(name, version)) |->Obj?| {
 			version != null
 				? get(_id(name, version), false)
-				: reduceByVersion(field("name").eqIgnoreCase(name)).first
+				: reduceByVersion(field("meta.pod\\u002ename").eqIgnoreCase(name)).first
 		}
 	}
 
 	override RepoPod[] findPublic(RepoUser? user) {
-		query		:= Query().field("isPublic").eq(true).field("isDeprecated").eq(false)
+		// NOTE the stringified "true" and "false" - that's 'cos we're querying a map of STRINGS!!!
+		query		:= Query().field("meta.repo\\u002epublic").eq("true").field("meta.repo\\u002edeprecated").eq("false")
 		if (user != null)
 			query	= Query().or([query, field("ownerId").eq(user._id)])
 		return reduceByVersion(query)
 	}
 	
 	override RepoPod[] findPublicVersions(Int limit) {
-		query := Query().field("isPublic").eq(true).field("isDeprecated").eq(false)
+		// NOTE the stringified "true" and "false" - that's 'cos we're querying a map of STRINGS!!!
+		query := Query().field("meta.repo\\u002epublic").eq("true").field("meta.repo\\u002edeprecated").eq("false")
 		return datastore.query(query).orderByIndex("_builtOn_").limit(limit).findAll
 	}
 	
@@ -94,11 +96,11 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 	
 	override RepoPod[] findPublicOwned(RepoUser user) {
-		reduceByVersion(field("ownerId").eq(user._id).field("isPublic").eq(true))
+		reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq("true"))
 	}
 	
 	override Int countPublicVersions(RepoUser user) {
-		query := Query().field("isPublic").eq(true).field("ownerId").eq(user._id)
+		query := Query().field("meta.repo\\u002epublic").eq("true").field("ownerId").eq(user._id)
 		return datastore.query(query).findCount		
 	}
 
@@ -120,17 +122,17 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	private RepoPod[] reduceByVersion(Query? query) {
 		// need to ensure the collection exists else you get a "Mongo ns does not exist" Err
 		// so just ensure the indexes and job done		
-		mapFunc 	:= Code("function () { emit(this.name, this); }")
+		mapFunc 	:= Code("function () { emit(this.meta['pod\\\\u002ename'], this); }")
 		reduceFunc	:= Code(reduceByVersionFunc)
 		options		:= [
 			"query"	: query?.toMongo(datastore),
-			"sort"	: ["_name_" : 1]
+			"sort"	: ["_podName_" : 1]
 		]
 		if (query == null)
 			options.remove("query")
 		output 	:= datastore.collection.mapReduce(mapFunc, reduceFunc, options)
 		pods 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
-		return pods.map { datastore.fromMongoDoc(it) }
+		return pods.map { datastore.fromMongoDoc(it) }.sort |RepoPod p1, RepoPod p2 -> Int| { p1.projectName <=> p2.projectName }
 	}
 
 	private Str _id(Str name, Version? version) {

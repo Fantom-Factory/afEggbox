@@ -138,14 +138,14 @@ class PodEditDetails {
 
 	@HtmlInput { type="checkbox" }
 	Bool isPublic {
-		get { pod.isPublic }
-		set { pod.isPublic = it	}
+		get { pod.meta.isPublic }
+		set { pod.meta.isPublic = it	}
 	}
 
 	@HtmlInput { type="checkbox" }
 	Bool isDeprecated {
-		get { pod.isDeprecated }
-		set { pod.isDeprecated = it }
+		get { pod.meta.isDeprecated }
+		set { pod.meta.isDeprecated = it }
 	}
 
 	@HtmlInput { type="checkbox" }

@@ -12,6 +12,8 @@
 				p;	i	${pod.projectName} is a support library that aids ${pod.meta.orgName ?: pod.owner.screenName} in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.
 
 			== aboutHtml
+
+
 		
 			h2	Install
 			p	To install ${pod.projectName} with the Fantom Repository Manager (<a class="externalLink" href="http://fantom.org/doc/docFanr/Tool.html#install">fanr</a>), cut'n'paste the following into a command prompt, terminal or shell: 
@@ -27,11 +29,15 @@
 				i.fa.fa-download.fa-lg
 				a (href="${fandocUri.toDownloadUrl.encode}" rel="nofollow")
 					|  ${pod.name}.pod 
-					small() ($${toFileSize(pod.fileSize)})
+					small() ($${toFileSize(pod.fileSize)}) 
+
+					 
 			
 			h2	Configure
 			p	To use ${pod.projectName} in a Fantom project, add a dependency to the project's <code>build.fan</code>:
 			== syntaxWriter.writeSyntax("""depends = ["sys 1.0", ..., "${pod.name} ${Version(pod.version.segments[0..2])} - ${Version(pod.version.segments[0..1])}"]""", "fan", false)
+		
+		
 		
 			h2	Information
 			p	Meta information on the ${pod.projectName} pod:
@@ -68,7 +74,7 @@
 		
 			-- versions := podDao.findVersions(pod.name, null)
 			-- if (versions.size > 1)
-				h3	${versions.size} Other Versions
+				h3	${versions.size} Releases
 				ul
 					-- versions.each
 						li;	a (href="${it.toSummaryUri.toClientUrl.encode}") ${it.version}

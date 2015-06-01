@@ -22,11 +22,12 @@ const class Indexes {
 	Void ensureIndexes() {
 		log.info("Ensuring Mongo Indexes...")
 
-		podCol.index("_name_")			.ensure(["name"			: Index.ASC])
-		podCol.index("_ownerId_")		.ensure(["ownerId"		: Index.ASC])
-		podCol.index("_builtOn_")		.ensure(["builtOn"		: Index.DESC])
-		podCol.index("_isPublic_")		.ensure(["isPublic"		: Index.ASC])
-		podCol.index("_isDeprecated_")	.ensure(["isDeprecated"	: Index.ASC])
+		podCol.index("_ownerId_")		.ensure(["ownerId"						: Index.ASC])
+		podCol.index("_podName_")		.ensure(["meta.pod\\u002ename"			: Index.ASC])
+		podCol.index("_projName_")		.ensure(["meta.proj\\u002ename"			: Index.ASC])
+		podCol.index("_builtOn_")		.ensure(["meta.build\\u002ets"			: Index.DESC])
+		podCol.index("_public_")		.ensure(["meta.repo\\u002epublic"		: Index.ASC])
+		podCol.index("_deprecated_")	.ensure(["meta.repo\\u002edeprecated"	: Index.ASC])
 
 		userCol.index("_email_")		.ensure(key.add("email"		, Index.ASC).add("unique", true))
 		userCol.index("_screenName_")	.ensure(key.add("screenName", Index.ASC).add("unique", true))
