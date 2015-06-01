@@ -14,6 +14,11 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract BedSheetServer		bedServer
 	@PageContext	abstract FandocSummaryUri	fandocUri
 	
+	@BeforeRender
+	Void beforeRender() {
+		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
+	}
+
 	** Need to wait until *after* layout has rendered to find the HTML tag.
 	@AfterRender
 	Void afterRender(StrBuf buf) {
@@ -37,7 +42,6 @@ const mixin PodSummaryPage : PrPage {
 		
 		metaDesc := "${pod.projectName} by ${pod.meta.orgName ?: pod.owner.screenName} :: ${pod.summary}"
 		injector.injectMeta.withName("description").withContent(metaDesc)
-
 	}
 
 	RepoPod pod() {
