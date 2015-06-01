@@ -29,17 +29,20 @@ install MongoDB on VM
 front page
 help pages -> security
 
+http://jasny.github.io/bootstrap/javascript/
 
-
-
-
-Future
-======
 Smoke test
 
 better ogimage
 
 ID Linking via JS
+
+sticky mozilla on doc pages
+https://developer.mozilla.org/en-US/docs/Web/CSS/position#Sticky_positioning
+
+
+Future
+======
 
 User, grab default details from gravatar -> have a Populate button
 

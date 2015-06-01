@@ -82,7 +82,7 @@ mixin Msgs {
 	}
 
 	static Str alert_userUploadedPod(RepoPod pod) {
-		"${pod.displayName} was successfully uploaded!"
+		"${pod.name} ${pod.version} was successfully uploaded!"
 	}
 
 	static Str alert_userDetailsSaved(RepoUser user) {

@@ -12,44 +12,22 @@ class RepoPod {
 	@Inject private Registry?		registry
 
 	@Property{}	Str?			_id
-	@Property{}	Str				name
-	@Property{}	Version			version
+	@Property{}	RepoPodMeta		meta
 	@Property{}	Int				fileSize
-	@Property{}	DateTime		builtOn
 	@Property{}	Int				ownerId
 	@Property{}	Str				aboutFandoc
-	@Property{}	Bool			isPublic		// keep our own 'isPublic' for indexing and searching on
-	@Property{}	Bool			isDeprecated	// keep our own 'isDeprecated' for indexing and searching on
-				Str				displayName {
-					get { "${name} ${version}" }
-					private set { }
-				}
 	@Property{}	InvalidLink[]	invalidLinks
 	@Property{}	DateTime?		linksValidatedOn
-	@Property private Str:Str	metaOrig			// currently we don't need 2 meta maps, but it's good future proofing
-	@Property private Str:Str?	metaNew			// should we decide to validate on the original meta, such as only
-				RepoPodMeta		meta			// allowing pod to be public if the uploaded meta is valid
 
-	new make(|This|f) {
-		f(this)
-		meta = RepoPodMeta(metaOrig, metaNew)
-	}
-	
+	new make(|This|f) { f(this) }
+
 	static new fromContents(RepoUser user, Int podSize, Str:Str metaProps, Uri:Buf docContents) {
-		meta := RepoPodMeta(metaProps.ro)
 		return RepoPod() {
-			it.name			= meta["pod.name"]
+			it.meta			= RepoPodMeta(metaProps)
 			it.fileSize		= podSize
-			it.version		= Version(meta["pod.version"])
-			it.builtOn		= DateTime(meta["build.ts"], true)
-			it.meta			= meta
-			it.aboutFandoc	= findAboutFandoc(metaProps, docContents)
-			it.&isPublic	= meta.isPublic		// don't worry if the two get out of sync, we only use the non-meta one
-			it.&isDeprecated= meta.isDeprecated	// don't worry if the two get out of sync, we only use the non-meta one
 			it.ownerId		= user._id
+			it.aboutFandoc	= findAboutFandoc(metaProps, docContents)
 			it.invalidLinks	= InvalidLink#.emptyList
-			it.metaOrig 	= meta.metaOrig	// this map has been nicely ordered
-			it.metaNew 		= meta.metaNew
 		}
 	}
 	
@@ -80,7 +58,7 @@ class RepoPod {
 	}
 
 	Str:Str toJsonObj() {
-		meta.allMeta
+		meta.meta
 	}
 	
 	PodSpec toPodSpec() {
@@ -91,13 +69,9 @@ class RepoPod {
 		podFileDao.get(_id, true).data
 	}
 	
-	Str projectName() {
-		meta.projectName
-	}
-	
 	Str summary() {
 		summary := meta.summary
-		if (isDeprecated)
+		if (meta.isDeprecated)
 			summary = "(Deprecated) ${summary}"
 		if (meta.isInternal)
 			summary = "(Internal) ${summary}"
@@ -114,6 +88,30 @@ class RepoPod {
 	
 	FandocSummaryUri toSummaryUri() {
 		registry.autobuild(FandocSummaryUri#, [name, version])
+	}
+	
+	Str name() {
+		meta.name
+	}
+	
+	Version version() {
+		meta.version
+	}
+	
+	DateTime builtOn() {
+		meta.builtOn
+	}
+	
+	Str projectName() {
+		meta.projectName
+	}
+	
+	Bool isPublic() {
+		meta.isPublic
+	}
+	
+	Bool isDeprecated() {
+		meta.isDeprecated
 	}
 	
 	private Str findAboutFandoc(Str:Str metaProps, Uri:Buf contents) {
@@ -151,7 +149,7 @@ class RepoPod {
 		return metaProps["summary"] ?: "This pod has no description"
 	}
 	
-	override Str toStr() { "${name}-${version}" }
+	override Str toStr() { _id }
 	
 	override Int hash() { _id.toInt }
 	override Bool equals(Obj? that) {
@@ -162,28 +160,37 @@ class RepoPod {
 class RepoPodMeta {	
 	static const	
 	Str[] 		specialKeys	:= ["pod.name", "pod.version", "pod.depends", "pod.summary", "build.ts"]
-	Str:Str		metaOrig
-	Str:Str?	metaNew
+	Str:Str?	meta
 	
-	new make(Str:Str metaOrig, Str:Str? metaNew) {
-		this.metaOrig	= metaOrig
-		this.metaNew	= metaNew
-	}
+	new make(|This|in) { in(this) }
 
 	new makeFromOrig(Str:Str metaOrig) {
 		specialKeys.each { assertKeyExists(metaOrig, it) }
 
-		m2 := Str:Str[:] { ordered = true }
-		specialKeys.each { m2[it] = metaOrig[it] ?: "" }
-		metaOrig.keys.exclude { specialKeys.contains(it) }.sort.each { m2[it] = metaOrig[it] }
+		meta = Str:Str[:] { ordered = true }
+		specialKeys.each { meta[it] = metaOrig[it] ?: "" }
+		metaOrig.keys.exclude { specialKeys.contains(it) }.sort.each { meta[it] = metaOrig[it] }
+
+		// default project name to pod name
+		if (get("proj.name") == null)
+			projectName = name
 		
-		this.metaOrig	= m2.toImmutable
-		this.metaNew	= Str:Str?[:] { ordered = true }
+		// convert private to public
+		if (metaOrig.containsKey("repo.private")) {
+			isPublic = !(meta["repo.private"]?.toBool(false) ?: false)
+			meta.remove("repo.private")
+		}
 
 		// respect both British and American spellings - but use / keep the British one!
-		if (metaOrig.containsKey("license.name"))
-			metaNew["licence.name"] = metaOrig["license.name"]
+		if (metaOrig.containsKey("license.name")) {
+			licenceName = metaOrig["license.name"]
+			meta.remove("license.name")
+		}
 		
+		// ensure these guys exist for indexing
+		isPublic		= |->Obj| { isPublic	 }()
+		isDeprecated	= |->Obj| { isDeprecated }()
+
 		try parseTest := projectUrl
 		catch projectUrl = null
 
@@ -196,13 +203,13 @@ class RepoPodMeta {
 
 	Bool isPublic {
 		// convert the older "repo.private" --> "repo.public"
-		get { get("repo.public")?.toBool(false) ?: !(get("repo.private")?.toBool(false) ?: false) }
-		private set { }
+		get { get("repo.public")?.toBool(false) ?: false}
+		set { set("repo.public", it.toStr) }
 	}
 
 	Bool isDeprecated {
 		get { get("repo.deprecated")?.toBool(false) ?: false }
-		private set { }
+		set { set("repo.deprecated", it.toStr) }
 	}
 
 	Bool isInternal {
@@ -210,13 +217,28 @@ class RepoPodMeta {
 		set { set("repo.internal", it)	}
 	}
 
+	Str name {
+		get { get("pod.name") 			}
+		set { set("pod.name", it)		}
+	}
+
+	Version version {
+		get { Version(get("pod.version"))	}
+		set { set("pod.version", it.toStr)	}
+	}
+
 	Str summary {
-		get { get("pod.summary") ?: ""	}
+		get { get("pod.summary")		}
 		set { set("pod.summary", it)	}
+	}
+
+	DateTime builtOn {
+		get { DateTime(get("build.ts"))	}
+		private set { }
 	}
 	
 	Str projectName {
-		get { get("proj.name") ?: get("pod.name") }
+		get { get("proj.name")			}
 		set { set("proj.name", it)		}
 	}
 
@@ -257,32 +279,20 @@ class RepoPodMeta {
 		
 	@Operator
 	Str? get(Str key) {
-		metaNew.containsKey(key) ? metaNew[key] : metaOrig[key]
+		meta[key]
 	}
 	
 	@Operator
 	Void set(Str key, Obj? value) {
 		val := value?.toStr?.trimToNull
-		if (metaOrig.containsKey(key) && metaOrig[key] == val) {
-			metaNew.remove(key)
-			return
-		}
-		metaNew[key] = val
+		if (val == null)
+			meta.remove(key)
+		else
+			meta[key] = val
 	}
 	
 	Bool containsKey(Str key) {
-		metaNew.containsKey(key) || metaOrig.containsKey(key)
-	}
-	
-	Str:Str allMeta() {
-		if (metaNew.isEmpty)
-			return metaOrig
-		// add the two meta maps together but try to keep the original key order
-		meta := Str:Str[:] { ordered = true}
-		metaOrig.keys.addAll(metaNew.keys).unique.each |key| {
-			meta[key] = get(key)
-		}
-		return meta
+		meta.containsKey(key)
 	}
 	
 	private static Void assertKeyExists(Str:Str meta, Str key) {

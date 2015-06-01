@@ -30,6 +30,7 @@ class CoreModule {
 
 	@Contribute { serviceType=Converters# }
 	static Void contributeConverters(Configuration config) {		
+		config[RepoPodMeta#] 	= config.createProxy(Converter#, RepoPodMetaConverter#)
 		config[FandocUri#] 		= config.autobuild(FandocUriConverter#)
 	}
 
