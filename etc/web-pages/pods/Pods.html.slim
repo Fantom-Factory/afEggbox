@@ -14,23 +14,25 @@
 		-- else
 			p	There are ${allPods.size} pod(s).
 			div.table-responsive
-				table.table.table-striped.table-condensed
-					tr
-						th	Name
-						th	Version
-						th.text-nowrap	Built On
-						th	Summary
-						th	Published by
-						th	Documentation
-					-- allPods.each |pod|
+				table.table.table-striped.table-condensed.table-hover
+					thead
 						tr
-							td.text-nowrap;b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName}
-							// / ${pod.projectName}
-							td.text-nowrap	${pod.version}
-							td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
-							td	${pod.summary}
-							td.text-nowrap
-								a (href="${userUrl(pod.owner)}")
-									img.img-rounded (src="${pod.owner.gravatarImageUrl(20)}")
-									|  ${pod.owner.screenName}
-							td;	== podDocsHtml(pod)
+							th	Name
+							th	Version
+							th.text-nowrap	Built On
+							th	Summary
+							th	Published by
+							th	Documentation
+					tbody.rowlink (data-link="row")
+						-- allPods.each |pod|
+							tr
+								td.text-nowrap;b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName}
+								// / ${pod.projectName}
+								td.text-nowrap	${pod.version}
+								td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
+								td	${pod.summary}
+								td.rowlink-skip.text-nowrap
+									a (href="${userUrl(pod.owner)}")
+										img.img-rounded (src="${pod.owner.gravatarImageUrl(20)}")
+										|  ${pod.owner.screenName}
+								td.rowlink-skip.text-nowrap;	== podDocsHtml(pod)

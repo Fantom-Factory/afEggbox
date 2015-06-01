@@ -13,32 +13,34 @@
 	-- else
 		p	You have ${allPods.size} pod(s).
 		div.table-responsive
-			table.table.table-striped.table-condensed
-				tr
-					th	Name
-					th	Version
-					th.text-nowrap	Built On
-					th.text-centre	Public
-					th	Summary
-					th	Documentation
-					th.text-nowrap.text-centre	Doc Errs
-					th.text-centre	Actions
-				-- allPods.each |pod|
-					tr.${pod.ownerId == loggedInUser._id ? "" : "bg-danger"}
-						td.text-nowrap;b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName}
-						td.text-nowrap	${pod.version}
-						td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
-						td.text-centre;	== pod.isPublic ? "\u2611" : "" // "\u2610";
-						td				${pod.summary}
-						td.text-nowrap;	== podDocsHtml(pod)
-						td.text-centre;
-							-- if (pod.invalidLinks.isEmpty)
-								| -
-							-- else
-								a (href="${podValidateUrl(pod)}" title="Goto pod validate page")
-									span.badge.label.label-warning ${pod.invalidLinks.size}	
-						td.text-centre.text-nowrap
-							a.btn.btn-xs.btn-primary (href="${podEditUrl(pod)}") &nbsp;&nbsp;Edit Pod&nbsp;&nbsp;
+			table.table.table-striped.table-condensed.table-hover
+				thead
+					tr
+						th	Name
+						th	Version
+						th.text-nowrap	Built On
+						th.text-centre	Public
+						th	Summary
+						th	Documentation
+						th.text-nowrap.text-centre	Doc Errs
+						th.text-centre	Actions
+				tbody.rowlink (data-link="row")
+					-- allPods.each |pod|
+						tr.${pod.ownerId == loggedInUser._id ? "" : "bg-danger"}
+							td.text-nowrap;b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName}
+							td.text-nowrap	${pod.version}
+							td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
+							td.text-centre;	== pod.isPublic ? "\u2611" : "" // "\u2610";
+							td				${pod.summary}
+							td.rowlink-skip.text-nowrap;	== podDocsHtml(pod)
+							td.rowlink-skip.text-centre;
+								-- if (pod.invalidLinks.isEmpty)
+									| -
+								-- else
+									a (href="${podValidateUrl(pod)}" title="Goto pod validate page")
+										span.badge.label.label-warning ${pod.invalidLinks.size}	
+							td.rowlink-skip.text-centre.text-nowrap
+								a.btn.btn-xs.btn-primary (href="${podEditUrl(pod)}") &nbsp;&nbsp;Edit Pod&nbsp;&nbsp;
 
 
 
@@ -54,10 +56,10 @@
 				div.form-group
 					label (for="podFile")	Pod File
 					div.input-group
+						input.form-control (type="text" placeholder="No file selected..." disabled)
 						span.input-group-btn
 							span.btn.btn-info.btn-file	Browse&hellip; 
 								input#podFile (name="podFile" type="file" accept=".pod")
-						input.form-control (type="text" placeholder="No file selected..." disabled)
 
 				div.pull-right
 					button.btn.btn-primary (type="submit" name="upload") Upload
