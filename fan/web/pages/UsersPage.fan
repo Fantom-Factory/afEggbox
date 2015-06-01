@@ -16,6 +16,7 @@ const mixin UsersPage : PrPage, SitemapSource {
 	@BeforeRender
 	Void beforeRender() {
 		allPods = podDao.findPublicOwned(user)
+		injector.injectRequireModule("rowLink")
 	}
 
 	Str podSummaryUrl(RepoPod pod) {

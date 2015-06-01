@@ -18,6 +18,7 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 	Void initRender() {
 		allPods = podDao.findPrivateOwned(userSession.user)
 		injector.injectRequireModule("fileInput")
+		injector.injectRequireModule("rowLink")
 	}
 	
 	Str podSummaryUrl(RepoPod pod) {
