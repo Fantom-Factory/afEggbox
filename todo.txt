@@ -24,6 +24,8 @@ email reza
 
 TODO
 ====
+Log errors in activity 
+
 install MongoDB on VM
 
 front page
@@ -32,8 +34,6 @@ help pages -> security
 Smoke test
 
 better ogimage
-
-ID Linking via JS
 
 sticky mozilla on doc pages
 https://developer.mozilla.org/en-US/docs/Web/CSS/position#Sticky_positioning

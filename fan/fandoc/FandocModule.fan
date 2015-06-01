@@ -25,5 +25,6 @@ class FandocModule {
 		config["fandoc"]	= config.autobuild(FandocLinkResolver#)
 		config["pod"]		= config.autobuild(PodLinkResolver#)
 		config["fan"]		= config.autobuild(FanLinkResolver#)
+		config["article"]	= ArticleLinkResolver()
 	}
 }
