@@ -72,6 +72,7 @@ const class FanrRepo {
 		q := Query.fromStr(query)
 		
 		return podDao.query |c| {
+			c.hint = "_builtOn_"
 			pods := RepoPod[,] 
 			while (c.hasNext && pods.size < numVersions) {
 				pod := podDao.toPod(c.next)
