@@ -14,7 +14,7 @@ class RepoPodDocs {
 		txt	:= Uri:Str[:]
 		bin	:= Uri:Buf[:]
 		contents.each |buf, uri| {
-			if (uri.mimeType.mediaType == "text")
+			if (uri.mimeType?.mediaType == "text")
 				txt[uri] = buf.seek(0).readAllStr
 			else
 				bin[uri] = buf

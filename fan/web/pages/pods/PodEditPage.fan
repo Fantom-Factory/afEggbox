@@ -186,6 +186,6 @@ class PodEditDetails {
 }
 
 class PodDeleteDetails {
-	@HtmlInput { type="text"; placeholder="Pod Name"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=128 }
+	@HtmlInput { type="text"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=128 }
 	Str?	podName
 }

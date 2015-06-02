@@ -42,6 +42,6 @@ const class FandocDocAsset : ClientAsset {
 	}
 
 	override InStream? in() {
-		fandocUri.content.in
+		fandocUri.content?.in
 	}
 }
