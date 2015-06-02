@@ -583,8 +583,8 @@ const class FandocDocUri : FandocUri {
 		return contents
 	}
 	
-	Buf content() {
-		podDocDao[pod._id][fileUri]
+	Buf? content() {
+		podDocDao[pod._id]?.get(fileUri)
 	}
 	
 	Heading[] findHeadings() {
