@@ -18,7 +18,7 @@ internal const class RepoPodDownloadDaoImpl : RepoPodDownloadDao {
 
 	new make(|This| in) { in(this) }
 	
-	override RepoActivity create(Obj entity) {
+	override RepoPodDownload create(Obj entity) {
 		repoConfig.logDownloadsEnabled
 			? EntityDao.super.create(entity)
 			: entity

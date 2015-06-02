@@ -25,6 +25,7 @@ email reza
 TODO
 ====
 Log errors in activity 
+Optimize fanr query for install
 
 install MongoDB on VM
 
@@ -33,7 +34,7 @@ help pages -> security
 
 Smoke test
 
-better ogimage
+better site ogimage
 
 sticky mozilla on doc pages
 https://developer.mozilla.org/en-US/docs/Web/CSS/position#Sticky_positioning
@@ -69,3 +70,8 @@ Delete user account
 404 page
 
 MongoDB text search
+
+
+
+
+
