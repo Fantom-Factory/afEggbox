@@ -4,8 +4,8 @@ using afMorphia
 const mixin RepoActivityDao : EntityDao {
 	@Operator
 	abstract RepoActivity?	get(Int id, Bool checked := true)
-	abstract Void warn (Str msg, Err err)
-	abstract Void error(Str msg, Err err)
+	abstract Void warn (Str msg, Err err, Bool logErr)
+	abstract Void error(Str msg, Err err, Bool logErr)
 }
 
 internal const class RepoActivityDaoImpl : RepoActivityDao {
@@ -31,13 +31,13 @@ internal const class RepoActivityDaoImpl : RepoActivityDao {
 		datastore.query(field("_id").eq(id)).findOne(checked)
 	}
 	
-	override Void warn(Str msg, Err err) {
-		log.warn(msg, err)
+	override Void warn(Str msg, Err err, Bool logErr) {
+		if (logErr) log.warn(msg, err)
 		create(RepoActivity("warn", "${msg} :: ${err.typeof} - ${err.msg}"))
 	}
 
-	override Void error(Str msg, Err err) {
-		log.err(msg, err)
+	override Void error(Str msg, Err err, Bool logErr) {
+		if (logErr) log.err(msg, err)
 		create(RepoActivity("error", "${msg} :: ${err.typeof} - ${err.msg}"))
 	}
 }

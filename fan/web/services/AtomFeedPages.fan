@@ -15,7 +15,7 @@ const class AtomFeedPages {
 	}
 
 	Obj generateForPod(Str podName) {
-		pods := podDao.findVersions(podName, 20)
+		pods := podDao.findVersions(null, podName, 20)
 		if (pods.isEmpty)
 			return HttpStatus(404, "Pod ${podName} not found") 
 		feed := atomFeedGen.generate(`/pods/${podName}/feed.atom`, pods, "${pods.first.projectName} Versions", "Version history for ${pods.first.projectName}", "${pods.first.projectName} Summary")

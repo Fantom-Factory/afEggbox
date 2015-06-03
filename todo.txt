@@ -5,11 +5,7 @@ email reza
 
 TODO
 ====
-Log errors in activity 
-Optimize fanr query for install
-
 pod summary - show is JS enabled
-poddao - store obj, not "false"
 return 304 for pod pages
 
 install MongoDB on VM

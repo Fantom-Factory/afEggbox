@@ -63,9 +63,11 @@ const class ErrEmailer {
 			endTime		:= DateTime.nowTicks
 			duration	:= endTime.minus(startTime).toDuration
 			log.warn("Sent error email to `${email.to.join}` in ${duration.toSec} secs")
+
+			activityDao.error("Emailed Err Details", err, false)
 			
 		} catch (Err oops) {
-			activityDao.warn("Could not send error email", oops)
+			activityDao.warn("Could not send error email", oops, true)
 		}
 	}
 }
