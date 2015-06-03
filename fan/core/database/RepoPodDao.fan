@@ -78,16 +78,14 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 
 	override RepoPod[] findPublic(RepoUser? user) {
-		// NOTE the stringified "true" and "false" - that's 'cos we're querying a map of STRINGS!!!
-		query		:= Query().field("meta.repo\\u002epublic").eq("true").field("meta.repo\\u002edeprecated").eq("false")
+		query		:= Query().field("meta.repo\\u002epublic").eq(true).field("meta.repo\\u002edeprecated").eq(false)
 		if (user != null)
 			query	= Query().or([query, field("ownerId").eq(user._id)])
 		return reduceByVersion(query)
 	}
 	
 	override RepoPod[] findPublicVersions(Int limit) {
-		// NOTE the stringified "true" and "false" - that's 'cos we're querying a map of STRINGS!!!
-		query := Query().field("meta.repo\\u002epublic").eq("true").field("meta.repo\\u002edeprecated").eq("false")
+		query := Query().field("meta.repo\\u002epublic").eq(true).field("meta.repo\\u002edeprecated").eq(false)
 		return datastore.query(query).orderByIndex("_builtOn_").limit(limit).findAll
 	}
 	
@@ -96,11 +94,11 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 	
 	override RepoPod[] findPublicOwned(RepoUser user) {
-		reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq("true"))
+		reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq(true))
 	}
 	
 	override Int countPublicVersions(RepoUser user) {
-		query := Query().field("meta.repo\\u002epublic").eq("true").field("ownerId").eq(user._id)
+		query := Query().field("meta.repo\\u002epublic").eq(true).field("ownerId").eq(user._id)
 		return datastore.query(query).findCount		
 	}
 
@@ -132,7 +130,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			options.remove("query")
 		output 	:= datastore.collection.mapReduce(mapFunc, reduceFunc, options)
 		pods 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
-		return pods.map { datastore.fromMongoDoc(it) }.sort |RepoPod p1, RepoPod p2 -> Int| { p1.projectName <=> p2.projectName }
+		return pods.map { datastore.fromMongoDoc(it) }.sort |RepoPod p1, RepoPod p2 -> Int| { p1.projectName.compareIgnoreCase(p2.projectName) }
 	}
 
 	private Str _id(Str name, Version? version) {
