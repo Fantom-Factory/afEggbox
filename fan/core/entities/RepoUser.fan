@@ -95,13 +95,13 @@ class RepoUser {
 				} catch (Err err) {
 					// I don't trust the gravatar API
 					msg := "Could not parse Gravatar response for ${gravatarJsonUri}"
-					activityDao.warn(msg, err)
+					activityDao.warn(msg, err, true)
 				}
 			}
 		} catch (Err err) {
 			// I don't trust external websites
 			msg := "Could not contact Gravatar at ${gravatarJsonUri}"
-			activityDao.warn(msg, err)
+			activityDao.warn(msg, err, true)
 		}
 		return this
 	}

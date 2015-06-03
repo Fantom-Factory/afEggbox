@@ -68,6 +68,10 @@ const class FanrRepo {
 
 	RepoPod[] query(RepoUser? user, Str query, Int numVersions := 1) {
 		if (numVersions < 1) throw ArgErr("numVersions < 1")
+
+		// a quick speed hack - fanr (when installing) uses query not find, so we re-route it!
+		if (query.trim.all { it.isAlphaNum })
+			return podDao.findVersions(user, query.trim, numVersions)
 		
 		q := Query.fromStr(query)
 		
@@ -76,8 +80,9 @@ const class FanrRepo {
 			pods := RepoPod[,] 
 			while (c.hasNext && pods.size < numVersions) {
 				pod := podDao.toPod(c.next)
-				if (q.include(pod.toPodSpec))
-					pods.add(pod)
+				if (user == null || user.owns(pod))
+					if (q.include(pod.toPodSpec))
+						pods.add(pod)
 			}
 			return pods
 		}
@@ -107,6 +112,7 @@ class PodContents {
 	Uri:Buf	docContents	:= Uri:Buf[:]
 	Uri:Str	apiContents	:= Uri:Str[:]
 	Uri:Str	srcContents	:= Uri:Str[:]
+	Str[]	rootFileNames := Str[,]
 	RepoPod	pod
 	
 	
@@ -119,6 +125,10 @@ class PodContents {
 			throw PodPublishErr(Msgs.publish_missingPodFile(`/meta.props`))
 
 		pod = RepoPod(user, podBuf.size, metaProps, docContents)
+		
+		if (rootFileNames.contains("${pod.name}.js"))
+			pod.meta.jsEnabled = true
+
 		// Naa - we'll not enforce this, just print an embarrassing msg instead
 //		if (pod.isPublic && !docContents.containsKey(`/doc/pod.fandoc`))
 //			throw PodPublishErr(Msgs.publish_missingPublicPodFile(`/doc/pod.fandoc`))
@@ -149,6 +159,9 @@ class PodContents {
 				
 				if (entry.uri == `/meta.props`)
 					metaProps = entry.readProps
+				
+				if (entry.uri.path.size == 1)
+					rootFileNames.add(entry.uri.name)
 				
 				if (entry.uri.toStr.startsWith("/doc/") && !entry.uri.isDir)
 					if (entry.uri.path.size == 2 && entry.uri.ext == "apidoc")

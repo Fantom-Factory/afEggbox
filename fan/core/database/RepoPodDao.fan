@@ -8,7 +8,7 @@ const mixin RepoPodDao : EntityDao {
 	@Operator
 	abstract RepoPod?		get(Str name, Bool checked := true)
 	abstract RepoPod[]		findAll()
-	abstract RepoPod[]		findVersions(Str name, Int? limit)
+	abstract RepoPod[]		findVersions(RepoUser? user, Str name, Int? limit)
 	abstract RepoPod? 		findOne(Str name, Version? version := null)
 
 	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)			// for All Pods page
@@ -65,8 +65,13 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		datastore.query.orderBy("_id").findAll
 	}
 	
-	override RepoPod[] findVersions(Str name, Int? limit) {
-		datastore.query(field("meta.pod\\u002ename").eq(name)).orderByIndex("_builtOn_").limit(limit).findAll
+	override RepoPod[] findVersions(RepoUser? user, Str name, Int? limit) {
+		query := field("meta.pod\\u002ename").eq(name)
+		if (user == null)
+			query.field("meta.repo\\u002epublic").eq(true)
+		else
+			query.or([field("meta.repo\\u002epublic").eq(true), field("ownerId").eq(user._id)])
+		return datastore.query(query).orderByIndex("_builtOn_").limit(limit).findAll
 	}
 	
 	override RepoPod? findOne(Str name, Version? version := null) {

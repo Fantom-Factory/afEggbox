@@ -192,8 +192,11 @@ class RepoPodMeta {
 		set("repo.deprecated",	get("repo.deprecated")	?.toStr?.toBool(false) ?: false)
 		set("build.ts",			DateTime.fromStr(get("build.ts").toStr))
 		
-		if (meta.containsKey("repo.internal"))
-			set("repo.internal",get("repo.internal")	?.toStr?.toBool(false) ?: false)
+		// convert other props to Bool
+		"pod.docApi pod.docSrc pod.isScript pod.native.dotnet pod.native.java pod.native.jni pod.native.js repo.internal repo.jsEnabled".split.each {
+			if (containsKey(it))
+				set(it,	this.get(it)?.toStr?.toBool(false) ?: false)			
+		}
 
 		try parseTest := projectUrl
 		catch projectUrl = null
@@ -279,7 +282,12 @@ class RepoPodMeta {
 		get { get("repo.tags")			}
 		set { set("repo.tags", it)		}
 	}
-		
+
+	Bool jsEnabled {
+		get { get("repo.jsEnabled") ?: false }
+		set { set("repo.jsEnabled", it)		 }
+	}
+
 	@Operator
 	Obj? get(Str key) {
 		meta.get(key)
