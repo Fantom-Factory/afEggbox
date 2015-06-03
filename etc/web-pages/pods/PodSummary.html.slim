@@ -72,7 +72,7 @@
 			hr.visible-xs
 			== app.renderPodToc(fandocUri)
 		
-			-- versions := podDao.findVersions(pod.name, null)
+			-- versions := podDao.findVersions(loggedInUser, pod.name, null)
 			-- if (versions.size > 1)
 				h3	${versions.size} Releases
 				ul

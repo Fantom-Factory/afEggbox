@@ -9,12 +9,14 @@ const class AtomFeedPages {
 	new make(|This|in) { in(this) }
 	
 	Text generateAll() {
+		// FIXME: 304
 		pods := podDao.findPublicVersions(20)
 		feed := atomFeedGen.generate(`/pods/feed.atom`, pods, "Fantom Pod Repository", "3rd Party Libraries for the Fantom language", "Fantom Pods")
 		return Text.fromContentType(feed, MimeType("application/atom+xml"))
 	}
 
 	Obj generateForPod(Str podName) {
+		// FIXME: 304
 		pods := podDao.findVersions(null, podName, 20)
 		if (pods.isEmpty)
 			return HttpStatus(404, "Pod ${podName} not found") 

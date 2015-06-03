@@ -1,6 +1,7 @@
 using afIoc
 using afBedSheet
 using afPillow
+using web
 
 const class PodRoutes : Route {
 	
@@ -10,7 +11,9 @@ const class PodRoutes : Route {
 	@Inject private const Backdoor		backdoor
 	@Inject private const Registry		reg
 	@Inject private const AtomFeedPages	atomPages
+	@Inject private const HttpRequest	httpRequest
 	@Inject private const HttpResponse	httpResponse
+	@Inject private const DirtyCash		dirtyCash
 	@Inject private const RepoPodDownloadDao	podDownloadDao
 
 	new make(|This|in) { in(this) }
@@ -78,28 +81,40 @@ const class PodRoutes : Route {
 		if (fandocUri == null)
 			return null
 		
-		if (fandocUri.validate == false) 
-			return HttpStatus(404, "Could not validate: ${fandocUri.toUri.encode}")
-		
-		if (fandocUri is FandocSummaryUri)
-			return pages.renderPage(PodSummaryPage#, [fandocUri])
-
-		if (fandocUri is FandocDocUri) {
-			fandocDocUri := (FandocDocUri) fandocUri 
-			if (fandocDocUri.fileUri.ext == "fandoc")
-				return pages.renderPage(PodDocPage#, [fandocUri])
-			return fandocDocUri.toAsset
+		return dirtyCash.cash |->Obj?| {
+			if (fandocUri.validate == false) 
+				return HttpStatus(404, "Could not validate: ${fandocUri.toUri.encode}")
+			
+			// set identity headers
+			httpResponse.headers.eTag 		  = fandocUri.etag
+			httpResponse.headers.lastModified = fandocUri.pod.builtOn.floor(1sec)	// 1 second which is the most precision that HTTP can deal with
+	
+			// check if we can return a 304 Not Modified
+			if (notModified(httpRequest.headers, fandocUri)) {
+				httpResponse.statusCode = 304
+				return true
+			}
+	
+			if (fandocUri is FandocSummaryUri)
+				return pages.renderPage(PodSummaryPage#, [fandocUri])
+	
+			if (fandocUri is FandocDocUri) {
+				fandocDocUri := (FandocDocUri) fandocUri 
+				if (fandocDocUri.fileUri.ext == "fandoc")
+					return pages.renderPage(PodDocPage#, [fandocUri])
+				return fandocDocUri.toAsset
+			}
+			
+			if (fandocUri is FandocSrcUri)
+				return pages.renderPage(PodSrcPage#, [fandocUri])
+			
+			if (fandocUri is FandocApiUri)
+				return (fandocUri as FandocApiUri).typeName == null
+					? pages.renderPage(PodApiIndexPage#, [fandocUri])
+					: pages.renderPage(PodApiPage#, [fandocUri])
+			
+			return null
 		}
-		
-		if (fandocUri is FandocSrcUri)
-			return pages.renderPage(PodSrcPage#, [fandocUri])
-		
-		if (fandocUri is FandocApiUri)
-			return (fandocUri as FandocApiUri).typeName == null
-				? pages.renderPage(PodApiIndexPage#, [fandocUri])
-				: pages.renderPage(PodApiPage#, [fandocUri])
-		
-		return null
 	}
 
 	
@@ -176,5 +191,31 @@ const class PodRoutes : Route {
 			buf.addChar(char)
 		}
 		return buf.toStr
+	}
+	
+	** Check if the request passed headers indicating it has cached version of the file. Return 
+	** 'true' If the file has not been modified.
+	** 
+	** This method supports ETag "If-None-Match" and "If-Modified-Since" modification time.
+	virtual Bool notModified(HttpRequestHeaders headers, FandocUri fandocUri) {
+		// check If-Match-None
+		matchNone := headers.ifNoneMatch
+		if (matchNone != null) {
+			if (WebUtil.parseList(matchNone).map |str->Str| {
+				try   return WebUtil.fromQuotedStr(str)
+				catch return str
+			}.any { it == fandocUri.etag || it == "*" })
+				return true
+		}
+		
+		// check If-Modified-Since
+		since := headers.ifModifiedSince
+		if (since != null) {
+			if (fandocUri.pod.builtOn.floor(1sec) <= since)
+				return true
+		}
+	
+		// gotta do it the hard way
+		return false
 	}
 }
