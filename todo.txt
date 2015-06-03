@@ -5,9 +5,6 @@ email reza
 
 TODO
 ====
-pod summary - show is JS enabled
-return 304 for pod pages
-
 install MongoDB on VM
 
 front page

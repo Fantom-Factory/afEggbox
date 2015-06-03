@@ -230,8 +230,14 @@ abstract const class FandocUri {
 		return func(pod) ?: false
 	}
 	
+	const AtomicInt ai := AtomicInt(0);
 	RepoPod? pod() {
-		podDao.findOne(podName, podVersion)
+		echo(ai.incrementAndGet.toStr + " x POD")
+		return podDao.findOne(podName, podVersion)
+	}
+	
+	Str etag() {
+		"${pod.fileSize.toHex}-${pod.builtOn.ticks.toHex}"
 	}
 	
 	abstract Str title()

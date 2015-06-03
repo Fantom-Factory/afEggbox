@@ -1,4 +1,5 @@
 using afIoc
+using afBedSheet
 using afConcurrent
 
 const class DirtyCash {
@@ -7,6 +8,7 @@ const class DirtyCash {
 	@Inject	{ type=[Str:Int]# }		private	const LocalMap	cacheHits
 	@Inject	{ type=[Str:Int]# }		private	const LocalMap	cacheMisses
 	@Inject							private	const LocalRef	cachingRef
+	@Inject							private	const HttpRequest	httpReq
 	
 	new make(|This| in) { in(this) }
 	
@@ -27,8 +29,8 @@ const class DirtyCash {
 		} finally {
 			caching = false
 			
-//			logCash
-						
+			logCash
+
 			cache.clear
 			cacheHits.clear
 			cacheMisses.clear
@@ -42,7 +44,7 @@ const class DirtyCash {
 			size.max(key.size)
 		}
 		
-		echo("\nDirty Cache Results:")
+		echo("\nDirty Cache Results for: ${httpReq.url}")
 		cache.keys.each |Str k| {
 			hits	:= (Int) cacheHits  .get(k, 0)
 			misses	:= (Int) cacheMisses.get(k, 0)
