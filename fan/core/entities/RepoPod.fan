@@ -44,7 +44,7 @@ class RepoPod {
 	Str[] validateForPublicUse() {
 		errs := Str[,]
 		RepoPodMeta.specialKeys.each |key| {
-			if (meta[key] == null || meta[key].isEmpty)
+			if (meta[key] == null || meta[key].toStr.isEmpty)
 				errs.add(Msgs.publish_missingPodMeta(key))
 		}
 		
@@ -79,7 +79,7 @@ class RepoPod {
 	}
 	
 	Depend[] dependsOn() {
-		meta["pod.depends"].split(';').map { Depend(it, false) }.exclude { it == null }.sort |Depend p1, Depend p2 -> Int| { p1.name <=> p2.name }
+		meta["pod.depends"].toStr.split(';').map { Depend(it, false) }.exclude { it == null }.sort |Depend p1, Depend p2 -> Int| { p1.name <=> p2.name }
 	}
 	
 	RepoUser owner() {
@@ -115,7 +115,7 @@ class RepoPod {
 	}
 	
 	private Str findAboutFandoc(Str:Str metaProps, Uri:Buf contents) {
-		aboutFd := contents[`/doc/about.fdoc`]?.readAllStr		
+		aboutFd := contents[`/doc/about.fandoc`]?.readAllStr ?: contents[`/doc/about.fdoc`]?.readAllStr		
 		if (aboutFd != null)
 			return aboutFd
 		
@@ -160,7 +160,7 @@ class RepoPod {
 class RepoPodMeta {	
 	static const	
 	Str[] 		specialKeys	:= ["pod.name", "pod.version", "pod.depends", "pod.summary", "build.ts"]
-	Str:Str?	meta
+	Str:Obj?	meta	// allow some MongoDB types to be stored
 	
 	new make(|This|in) { in(this) }
 
@@ -177,7 +177,7 @@ class RepoPodMeta {
 		
 		// convert private to public
 		if (metaOrig.containsKey("repo.private")) {
-			isPublic = !(meta["repo.private"]?.toBool(false) ?: false)
+			set("repo.public", (meta["repo.private"].toStr.toBool(false) ?: true).not.toStr)
 			meta.remove("repo.private")
 		}
 
@@ -187,9 +187,13 @@ class RepoPodMeta {
 			meta.remove("license.name")
 		}
 		
-		// ensure these guys exist for indexing
-		isPublic		= |->Obj| { isPublic	 }()
-		isDeprecated	= |->Obj| { isDeprecated }()
+		// ensure these guys exist for indexing / convert to Bool
+		set("repo.public", 		get("repo.public")		?.toStr?.toBool(false) ?: false)
+		set("repo.deprecated",	get("repo.deprecated")	?.toStr?.toBool(false) ?: false)
+		set("build.ts",			DateTime.fromStr(get("build.ts").toStr))
+		
+		if (meta.containsKey("repo.internal"))
+			set("repo.internal",get("repo.internal")	?.toStr?.toBool(false) ?: false)
 
 		try parseTest := projectUrl
 		catch projectUrl = null
@@ -202,19 +206,18 @@ class RepoPodMeta {
 	}
 
 	Bool isPublic {
-		// convert the older "repo.private" --> "repo.public"
-		get { get("repo.public")?.toBool(false) ?: false}
-		set { set("repo.public", it.toStr) }
+		get { get("repo.public")	}
+		set { set("repo.public", it) }
 	}
 
 	Bool isDeprecated {
-		get { get("repo.deprecated")?.toBool(false) ?: false }
-		set { set("repo.deprecated", it.toStr) }
+		get { get("repo.deprecated")	}
+		set { set("repo.deprecated", it) }
 	}
 
 	Bool isInternal {
-		get { get("repo.internal")?.toBool(false) ?: false }
-		set { set("repo.internal", it)	}
+		get { get("repo.internal") ?: false	}
+		set { set("repo.internal", it)		}
 	}
 
 	Str name {
@@ -223,8 +226,8 @@ class RepoPodMeta {
 	}
 
 	Version version {
-		get { Version(get("pod.version"))	}
-		set { set("pod.version", it.toStr)	}
+		get { Version(get("pod.version").toStr)	}
+		set { set("pod.version", it.toStr)		}
 	}
 
 	Str summary {
@@ -233,8 +236,8 @@ class RepoPodMeta {
 	}
 
 	DateTime builtOn {
-		get { DateTime(get("build.ts"))	}
-		private set { }
+		get { get("build.ts")			}
+		private set { /* read only */	}
 	}
 	
 	Str projectName {
@@ -243,8 +246,8 @@ class RepoPodMeta {
 	}
 
 	Uri? projectUrl {
-		get { get("proj.uri")?.toUri	}
-		set { set("proj.uri", it)		}
+		get { get("proj.uri")?.toStr?.toUri	}
+		set { set("proj.uri", it?.toStr)	}
 	}
 	
 	Str? licenceName {
@@ -258,8 +261,8 @@ class RepoPodMeta {
 	}
 
 	Uri? orgUrl {
-		get { get("org.uri")?.toUri		}
-		set { set("org.uri", it)		}
+		get { get("org.uri")?.toStr?.toUri	}
+		set { set("org.uri", it?.toStr)		}
 	}
 
 	Str? vcsName {
@@ -268,8 +271,8 @@ class RepoPodMeta {
 	}
 
 	Uri? vcsUrl {
-		get { get("vcs.uri")?.toUri		}
-		set { set("vcs.uri", it)		}
+		get { get("vcs.uri")?.toStr?.toUri	}
+		set { set("vcs.uri", it?.toStr)		}
 	}
 
 	Str? tags {
@@ -278,13 +281,13 @@ class RepoPodMeta {
 	}
 		
 	@Operator
-	Str? get(Str key) {
-		meta[key]
+	Obj? get(Str key) {
+		meta.get(key)
 	}
 	
 	@Operator
 	Void set(Str key, Obj? value) {
-		val := value?.toStr?.trimToNull
+		val := value is Str ? value.toStr.trimToNull : value
 		if (val == null)
 			meta.remove(key)
 		else

@@ -1,31 +1,16 @@
 
-Features
-========
-
-libraries may have multiple documentation pages
-pod meta data editing
-documentation/ api for every pod version
-
-Fandoc:
- - syntax highlighting
- - reference pod images from doc
- - table formatting  
- - document linking honours:
-   - fantom code scheme
-   - fandoc: scheme
-   - fan: scheme
-   - pod: scheme
-
-RSS feed for both site and individual pods
-
-
 
 email reza
+****
 
 TODO
 ====
 Log errors in activity 
 Optimize fanr query for install
+
+pod summary - show is JS enabled
+poddao - store obj, not "false"
+return 304 for pod pages
 
 install MongoDB on VM
 

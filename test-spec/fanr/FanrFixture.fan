@@ -86,21 +86,24 @@ abstract class FanrFixture : RepoFixture {
 
 	virtual Void verifyJson(Str jsonStr) {
 		expected := (Str:Obj?) JsonInStream(jsonStr.in).readJson
-		jsonObj.remove("proj.name")
-		jsonObj.remove("repo.public")
-		jsonObj.remove("repo.deprecated")
-		jsonObj.remove("licence.name")
-		jsonObj.remove("vcs.uri")
-		(([Str:Obj?]?) jsonObj["published"])?.remove("proj.name")
-		(([Str:Obj?]?) jsonObj["published"])?.remove("repo.public")
-		(([Str:Obj?]?) jsonObj["published"])?.remove("repo.deprecated")
-		(([Str:Obj?]?) jsonObj["published"])?.remove("licence.name")
-		(([Str:Obj?]?) jsonObj["published"])?.remove("vcs.uri")
-		(([Str:Obj?][]?) jsonObj["pods"])?.each { it.remove("proj.name") }
-		(([Str:Obj?][]?) jsonObj["pods"])?.each { it.remove("repo.public") }
-		(([Str:Obj?][]?) jsonObj["pods"])?.each { it.remove("repo.deprecated") }
-		(([Str:Obj?][]?) jsonObj["pods"])?.each { it.remove("licence.name") }
-		(([Str:Obj?][]?) jsonObj["pods"])?.each { it.remove("vcs.uri") }
+		convPodData(jsonObj)
+		convPodData(jsonObj["published"])
+		(([Str:Obj?][]?) jsonObj["pods"])?.each { convPodData(it) }
 		verifyEq(expected.toStr, jsonObj.toStr)	// don't compare Map types
+	}
+	
+	private Void convPodData([Str:Obj?]? map) {
+		if (map == null) return
+		map.remove("proj.name")
+		map.remove("repo.public")
+		map.remove("repo.deprecated")
+		map.remove("licence.name")
+		map.remove("vcs.uri")
+		if (map.containsKey("build.ts"))
+			map["build.ts"] = DateTime(map["build.ts"]).toUtc.toStr
+	}
+	
+	static Void main() {
+		echo(DateTime.now.toUtc)
 	}
 }
