@@ -171,9 +171,9 @@ class RepoPodMeta {
 		specialKeys.each { meta[it] = metaOrig[it] ?: "" }
 		metaOrig.keys.exclude { specialKeys.contains(it) }.sort.each { meta[it] = metaOrig[it] }
 
-		// default project name to pod name
+		// default project name to pod name (if not supplied)
 		if (get("proj.name") == null)
-			projectName = name
+			projectName = name.toDisplayName	// so sys -> Sys
 		
 		// convert private to public
 		if (metaOrig.containsKey("repo.private")) {

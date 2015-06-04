@@ -48,6 +48,10 @@ const mixin PodSummaryPage : PrPage {
 		fandocUri.pod
 	}
 
+	Str installPodName() {
+		fandocUri.isLatest ? pod.name : "\"${pod.name} ${pod.version}\""
+	}
+	
 	Str aboutHtml() {
 		fandocUri.aboutHtml
 	}
