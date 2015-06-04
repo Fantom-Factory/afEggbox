@@ -230,10 +230,8 @@ abstract const class FandocUri {
 		return func(pod) ?: false
 	}
 	
-	const AtomicInt ai := AtomicInt(0);
 	RepoPod? pod() {
-		echo(ai.incrementAndGet.toStr + " x POD")
-		return podDao.findOne(podName, podVersion)
+		podDao.findOne(podName, podVersion)
 	}
 	
 	Str etag() {

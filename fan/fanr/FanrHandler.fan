@@ -26,14 +26,18 @@ const class FanrHandler {
 		signatures	:= signatureAlgorithms.join(",")
 		json 		:= [
 			"username"				: username,
-			"salt"					: salt,
+			"salt"					: salt ?: "null",
 			"secretAlgorithms"		: secrets,
 			"signatureAlgorithms"	: signatures,
 			"ts"					: now.toStr
 		]
 		
-		if (json["salt"] == null)
-			json.remove("salt")
+		// The specs indicate salt should be removed should a user not exist... but 
+		// if the returned json has no salt key, or if salt is null, then fanr complains 
+		// that the response has no salt - which makes it sound like the server is in the wrong!
+		// so just return the Str 'null' instead. 
+//		if (json["salt"] == null)
+//			json.remove("salt")
 		
 		return Text.fromJsonObj(json)
 	}
@@ -79,9 +83,14 @@ const class FanrHandler {
 		if (user == null)
 			sendForbiddenErr(user)
 
-		pod := repo.publish(user, req.body.in)
-
-		return Text.fromJsonObj(["published" : pod.toJsonObj])			
+		try {
+			pod := repo.publish(user, req.body.in)
+			return Text.fromJsonObj(["published" : pod.toJsonObj])
+			
+		} catch (Err err) {
+			// return publish errs in json format
+			return sendErr(500, err.msg)
+		}
 	}
 
 	Text onQuery() {
@@ -168,7 +177,7 @@ const class FanrHandler {
     	else sendErr(403, "Not allowed")
     }
 
-    private Str? sendErr(Int code, Str msg) {
+    private Obj? sendErr(Int code, Str msg) {
 		res.statusCode = code
 		throw ReProcessErr(Text.fromJsonObj(["err":msg]))
 	}

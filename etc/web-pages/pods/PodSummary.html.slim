@@ -67,6 +67,12 @@
 						a.externalLink (href="${pod.meta.vcsUrl.encode}") ${pod.meta.vcsUrl}
 				dt	Depends on 
 				dd;	== pod.dependsOn.join(", ") { linkToPod(it) }
+				dt	Contains Javascript
+				dd
+					-- if (pod.meta.jsEnabled)
+						span.jsIcon
+					-- else
+						| No
 
 		nav.col-sm-3
 			hr.visible-xs

@@ -29,7 +29,7 @@ const class DirtyCash {
 		} finally {
 			caching = false
 			
-			logCash
+//			logCash
 
 			cache.clear
 			cacheHits.clear

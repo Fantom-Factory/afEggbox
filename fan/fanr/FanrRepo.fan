@@ -14,6 +14,7 @@ const class FanrRepo {
 	@Inject private const RepoPodSrcDao		podSrcDao
 	@Inject private const RepoPodApiDao		podApiDao
 	@Inject private const Registry			registry
+	@Inject	private const RepoActivityDao	activityDao
 	
 	new make(|This|in) { in(this) }
 
@@ -63,6 +64,8 @@ const class FanrRepo {
 			podApiDao .create(RepoPodApi (pod, podContents.apiContents))
 		registry.injectIntoFields(pod)
 		pod.validateDocumentLinks.save
+
+		activityDao.create(RepoActivity(user, pod, LogMsgs.publishedPod, pod._id))
 		return pod
 	}
 
