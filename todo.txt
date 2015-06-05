@@ -5,7 +5,7 @@ email reza
 
 TODO
 ====
-overview markup proj name
+try uploading a pod with NO pod.fandoc
 
 install MongoDB on VM
 
