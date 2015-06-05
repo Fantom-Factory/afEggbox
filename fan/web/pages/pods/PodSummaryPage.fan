@@ -24,6 +24,7 @@ const mixin PodSummaryPage : PrPage {
 	Void afterRender(StrBuf buf) {
 		pod			:= fandocUri.pod
 		ogasset		:= fandocUri.toDocUri(`/doc/ogimage.png`)
+		// FIXME: look for JPG ogimage
 		ogimage		:= ogasset.exists ? ogasset.toAsset.clientUrl : fileHandler.fromLocalUrl(`/images/ogimage.png`).clientUrl
 		htmlIndex	:= buf.toStr.index("<html ") + "<html ".size
 		absPageUrl	:= bedServer.toAbsoluteUrl(fandocUri.toClientUrl)
