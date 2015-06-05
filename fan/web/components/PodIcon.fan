@@ -5,19 +5,20 @@ using afPillow
 const mixin PodIcon : EfanComponent {
 
 	@Inject	abstract Pages	 	pages
-			abstract FandocUri	fandocUri
+			abstract RepoPod	pod
 	
 	@InitRender
-	Void initRender(FandocUri fandocUri) {
-		this.fandocUri = fandocUri
+	Void initRender(RepoPod pod) {
+		this.pod = pod
 	}
 	
 	override Str renderTemplate() {
-		iconUri := fandocUri.toDocUri(`/doc/icon.png`)
-		if (!iconUri.exists)
+		if (!pod.hasIcon)
 			return ""
 		
-		return """<img class="podIcon" src="${iconUri.toAsset.clientUrl.encode}">"""
+		iconUrl := pod.iconDataUri ?: pod.toDocUri(`/doc/icon.png`).toClientUrl.encode
+
+		return """<img class="podIcon" src="${iconUrl}">"""
 	}
 	
 }

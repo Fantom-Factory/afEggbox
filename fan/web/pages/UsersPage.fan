@@ -26,11 +26,11 @@ const mixin UsersPage : PrPage, SitemapSource {
 	Str podDocsHtml(RepoPod pod) {
 		apiUri := pod.toSummaryUri.toApiUri
 		docUri := pod.toSummaryUri.toDocUri
-		if (apiUri.exists && docUri.exists)
+		if (pod.hasApi && pod.hasDocs)
 			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a> / <a href=\"${docUri.toClientUrl.encode}\">User Guide</a>" 
-		if (apiUri.exists)
+		if (pod.hasApi)
 			return "<a href=\"${apiUri.toClientUrl.encode}\">API</a>" 
-		if (docUri.exists)
+		if (pod.hasDocs)
 			return "<a href=\"${docUri.toClientUrl.encode}\">User Guide</a>"
 		return ""
 	}

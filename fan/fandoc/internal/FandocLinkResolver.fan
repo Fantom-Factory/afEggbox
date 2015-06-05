@@ -316,10 +316,6 @@ const class FandocApiUri : FandocUri {
 		reg.autobuild(FandocApiUri#, [podName, null, typeName, slotName])
 	}
 
-	Bool exists() {
-		validate
-	}
-
 	DocType type() {
 		podApiDao[pod._id][typeName]
 	}

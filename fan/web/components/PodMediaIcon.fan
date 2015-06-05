@@ -12,9 +12,16 @@ const mixin PodMediaIcon : PrComponent {
 	}
 	
 	override Str renderTemplate() {
-		iconUri := pod.toSummaryUri.toDocUri(`/doc/icon.png`)
-		iconUrl := (Uri) (iconUri.exists ? iconUri.toAsset.clientUrl : fileHandler.fromLocalUrl(`/images/defaultPodIcon.png`))
-		return """<img class="podMediaIcon" src="${iconUrl.encode}" alt="${pod.projectName} ${pod.version}">"""
+		iconUrl := (Str?) null
+
+		if (!pod.hasIcon)
+			iconUrl = fileHandler.fromLocalUrl(`/images/defaultPodIcon.png`).clientUrl.encode
+		else if (pod.iconDataUri != null)
+			iconUrl = pod.iconDataUri
+		else
+			iconUrl = pod.toDocUri(`/doc/icon.png`).toClientUrl.encode
+
+		return """<img class="podMediaIcon" src="${iconUrl}" alt="${pod.projectName} ${pod.version}">"""
 	}
 	
 }

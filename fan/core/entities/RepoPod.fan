@@ -19,15 +19,29 @@ class RepoPod {
 	@Property{}	InvalidLink[]	invalidLinks
 	@Property{}	DateTime?		linksValidatedOn
 
+	@Property{}	Bool			hasApi
+	@Property{}	Bool			hasDocs
+	@Property{}	Bool			hasIcon
+	@Property{}	Str?			iconDataUri
+
 	new make(|This|f) { f(this) }
 
-	static new fromContents(RepoUser user, Int podSize, Str:Str metaProps, Uri:Buf docContents) {
+	static new fromContents(RepoUser user, Int podSize, Str:Str metaProps, Uri:Buf docContents, Uri:Str apiContents, Str[] rootFileNames) {
 		return RepoPod() {
 			it.meta			= RepoPodMeta(metaProps)
 			it.fileSize		= podSize
 			it.ownerId		= user._id
 			it.aboutFandoc	= findAboutFandoc(metaProps, docContents)
 			it.invalidLinks	= InvalidLink#.emptyList
+			it.hasApi		= apiContents.size > 0
+			it.hasDocs		= docContents.containsKey(`/doc/pod.fandoc`)
+			it.hasIcon		= docContents.containsKey(`/doc/icon.png`)
+			
+			if (it.hasIcon && docContents[`/doc/icon.png`].size < 12*1024)
+				it.iconDataUri	= "data:image/png;base64," + docContents[`/doc/icon.png`].toBase64 
+			
+			if (rootFileNames.contains("${meta.name}.js"))
+				it.meta.jsEnabled = true
 		}
 	}
 	
@@ -89,7 +103,11 @@ class RepoPod {
 	FandocSummaryUri toSummaryUri() {
 		registry.autobuild(FandocSummaryUri#, [name, version])
 	}
-	
+
+	FandocDocUri toDocUri(Uri fileUri := `/doc/pod.fandoc`, Str? headingId := null) {
+		registry.autobuild(FandocDocUri#, [name, version, fileUri, headingId])
+	}
+
 	Str name() {
 		meta.name
 	}

@@ -28,16 +28,17 @@ const mixin PodToc : EfanComponent {
 			html.add("<h4>").add("<a href=\"${summaryUri.toClientUrl.encode}\">").add("Summary").add("</a>").add("</h4>")
 		}
 		
-		apiUri := fandocUri.toApiUri
-		if (apiUri.exists)
+		if (fandocUri.pod.hasApi) {
+			apiUri := fandocUri.toApiUri
 			if (fandocUri is FandocApiUri && (fandocUri as FandocApiUri).typeName == null)
 				html.add("<h4 class=\"text-muted\">").add("API").add("</h4>")
 			else {
 				html.add("<h4>").add("<a href=\"${apiUri.toClientUrl.encode}\">").add("API").add("</a>").add("</h4>")
 			}
+		}
 		
-		docUri := fandocUri.toDocUri
-		if (docUri.exists) {
+		if (fandocUri.pod.hasDocs) {
+			docUri := fandocUri.toDocUri
 			contents := docUri.pageContents
 	
 			contents.each |title, page| { 
