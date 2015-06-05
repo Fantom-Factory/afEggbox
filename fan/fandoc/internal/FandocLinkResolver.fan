@@ -159,8 +159,8 @@ abstract const class FandocUri {
 		if (pod == null)
 			return InvalidLinks.add(InvalidLinkMsgs.podNotFound(podName, null))
 		
-		podApi		:= podApiDao[pod._id]
-		if (podApi.hasType(typeName.split('.')[0])) {
+		podApi := pod.hasApi ? podApiDao[pod._id] : null
+		if (podApi != null && podApi.hasType(typeName.split('.')[0])) {
 			slotName	:= (Str?) null
 			if (typeName.contains(".")) {
 				if (typeName.split('.').size > 2)
@@ -173,7 +173,7 @@ abstract const class FandocUri {
 			return reg.autobuild(FandocApiUri#, [podName, null, typeName, slotName])
 		}
 
-		if (ctx.type != null && podApi.hasType(ctx.type))
+		if (ctx.type != null && podApi != null && podApi.hasType(ctx.type))
 			if (podApi[ctx.type].slot(typeName, false) != null)
 				return reg.autobuild(FandocApiUri#, [podName, null, ctx.type, typeName])
 		
