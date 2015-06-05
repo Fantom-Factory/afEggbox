@@ -1,4 +1,5 @@
 using afIoc
+using afIocEnv
 using afBedSheet
 using afConcurrent
 
@@ -9,6 +10,7 @@ const class DirtyCash {
 	@Inject	{ type=[Str:Int]# }		private	const LocalMap	cacheMisses
 	@Inject							private	const LocalRef	cachingRef
 	@Inject							private	const HttpRequest	httpReq
+	@Inject							private	const IocEnv	iocEnv
 	
 	new make(|This| in) { in(this) }
 	
@@ -29,7 +31,8 @@ const class DirtyCash {
 		} finally {
 			caching = false
 			
-//			logCash
+			if (iocEnv.isDev)
+				logCash
 
 			cache.clear
 			cacheHits.clear
@@ -71,8 +74,4 @@ const class DirtyCash {
 		}
 		return func()
 	}	
-}
-
-internal class CacheHit {
-	
 }

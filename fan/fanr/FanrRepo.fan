@@ -127,11 +127,8 @@ class PodContents {
 		if (metaProps.isEmpty)
 			throw PodPublishErr(Msgs.publish_missingPodFile(`/meta.props`))
 
-		pod = RepoPod(user, podBuf.size, metaProps, docContents)
+		pod = RepoPod(user, podBuf.size, metaProps, docContents, apiContents, rootFileNames)
 		
-		if (rootFileNames.contains("${pod.name}.js"))
-			pod.meta.jsEnabled = true
-
 		// Naa - we'll not enforce this, just print an embarrassing msg instead
 //		if (pod.isPublic && !docContents.containsKey(`/doc/pod.fandoc`))
 //			throw PodPublishErr(Msgs.publish_missingPublicPodFile(`/doc/pod.fandoc`))
