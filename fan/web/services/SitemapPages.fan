@@ -16,6 +16,8 @@ const class SitemapPages : SitemapSource {
 	override SitemapUrl[] sitemapUrls() {
 		dirtyCash.cash |->SitemapUrl[]| {
 			urls := SitemapUrl[,]
+			
+			// only map the latest pod versions
 			podDao.findPublic(null).each |pod| {
 				// Pod Summary Page
 				urls.add(SitemapUrl(bedServer.toAbsoluteUrl(pod.toSummaryUri.toClientUrl)) {
