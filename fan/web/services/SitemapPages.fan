@@ -27,37 +27,41 @@ const class SitemapPages : SitemapSource {
 				})
 		
 				// Pod Document Pages
-				podDocsDao[pod._id].fandocPages.keys.each |fileUri| {
-					fandocDocUri := (FandocDocUri) registry.autobuild(FandocDocUri#, [pod.name, pod.version, fileUri, null])
-					urls.add(SitemapUrl(bedServer.toAbsoluteUrl(fandocDocUri.toClientUrl)) {
+				if (pod.hasDocs) {
+					podDocsDao[pod._id].fandocPages.keys.each |fileUri| {
+						fandocDocUri := (FandocDocUri) registry.autobuild(FandocDocUri#, [pod.name, pod.version, fileUri, null])
+						urls.add(SitemapUrl(bedServer.toAbsoluteUrl(fandocDocUri.toClientUrl)) {
+							lastMod		= pod.builtOn
+							changefreq	= SitemapFreq.monthly
+							priority 	= 0.8f
+						})
+					}
+				}
+		
+				// Pod API Pages
+				if (pod.hasApi) {
+					fandocApiUri := (FandocApiUri) registry.autobuild(FandocApiUri#, [pod.name, pod.version, null, null])
+					urls.add(SitemapUrl(bedServer.toAbsoluteUrl(fandocApiUri.toClientUrl)) {
 						lastMod		= pod.builtOn
 						changefreq	= SitemapFreq.monthly
 						priority 	= 0.8f
 					})
-				}
-		
-				// Pod API Pages
-				fandocApiUri := (FandocApiUri) registry.autobuild(FandocApiUri#, [pod.name, pod.version, null, null])
-				urls.add(SitemapUrl(bedServer.toAbsoluteUrl(fandocApiUri.toClientUrl)) {
-					lastMod		= pod.builtOn
-					changefreq	= SitemapFreq.monthly
-					priority 	= 0.8f
-				})
-				fandocApiUri.allTypes.each |apiUri| {
-					urls.add(SitemapUrl(bedServer.toAbsoluteUrl(apiUri.toClientUrl)) {
-						lastMod		= pod.builtOn
-						changefreq	= SitemapFreq.monthly
-						priority 	= 0.7f
-					})
-				}
-		
-				// Pod Src Pages
-				fandocApiUri.allTypes.map { it.toTypeSrcUri }.findAll { ((FandocSrcUri) it).hasSrc }.each |FandocSrcUri srcUri| { 
-					urls.add(SitemapUrl(bedServer.toAbsoluteUrl(srcUri.toClientUrl)) {
-						lastMod		= pod.builtOn
-						changefreq	= SitemapFreq.monthly
-						priority 	= 0.6f
-					})				
+					fandocApiUri.allTypes.each |apiUri| {
+						urls.add(SitemapUrl(bedServer.toAbsoluteUrl(apiUri.toClientUrl)) {
+							lastMod		= pod.builtOn
+							changefreq	= SitemapFreq.monthly
+							priority 	= 0.7f
+						})
+					}
+
+					// Pod Src Pages - src pages are only mapped through API pages
+					fandocApiUri.allTypes.map { it.toTypeSrcUri }.findAll { ((FandocSrcUri) it).hasSrc }.each |FandocSrcUri srcUri| { 
+						urls.add(SitemapUrl(bedServer.toAbsoluteUrl(srcUri.toClientUrl)) {
+							lastMod		= pod.builtOn
+							changefreq	= SitemapFreq.monthly
+							priority 	= 0.6f
+						})				
+					}
 				}
 			}
 		
