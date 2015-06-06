@@ -5,8 +5,6 @@ email reza
 
 TODO
 ====
-try uploading a pod with NO pod.fandoc
-
 install MongoDB on VM
 
 front page
