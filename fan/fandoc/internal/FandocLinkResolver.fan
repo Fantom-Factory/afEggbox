@@ -370,7 +370,7 @@ const class FandocApiUri : FandocUri {
 	}
 
 	private DocType[] allDocTypes() {
-		if (allDocTypesRef.val == null)
+		if (allDocTypesRef.val == null && pod.hasApi)
 			allDocTypesRef.val = podApiDao[pod._id].allTypes
 				.exclude |DocType t->Bool| {
 					t.hasFacet("sys::NoDoc")     ||
@@ -378,7 +378,7 @@ const class FandocApiUri : FandocUri {
 					DocFlags.isPrivate(t.flags)  ||
 					DocFlags.isSynthetic(t.flags)
 				}.toImmutable
-		return allDocTypesRef.val
+		return allDocTypesRef.val ?: DocType[,]
 	}
 
 	override Bool validate() {
