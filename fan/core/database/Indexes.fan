@@ -29,8 +29,8 @@ const class Indexes {
 		podCol.index("_public_")		.ensure(["meta.repo\\u002epublic"		: Index.ASC])
 		podCol.index("_deprecated_")	.ensure(["meta.repo\\u002edeprecated"	: Index.ASC])
 
-		userCol.index("_email_")		.ensure(key.add("email"		, Index.ASC).add("unique", true))
-		userCol.index("_screenName_")	.ensure(key.add("screenName", Index.ASC).add("unique", true))
+		userCol.index("_email_")		.ensure(["email"		: Index.ASC], true)
+		userCol.index("_screenName_")	.ensure(["screenName"	: Index.ASC], true)
 		
 		activityCol.index("_userId_")	.ensure(["userId"		: Index.ASC])
 		activityCol.index("_when_")		.ensure(["when"			: Index.DESC])
@@ -48,3 +48,4 @@ const class Indexes {
 	
 	Str:Obj? key() { Str:Obj?[:] { ordered = true } }
 }
+

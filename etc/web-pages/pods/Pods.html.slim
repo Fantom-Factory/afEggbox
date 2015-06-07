@@ -25,6 +25,12 @@
 									== app.renderPodMediaIcon(pod)
 								
 						div.media-body
+							a.podRssFeed (href="${pod.toAtomFeedUrl.encode}" title="RSS Feed for ${pod.projectName}")
+								i.fa.fa-rss-square.fa-lg.rss
+						
+							-- if (loggedIn && loggedInUser.owns(pod))
+								a.btn.btn-primary.btn-xs.pull-right (href="${editUrl(pod)}") &nbsp;&nbsp;Edit&nbsp;Pod&nbsp;&nbsp;
+
 							h4.media-heading
 								b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName} ${pod.version} 
 								small.text-nowrap by 

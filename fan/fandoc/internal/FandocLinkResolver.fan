@@ -206,7 +206,9 @@ abstract const class FandocUri {
 	abstract FandocUri toLatest()
 
 	FandocSummaryUri toSummaryUri() {
-		reg.autobuild(FandocSummaryUri#, [podName, podVersion])
+		this is FandocSummaryUri
+			? this
+			: reg.autobuild(FandocSummaryUri#, [podName, podVersion])
 	}
 
 	FandocApiUri toApiUri(Str? typeName := null, Str? slotName := null) {
@@ -219,6 +221,10 @@ abstract const class FandocUri {
 
 	FandocDocUri toDocUri(Uri fileUri := `/doc/pod.fandoc`, Str? headingId := null) {
 		reg.autobuild(FandocDocUri#, [podName, podVersion, fileUri, headingId])
+	}
+	
+	Uri toAtomFeedUrl() {
+		toSummaryUri.toClientUrl.plusSlash.plusName("feed.atom")
 	}
 	
 	protected Bool? validatePod(|RepoPod->Bool?| func) {
