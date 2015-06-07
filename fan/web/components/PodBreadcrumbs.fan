@@ -40,7 +40,7 @@ const mixin PodBreadcrumbs : PrComponent {
 		}
 		html.add("<li class=\"active\">${uris.last.title.toXml}</li>")
 		
-		href := fandocUri.toSummaryUri.toClientUrl.plusSlash.plusName("feed.atom").encode
+		href := fandocUri.toAtomFeedUrl.encode
 		injector.injectLink
 			.setAttr("rel",		"alternate")
 			.setAttr("type",	"application/atom+xml")

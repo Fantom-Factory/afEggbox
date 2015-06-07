@@ -107,7 +107,7 @@ internal class BootstrapHtmlSkin : DefaultHtmlSkin {
 		return this
 	}
 	
-	override This table() { w("<table").attr("class", "table table-condensed table-striped table-hover").w(">") }
+	override This table() { w("<table").attr("class", "table table-condensed").w(">") }
 
 	override This img(Uri src, Str? alt) { w("<img").attr("class", "img-responsive").attr("src", src).attr("alt", alt).w(">") }
 }

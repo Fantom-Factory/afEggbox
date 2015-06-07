@@ -12,6 +12,7 @@ help pages -> security
 
 Smoke test
 
+better default icon image
 better site ogimage
 
 sticky mozilla on doc pages
