@@ -15,7 +15,7 @@ const mixin RepoPodDao : EntityDao {
 	abstract RepoPod[] 		findPublicVersions(Int limit)				// for main public atom feed
 	abstract RepoPod[] 		findPrivateOwned(RepoUser loggedInUser)		// for My Pods page
 	abstract RepoPod[] 		findPublicOwned(RepoUser loggedInUser)		// for Users page
-	abstract Int	 		countPublicVersions(RepoUser loggedInUser)	// for Users page
+	abstract Int	 		countPublicVersions(RepoUser? loggedInUser)	// for Users page
 
 	** used for fanr queries
 	abstract RepoPod[] 		query(|Cursor->Obj?| f)
@@ -102,8 +102,10 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq(true))
 	}
 	
-	override Int countPublicVersions(RepoUser user) {
-		query := Query().field("meta.repo\\u002epublic").eq(true).field("ownerId").eq(user._id)
+	override Int countPublicVersions(RepoUser? user) {
+		query := Query().field("meta.repo\\u002epublic").eq(true)
+		if (user != null)
+			query = query.field("ownerId").eq(user._id)
 		return datastore.query(query).findCount		
 	}
 

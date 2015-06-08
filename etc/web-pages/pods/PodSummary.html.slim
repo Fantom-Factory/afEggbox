@@ -6,7 +6,7 @@
 		article.col-sm-9
 			== app.renderPodIcon(pod)
 			h1.podHeading	${pod.projectName} ${pod.version}
-				div.small	${pod.summary}
+				div.small;	== pod.summaryHtml
 
 			-- if (pod.meta.isInternal)
 				p;	i	${pod.projectName} is a support library that aids ${pod.meta.orgName ?: pod.owner.screenName} in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.

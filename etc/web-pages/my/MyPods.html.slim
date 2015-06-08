@@ -31,7 +31,7 @@
 							td.text-nowrap	${pod.version}
 							td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
 							td.text-centre;	== pod.isPublic ? "\u2611" : "" // "\u2610";
-							td				${pod.summary}
+							td;				== pod.summaryHtml
 							td.rowlink-skip.text-nowrap;	== podDocsHtml(pod)
 							td.rowlink-skip.text-centre;
 								-- if (pod.invalidLinks.isEmpty)

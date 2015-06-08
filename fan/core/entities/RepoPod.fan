@@ -83,12 +83,12 @@ class RepoPod {
 		podFileDao.get(_id, true).data
 	}
 	
-	Str summary() {
-		summary := meta.summary
+	Str summaryHtml() {
+		summary := meta.summary.toXml
 		if (meta.isDeprecated)
-			summary = "(Deprecated) ${summary}"
+			summary += " <span class=\"text-muted\">(Deprecated)</span>"
 		if (meta.isInternal)
-			summary = "(Internal) ${summary}"
+			summary += " <span class=\"text-muted\">(Internal)</span>"
 		return summary
 	}
 	
