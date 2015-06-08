@@ -37,11 +37,11 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectMeta.withProperty("og:image"	).withContent(ogimage.encode)
 		
 		// ---- Open Graph Meta ---- Optional
-		injector.injectMeta.withProperty("og:description"	).withContent(fandocUri.pod.summary)
+		injector.injectMeta.withProperty("og:description"	).withContent(fandocUri.pod.meta.summary)
 		injector.injectMeta.withProperty("og:locale"		).withContent("en_GB")
 		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
 		
-		metaDesc := "${pod.projectName} by ${pod.meta.orgName ?: pod.owner.screenName} :: ${pod.summary}"
+		metaDesc := "${pod.projectName} by ${pod.meta.orgName ?: pod.owner.screenName} :: ${pod.meta.summary}"
 		injector.injectMeta.withName("description").withContent(metaDesc)
 	}
 
@@ -82,3 +82,4 @@ const mixin PodSummaryPage : PrPage {
 		return (scalar > 1f) ? ((unit.name == "byte") ? "$size.toInt bytes" : scalar.toLocale("#,##0.00") + "&#160;$unit.symbol") : null
 	}
 }
+

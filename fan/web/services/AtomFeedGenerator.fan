@@ -75,7 +75,7 @@ class AtomPodWrapper : AtomEntryWrapper {
 		this.pod 		= pod
 		this.host		= host
 		this.title		= "${pod.projectName} ${pod.version}"
-		this.summary	= pod.summary
+		this.summary	= pod.meta.summary
 		this.clientUrl	= pod.toSummaryUri.toClientUrl
 		this.updated	= pod.builtOn
 	}

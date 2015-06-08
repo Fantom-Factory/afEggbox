@@ -12,7 +12,7 @@
 			p	This repository has no pods! Why don't you upload one?
 		
 		-- else
-			p	There are ${allPods.size} pod(s):
+			p	This repository has ${countPublicVersions} version(s) of ${allPods.size} pod(s):
 
 		div.row
 			div.col-sm-10.col-sm-offset-1
@@ -37,13 +37,17 @@
 									a (href="${userUrl(pod.owner)}") ${pod.owner.screenName}
 							span.text-muted ${pod.builtOn.toLocale("DDD MMM YYYY")}
 							br
-							| ${pod.summary}
+							== pod.summaryHtml
 							br
 							span (style="display: inline-block")
 								== podDocsHtml(pod)
 								-- if (pod.meta.jsEnabled)
 									span.pull-right.jsIcon (title="Pod available in Javascript")
 					hr				
+
+		div.row
+			div.col-sm-12
+				p 	Sign up and login to publish your pod to this repository!
 
 				
 				/*div.table-responsive
@@ -65,7 +69,7 @@
 									td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
 									td.text; -- if (pod.meta.jsEnabled)
 										span.jsIcon (title="Pod available in Javascript")
-									td	${pod.summary}
+									td	$${pod.summaryHtml}
 									/*td.rowlink-skip.text-nowrap
 										a (href="${userUrl(pod.owner)}")
 											img.img-rounded (src="${pod.owner.gravatarImageUrl(20)}")

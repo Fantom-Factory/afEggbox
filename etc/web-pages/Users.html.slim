@@ -40,7 +40,7 @@
 									td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
 									td.text; -- if (pod.meta.jsEnabled)
 										span.jsIcon (title="Pod has been compiled to Javascript")
-									td				${pod.summary}
+									td;				== pod.summary
 									td.rowlink-skip.text-nowrap;	== podDocsHtml(pod)
 
 		//nav.col-sm-3.hidden-xs

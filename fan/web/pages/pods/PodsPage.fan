@@ -15,6 +15,10 @@ const mixin PodsPage : PrPage {
 		injector.injectRequireModule("rowLink")
 	}
 	
+	Int countPublicVersions() {
+		podDao.countPublicVersions(null)
+	}
+	
 	Str podSummaryUrl(RepoPod pod) {
 		pod.toSummaryUri.toClientUrl.encode
 	}
