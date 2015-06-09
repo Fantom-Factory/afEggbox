@@ -12,10 +12,12 @@ const mixin RepoPodDao : EntityDao {
 	abstract RepoPod? 		findOne(Str name, Version? version := null)
 
 	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)			// for All Pods page
+	abstract Int	 		countPublicVersions()
+	abstract Int	 		countPublicPods()
+
 	abstract RepoPod[] 		findPublicVersions(Int limit)				// for main public atom feed
 	abstract RepoPod[] 		findPrivateOwned(RepoUser loggedInUser)		// for My Pods page
 	abstract RepoPod[] 		findPublicOwned(RepoUser loggedInUser)		// for Users page
-	abstract Int	 		countPublicVersions(RepoUser? loggedInUser)	// for Users page
 
 	** used for fanr queries
 	abstract RepoPod[] 		query(|Cursor->Obj?| f)
@@ -83,14 +85,14 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 
 	override RepoPod[] findPublic(RepoUser? user) {
-		query		:= Query().field("meta.repo\\u002epublic").eq(true).field("meta.repo\\u002edeprecated").eq(false)
+		query		:= Query().field("meta.repo\\u002epublic").eq(true)
 		if (user != null)
 			query	= Query().or([query, field("ownerId").eq(user._id)])
 		return reduceByVersion(query)
 	}
 	
 	override RepoPod[] findPublicVersions(Int limit) {
-		query := Query().field("meta.repo\\u002epublic").eq(true).field("meta.repo\\u002edeprecated").eq(false)
+		query := Query().field("meta.repo\\u002epublic").eq(true)
 		return datastore.query(query).orderByIndex("_builtOn_").limit(limit).findAll
 	}
 	
@@ -102,11 +104,33 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq(true))
 	}
 	
-	override Int countPublicVersions(RepoUser? user) {
+	override Int countPublicVersions() {
 		query := Query().field("meta.repo\\u002epublic").eq(true)
-		if (user != null)
-			query = query.field("ownerId").eq(user._id)
 		return datastore.query(query).findCount		
+	}
+
+	override Int countPublicPods() {
+		query := Query().field("meta.repo\\u002epublic").eq(true)
+		return datastore.collection.aggregate([
+			[
+				"\$match" : [
+					"meta.repo\\u002epublic" : true
+				] 
+			],
+			[
+				"\$group" : [
+					"_id" : "\$meta.pod\\u002ename"
+				] 
+			],
+			[
+				"\$group" : [
+					"_id": 1, 
+					"count": [
+						"\$sum" : 1
+					]
+				]
+			]
+		]).first["count"]
 	}
 
 	override RepoPod[] query(|Cursor->Obj?| f) {
@@ -124,6 +148,8 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		return datastore.insert(repoPod)
 	}
 	
+	// TODO: as map reduce is intended for background queries, should the repo get large, we may have to 
+	// add an array of version Ints to the document and aggregate / group and sort on that.
 	private RepoPod[] reduceByVersion(Query? query) {
 		// need to ensure the collection exists else you get a "Mongo ns does not exist" Err
 		// so just ensure the indexes and job done		

@@ -8,7 +8,7 @@ using afFancordion
 ** -------
 **  - [Pod exceeds maximum size of 100B]`errMsg:podSizeTooBig`
 **  - [Pod name 'acmeWidgets' has already been taken by user 'Stevie']`errMsg:podNameTakenBySomeoneElse`
-**  - [Pod version '1.1.1' is too small, it must be at least '2.3.4']`errMsg:podVersionTooSmall`
+**  - [Pod version '1.1.1' must be greater than '2.3.4']`errMsg:podVersionTooSmall`
 **  - [Pods must define meta data for 'pod.summary']`errMsg:missingPodMeta`
 **  - [Public pods must define meta data for 'licence.name' or 'license.name']`errMsg:missingPublicPodMeta`
 ** 

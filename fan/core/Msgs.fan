@@ -12,7 +12,7 @@ mixin Msgs {
 	}
 
 	static Str publish_podVersionTooSmall(Version vOld, Version vNew) {
-		"Pod version '${vNew}' is too small, it must be at least '${vOld}'"
+		"Pod version '${vNew}' must be greater than '${vOld}'"
 	}
 
 	static Str publish_missingPodMeta(Str metaName) {
