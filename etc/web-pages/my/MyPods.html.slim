@@ -11,7 +11,7 @@
 		p	You have no pods! Why don't you upload one?
 	
 	-- else
-		p	You have ${allPods.size} pod(s).
+		p	You have ${allPods.size} pod${s(allPods.size)}.
 		div.table-responsive
 			table.table.table-striped.table-hover
 				thead
@@ -20,7 +20,8 @@
 						th	Version
 						th.text-nowrap	Built On
 						th.text-centre	Public
-						th.text-centre	Deprecated
+						th.text-centre	D
+							span.hidden-xs.hidden-sm	eprecated
 						th.hidden-xs.hidden-sm.hidden-md	Summary
 						th	Documentation
 						th.text-nowrap.text-centre	Doc Errs
@@ -28,13 +29,13 @@
 				tbody.rowlink (data-link="row")
 					-- allPods.each |pod|
 						tr.${pod.ownerId == loggedInUser._id ? "" : "bg-danger"}
-							td.text-nowrap;b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName}
-							td.text-nowrap	${pod.version}
-							td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
-							td.text-centre;	== pod.isPublic ? "\u2611" : "" // "\u2610";
-							td.text-centre;	== pod.isDeprecated ? "\u2611" : "" // "\u2610";
-							td.hidden-xs.hidden-sm.hidden-md;				== pod.summaryHtml
-							td.rowlink-skip.text-nowrap;	== podDocsHtml(pod)
+							td.text-nowrap;						b; a (href="${podSummaryUrl(pod)}") ${pod.projectName}
+							td.text-nowrap;						== pod.version
+							td.text-nowrap;						== pod.builtOn.toLocale("DDD MMM YYYY")
+							td.text-centre;						== pod.isPublic ? "\u2611" : "" // "\u2610";
+							td.text-centre;						== pod.isDeprecated ? "\u2611" : "" // "\u2610";
+							td.hidden-xs.hidden-sm.hidden-md;	== pod.summaryHtml
+							td.rowlink-skip.text-nowrap;		== podDocsHtml(pod)
 							td.rowlink-skip.text-centre;
 								-- if (pod.invalidLinks.isEmpty)
 									| -
