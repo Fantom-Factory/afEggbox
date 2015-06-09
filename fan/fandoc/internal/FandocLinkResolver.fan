@@ -145,7 +145,7 @@ abstract const class FandocUri {
 		podDao 		:= (RepoPodDao)		reg.serviceById(RepoPodDao#.qname)
 		podApiDao	:= (RepoPodApiDao)	reg.serviceById(RepoPodApiDao#.qname)
 		corePods	:= (CorePods)		reg.serviceById(CorePods#.qname)
-		pod 		:= podDao.findOne(podName) 
+		pod 		:= ctx.pod ?: podDao.findOne(podName) 
 		
 		if (pod == null && corePods.isCorePod(podName)) {
 			slotName	:= (Str?) null
@@ -170,18 +170,18 @@ abstract const class FandocUri {
 					typeName = typeName.split('.').getSafe(0)
 				}
 			}
-			return reg.autobuild(FandocApiUri#, [podName, null, typeName, slotName])
+			return reg.autobuild(FandocApiUri#, [pod.name, pod.version, typeName, slotName])
 		}
 
 		if (ctx.type != null && podApi != null && podApi.hasType(ctx.type))
 			if (podApi[ctx.type].slot(typeName, false) != null)
-				return reg.autobuild(FandocApiUri#, [podName, null, ctx.type, typeName])
+				return reg.autobuild(FandocApiUri#, [pod.name, pod.version, ctx.type, typeName])
 		
 		docUri := `/doc/`.plusName(typeName.toUri.pathStr)
 		if (docUri.ext == null)
 			docUri = `${docUri}.fandoc`
 		headingId := uri.frag
-		return reg.autobuild(FandocDocUri#, [podName, null, docUri, headingId])
+		return reg.autobuild(FandocDocUri#, [pod.name, pod.version, docUri, headingId])
 	}
 	
 	private Uri summaryUrl(RepoPod pod) {
