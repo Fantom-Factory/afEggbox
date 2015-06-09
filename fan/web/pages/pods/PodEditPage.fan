@@ -61,13 +61,16 @@ const mixin PodEditPage : PrPage {
 		if (pod.isPublic) {
 			if (editDetails.summary.isEmpty)
 				podEditFormBean.formFields[PodEditDetails#summary].errMsg = "Public pods must have a summary"
+			
 			if (editDetails.licenceName.isEmpty)
-				podEditFormBean.formFields[PodEditDetails#summary].errMsg = "Public pods must have a licence"
+				podEditFormBean.formFields[PodEditDetails#licenceName].errMsg = "Public pods must have a licence"
+			
 			if (editDetails.organisationUrl.toStr.isEmpty && editDetails.sourceCodeManagementUrl.toStr.isEmpty) {
 				podEditFormBean.errorMsgs.add("Public pods must have an Org URL or a Source Code URL")
 				podEditFormBean.formFields[PodEditDetails#organisationUrl].invalid = true
 				podEditFormBean.formFields[PodEditDetails#sourceCodeManagementUrl].invalid = true
 			}
+	
 			if (podEditFormBean.hasErrors)
 				return null
 		}		

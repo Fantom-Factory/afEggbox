@@ -12,8 +12,8 @@ const mixin RepoPodDao : EntityDao {
 	abstract RepoPod? 		findOne(Str name, Version? version := null)
 
 	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)			// for All Pods page & sitemap
-	abstract Int	 		countPublicVersions()
-	abstract Int	 		countPublicPods()
+	abstract Int	 		countPublicVersions(RepoUser? user)			// for All Pods and User page
+	abstract Int	 		countPublicPods(RepoUser? user)				// for All Pods and User page
 
 	abstract RepoPod[] 		findPublicVersions(Int limit)				// for main public atom feed
 	abstract RepoPod[] 		findPrivateOwned(RepoUser loggedInUser)		// for My Pods page
@@ -85,9 +85,12 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 
 	override RepoPod[] findPublic(RepoUser? user) {
-		query		:= Query().field("meta.repo\\u002epublic").eq(true).field("meta.repo\\u002edeprecated").notEq(true)
+		query := Query().field("meta.repo\\u002epublic").eq(true)
+		
+		// if pod is deprecated, we need to remove the entire project, not just individual versions
+		//.field("meta.repo\\u002edeprecated").notEq(true)
 		if (user != null)
-			query	= Query().or([query, field("ownerId").eq(user._id)])
+			query = Query().or([query, field("ownerId").eq(user._id)])
 		return reduceByVersion(query)
 	}
 	
@@ -104,18 +107,20 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq(true))
 	}
 	
-	override Int countPublicVersions() {
+	override Int countPublicVersions(RepoUser? user) {
 		query := Query().field("meta.repo\\u002epublic").eq(true)
+		if (user != null)
+			query = Query().and([query, field("ownerId").eq(user._id)])
 		return datastore.query(query).findCount		
 	}
 
-	override Int countPublicPods() {
-		query := Query().field("meta.repo\\u002epublic").eq(true)
-		return datastore.collection.aggregate([
+	override Int countPublicPods(RepoUser? user) {
+		pipeline := [
 			[
 				"\$match" : [
-					"meta.repo\\u002epublic" : true
-				] 
+					"meta.repo\\u002epublic" 	: true,
+					"ownerId"					: user?._id
+				]
 			],
 			[
 				"\$group" : [
@@ -130,7 +135,12 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 					]
 				]
 			]
-		]).first["count"]
+		]
+
+		if (user == null)
+			pipeline[0]["\$match"] = ["meta.repo\\u002epublic" : true]
+
+		return datastore.collection.aggregate(pipeline).first?.get("count") ?: 0
 	}
 
 	override RepoPod[] query(|Cursor->Obj?| f) {
