@@ -43,7 +43,8 @@ const class FanrRepo {
 				throw PodPublishErr(Msgs.publish_podNameAlreadyTaken(pod.name, exUser))
 			}
 			
-			if (pod.version <= existing.version)
+			// it makes life easier if we just let admins (i.e. ME!) do what they want
+			if (pod.version <= existing.version && !user.isAdmin)
 				throw PodPublishErr(Msgs.publish_podVersionTooSmall(existing.version, pod.version))
 		}
 		

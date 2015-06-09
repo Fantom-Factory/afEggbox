@@ -12,7 +12,10 @@
 			p	This repository has no pods! Why don't you upload one?
 		
 		-- else
-			p	This repository has ${countPublicVersions} version(s) of ${allPods.size} pod(s):
+			p	This repository has ${countPublicVersions} public version${s(countPublicVersions)} of ${countPublicPods} public pod${s(countPublicPods)}.
+			-- if (!loggedIn)
+				| Sign Up to publish your pods to this site! 
+			p	Displaying ${allPods.size} pod${s(allPods.size)}:
 
 		div.row
 			div.col-sm-10.col-sm-offset-1

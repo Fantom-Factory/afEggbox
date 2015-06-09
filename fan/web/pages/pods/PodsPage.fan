@@ -15,8 +15,16 @@ const mixin PodsPage : PrPage {
 		injector.injectRequireModule("rowLink")
 	}
 	
+	Str s(Int size) {
+		size > 0 ? "s" : "" 
+	}
+	
 	Int countPublicVersions() {
-		podDao.countPublicVersions(null)
+		podDao.countPublicVersions
+	}
+	
+	Int countPublicPods() {
+		podDao.countPublicPods
 	}
 	
 	Str podSummaryUrl(RepoPod pod) {
