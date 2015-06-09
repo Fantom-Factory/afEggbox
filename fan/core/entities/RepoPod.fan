@@ -211,8 +211,11 @@ class RepoPodMeta {
 			meta.remove("repo.private")
 		} else {
 			// older pods from Repo302 should default to public, newer pods to private
-			if (!metaOrig.containsKey("repo.public"))
-				set("repo.public", DateTime.fromStr(metaOrig["build.ts"]).year >= 2015 ? true : false)
+			if (!metaOrig.containsKey("repo.public")) {
+				date := DateTime.fromStr(metaOrig["build.ts"]).date
+				pub  := date < Date(2015, Month.jun, 1)
+				set("repo.public", pub)
+			}
 		}
 
 		// respect both British and American spellings - but use / keep the British one!

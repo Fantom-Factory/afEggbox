@@ -12,11 +12,19 @@ const mixin UsersPage : PrPage, SitemapSource {
 	@Inject			abstract RepoUserDao	userDao
 	@PageContext	abstract RepoUser		user
 					abstract RepoPod[]		allPods
+					abstract Int			countPublicVersions
+					abstract Int			countPublicPods
 
 	@BeforeRender
 	Void beforeRender() {
-		allPods = podDao.findPublicOwned(user)
+		allPods = podDao.findPublicOwned(user).exclude { it.isDeprecated }
 		injector.injectRequireModule("rowLink")
+		countPublicVersions = podDao.countPublicVersions(user)
+		countPublicPods		= podDao.countPublicPods(user)
+	}
+	
+	Str s(Int size) {
+		size > 1 ? "s" : "" 
 	}
 
 	Str podSummaryUrl(RepoPod pod) {

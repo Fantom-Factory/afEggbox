@@ -8,23 +8,19 @@ const mixin PodsPage : PrPage {
 	@Inject abstract Registry		registry
 	@Inject abstract RepoPodDao		podDao
 			abstract RepoPod[]		allPods
+			abstract Int			countPublicVersions
+			abstract Int			countPublicPods
 
 	@InitRender
 	Void initRender() {
-		allPods = podDao.findPublic(loggedInUser)
+		allPods = podDao.findPublic(loggedInUser).exclude { it.isDeprecated }
 		injector.injectRequireModule("rowLink")
+		countPublicVersions = podDao.countPublicVersions(null)
+		countPublicPods		= podDao.countPublicPods(null)
 	}
 	
 	Str s(Int size) {
-		size > 0 ? "s" : "" 
-	}
-	
-	Int countPublicVersions() {
-		podDao.countPublicVersions
-	}
-	
-	Int countPublicPods() {
-		podDao.countPublicPods
+		size > 1 ? "s" : "" 
 	}
 	
 	Str podSummaryUrl(RepoPod pod) {

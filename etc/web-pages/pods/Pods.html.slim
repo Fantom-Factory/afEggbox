@@ -1,4 +1,4 @@
--- app.renderLayout(true, "All Pods" + (allPods.isEmpty ? "" : " (${allPods.size})"))
+-- app.renderLayout(true, "All Pods" + (countPublicPods == 0 ? "" : " (${countPublicPods})"))
 
 	ol.breadcrumb
 		li.active	Pods
@@ -17,7 +17,6 @@
 				p;	i 
 					a (href="${pageUrl(SignupPage#)}") Sign Up
 					|  to publish your pods to this site! 
-			p	Displaying ${allPods.size} pod${s(allPods.size)}:
 
 		div.row
 			div.col-sm-10.col-sm-offset-1
