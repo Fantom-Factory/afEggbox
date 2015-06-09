@@ -4,6 +4,8 @@ using afMongo
 using afMorphia
 
 const mixin RepoPodDao : EntityDao {
+	const static Func byProjName  := |RepoPod p1, RepoPod p2 -> Int| { p1.projectName.compareIgnoreCase(p2.projectName) }
+	const static Func byBuildDate := |RepoPod p1, RepoPod p2 -> Int| { p1.builtOn.compare(p2.builtOn) }
 
 	@Operator
 	abstract RepoPod?		get(Str name, Bool checked := true)
@@ -35,6 +37,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 
 	@Inject	const DirtyCash dirtyCache
 
+	
 	// see http://stackoverflow.com/questions/7717109/how-can-i-compare-arbitrary-version-numbers/7717160#7717160
 	private const Str	reduceByVersionFunc	:= 
 		"""function (key, pods) { 
@@ -100,11 +103,11 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 	
 	override RepoPod[] findPrivateOwned(RepoUser user) {
-		user.isAdmin ? reduceByVersion(null) : reduceByVersion(field("ownerId").eq(user._id))
+		(user.isAdmin ? reduceByVersion(null) : reduceByVersion(field("ownerId").eq(user._id))).sort(byProjName)
 	}
 	
 	override RepoPod[] findPublicOwned(RepoUser user) {
-		reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq(true))
+		(reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq(true))).sort(byProjName)
 	}
 	
 	override Int countPublicVersions(RepoUser? user) {
@@ -167,19 +170,21 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		reduceFunc	:= Code(reduceByVersionFunc)
 		options		:= [
 			"query"	: query?.toMongo(datastore),
-			"sort"	: ["_podName_" : 1]
+			"sort"	: ["_builtOn_" : 1]
 		]
 		if (query == null)
 			options.remove("query")
 		output 	:= datastore.collection.mapReduce(mapFunc, reduceFunc, options)
 		vals 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
-		pods	:= (RepoPod[]) vals .map { datastore.fromMongoDoc(it) }.sort |RepoPod p1, RepoPod p2 -> Int| { p1.projectName.compareIgnoreCase(p2.projectName) }
+		pods	:= (RepoPod[]) vals .map { datastore.fromMongoDoc(it) }
 
 		// dirty cash!
 		pods.each { 
 			dirtyCache.put(RepoPod#, it._id, it)
+			// I just happen to know this is the latest!
 			dirtyCache.put(RepoPod#, "${it.name}-null", it)			
 		}
+		echo(pods)
 		return pods
 	}
 
