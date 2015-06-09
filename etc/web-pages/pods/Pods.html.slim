@@ -12,43 +12,46 @@
 			p	This repository has no pods! Why don't you upload one?
 		
 		-- else
-			p	This repository has ${countPublicVersions} public version${s(countPublicVersions)} of ${countPublicPods} public pod${s(countPublicPods)}.
+			p	This repository has ${countPublicVersions} public version${s(countPublicVersions)} of ${countPublicPods} public pod${s(countPublicPods)}. 
 			-- if (!loggedIn)
-				| Sign Up to publish your pods to this site! 
+				p;	i 
+					a (href="${pageUrl(SignupPage#)}") Sign Up
+					|  to publish your pods to this site! 
 			p	Displaying ${allPods.size} pod${s(allPods.size)}:
 
 		div.row
 			div.col-sm-10.col-sm-offset-1
 
-				-- allPods.each |pod|
-					div.media.podList
-						div.media-left.tableIcon
-							a (href="${podSummaryUrl(pod)}")
-								div.media-object
-									== app.renderPodMediaIcon(pod)
-								
-						div.media-body
-							a.podRssFeed (href="${pod.toAtomFeedUrl.encode}" title="RSS Feed for ${pod.projectName}")
-								i.fa.fa-rss-square.fa-lg.rss
-						
-							-- if (loggedIn && loggedInUser.owns(pod))
-								a.btn.btn-primary.btn-xs.pull-right (href="${editUrl(pod)}") &nbsp;&nbsp;Edit&nbsp;Pod&nbsp;&nbsp;
+				div.podList
+					-- allPods.each |pod|
+						div.media
+							div.media-left.tableIcon
+								a (href="${podSummaryUrl(pod)}")
+									div.media-object
+										== app.renderPodMediaIcon(pod)
+									
+							div.media-body
+								a.podRssFeed (href="${pod.toAtomFeedUrl.encode}" title="RSS Feed for ${pod.projectName}")
+									i.fa.fa-rss-square.fa-lg.rss
+							
+								-- if (loggedIn && loggedInUser.owns(pod))
+									a.btn.btn-primary.btn-xs.pull-right (href="${editUrl(pod)}") &nbsp;&nbsp;Edit&nbsp;Pod&nbsp;&nbsp;
+	
+								h4.media-heading
+									b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName} ${pod.version} 
+									small.text-nowrap by 
+										a (href="${userUrl(pod.owner)}") ${pod.owner.screenName}
+								span.text-muted ${pod.builtOn.toLocale("DDD MMM YYYY")}
+								br
+								== pod.summaryHtml
+								br
+								span (style="display: inline-block")
+									== podDocsHtml(pod)
+									-- if (pod.meta.jsEnabled)
+										span.pull-right.jsIcon (title="Pod available in Javascript")
+						hr				
 
-							h4.media-heading
-								b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName} ${pod.version} 
-								small.text-nowrap by 
-									a (href="${userUrl(pod.owner)}") ${pod.owner.screenName}
-							span.text-muted ${pod.builtOn.toLocale("DDD MMM YYYY")}
-							br
-							== pod.summaryHtml
-							br
-							span (style="display: inline-block")
-								== podDocsHtml(pod)
-								-- if (pod.meta.jsEnabled)
-									span.pull-right.jsIcon (title="Pod available in Javascript")
-					hr				
-
-		div.row
+		/*div.row
 			div.col-sm-12
 				p 	Sign up and login to publish your pod to this repository!
 
