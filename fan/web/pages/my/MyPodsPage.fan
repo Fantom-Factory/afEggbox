@@ -21,6 +21,10 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 		injector.injectRequireModule("rowLink")
 	}
 	
+	Str s(Int size) {
+		size > 1 ? "s" : "" 
+	}
+
 	Str podSummaryUrl(RepoPod pod) {
 		fandocUri(pod).toSummaryUri.toClientUrl.encode
 	}
