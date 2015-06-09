@@ -11,7 +11,7 @@ const mixin RepoPodDao : EntityDao {
 	abstract RepoPod[]		findVersions(RepoUser? user, Str name, Int? limit)
 	abstract RepoPod? 		findOne(Str name, Version? version := null)
 
-	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)			// for All Pods page
+	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)			// for All Pods page & sitemap
 	abstract Int	 		countPublicVersions()
 	abstract Int	 		countPublicPods()
 
@@ -85,7 +85,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 
 	override RepoPod[] findPublic(RepoUser? user) {
-		query		:= Query().field("meta.repo\\u002epublic").eq(true)
+		query		:= Query().field("meta.repo\\u002epublic").eq(true).field("meta.repo\\u002edeprecated").notEq(true)
 		if (user != null)
 			query	= Query().or([query, field("ownerId").eq(user._id)])
 		return reduceByVersion(query)

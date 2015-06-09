@@ -26,6 +26,7 @@ const class Indexes {
 		podCol.index("_podName_")		.ensure(["meta.pod\\u002ename"			: Index.ASC])
 		podCol.index("_builtOn_")		.ensure(["meta.build\\u002ets"			: Index.DESC])
 		podCol.index("_public_")		.ensure(["meta.repo\\u002epublic"		: Index.ASC])
+		podCol.index("_deprecated_")	.ensure(["meta.repo\\u002edeprecated"	: Index.ASC])
 
 		userCol.index("_email_")		.ensure(["email"		: Index.ASC], true)
 		userCol.index("_screenName_")	.ensure(["screenName"	: Index.ASC], true)

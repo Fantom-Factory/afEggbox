@@ -20,7 +20,8 @@
 						th	Version
 						th.text-nowrap	Built On
 						th.text-centre	Public
-						th	Summary
+						th.text-centre	Deprecated
+						th.hidden-xs.hidden-sm.hidden-md	Summary
 						th	Documentation
 						th.text-nowrap.text-centre	Doc Errs
 						th.text-centre	Actions
@@ -31,7 +32,8 @@
 							td.text-nowrap	${pod.version}
 							td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
 							td.text-centre;	== pod.isPublic ? "\u2611" : "" // "\u2610";
-							td;				== pod.summaryHtml
+							td.text-centre;	== pod.isDeprecated ? "\u2611" : "" // "\u2610";
+							td.hidden-xs.hidden-sm.hidden-md;				== pod.summaryHtml
 							td.rowlink-skip.text-nowrap;	== podDocsHtml(pod)
 							td.rowlink-skip.text-centre;
 								-- if (pod.invalidLinks.isEmpty)
