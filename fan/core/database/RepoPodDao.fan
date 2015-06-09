@@ -58,7 +58,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	new make(|This| in) { in(this) }
 	
 	override RepoPod? get(Str _id, Bool checked := true) {
-		dirtyCache.get(RepoPod#, _id.lower) |->Obj?| {
+		dirtyCache.get(RepoPod#, _id) |->Obj?| {
 			datastore.query(field("_id").eq(_id.lower)).findOne(checked)
 		}
 	}
@@ -172,8 +172,15 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		if (query == null)
 			options.remove("query")
 		output 	:= datastore.collection.mapReduce(mapFunc, reduceFunc, options)
-		pods 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
-		return pods.map { datastore.fromMongoDoc(it) }.sort |RepoPod p1, RepoPod p2 -> Int| { p1.projectName.compareIgnoreCase(p2.projectName) }
+		vals 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
+		pods	:= (RepoPod[]) vals .map { datastore.fromMongoDoc(it) }.sort |RepoPod p1, RepoPod p2 -> Int| { p1.projectName.compareIgnoreCase(p2.projectName) }
+
+		// dirty cash!
+		pods.each { 
+			dirtyCache.put(RepoPod#, it._id, it)
+			dirtyCache.put(RepoPod#, "${it.name}-null", it)			
+		}
+		return pods
 	}
 
 	private Str _id(Str name, Version? version) {
