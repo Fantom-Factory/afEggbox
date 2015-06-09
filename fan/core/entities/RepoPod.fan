@@ -31,7 +31,7 @@ class RepoPod {
 			it.meta			= RepoPodMeta(metaProps)
 			it.fileSize		= podSize
 			it.ownerId		= user._id
-			it.aboutFandoc	= findAboutFandoc(metaProps, docContents)
+			it.aboutFandoc	= findAboutFandoc(docContents)
 			it.invalidLinks	= InvalidLink#.emptyList
 			it.hasApi		= apiContents.size > 0
 			it.hasDocs		= docContents.containsKey(`/doc/pod.fandoc`)
@@ -144,7 +144,7 @@ class RepoPod {
 		meta.isDeprecated
 	}
 	
-	private Str findAboutFandoc(Str:Str metaProps, Uri:Buf contents) {
+	private Str findAboutFandoc(Uri:Buf contents) {
 		aboutFd := contents[`/doc/about.fandoc`]?.readAllStr ?: contents[`/doc/about.fdoc`]?.readAllStr		
 		if (aboutFd != null)
 			return aboutFd
@@ -176,7 +176,7 @@ class RepoPod {
 			}
 		}
 		
-		return metaProps["summary"] ?: "This pod has no description"
+		return ""
 	}
 	
 	override Str toStr() { _id }
@@ -209,6 +209,10 @@ class RepoPodMeta {
 		if (metaOrig.containsKey("repo.private")) {
 			set("repo.public", (meta["repo.private"].toStr.toBool(false) ?: true).not.toStr)
 			meta.remove("repo.private")
+		} else {
+			// older pods from Repo302 should default to public, newer pods to private
+			if (!metaOrig.containsKey("repo.public"))
+				set("repo.public", DateTime.fromStr(metaOrig["build.ts"]).year >= 2015 ? true : false)
 		}
 
 		// respect both British and American spellings - but use / keep the British one!
@@ -219,13 +223,12 @@ class RepoPodMeta {
 		
 		// ensure these guys exist for indexing / convert to Bool
 		set("repo.public", 		get("repo.public")		?.toStr?.toBool(false) ?: false)
-		set("repo.deprecated",	get("repo.deprecated")	?.toStr?.toBool(false) ?: false)
 		set("build.ts",			DateTime.fromStr(get("build.ts").toStr))
 		
 		// convert other props to Bool
-		"pod.docApi pod.docSrc pod.isScript pod.native.dotnet pod.native.java pod.native.jni pod.native.js repo.internal repo.jsEnabled".split.each {
-			if (containsKey(it))
-				set(it,	this.get(it)?.toStr?.toBool(false) ?: false)			
+		meta.keys.each |key| {
+			if (meta[key].toStr.toBool(false) != null)
+				meta[key] = meta[key].toStr.toBool	
 		}
 
 		try parseTest := projectUrl
@@ -244,7 +247,7 @@ class RepoPodMeta {
 	}
 
 	Bool isDeprecated {
-		get { get("repo.deprecated")	}
+		get { get("repo.deprecated") ?: false }
 		set { set("repo.deprecated", it) }
 	}
 

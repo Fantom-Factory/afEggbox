@@ -3,23 +3,31 @@ using afMorphia
 
 @Entity { name = "podApi" }
 class RepoPodApi {
-	@Property	const Str			_id
-	@Property	const Str			podName
-	@Property	const Uri:Str		contents
-					  Str:DocType	docTypes	:= Str:DocType[:]
+	@Property	private const Str		_id
+	@Property	private const Str		podName
+	@Property	private const Str:Str	api
+				private 	Str:DocType	docTypes	:= Str:DocType[:]
 	
 	new make(|This|f) { f(this) }
 	
 	static new fromFile(RepoPod pod, Uri:Str contents) {
-		RepoPodApi {
+		newContents := Str:Str[:] { ordered = true }
+		contents.keys.sort.each |uri| {
+			if (!uri.isDir && uri.toStr.startsWith("/doc/") && uri.ext == "apidoc") {
+				key := uri.relTo(`/doc/`).plusName(uri.name[0..<-7])
+				newContents[key.toStr] = contents[uri]
+			}
+		}
+
+		return RepoPodApi {
 			it._id		= pod._id
 			it.podName	= pod.name
-			it.contents	= contents
+			it.api		= newContents
 		}
 	}
 	
 	Bool hasType(Str typeName) {
-		contents.containsKey(`/doc/${typeName}.apidoc`)
+		api.containsKey(typeName)
 	}
 	
 	@Operator
@@ -27,7 +35,7 @@ class RepoPodApi {
 		if (docTypes.containsKey(typeName))
 			return docTypes[typeName]
 		
-		apidoc := contents[`/doc/${typeName}.apidoc`] ?: (checked ? throw Err("Pod api `$typeName` not found") : null)
+		apidoc := api[typeName] ?: (checked ? throw Err("Pod api `$typeName` not found") : null)
 		if (apidoc == null)
 			return apidoc
 		docType := ApiDocParser(podName, apidoc.toStr.in).parseType
@@ -36,6 +44,6 @@ class RepoPodApi {
 	}
 	
 	DocType[] allTypes() {
-		contents.keys.sort.map { this.get(it.name[0..<it.name.indexr(".")]) }
+		api.keys.map { this.get(it) }
 	}
 }

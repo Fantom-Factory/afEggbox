@@ -11,7 +11,7 @@ const mixin PodsPage : PrPage {
 
 	@InitRender
 	Void initRender() {
-		allPods = podDao.findPublic(userSession.user)
+		allPods = podDao.findPublic(loggedInUser)
 		injector.injectRequireModule("rowLink")
 	}
 	
