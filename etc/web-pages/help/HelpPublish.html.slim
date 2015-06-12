@@ -4,9 +4,14 @@
 		li.active	Help
 		li.active	Publishing Pods
 
-	article
-		h1.podHeading
-			span	help
-			| Publishing Pods
-	
-		== printFandocHelp(`HelpPublish.fandoc`)
+	div.row
+		article.col-sm-9
+			h1.podHeading
+				span	help
+				| Publishing Pods
+		
+			== printFandocHelp(`HelpPublish.fandoc`)
+
+		nav.col-sm-3
+			hr.visible-xs
+			== app.renderHelpToc(`HelpPublish.fandoc`)

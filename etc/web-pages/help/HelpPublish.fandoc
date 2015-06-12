@@ -10,22 +10,84 @@ Private Pods
 ************
 By default, published pods are private. That means they are only visible to you. Even when accessed with the fanr tool.
 
-There are no restrictions on private pods and virtually any standard pod build by a 'build.fan' script is accepted.
+There are no restrictions on private pods and any pod build by a standard 'build.fan' script is accepted.
+
+A minimalist 'build.fan' for a private pod looks like this:
+
+pre>
+syntax: fantom
+
+using build
+
+class Build : BuildPod {
+
+	new make() {
+		podName = "pooPrivate"
+		version = Version("1.0.0")
+		depends = ["sys 1.0"]
+		srcDirs = [`fan/`]
+	}
+}
+<pre
+
+Once uploaded, private pods may be converted to a public pod (and back again) via its *edit* page.
 
 
 
 Public Pods
 ***********
-Public pods, because they're exposed to everyone, carry a few restrictions. Namely they need to define the following pod meta:
+Public pods, because they're exposed to everyone, need to include more meta data to tell us a bit more about themselves. They do this by defining extra pod meta:
 
- - 'pod.summary'
- - 'repo.public'
- - 'licence.name' or 'license.name'
+
+
+repo.public
+===========
+'repo.public' must be set to 'true'.
+
+To accept legacy pods from the [Status302 pod repository]`http://repo.status302.com/`, the  meta 'repo.private' is also honoured. Though if both are defined, 'repo.public' takes precedence.
+
+licence.name / license.name
+===========================
+Either 'licence.name' or 'license.name'
  - 'vcs.uri' or 'org.uri'
 
+A minimalist 'build.fan' for a pubic pod would look like this:
 
+pre>
+syntax: fantom
 
-Pod Meta
+using build
+
+class Build : BuildPod {
+
+	new make() {
+		podName = "pooPublic"
+		summary = "Project desciption"
+		version = Version("1.0.0")
+
+		meta = [
+			"licence.name"	: "The MIT Licence",
+			"org.uri"		: "http://www.alienfactory.co.uk",
+			"proj.name"		: "Poo - Public",
+			"repo.public"	: "true",
+		]
+
+		depends = ["sys 1.0"]
+		srcDirs = [`fan/`]
+	}
+}
+
+<pre
+
+Optional Data
 ********
 Pod Repo makes us of the following pod meta:
 
+
+proj.name
+
+repo.internal
+
+repo.tags
+
+repo.deprecated

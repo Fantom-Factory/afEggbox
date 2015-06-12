@@ -3,11 +3,15 @@
 	ol.breadcrumb
 		li.active	Help
 		li.active	Writing Documentation
-
-	div.row
-		h1.podHeading
-			span	help
-			| Writing Documentation
-
-		== printFandocHelp(`HelpFandoc.fandoc`)
 			
+	div.row
+		article.col-sm-9
+			h1.podHeading
+				span	help
+				| Writing Documentation
+		
+			== printFandocHelp(`HelpFandoc.fandoc`)
+
+		nav.col-sm-3
+			hr.visible-xs
+			== app.renderHelpToc(`HelpFandoc.fandoc`)

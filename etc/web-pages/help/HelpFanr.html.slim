@@ -5,8 +5,13 @@
 		li.active	Using fanr
 
 	div.row
-		h1.podHeading
-			span	help
-			| Using fanr
+		article.col-sm-9
+			h1.podHeading
+				span	help
+				| Using fanr
+		
+			== printFandocHelp(`HelpFanr.fandoc`)
 
-		== printFandocHelp(`HelpFanr.fandoc`)
+		nav.col-sm-3
+			hr.visible-xs
+			== app.renderHelpToc(`HelpFanr.fandoc`)
