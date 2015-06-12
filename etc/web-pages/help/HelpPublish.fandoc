@@ -1,0 +1,31 @@
+Anyone may publish a Fantom library / pod to this website.
+
+[Sign Up]`/signup` to create an account, and visit the 'My Pods' page. There you'll find a simple form to upload your pod file.
+
+Or, after you've created an account, you may publish pods via the [Fantom fanr tool]`docFanr::Tool#publish`.
+
+
+
+Private Pods
+************
+By default, published pods are private. That means they are only visible to you. Even when accessed with the fanr tool.
+
+There are no restrictions on private pods and virtually any standard pod build by a 'build.fan' script is accepted.
+
+
+
+Public Pods
+***********
+Public pods, because they're exposed to everyone, carry a few restrictions. Namely they need to define the following pod meta:
+
+ - 'pod.summary'
+ - 'repo.public'
+ - 'licence.name' or 'license.name'
+ - 'vcs.uri' or 'org.uri'
+
+
+
+Pod Meta
+********
+Pod Repo makes us of the following pod meta:
+

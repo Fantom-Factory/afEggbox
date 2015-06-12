@@ -6,7 +6,7 @@ const class InvalidLinks {
 	@Inject private const Registry			registry
 	@Inject private const RepoPodApiDao		podApiRepo
 	@Inject private const RepoPodDocsDao	podDocsRepo
-	@Inject private const Fandoc			fandoc
+	@Inject private const FandocWriter		fandoc
 	@Inject private const DirtyCash			dirtyCash
 
 	new make(|This|in) { in(this) }

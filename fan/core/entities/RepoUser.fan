@@ -30,7 +30,7 @@ class RepoUser {
 	@Property{}	Str		userSalt
 	@Property{}	Str		userSecret
 
-	@Inject{} Fandoc?			fandocRenderer
+	@Inject{} FandocWriter?		fandocRenderer
 	@Inject{} PodRepoConfig?	repoConfig
 	@Inject{} RepoActivityDao?	activityDao
 	

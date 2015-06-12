@@ -4,41 +4,9 @@
 		li.active	Help
 		li.active	Publishing Pods
 
-	/* div.row
-		article.col-sm-9
-		
 	article
 		h1.podHeading
 			span	help
 			| Publishing Pods
 	
-		p	Anyone may publish a Fantom library / pod to this website.
-		
-		p	Once you've <a href="${pages[SignupPage#].pageUrl.encode}">Signed Up</a> and created an account, visit the 'My Pods' page. 
-			| There you'll be able to upload pod files. Or, once you have an account, you may publish pods to this site via the <a href="http://fantom.org/doc/docFanr/Tool.html#publish">Fantom fanr tool</a>.
-		
-		
-			
-		h2 Private Pods
-		
-		p	By default, all pods are private. That means they are only visible to you. Even when accessed with the <span class="mark">Fanr</span> tool.
-		
-		p	There are no restrictions on private pods and virtually any standard pod build by a 'build.fan' script is accepted.  
-		
-		
-		
-		h2 Public Pods
-		
-		p	Public pods, because they're exposed to everyone, carry a few restrictions. Namely they need to define the following pod meta:
-		
-		ul
-			li	<code>pod.summary</code>
-			li	<code>repo.public</code>
-			li	<code>licence.name</code> or <code>license.name</code>
-			li	<code>vcs.uri</code> or <code>org.uri</code>
-		 
-		 
-		 
-		h2 Pod Meta
-		
-		Pod Repo makes us of the following pod meta:
+		== printFandocHelp(`HelpPublish.fandoc`)

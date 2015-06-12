@@ -3,7 +3,7 @@ using fandoc
 using web
 
 // TODO: make Fandoc lib not IoC
-const class Fandoc {
+const class FandocWriter {
 	
 	@Inject	private const |LinkResolverCtx?, HtmlSkin?->HtmlWriter| htmlWriter
 	

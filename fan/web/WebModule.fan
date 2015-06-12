@@ -3,6 +3,7 @@ using afIocConfig
 using afIocEnv
 using afBedSheet
 using afDuvet
+using afEfanXtra::TemplateConverters
 using afFormBean::InputSkins
 using afFormBean::ErrorSkin
 using afGoogleAnalytics::GoogleAnalyticsConfigIds
@@ -67,6 +68,11 @@ class WebModule {
 		}
 	}
 	
+	@Contribute { serviceType=TemplateConverters# }
+	internal static Void contributeTemplateConverters(Configuration config) {
+		config.remove("fandoc")	// so we can have help fandoc file named after the class
+	}
+
 	@Advise { serviceId="afPillow::Pages" }
 	static Void addTransations(MethodAdvisor[] methodAdvisors, DirtyCash dirtyCash) {
 		methodAdvisors
