@@ -2,7 +2,7 @@ using afIoc
 
 internal const class TablePreProcessor : PreTextProcessor {
 	
-	@Inject private const Fandoc fandoc
+	@Inject private const FandocWriter fandoc
 			private const TableParser tableParser	:= TableParser()
 	
 	new make(|This|in) { in(this) }

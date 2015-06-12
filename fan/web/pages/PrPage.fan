@@ -7,6 +7,7 @@ using afDuvet
 @Abstract @Page
 const mixin PrPage : PrComponent {
 
+	@Inject abstract FandocWriter	fandocWriter
 	@Inject	abstract Alert			alert
 
 	Bool isActive() {
@@ -15,5 +16,11 @@ const mixin PrPage : PrComponent {
 	
 	Str podsUrl() {
 		pageUrl(PodsPage#)
+	}
+	
+	Str printFandocHelp(Uri name) {
+		// FIXME: also read from pod 
+		fandocFile := `etc/web-pages/help/${name}`.toFile
+		return fandocWriter.writeStrToHtml(fandocFile.readAllStr, LinkResolverCtx())
 	}
 }

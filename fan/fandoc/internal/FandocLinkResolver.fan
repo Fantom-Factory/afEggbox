@@ -34,7 +34,7 @@ internal const class FandocLinkResolver : LinkResolver {
 
 
 abstract const class FandocUri {
-	@Inject const Fandoc		fandocRenderer
+	@Inject const FandocWriter	fandocRenderer
 	@Inject const Registry		reg
 	@Inject const RepoPodDao	podDao
 	@Inject const CorePods		corePods

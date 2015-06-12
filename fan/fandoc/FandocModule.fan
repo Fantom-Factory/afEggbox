@@ -3,7 +3,7 @@ using afIoc
 class FandocModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
-		defs.add(Fandoc#)
+		defs.add(FandocWriter#)
 		defs.add(PreTextProcessors#)
 		defs.add(LinkResolvers#)
 		defs.add(SyntaxWriter#)
