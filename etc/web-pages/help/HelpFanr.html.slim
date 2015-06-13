@@ -10,7 +10,8 @@
 				span	help
 				| Using fanr
 		
-			== printFandocHelp(`HelpFanr.fandoc`)
+			-- echo(host)
+			== printFandocHelp(`HelpFanr.fandoc`).replace("@@fanrUrl@@", host.plusSlash.plusName("fanr").encode)
 
 		nav.col-sm-3
 			hr.visible-xs

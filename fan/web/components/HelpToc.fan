@@ -22,8 +22,8 @@ const mixin HelpToc : PrComponent {
 
 		contents := Type:Str[:] { ordered = true }
 			.add(HelpPublishPage#,	"Publishing Pods")
-			.add(HelpFanrPage#, 	"Using fanr")
 			.add(HelpFandocPage#, 	"Writing Documentation")
+			.add(HelpFanrPage#, 	"Using fanr")
 
 		contents.each |title, pageType| { 
 			link  := pages[pageType]
