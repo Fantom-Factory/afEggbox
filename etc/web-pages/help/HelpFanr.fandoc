@@ -1,1 +1,47 @@
-Use email in place of usernamem e,.g.
+This Pod Repository is fanr compatible, meaning the fanr command line tool may be used to query, install and publish pods to and from your local Fantom installation.
+
+The base fanr URL for this repository is:
+
+  @@fanrUrl@@
+
+
+
+Querying Pods
+*************
+To query for pods, use the [query syntax]`http://fantom.org/doc/docFanr/Tool#query`:
+
+  C:\> fanr query -r @@fanrUrl@@ "*mongo*"
+
+Note that this will only display public pods. To include your own private pods in the results, you must send your credentials.
+
+   C:\> fanr query -u foo@bar.com -p password -r @@fanrUrl@@ "*mongo*"
+
+Where '-u' is the *email address* used to create your account.
+
+
+
+Installing Pods
+***************
+To install pods from this repository onto your local machine, use the fanr [install]`http://fantom.org/doc/docFanr/Tool#install` command:
+
+  C:\> fanr install -r @@fanrUrl@@ "somePod"
+
+Or to install a specific version of a pod:
+
+  C:\> fanr install -r @@fanrUrl@@ "somePod 1.0.0"
+
+Again, if the pod is private to you, then you must supply your credentials:
+
+  C:\> fanr install -u foo@bar.com -p password -r @@fanrUrl@@ "somePod 1.0.0"
+
+
+
+Publishing Pods
+***************
+Pods may also be published to this repository via the fanr [publish]`http://fantom.org/doc/docFanr/Tool#publish` command.
+
+To publish, your credentails must be supplied everytime:
+
+  C:\> fanr publish -u foo@bar.com -p password -r @@fanrUrl@@ somePod.pod
+
+

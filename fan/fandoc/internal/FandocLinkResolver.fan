@@ -126,7 +126,8 @@ abstract const class FandocUri {
 		}
 		
 		if (uri.scheme == null && !uri.isPathAbs) {
-			return parseFantomUri(reg, ctx, link, ctx.pod.name, link)
+			if (ctx.pod != null)
+				return parseFantomUri(reg, ctx, link, ctx.pod.name, link)
 		}
 		
 		return null

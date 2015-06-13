@@ -9,6 +9,8 @@ const mixin FatFooter : PrComponent {
 	
 	@InitRender
 	Void initRender() {
+		if (repoConfig.contactEnabled)
+			injector.injectRequireModule("unscramble", null, ["contactUs"])
 	}
 	
 }

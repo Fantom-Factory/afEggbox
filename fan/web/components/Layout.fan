@@ -29,7 +29,6 @@ const mixin Layout : PrComponent {
 		
 		injector.injectStylesheet.fromLocalUrl(`/css/website.min.css`)
 		injector.injectRequireModule("bootstrap")
-		injector.injectRequireModule("unscramble", null, ["contactUs"])
 	}
 	
 	Str pageTitle() {
