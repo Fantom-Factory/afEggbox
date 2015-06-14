@@ -15,7 +15,7 @@ const mixin HelpToc : PrComponent {
 	
 	override Str renderTemplate() {
 		html	:= StrBuf()
-		html.add("<h3>Help</h3>")
+		html.add("<h3>Get Started</h3>")
 
 		fandocFile := `etc/web-pages/help/${fileName}`.toFile
 		doc := fandoc.parseStr(FandocParser(), fandocFile.readAllStr)

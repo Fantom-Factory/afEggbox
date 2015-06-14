@@ -1,8 +1,8 @@
 Anyone may publish a Fantom library / pod to this website.
 
-[Sign Up]`/signup` to create an account, and visit the 'My Pods' page. There you'll find a simple form to upload pod files.
+First **Sign Up** to create an account, then visit the **My Pods** page. There you'll find a simple form to upload pod files.
 
-Or, after you've created an account, pods may be published with the [Fantom fanr tool]`docFanr::Tool#publish`.
+Or, after you've created an account, publish pods with the [Fantom fanr tool]`docFanr::Tool#publish`.
 
 
 
@@ -25,13 +25,13 @@ using build
 
 class Build : BuildPod {
 
-	new make() {
-		podName = "pooPrivate"
-		summary = "Project description"
-		version = Version("1.0.0")
-		depends = ["sys 1.0"]
-		srcDirs = [`fan/`]
-	}
+    new make() {
+        podName = "pooPrivate"
+        summary = "Project description"
+        version = Version("1.0.0")
+        depends = ["sys 1.0"]
+        srcDirs = [`fan/`]
+    }
 }
 <pre
 
@@ -82,20 +82,20 @@ using build
 
 class Build : BuildPod {
 
-	new make() {
-		podName = "pooPublic"
-		summary = "Project description"
-		version = Version("1.0.0")
+    new make() {
+        podName = "pooPublic"
+        summary = "Project description"
+        version = Version("1.0.0")
 
-		meta = [
-			"licence.name"	: "ISC License (ISC)",
-			"org.uri"		: "http://www.example.com",
-			"repo.public"	: "true",
-		]
+        meta = [
+            "licence.name"  : "ISC License (ISC)",
+            "org.uri"       : "http://www.example.com",
+            "repo.public"   : "true",
+        ]
 
-		depends = ["sys 1.0"]
-		srcDirs = [`fan/`]
-	}
+        depends = ["sys 1.0"]
+        srcDirs = [`fan/`]
+    }
 }
 <pre
 
@@ -103,7 +103,7 @@ class Build : BuildPod {
 
 Pod Meta Data
 *************
-The Pod Repository makes us of the following [pod meta data]`docLang::Pods#meta`:
+The Pod Repository makes us of the following optional [pod meta data]`docLang::Pods#meta`:
 
 pre>
 table:
@@ -124,14 +124,14 @@ A more complete set of pod meta data would look like this:
 pre>
 syntax: fantom
 meta = [
-	"proj.name"		: "Foo Bar",
-	"proj.uri"		: "http://www.wotever.com/foobar",
-	"org.name"		: "Wotever",
-	"org.uri"		: "http://www.wotever.com",
-	"vcs.name"		: "Mercurial",
-	"vcs.uri"		: "https://bitbucket.org/Wotever/foobar",
-	"licence.name"	: "ISC License (ISC)",
-	"repo.public"	: "true"
+    "proj.name"     : "Foo Bar",
+    "proj.uri"      : "http://www.wotever.com/foobar",
+    "org.name"      : "Wotever",
+    "org.uri"       : "http://www.wotever.com",
+    "vcs.name"      : "Mercurial",
+    "vcs.uri"       : "https://bitbucket.org/Wotever/foobar",
+    "licence.name"  : "ISC License (ISC)",
+    "repo.public"   : "true"
 ]
 <pre
 
@@ -156,14 +156,14 @@ syntax: fantom
 
 class Build : BuildPod {
 
-	new make() {
-		podName = "poo"
-		version = Version("1.0.0")
+    new make() {
+        podName = "poo"
+        version = Version("1.0.0")
 
-		...
+        ...
 
-		docApi = true
-	}
+        docApi = true
+    }
 }
 <pre
 
@@ -180,14 +180,14 @@ syntax: fantom
 
 class Build : BuildPod {
 
-	new make() {
-		podName = "poo"
-		version = Version("1.0.0")
+    new make() {
+        podName = "poo"
+        version = Version("1.0.0")
 
-		...
+        ...
 
-		docSrc = true
-	}
+        docSrc = true
+    }
 }
 <pre
 
@@ -242,14 +242,14 @@ syntax: fantom
 
 class Build : BuildPod {
 
-	new make() {
-		podName = "poo"
-		version = Version("1.0.0")
+    new make() {
+        podName = "poo"
+        version = Version("1.0.0")
 
-		...
+        ...
 
-		resDirs = [`doc/`]
-	}
+        resDirs = [`doc/`]
+    }
 }
 <pre
 
@@ -262,14 +262,14 @@ syntax: fantom
 
 class Build : BuildPod {
 
-	new make() {
-		podName = "poo"
-		version = Version("1.0.0")
+    new make() {
+        podName = "poo"
+        version = Version("1.0.0")
 
-		...
+        ...
 
-		resDirs = [`doc/disasterRecovery.fandoc`, `doc/pod.fandoc`, `releaseNotes.fandoc`]
-	}
+        resDirs = [`doc/disasterRecovery.fandoc`, `doc/pod.fandoc`, `releaseNotes.fandoc`]
+    }
 }
 <pre
 

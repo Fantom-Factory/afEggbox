@@ -38,7 +38,7 @@ const class DirtyCash {
 		} finally {
 			caching = false
 			
-			if (iocEnv.isDev)
+			if (iocEnv.isDev && (cacheHits.size > 0 || cacheMisses.size > 0))
 				logCash
 
 			cache.clear

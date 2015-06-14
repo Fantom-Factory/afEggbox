@@ -46,9 +46,6 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		           var i, cmp, len, re = /(\\.0)+[^\\.]*\$/;
 		           var a = (podA.meta['pod\\\\u002eversion'] + '').replace(re, '').split('.');
 		           var b = (podB.meta['pod\\\\u002eversion'] + '').replace(re, '').split('.');
-		           if (!asc) {
-		               var t = a; a = b; b = t;
-		           }
 		           len = Math.min(a.length, b.length);
 		           for (i = 0; i < len; i++) {
 		               cmp = parseInt(a[i], 10) - parseInt(b[i], 10);
@@ -59,7 +56,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		           return a.length - b.length;
 		       };
 		   
-		       return pods.sort(sortByVersion)[pods.length-1];
+		       return asc ? pods.sort(sortByVersion)[pods.length-1] : pods.sort(sortByVersion)[0];
 		   }"""
 	
 	new make(|This| in) { in(this) }
@@ -191,11 +188,12 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		pods	:= (RepoPod[]) vals .map { datastore.fromMongoDoc(it) }
 
 		// dirty cash!
-		pods.each { 
-			dirtyCache.put(RepoPod#, it._id, it)
-			// I just happen to know this is the latest!
-			dirtyCache.put(RepoPod#, "${it.name}-null", it)			
-		}
+		if (asc)
+			pods.each { 
+				dirtyCache.put(RepoPod#, it._id, it)
+				// I just happen to know this is the latest!
+				dirtyCache.put(RepoPod#, "${it.name}-null", it)			
+			}
 		return pods
 	}
 
