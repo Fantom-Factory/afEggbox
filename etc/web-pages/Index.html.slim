@@ -29,3 +29,16 @@
 			ul
 				li	<b>Downloaded</b> manually on this website or 
 				li	<b>Installed</b> with the <a href="http://fantom.org/doc/docFanr/Tool">fanr</a> command line tool.
+				
+		div.col-sm-6.col-md-4
+			h2.text-center	Latest Pods
+			== app.renderPodList(newPods)
+				
+		div.col-sm-6.col-md-4
+			h2.text-center	Latest Versions
+			== app.renderPodList(newVers)
+				
+		div.col-sm-6.col-md-4
+			h2.text-center	Most Popular
+			== app.renderPodList(allPods)
+				

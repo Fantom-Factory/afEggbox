@@ -16,6 +16,7 @@ const mixin RepoPodDao : EntityDao {
 	abstract RepoPod[] 		findPublic(RepoUser? loggedInUser)			// for All Pods page & sitemap
 	abstract Int	 		countPublicVersions(RepoUser? user)			// for All Pods and User page
 	abstract Int	 		countPublicPods(RepoUser? user)				// for All Pods and User page
+	abstract RepoPod[] 		findPublicNewest(RepoUser? loggedInUser)	// for All Pods page & sitemap
 
 	abstract RepoPod[] 		findPublicVersions(Int limit)				// for main public atom feed
 	abstract RepoPod[] 		findPrivateOwned(RepoUser loggedInUser)		// for My Pods page
@@ -45,6 +46,9 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		           var i, cmp, len, re = /(\\.0)+[^\\.]*\$/;
 		           var a = (podA.meta['pod\\\\u002eversion'] + '').replace(re, '').split('.');
 		           var b = (podB.meta['pod\\\\u002eversion'] + '').replace(re, '').split('.');
+		           if (!asc) {
+		               var t = a; a = b; b = t;
+		           }
 		           len = Math.min(a.length, b.length);
 		           for (i = 0; i < len; i++) {
 		               cmp = parseInt(a[i], 10) - parseInt(b[i], 10);
@@ -83,10 +87,18 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		dirtyCache.get(RepoPod#, _id(name, version)) |->Obj?| {
 			version != null
 				? get(_id(name, version), false)
-				: reduceByVersion(field("meta.pod\\u002ename").eqIgnoreCase(name)).first
+				: reduceByVersion(field("meta.pod\\u002ename").eqIgnoreCase(name), true).first
 		}
 	}
 
+	override RepoPod[] findPublicNewest(RepoUser? user) {
+		query := Query().field("meta.repo\\u002epublic").eq(true)		
+		if (user != null)
+			query = Query().or([query, field("ownerId").eq(user._id)])
+
+		return reduceByVersion(query, false)
+	}
+	
 	override RepoPod[] findPublic(RepoUser? user) {
 		query := Query().field("meta.repo\\u002epublic").eq(true)
 		
@@ -94,7 +106,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		//.field("meta.repo\\u002edeprecated").notEq(true)
 		if (user != null)
 			query = Query().or([query, field("ownerId").eq(user._id)])
-		return reduceByVersion(query)
+		return reduceByVersion(query, true)
 	}
 	
 	override RepoPod[] findPublicVersions(Int limit) {
@@ -103,11 +115,11 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 	
 	override RepoPod[] findPrivateOwned(RepoUser user) {
-		(user.isAdmin ? reduceByVersion(null) : reduceByVersion(field("ownerId").eq(user._id))).sort(byProjName)
+		(user.isAdmin ? reduceByVersion(null, true) : reduceByVersion(field("ownerId").eq(user._id), true)).sort(byProjName)
 	}
 	
 	override RepoPod[] findPublicOwned(RepoUser user) {
-		(reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq(true))).sort(byProjName)
+		(reduceByVersion(field("ownerId").eq(user._id).field("meta.repo\\u002epublic").eq(true), true)).sort(byProjName)
 	}
 	
 	override Int countPublicVersions(RepoUser? user) {
@@ -163,11 +175,11 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	
 	// TODO: as map reduce is intended for background queries, should the repo get large, we may have to 
 	// add an array of version Ints to the document and aggregate / group and sort on that.
-	private RepoPod[] reduceByVersion(Query? query) {
+	private RepoPod[] reduceByVersion(Query? query, Bool asc) {
 		// need to ensure the collection exists else you get a "Mongo ns does not exist" Err
 		// so just ensure the indexes and job done		
 		mapFunc 	:= Code("function () { emit(this.meta['pod\\\\u002ename'], this); }")
-		reduceFunc	:= Code(reduceByVersionFunc)
+		reduceFunc	:= Code(reduceByVersionFunc, ["asc":asc])
 		options		:= [
 			"query"	: query?.toMongo(datastore),
 			"sort"	: ["_builtOn_" : 1]
