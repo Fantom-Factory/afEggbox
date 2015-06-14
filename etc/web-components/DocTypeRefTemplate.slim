@@ -1,0 +1,38 @@
+
+-- if (ref.isParameterized)
+
+	-- if (ref.qname == "sys::List")
+		-- app.renderDocTypeRefTemplate(ctx, ref.v, false)
+		== "[]"
+
+	-- else if (ref.qname == "sys::Map")
+		== ref.isNullable ? "[" : ""
+		== app.renderDocTypeRefTemplate(ctx, ref.k, false)
+		== ":"
+		== app.renderDocTypeRefTemplate(ctx, ref.v, false)
+		== ref.isNullable ? "]" : ""
+
+	-- else if (ref.qname == "sys::Func")
+		-- isVoid := ref.funcReturn.qname == "sys::Void"
+		== "|"
+		-- ref.funcParams.each |p, i|
+			-- if (i > 0)
+				== ","
+			== app.renderDocTypeRefTemplate(ctx, p, false)
+		-- if (!isVoid || ref.funcParams.isEmpty)
+			== "->"
+			== app.renderDocTypeRefTemplate(ctx, ref.funcReturn, false)
+		|
+	-- else throw Err("Unsupported parameterized type: $ref")
+
+	== ref.isNullable ? "?" : ""
+
+-- else
+	-- if (resolved)
+		a (href="${typeUrl}")
+			== full ? ref.qname : ref.name
+			== ref.isNullable ? "?" : ""
+	-- else
+		== full ? ref.qname : ref.name
+		== ref.isNullable ? "?" : ""
+		

@@ -1,0 +1,102 @@
+-? using fandoc
+
+-- app.renderLayout(isPublic, "${type.qname} API")
+
+	== app.renderPodBreadcrumbs(fandocUri)
+
+	div.row
+		article.col-sm-9.api
+			== app.renderPodIcon(pod)
+			h1.podHeading
+				span; == DocFlags.toTypeDis(type.flags)
+				== type.qname
+
+			// writeTypeInheritance
+			pre
+				-- indent := 0
+				-- type.base.eachr |ref|
+					-- if (indent > 0)
+						== "\n${Str.spaces(indent*2)}"
+					== app.renderDocTypeRefTemplate(ctx, ref, true)
+					-- indent++
+				-- if (type.base.size > 0) 
+					== "\n${Str.spaces(indent*2)}"
+				== type.qname
+				-- type.mixins.each |ref, i|
+					== i==0 ? " : " : ", "
+					== app.renderDocTypeRefTemplate(ctx, ref, true)
+			
+			// writeFacets
+			-- if (type.facets.size > 0)
+				p.facets.sig
+					-- type.facets.each |f|
+						== app.renderDocFacetTemplate(ctx, f)
+						br
+			
+			== fandocUri.typeHtml
+	
+			-- if (DocFlags.isEnum(type.flags))
+				ul
+					-- type.slots.each |s|
+						-- if (DocFlags.isEnum(s.flags))
+							li;	a (href="#${s.name}")	${s.name}
+			
+			dl
+				-- type.slots.each |slot|
+					-- slotSrcUri := fandocUri.toSrcUri(type.name, slot.name)
+					dt
+						// put the ID in a div - 'cos the ID top offset fix don't work on dt tags
+						div#${slot.name}.id	$slot.name
+					dd
+						-- if (slotSrcUri.hasSrc)
+							p.src
+								a (href="${slotSrcUri.toClientUrl.encode}") Source
+	
+						p.sig; code
+							-- slot.facets.each |f|
+								== app.renderDocFacetTemplate(ctx, f)
+								br
+							
+							-- if (slot is DocField)
+								-- field := (DocField) slot
+								== DocFlags.toSlotDis(field.flags) + " "
+								== app.renderDocTypeRefTemplate(ctx, field.type, false)
+								== " ${field.name}"
+								== field.init != null ? " := ${field.init.toXml}" : ""
+								== field.setterFlags != null ? " { " + DocFlags.toSlotDis(field.setterFlags) + " set }" : ""
+							
+							-- else
+								-- method := (DocMethod) slot
+								-- if (DocFlags.isCtor(method.flags))
+									== DocFlags.isStatic(method.flags) ? "static " : ""
+									== "new"
+								-- else
+									== DocFlags.toSlotDis(method.flags) + " "
+									== app.renderDocTypeRefTemplate(ctx, method.returns, false)
+								== " $method.name("
+								-- method.params.each |param, i|
+									== i > 0 ? ", " : ""
+									== app.renderDocTypeRefTemplate(ctx, param.type, false)
+									== " $param.name"
+									== param.def != null ? " := $param.def.toXml" : ""
+								== ")"
+						
+						-- slotUri := fandocUri.toApiUri(type.name, slot.name)
+						== slotUri.slotHtml
+	
+		nav.col-sm-3
+			hr.visible-xs
+			== app.renderPodToc(fandocUri)
+
+			h3	Source
+			ul.list-unstyled
+				-- typeSrcUri := fandocUri.toTypeSrcUri
+				-- if (typeSrcUri.hasSrc)
+					li;	a (href="${typeSrcUri.toClientUrl.encode}")	View Source
+				-- else
+					li	Not available
+	
+			h3	Slots
+			ul.list-unstyled
+				-- type.slots.each |slot|
+					li;	a (href="#${slot.name}")	${slot.name}

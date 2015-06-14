@@ -1,0 +1,16 @@
+# /robots.txt file for http://www.fantomfactory.org/
+
+Sitemap: http://pods.fantomfactory.org/sitemap.xml
+
+# Allow RedBot - see http://blog.redbot.org/post/80961783116/redbot-and-robots-txt
+User-agent: RED.
+Disallow:
+
+# Disallow access to meaningless directories
+# We'll keep images so RedBot and Google can access them, same goes for ColdFeet
+User-agent: *
+Disallow: /css/
+Disallow: /fonts/
+Disallow: /js/
+# Disallow: /images/
+# Disallow: /coldFeet/

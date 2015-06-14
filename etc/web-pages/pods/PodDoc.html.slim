@@ -1,0 +1,18 @@
+-- app.renderLayout(isPublic, "${pod.projectName} ${fandocUri.title}")
+
+	== app.renderPodBreadcrumbs(fandocUri)
+
+	div.row
+		article.col-sm-9
+			== app.renderPodIcon(pod)
+			h1.podHeading
+				span ${pod.projectName}
+				== fandocUri.title
+				
+			-- if (pod.meta.isInternal)
+				p;	i	${pod.projectName} is a support library that aids ${pod.meta.orgName ?: pod.owner.screenName} in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.
+			== docHtml
+
+		nav.col-sm-3
+			hr.visible-xs
+			== app.renderPodToc(fandocUri)

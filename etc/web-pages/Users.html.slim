@@ -1,0 +1,48 @@
+-- app.renderLayout(true, "${user.screenName} :: User")
+
+	ol.breadcrumb
+		li.active	Users
+		li.active	${user.screenName}
+		-- if (loggedIn && loggedInUser == user)
+			a.btn.btn-primary.btn-xs.pull-right (href="${pages[MyDetailsPage#].pageUrl.encode}") &nbsp;&nbsp;Edit User&nbsp;&nbsp;
+
+	div.row
+		article.col-sm-12
+			img.img-thumbnail.pull-right (src="${user.gravatarImageUrl(110)}")
+			h1.podHeading
+				span	user
+				| ${user.realName ?: user.screenName} 
+				-- if (user.realName != null && !user.realName.equalsIgnoreCase(user.screenName)) 
+					small()	 (${user.screenName})
+				
+			-- if (user.aboutMe != null)
+				h2	About Me
+				== user.aboutMeHtml	
+
+			-- if (allPods.size > 0)
+				h2	Public Published Pods
+				p	${user.realName ?: user.screenName} has published ${countPublicVersions} public version${s(countPublicVersions)} of ${countPublicPods} public pod${s(countPublicPods)}.
+							 
+				
+				div.table-responsive
+					table.table.table-striped.table-hover
+						thead
+							tr
+								th	Name
+								th	Version
+								th.text-nowrap	Built On
+								th	JS
+								th	Summary
+								th	Documentation
+						tbody.rowlink (data-link="row")
+							-- allPods.each |pod|
+								tr
+									td.text-nowrap;b;	a (href="${podSummaryUrl(pod)}") ${pod.projectName}
+									td.text-nowrap	${pod.version}
+									td.text-nowrap	${pod.builtOn.toLocale("DDD MMM YYYY")}
+									td.text; -- if (pod.meta.jsEnabled)
+										span.jsIcon (title="Pod has been compiled to Javascript")
+									td;				== pod.summaryHtml
+									td.rowlink-skip.text-nowrap;	== podDocsHtml(pod)
+
+		//nav.col-sm-3.hidden-xs

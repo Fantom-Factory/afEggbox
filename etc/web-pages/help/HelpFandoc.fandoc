@@ -1,0 +1,173 @@
+
+Syntax Highlighting
+*******************
+Preformatted text may have syntax highlighting applied (courtesy of the core [syntax]`syntax::index` pod). Simply prefix the 'pre' text with:
+
+  syntax: XXXX
+  syntax: XXXX
+
+Where 'XXXX' is the name of the syntax to use. Example:
+
+pre>
+ syntax: fantom
+ pre>
+ syntax: fantom
+
+ class Example {
+ 	Void main() {
+ 		echo("Hello Mum!")
+ 	}
+ }
+ <pre
+<pre
+
+Common syntaxes include:
+
+ - 'csharp'
+ - 'css'
+ - 'fantom'
+ - 'html'
+ - 'java'
+ - 'javascript'
+ - 'xml'
+
+For a full list of default supported styles, look in the Fantom installation at the files under '%FAN_HOME%\etc\syntax\'
+
+
+
+Tables
+******
+To render a HTML table, use preformatted text with 'table:' as the first line.
+
+Table parsing is simple, but expressive. The first line to start with a '-' character defines where the column boundaries are. All lines before are table headers, all lines after are table data.
+
+Example:
+pre>
+ pre>
+ table:
+
+ Full Name    First Name  Last Name
+ -----------  ----------  ---------
+ John Smith   John        Smith
+ Fred Bloggs  Fred        Bloggs
+ Steve Eynon  Steve       Eynon
+ <pre
+<pre
+
+Becomes:
+
+pre>
+table:
+
+Full Name    First Name  Last Name
+-----------  ----------  ---------
+John Smith   John        Smith
+Fred Bloggs  Fred        Bloggs
+Steve Eynon  Steve       Eynon
+<pre
+
+Note that any lines consisting entirely of '-' or '+' characters are ignored. This means the above table could also be written as:
+
+pre>
+ pre>
+ table:
+ +-------------+-------+--------+
+ |             | First | Last   |
+ | Full Name   | Name  | Name   |
+  -------------+-------+--------+
+ | John Smith  | John  | Smith  |
+ | Steve Eynon | Steve | Eynon  |
+ | Fred Bloggs | Fred  | Bloggs |
+ +-------------+-------+--------+
+ <pre
+<pre
+
+
+
+Hyperlinks
+**********
+A variety of schemes and formats may be used to link to different parts of your pod.
+
+
+
+Fantom URIs
+===========
+Pod Repository supports the full suite of Fantom URIs, which is the easy way to link to Fantom types and slots.
+
+API Links:
+
+pre>
+`sys::index`                Link to the summary page of pod 'sys'
+`web::pod-doc`              Link to User Guide of pod 'web'
+`sys::Str`                  Link to type (API page)
+`sys::Str.getRange`         Link to slot (API page)
+`Int`                       Link to type (within same pod)
+`Int.toHex`                 Link to slot (within same pod)
+[now]`sys::Duration.now`    Link with anchor text
+<pre
+
+Doc Links:
+pre>
+`docLang::closures`         Link to /doc/Closures.fandoc
+`docLang::closures#syntax`  Link to anchor in /doc/Closures.fandoc
+`closures`                  Link to /doc/Closures.fandoc (within same pod)
+`closures#syntax`           Link to anchor in /doc/Closures.fandoc (within same pod)
+`foo.txt`                   Link to /doc/foo.txt
+<pre
+
+
+
+Fandoc URIs
+===========
+Pod Repository also offers an alternative 'fandoc' scheme. It's format is very similar to the URLs used by the website:
+
+pre>
+`fandoc:/foo/`             Link to pod summary page
+`fandoc:/foo/api/`         Link to API page
+`fandoc:/foo/api/Bar`      Link to type
+`fandoc:/foo/api/Bar/src`  Link to type's source page
+`fandoc:/foo/api/Bar#poo`  Link to slot
+`fandoc:/foo/doc/`         Link to User Guide (/doc/pod.fandoc)
+`fandoc:/foo/doc/foo`      Link to /doc/foo.fandoc
+`fandoc:/foo/doc/bar.txt`  Link to /doc/bar.txt
+<pre
+
+Linking to specific pod versions is achieved by appending the pod version as a query string:
+
+pre>
+`fandoc:/foo/?v=2.0`         Link pod summary page - version 2.0
+`fandoc:/foo/api/Bar?v=2.1`  Link to type - version 2.1
+`fandoc:/foo/doc/?v=2.2`     Link to User Guide - version 2.2
+<pre
+
+Any 'fandoc' URI may be used with anchor text:
+
+pre>
+[User Guide]`fandoc:/foo/doc/`  Link to User Guide (/doc/pod.fandoc)
+[Foo v2.0]`fandoc:/foo/?v=2.0`  Link pod summary page - version 2.0
+<pre
+
+
+
+Fan URIs
+========
+Fantom's 'fan:' scheme may be used to link to resources held in the '/doc/' directory of pods.
+
+pre>
+`fan://foo/doc/bar.txt`     Link to /doc/bar.txt
+<pre
+
+
+
+Image URIs
+**********
+Resources from any pod's '/doc/' directory may be served up by simply linking to it. This makes it easy to link to, and serve up images.
+
+  ![Foo]`foo.png`  Displays /doc/foo.png
+
+
+
+Fandoc Editor
+*************
+To write and edit Fandoc documents, try using the [Explorer application]`http://pods.fantomfactory.org/pods/afExplorer/`, using 'F12' to toggle between view and edit modes.
+

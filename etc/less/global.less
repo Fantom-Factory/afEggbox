@@ -1,0 +1,163 @@
+
+@colour-rss:			#FF9030;
+//@colour-white:		#FFFFFF;
+//@colour-black:		#131313;
+
+/* ---- Globals --------------------------------------------------------------------------------- */
+
+ol, ul {
+	// better than the Firefox default of 40px!
+	padding-left:	@padding-large-horizontal * 2;
+}
+
+/* ---- Mixins ---------------------------------------------------------------------------------- */
+
+
+
+/* ---- Helpful Classes ------------------------------------------------------------------------- */
+
+// also use - text-nowrap
+.nowrap {
+	white-space: 		nowrap;
+}
+
+.text-prewrap {
+	white-space: 		pre-wrap;
+}
+
+.clickable {
+	cursor:				pointer;
+}
+
+.text-centre {
+	text-align:			center;
+}
+
+.display-none {
+	display:			none;
+}
+
+
+/* ---- Bootstrap Overrides --------------------------------------------------------------------- */
+
+body {
+	padding-top:		@navbar-height + @navbar-margin-bottom;
+}
+
+code {
+	color:				#080;
+	background-color:	inherit;
+	padding:			0px 2px;
+}
+
+// form-okay prevents invalid forms from appearing green when first rendered!
+form.form-okay input:valid {
+    color:			@state-success-text;
+    border-color:	@state-success-text;
+    .box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+
+	&:focus {
+		border-color:	darken(@state-success-text, 10%);
+		@shadow:		inset 0 1px 1px rgba(0,0,0,.075), 0 0 6px lighten(@state-success-text, 20%);
+		.box-shadow(@shadow);
+	}
+}
+
+// see http://getbootstrap.com/css/#firefox-and-fieldsets
+@-moz-document url-prefix() {
+	fieldset { display: table-cell; }
+}
+
+// from http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/
+.btn-file {
+	position:		relative;
+	overflow:		hidden;
+}
+.btn-file input[type=file] {
+	position:		absolute;
+	top:			0;
+	right:			0;
+	min-width:		100%;
+	min-height:		100%;
+	font-size:		100px;
+	text-align:		right;
+	filter:			alpha(opacity=0);
+	opacity:		0;
+	outline:		none;
+	background:		white;
+	cursor:			inherit;
+	display:		block;
+}
+
+// stops code badges from merging / running into pre blocks
+li > div.syntax {
+	margin-top:	@padding-large-vertical;
+}
+
+// Labels as badges - see http://stackoverflow.com/a/26495054/1532548
+.badge {
+	border-radius:	1em;
+}
+
+/* ---- Other ----------------------------------------------------------------------------------- */
+
+.podIcon {
+	.img-thumbnail;
+	.pull-right;
+	width:			110px;
+	height:			110px;
+	margin-left:	@padding-base-horizontal;
+}
+
+.jsIcon {
+	.img-rounded;
+	display:			inline-block;
+	width:				20px;
+	height:				20px;
+	background-repeat:	no-repeat;
+	background-image:	url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAY1BMVEXw208yMzDu2U5JSDO6q0asn0OmmkKilkJnYjhYVDZOTDQ7OzHr107ey0vXxUrEtEevokSek0FtZzldWTZDQjI3NzDm0k3hzkzSwErBske7rEa0pkWypEWKgT6BeTx7dDw+PTHw4jt3AAAAbklEQVQY093PSQqEQBQD0OR3zWo799zq/U/pQAlS4AXMJvAWgeAa8Q6woWuKI/IGxa7lmOCfGh85mCxoGH6CBPOGDO8EIcqxv+/02FBewEATTU91zVZ8ZpXnN2KZkb1CtRRdjphCm3XqWdlSTs7NfscDZ9hnvLMAAAAASUVORK5CYII=);
+}
+
+.podRssFeed {
+	.pull-right;
+}
+
+.externalLink:after {
+	content:		"\A0\F08E";
+	font-family:	"fonticons";
+	font-size:		90%;
+}
+
+.rss {
+	color:			@colour-rss;
+}
+.rss:hover {
+	color:			darken(@colour-rss, 20%);
+}
+
+.podHeading {
+	color:			#3d6ba0;
+	padding-bottom:	@line-height-computed * 0.5;
+	margin-bottom:	@line-height-computed * 1.5;
+	border-bottom:	1px solid @page-header-border-color;
+
+	> span {
+		display:		block;
+		color:			#4c697e;
+		font-size:		60%;
+		font-weight:	normal;
+	}
+}
+
+// see http://stackoverflow.com/a/22655654/1532548
+:target:before {
+	content:		"";
+	display:		block;
+	height:			@navbar-height + @navbar-margin-bottom;
+	margin:			-(@navbar-height + @navbar-margin-bottom) 0 0 0;
+}
+
+// hide the Honey Pots from humans
+.passwordAgain {
+	display:		none;
+}

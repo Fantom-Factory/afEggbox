@@ -1,0 +1,33 @@
+-- app.renderLayout(true, "Writing Documentation :: Help")
+
+	ol.breadcrumb
+		li.active	Get Started
+		li.active	Writing Documentation
+			
+	div.row
+		article.col-sm-9
+			h1.podHeading
+				span	get started
+				| Writing Documentation
+
+			p	| Documentation for both the API and documentation pages are written in <a href="http://fantom.org/doc/fandoc/index#overview">Fandoc</a>.
+				| Fandoc is a plaintext format similar to <a href="http://daringfireball.net/projects/markdown/">Markdown</a>. 
+
+			h2	Fandoc Cheat Sheet
+			
+			p	A quick overview of the Fandoc format:
+			div.row
+				div.col-md-6
+					h3	Fandoc Text
+					pre.text-prewrap
+						== printFandocRaw(`CheatSheet.fandoc`)
+			
+				div.col-md-6
+					h3	Rendered HTML
+					== printFandocHelp(`CheatSheet.fandoc`)
+						
+			== printFandocHelp(`HelpFandoc.fandoc`)
+
+		nav.col-sm-3
+			hr.visible-xs
+			== app.renderHelpToc(`HelpFandoc.fandoc`)

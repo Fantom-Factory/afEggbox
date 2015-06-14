@@ -1,0 +1,17 @@
+-- app.renderLayout(true, "Publishing Pods :: Help")
+
+	ol.breadcrumb
+		li.active	Get Started
+		li.active	Publishing Pods
+
+	div.row
+		article.col-sm-9
+			h1.podHeading
+				span	get started
+				| Publishing Pods
+		
+			== printFandocHelp(`HelpPublish.fandoc`)
+
+		nav.col-sm-3
+			hr.visible-xs
+			== app.renderHelpToc(`HelpPublish.fandoc`)

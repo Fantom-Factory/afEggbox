@@ -1,0 +1,309 @@
+Anyone may publish a Fantom library / pod to this website.
+
+First **Sign Up** to create an account, then visit the **My Pods** page. There you'll find a simple form to upload pod files.
+
+Or, after you've created an account, publish pods with the [Fantom fanr tool]`docFanr::Tool#publish`.
+
+
+
+Private Pods
+************
+By default, published pods are private. That means they are only visible to you. Even when accessed with the fanr tool.
+
+There are no restrictions on private pods and any pod build by a standard 'build.fan' script is accepted.
+
+
+
+Example build.fan (private)
+===========================
+A minimalist 'build.fan' for a private pod looks like this:
+
+pre>
+syntax: fantom
+
+using build
+
+class Build : BuildPod {
+
+    new make() {
+        podName = "pooPrivate"
+        summary = "Project description"
+        version = Version("1.0.0")
+        depends = ["sys 1.0"]
+        srcDirs = [`fan/`]
+    }
+}
+<pre
+
+Once uploaded, private pods may be converted to a public pod (and back again) via the pod's *edit* page.
+
+
+
+Public Pods
+***********
+Public pods, because they're exposed to everyone, need to provide extra information. They do this by defining [pod meta data]`docLang::Pods#meta`:
+
+
+
+repo.public
+===========
+'repo.public' must be set to 'true' to define a pod as public.
+
+To accept legacy pods from the [Status302 pod repository]`http://repo.status302.com/`, the  'repo.private' meta is also honoured. Though if both are defined, 'repo.public' takes precedence.
+
+
+
+licence.name
+============
+'licence.name' (or 'license.name') defines how the pod is licensed. It should be 'Commercial' or one of the long names as defined by the [Open Source Initiative]`http://opensource.org/licenses/alphabetical`.
+
+'licence.name' is required to let consumers know in what manner the pod may be used.
+
+
+
+vcs.uri / org.uri
+=================
+Either 'vcs.uri' or 'org.uri' is required so users know how to get in touch with the owner.
+
+'vcs.uri' is the URL of the pod on a public Version Control System (VCS), such as [BitBucket]`https://bitbucket.org/` or [GitHub]`https://github.com/`.
+
+'org.uri' is the URL of the owning organisation.
+
+
+
+Example build.fan (public)
+==========================
+A minimalist 'build.fan' for a pubic pod would look like this:
+
+pre>
+syntax: fantom
+
+using build
+
+class Build : BuildPod {
+
+    new make() {
+        podName = "pooPublic"
+        summary = "Project description"
+        version = Version("1.0.0")
+
+        meta = [
+            "licence.name"  : "ISC License (ISC)",
+            "org.uri"       : "http://www.example.com",
+            "repo.public"   : "true",
+        ]
+
+        depends = ["sys 1.0"]
+        srcDirs = [`fan/`]
+    }
+}
+<pre
+
+
+
+Pod Meta Data
+*************
+The Pod Repository makes us of the following optional [pod meta data]`docLang::Pods#meta`:
+
+pre>
+table:
+--------------  -------
+'license.name'  The project license; either 'Commercial' or a name defined by the [Open Source Initiative]`http://opensource.org/licenses/alphabetical`
+'org.name'      The organization who developed the pod
+'org.uri'       A web site URL for the organization
+'proj.name'     A readable *humanised* name for the pod
+'proj.uri'      The web site URL of the project
+'vcs.name'      The name of the Version Control System, e.g. Mercurial, Git, Subversion
+'vcs.uri'       The URL of the public version control repository
+<pre
+
+> Tip: Define 'proj.name' to give your pod a readable name in pod listings.
+
+A more complete set of pod meta data would look like this:
+
+pre>
+syntax: fantom
+meta = [
+    "proj.name"     : "Foo Bar",
+    "proj.uri"      : "http://www.wotever.com/foobar",
+    "org.name"      : "Wotever",
+    "org.uri"       : "http://www.wotever.com",
+    "vcs.name"      : "Mercurial",
+    "vcs.uri"       : "https://bitbucket.org/Wotever/foobar",
+    "licence.name"  : "ISC License (ISC)",
+    "repo.public"   : "true"
+]
+<pre
+
+The Pod Repository also makes use of the following bespoke meta:
+
+pre>
+table:
+-----------------  ---------
+'repo.deprecated'  Marks the pod as deprecated. Deprecated pods are not shown in pod listings.
+'repo.internal'    Marks the pod as *Internal* to the organisation that created it. Internal pods have a prologue on the summary page that explains how despite being public, it may not be feature complete.
+'repo.tags'        A CSV list of categories that the pod belongs to.
+<pre
+
+
+
+Pod API
+*******
+Pod Repository can display the public API for a pod. To do so, the pod must include special '.apidoc' files. To ensure these files are available, set 'docApi = true' in 'build.fan'
+
+pre>
+syntax: fantom
+
+class Build : BuildPod {
+
+    new make() {
+        podName = "poo"
+        version = Version("1.0.0")
+
+        ...
+
+        docApi = true
+    }
+}
+<pre
+
+Note that the above line is not strictly needed as 'docApi' defaults to 'true'.
+
+
+
+Pod Source
+**********
+Pod Repository can display source files from the pod. To do so, the pod must include the '.fan' source files. To ensure they are available, set 'docSrc = true' in 'build.fan'
+
+pre>
+syntax: fantom
+
+class Build : BuildPod {
+
+    new make() {
+        podName = "poo"
+        version = Version("1.0.0")
+
+        ...
+
+        docSrc = true
+    }
+}
+<pre
+
+Note that source files are only linked from the API pages, so it's a good idea to set both 'docApi' and 'docSrc' to 'true'.
+
+
+
+Pod Documentation
+*****************
+User guides and documentation pages are generated from '.fandoc' files in the '/doc/' directory of the pod.
+
+
+
+User Guide Page
+===============
+It is a Fantom standard that '/doc/pod.fandoc' is used as the main documentation page, so this becomes the *User Guide* page.
+
+To build a pod with just a single User Guide page, you can place the 'pod.fandoc' file in the project directory, like this:
+
+pre>
+poo/
+ +-- fan/
+ |     `-- {source files}
+ +-- build.fan
+ `-- pod.fandoc
+<pre
+
+If 'build.fan' finds a 'pod.fandoc' in that location, it will be automatically copied into the correct place in the pod.
+
+
+
+Multiple Pages
+==============
+If a pod is to have multiple documentation pages then these need to live in a '/doc/' directory under the project and be specified in the 'build.fan'. The project directory structure should look like:
+
+pre>
+poo/
+ +-- doc/
+ |    +-- disasterRecovery.fandoc
+ |    +-- pod.fandoc
+ |    `-- releaseNotes.fandoc
+ +-- fan/
+ |     `-- {source files}
+ +-- build.fan
+ `-- pod.fandoc
+<pre
+
+And the 'build.fan' should look like:
+
+pre>
+syntax: fantom
+
+class Build : BuildPod {
+
+    new make() {
+        podName = "poo"
+        version = Version("1.0.0")
+
+        ...
+
+        resDirs = [`doc/`]
+    }
+}
+<pre
+
+Note that directories in 'resDirs' should always end with a '/'.
+
+'resDirs' may also be used to list individual files:
+
+pre>
+syntax: fantom
+
+class Build : BuildPod {
+
+    new make() {
+        podName = "poo"
+        version = Version("1.0.0")
+
+        ...
+
+        resDirs = [`doc/disasterRecovery.fandoc`, `doc/pod.fandoc`, `releaseNotes.fandoc`]
+    }
+}
+<pre
+
+
+
+Ordering
+--------
+The User Guide page ( 'pod.fandoc' ) is always first in the documentation list. Other '.fandoc' pages are then listed in alphabetical order. The 'fandoc' file names are used to create page titles.
+
+Example, if a pod contained the following files:
+
+  /doc/disasterRecovery.fandoc
+  /doc/pod.fandoc
+  /doc/releaseNotes.fandoc
+
+Then the documentation pages would be listed as:
+
+  User Guide
+  Disaster Recovery
+  Release Notes
+
+
+
+Overview Section
+================
+The pod's summary page can contain an overview section. This is taken from the *Overview* section in 'pod.fandoc'. For example:
+
+pre>
+Overview
+********
+This section appears on the pod summary page.
+
+Quick Start
+***********
+This section does not.
+<pre
+

@@ -1,0 +1,56 @@
+
+
+email reza
+****
+
+TODO
+====
+install MongoDB on VM
+
+front page
+help pages -> security
+
+Smoke test
+
+better default icon image
+better site ogimage
+
+sticky mozilla on doc pages
+https://developer.mozilla.org/en-US/docs/Web/CSS/position#Sticky_positioning
+
+
+Future
+======
+
+User, grab default details from gravatar -> have a Populate button
+
+Show stat list
+  new pods vs new updates
+email notifications of new pod uploads
+did you forget your password?
+email confirmation
+upvote / star a pod
+contents.fog
+Remember me login checkbox
+
+Games:
+ - No of pods uploaded
+ - Upload a diff version of same pod
+ - public pods / private pods
+ - download / install pods
+ - no of downloads your pod get
+  
+http://avatars.io/ support
+
+make work in non-root env - see docAssets, RSS urls, etc
+
+Delete user account
+
+404 page
+
+MongoDB text search
+
+
+
+
+

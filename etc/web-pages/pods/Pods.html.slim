@@ -1,0 +1,28 @@
+-- app.renderLayout(true, "All Pods" + (countPublicPods == 0 ? "" : " (${countPublicPods})"))
+
+	ol.breadcrumb
+		li.active	Pods
+
+	article
+		h1.podHeading
+			span	all
+			| Pods
+
+		-- if (allPods.isEmpty)
+			p	This repository has no pods! Why don't you upload one?
+		
+		-- else
+			p
+				div.pull-right.btn-group
+					a.btn.btn-default.${nameActive} (href="${pageMeta.pageUrl.plusQuery(["sortByName":"true"])}") Sort by Name
+					a.btn.btn-default.${dateActive} (href="${pageMeta.pageUrl.plusQuery(["sortByDate":"true"])}") Sort by Date
+
+			p	This repository has ${countPublicVersions} public version${s(countPublicVersions)} of ${countPublicPods} public pod${s(countPublicPods)}. 
+			-- if (!loggedIn)
+				p;	i 
+					a (href="${pageUrl(SignupPage#)}") Sign Up
+					|  to publish your pods to this site! 
+
+		div.row
+			div.col-sm-10.col-sm-offset-1
+				== app.renderPodList(allPods)
