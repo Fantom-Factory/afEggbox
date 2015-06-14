@@ -143,20 +143,21 @@ abstract const class FandocUri {
 		if (typeName.startsWith("src-"))
 			return reg.autobuild(FandocSrcUri#, [podName, null, typeName[4..-1], null])
 		
+		
 		podDao 		:= (RepoPodDao)		reg.serviceById(RepoPodDao#.qname)
 		podApiDao	:= (RepoPodApiDao)	reg.serviceById(RepoPodApiDao#.qname)
-		corePods	:= (CorePods)		reg.serviceById(CorePods#.qname)
-		pod 		:= ctx.pod ?: podDao.findOne(podName) 
-		
+		corePods	:= (CorePods) 		reg.serviceById(CorePods#.qname)
+		pod 		:= podDao.findOne(podName)
+
 		if (pod == null && corePods.isCorePod(podName)) {
-			slotName	:= (Str?) null
+			slotName := (Str?) null
 			if (typeName.contains(".") && typeName.split('.').size == 2 && typeName[0].isUpper) {
 				slotName = typeName.split('.').getSafe(1)
 				typeName = typeName.split('.').getSafe(0)
 			}
 			return reg.autobuild(FandocApiUri#, [podName, null, typeName, slotName])
 		}
-		
+
 		if (pod == null)
 			return InvalidLinks.add(InvalidLinkMsgs.podNotFound(podName, null))
 		

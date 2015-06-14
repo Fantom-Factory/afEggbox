@@ -184,7 +184,6 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			// I just happen to know this is the latest!
 			dirtyCache.put(RepoPod#, "${it.name}-null", it)			
 		}
-		echo(pods)
 		return pods
 	}
 

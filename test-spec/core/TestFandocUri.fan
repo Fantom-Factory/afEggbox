@@ -56,7 +56,7 @@ using afFancordion
 ** . 
 ** 
 **   table:
-**   col[0]+exe:parseFantomUri(#TEXT)
+**   col[0]+exe:parseFantomUri("foo-2.0", #TEXT)
 **   col[1]+eq:fandocUri
 ** 
 **   Fantom URI In                  Fandoc URI Out
@@ -75,6 +75,29 @@ using afFancordion
 **   src-Bar                        fandoc:/foo/api/Bar/src?v=2.0
 **   foo#frag                       fandoc:/foo/doc/foo?v=2.0#frag
 **   bar.txt                        fandoc:/foo/doc/bar.txt?v=2.0
+**
+** Check Fantom URLs in the ctx of 'poo-1.0' pod:
+** 
+**   table:
+**   col[0]+exe:parseFantomUri("poo-1.0", #TEXT)
+**   col[1]+eq:fandocUri
+** 
+**   Fantom URI In                  Fandoc URI Out
+**   -----------------------------  ------------------------------
+**   foo::index                     fandoc:/foo/?v=2.0
+**   foo::pod-doc                   fandoc:/foo/doc/?v=2.0
+**   foo::Bar                       fandoc:/foo/api/Bar?v=2.0
+**   foo::Bar.poo                   fandoc:/foo/api/Bar?v=2.0#poo
+**   foo::foo                       fandoc:/foo/doc/foo?v=2.0
+**   foo::foo#frag                  fandoc:/foo/doc/foo?v=2.0#frag
+**   foo::src-Bar                   fandoc:/foo/api/Bar/src?v=2.0
+**   Bar                            fandoc:/poo/api/Bar?v=1.0
+**   Bar.poo                        fandoc:/poo/api/Bar?v=1.0#poo
+**   poo                            fandoc:/poo/api/Bar?v=1.0#poo
+**   foo                            fandoc:/poo/doc/foo?v=1.0
+**   src-Bar                        fandoc:/poo/api/Bar/src?v=1.0
+**   foo#frag                       fandoc:/poo/doc/foo?v=1.0#frag
+**   bar.txt                        fandoc:/poo/doc/bar.txt?v=1.0
 **
 ** .
 **  
@@ -96,7 +119,7 @@ using afFancordion
 ** .
 **  
 **   table:
-**   col[0]+exe:parseFantomUri(#TEXT)
+**   col[0]+exe:parseFantomUri("foo-2.0", #TEXT)
 **   col[1]+eq:clientUrl
 ** 
 **   Fantom URI In                       Client URL Out
@@ -123,6 +146,7 @@ class TestFandocUri : RepoFixture {
 		user := getOrMakeUser("foo@bar.com")
 		fanrRepo.publish(user, `test/res/foo-1.0.pod`.toFile.in)
 		fanrRepo.publish(user, `test/res/foo-2.0.pod`.toFile.in)
+		fanrRepo.publish(user, `test/res/poo-1.0.pod`.toFile.in)
 	}
 	
 	Void parseFandocUri(Str uri) {
@@ -155,9 +179,9 @@ class TestFandocUri : RepoFixture {
 		}
 	}
 
-	Void parseFantomUri(Str uri) {
+	Void parseFantomUri(Str podCtx, Str uri) {
 		InvalidLinks.gather |->| {
-			pod := podDao["foo-2.0"]
+			pod := podDao[podCtx]
 			ctx := LinkResolverCtx(pod) { it.type = "Bar" }
 			fandocUri := FandocUri.fromFantomUri(reg, ctx, uri)
 			InvalidLinks.setLinkBeingResolved(uri)
