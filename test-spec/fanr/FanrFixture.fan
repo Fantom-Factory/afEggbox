@@ -102,8 +102,4 @@ abstract class FanrFixture : RepoFixture {
 		if (map.containsKey("build.ts"))
 			map["build.ts"] = DateTime(map["build.ts"]).toUtc.toStr
 	}
-	
-	static Void main() {
-		echo(DateTime.now.toUtc)
-	}
 }

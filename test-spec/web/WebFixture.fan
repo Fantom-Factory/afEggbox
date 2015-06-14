@@ -47,7 +47,7 @@ abstract class WebFixture : RepoFixture {
 	}
 	
 	Void click(Str name) {
-		SubmitButton("[name=${name}]").submitForm
+		SubmitButton("[name=${name.fromDisplayName}]").submitForm
 	}
 
 //	Str renderComponent(Type componentType, Obj[] context) {
@@ -59,5 +59,8 @@ abstract class WebFixture : RepoFixture {
 	FormInput input(Str css) {
 		FormInput(css)
 	}
-
+	
+	Str httpStatus() {
+		"${client.lastResponse.statusCode} - ${client.lastResponse.statusMsg}"
+	}
 }
