@@ -35,7 +35,7 @@
 			
 			h2	Configure
 			p	To use ${pod.projectName} in a Fantom project, add a dependency to the project's <code>build.fan</code>:
-			== syntaxWriter.writeSyntax("""depends = ["sys 1.0", ..., "${pod.name} ${Version(pod.version.segments[0..2])} - ${Version(pod.version.segments[0..1])}"]""", "fan", false)
+			== syntaxWriter.writeSyntax("""depends = ["sys 1.0", ..., "${pod.name} ${podVersionRange}"]""", "fan", false)
 		
 		
 		
