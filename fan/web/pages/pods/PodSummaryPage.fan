@@ -53,6 +53,13 @@ const mixin PodSummaryPage : PrPage {
 		fandocUri.isLatest ? pod.name : "\"${pod.name} ${pod.version}\""
 	}
 	
+	Str podVersionRange() {
+		pod := pod
+		return pod.version.segments.size > 2 
+			? "${Version(pod.version.segments[0..2])} - ${Version(pod.version.segments[0..1])}"
+			: pod.version.toStr
+	}
+	
 	Str aboutHtml() {
 		fandocUri.aboutHtml
 	}

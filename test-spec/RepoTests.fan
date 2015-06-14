@@ -32,5 +32,6 @@
 ** Unit tests.
 ** 
 **  - [FandocUri]`run:TestFandocUri#`
+**  - [Smoke]`run:TestSmoke#`
 ** 
 class RepoTests : RepoFixture { }

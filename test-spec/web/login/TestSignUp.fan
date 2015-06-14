@@ -15,7 +15,7 @@ using afBounce
 **   ----------------------  --------
 **   micky.mouse@disney.com  password
 ** 
-** and click [Sign Up]`exe:click("SignUp")`
+** and click [Sign Up]`exe:click(#TEXT)`
 ** then a new user should be saved to the database with the values:
 ** 
 **   table:
