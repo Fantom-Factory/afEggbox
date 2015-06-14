@@ -7,6 +7,7 @@ using afEfanXtra
 const mixin IndexPage : PrPage {
 
 	@Inject abstract BedSheetServer	bedServer
+	@Inject	abstract RepoPodDao		podDao
 	
 	@InitRender
 	Void initRender() {
@@ -29,5 +30,20 @@ const mixin IndexPage : PrPage {
 		injector.injectMeta.withProperty("og:description"	).withContent("3rd Party Libraries for the Fantom programming language")
 		injector.injectMeta.withProperty("og:locale"		).withContent("en_GB")
 		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
-	}	
+	}
+	
+	RepoPod[] newPods() {
+		pods := podDao.findPublicNewest(loggedInUser)
+		return pods.size < 10 ? pods : pods[0..<10]
+	}
+
+	RepoPod[] newVers() {
+		pods := podDao.findPublic(loggedInUser)
+		return pods.size < 10 ? pods : pods[0..<10]
+	}
+
+	RepoPod[] allPods() {
+		pods := podDao.findPublic(loggedInUser)
+		return pods.size < 10 ? pods : pods[0..<10]
+	}
 }
