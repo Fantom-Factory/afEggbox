@@ -16,7 +16,6 @@ const mixin PodsPage : PrPage {
 	@InitRender
 	Void initRender() {
 		sortByName	= httpRequest.url.query.containsKey("sortByName")
-		echo(sortByName)
 		allPods	= podDao.findPublic(loggedInUser).exclude { it.isDeprecated }
 		if (sortByName)
 			allPods = allPods.sort(RepoPodDao.byProjName)

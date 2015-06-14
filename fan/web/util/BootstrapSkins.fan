@@ -3,7 +3,7 @@ using afBedSheet
 using afFormBean
 
 const mixin BootstrapSkin : InputSkin {
-	Str renderFormGroup(SkinCtx skinCtx, |Str->Str| inputStr) {
+	Str renderFormGroup(Str groupCss, SkinCtx skinCtx, |Str->Str| inputStr) {
 		html	:= Str.defVal
 		errCss	:= skinCtx.fieldInvalid ? " has-error" : Str.defVal
 		hint	:= skinCtx.input.hint ?: skinCtx.msg("field.${skinCtx.name}.hint")
@@ -12,7 +12,7 @@ const mixin BootstrapSkin : InputSkin {
 			attMap["aria-describedby"] = "${skinCtx.name}-helpBlock"
 		attrs	:= skinCtx.renderAttributes(attMap)
 
-		html	+= """<div class="form-group${errCss}">"""
+		html	+= """<div class="form-group${errCss} ${groupCss}">"""
 		html	+= """<label for="${skinCtx.name}">${skinCtx.label}</label>"""
 		html	+= inputStr(attrs)
 
@@ -27,7 +27,15 @@ const mixin BootstrapSkin : InputSkin {
 
 const class BootstrapTextSkin : BootstrapSkin {
 	override Str render(SkinCtx skinCtx) {
-		renderFormGroup(skinCtx) |attrs| {
+		renderFormGroup("", skinCtx) |attrs| {
+			"""<input ${attrs} type="${skinCtx.input.type}" value="${skinCtx.value}">"""
+		}
+	}
+}
+
+const class BootstrapHoneyPotSkin : BootstrapSkin {
+	override Str render(SkinCtx skinCtx) {
+		renderFormGroup("passwordAgain", skinCtx) |attrs| {
 			"""<input ${attrs} type="${skinCtx.input.type}" value="${skinCtx.value}">"""
 		}
 	}
@@ -35,7 +43,7 @@ const class BootstrapTextSkin : BootstrapSkin {
 
 const class BootstrapTextAreaSkin : BootstrapSkin {
 	override Str render(SkinCtx skinCtx) {
-		renderFormGroup(skinCtx) |attrs| {
+		renderFormGroup("", skinCtx) |attrs| {
 			"""<textarea ${attrs}>${skinCtx.value}</textarea>"""
 		}
 	}
@@ -43,7 +51,7 @@ const class BootstrapTextAreaSkin : BootstrapSkin {
 
 const class BootstrapStaticSkin : BootstrapSkin {
 	override Str render(SkinCtx skinCtx) {
-		renderFormGroup(skinCtx) |attrs| {
+		renderFormGroup("", skinCtx) |attrs| {
 			"""<p ${attrs}>${skinCtx.value.toXml}</p>"""
 		}
 	}

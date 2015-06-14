@@ -32,12 +32,14 @@ const mixin SignupPage : PrPage {
 	}
 
 	@PageEvent { name=""; httpMethod="POST" }
-	Redirect? onSignUp() {
+	Obj? onSignUp() {
 		if (!formBean.validateForm(httpRequest.body.form))
 			return null
 
 		signUpDetails = formBean.createBean
-		
+		if (signUpDetails.isSpamBot)
+			return HttpStatus(403, "SpamBots NOT allowed!")
+	
 		existing := userDao.getByEmail(signUpDetails.email, false)
 		if (existing != null) {
 			formBean.errorMsgs.add(Msgs.signup_emailTaken(existing.email))
@@ -69,7 +71,14 @@ class SignUpDetails {
 	@HtmlInput { type="password"; placeholder="password"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=128 }
 	Str?	password
 
+	@HtmlInput { type="honeyPot"; placeholder="password"; attributes="autocomplete=\"off\""; minLength=3; maxLength=128; hint="Leave blank" }
+	Str?	passwordAgain
+
 	RepoUser toUser() {
 		RepoUser(email, password)
+	}
+
+	Bool isSpamBot() {
+		passwordAgain != null
 	}
 }

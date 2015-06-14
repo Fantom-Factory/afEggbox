@@ -34,6 +34,7 @@ class WebModule {
 		config.overrideValue("checkbox",	BootstrapCheckboxSkin())
 		config.overrideValue("textarea",	BootstrapTextAreaSkin())
 		config.set			("static",		BootstrapStaticSkin())
+		config.set			("honeyPot",	BootstrapHoneyPotSkin())
 	}
 	
 	@Contribute { serviceType=MiddlewarePipeline# }

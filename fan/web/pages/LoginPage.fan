@@ -26,12 +26,14 @@ const mixin LoginPage : PrPage {
 	}
 
 	@PageEvent { name=""; httpMethod="POST" }
-	Redirect? onLogin() {
+	Obj? onLogin() {
 		if (!formBean.validateForm(httpRequest.body.form))
 			return null
 
 		loginDetails = formBean.createBean
-		
+		if (loginDetails.isSpamBot)
+			return HttpStatus(403, "SpamBots NOT allowed!")
+
 		user := userDao.getByEmail(loginDetails.email, false)
 		if (user == null) {
 			formBean.errorMsgs.add(Msgs.login_userNotFound)
@@ -58,4 +60,11 @@ class LoginDetails {
 
 	@HtmlInput { type="password"; placeholder="password"; attributes="autocomplete=\"off\""; required=true; minLength=3; maxLength=128 }
 	Str?	password
+
+	@HtmlInput { type="honeyPot"; placeholder="password"; attributes="autocomplete=\"off\""; minLength=3; maxLength=128; hint="Leave blank" }
+	Str?	passwordAgain
+	
+	Bool isSpamBot() {
+		passwordAgain != null
+	}
 }
