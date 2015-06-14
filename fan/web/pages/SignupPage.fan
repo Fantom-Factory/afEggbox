@@ -79,6 +79,6 @@ class SignUpDetails {
 	}
 
 	Bool isSpamBot() {
-		passwordAgain != null
+		passwordAgain != null && passwordAgain.size > 0
 	}
 }

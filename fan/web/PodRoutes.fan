@@ -87,16 +87,20 @@ const class PodRoutes : Route {
 			if (fandocUri.validate == false) 
 				return HttpStatus(404, "Could not validate: ${fandocUri.toUri.encode}")
 
-			// set identity headers
-			httpResponse.headers.eTag 		  = fandocUri.etag
-			httpResponse.headers.lastModified = fandocUri.pod.builtOn.floor(1sec)	// 1 second which is the most precision that HTTP can deal with
-	
-			// check if we can return a 304 Not Modified
-			if (notModified(httpRequest.headers, fandocUri)) {
-				// hitting CTRL+F5 in dev everytime is *really* annoying!
-				if (!iocEnv.isDev) {
-					httpResponse.statusCode = 304
-					return true
+			// don't cache pages when logged in so we can show the edit button and other confidential info 
+			if (!userSession.isLoggedIn) {
+
+				// set identity headers
+				httpResponse.headers.eTag 		  = fandocUri.etag
+				httpResponse.headers.lastModified = fandocUri.pod.builtOn.floor(1sec)	// 1 second which is the most precision that HTTP can deal with
+		
+				// check if we can return a 304 Not Modified
+				if (notModified(httpRequest.headers, fandocUri)) {
+					// hitting CTRL+F5 in dev everytime is *really* annoying!
+					if (!iocEnv.isDev) {
+						httpResponse.statusCode = 304
+						return true
+					}
 				}
 			}
 	
