@@ -7,25 +7,14 @@ TODO
 ====
 install MongoDB on VM
 
-front page
-help pages -> security
-
-Smoke test
-
-better default icon image
-better site ogimage
-
-sticky mozilla on doc pages
-https://developer.mozilla.org/en-US/docs/Web/CSS/position#Sticky_positioning
-
 
 Future
 ======
+sticky mozilla on doc pages
+https://developer.mozilla.org/en-US/docs/Web/CSS/position#Sticky_positioning
 
 User, grab default details from gravatar -> have a Populate button
 
-Show stat list
-  new pods vs new updates
 email notifications of new pod uploads
 did you forget your password?
 email confirmation
@@ -42,11 +31,11 @@ Games:
   
 http://avatars.io/ support
 
-make work in non-root env - see docAssets, RSS urls, etc
+make web-app work in non-root ctx, .e.g. localhost/*repo*/pods/etc - see docAssets, RSS urls, etc
 
 Delete user account
 
-404 page
+404 / 500 page
 
 MongoDB text search
 
