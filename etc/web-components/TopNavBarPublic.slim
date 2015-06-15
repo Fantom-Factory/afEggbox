@@ -17,9 +17,11 @@ header.navbar.navbar-default.navbar-fixed-top
 
 
 			ul.nav.navbar-nav.navbar-right
-				li.hidden-xs;	a (href="/pods/feed.atom" title="Pod Repository RSS Feed")
+				li.hidden-xs.hidden-sm;	a (href="/pods/feed.atom" title="Pod Repository RSS Feed")
 					i.fa.fa-rss-square.fa-lg.rss
-				li.dropdown
+				-- if (aboutFandocExists)
+					== pageLink(AboutPage#,	"About")
+				li.dropdown.${helpDdCss}
 					a.dropdown-toggle (href="#" data-toggle="dropdown" role="button" aria-expanded="false")	Get Started
 						span.caret
 					ul.dropdown-menu (role="menu")

@@ -3,7 +3,7 @@ using afEfanXtra
 using afPillow
 using fandoc
 
-const mixin HelpToc : PrComponent {
+const mixin FandocToc : PrComponent {
 
 	@Inject	abstract FandocWriter	fandoc
 			abstract Uri			fileName
@@ -15,27 +15,14 @@ const mixin HelpToc : PrComponent {
 	
 	override Str renderTemplate() {
 		html	:= StrBuf()
-		html.add("<h3>Get Started</h3>")
+		html.add("<h3>Contents</h3>")
 
-		fandocFile := fileName.toFile
+		fandocFile := fileName.relTo(`/`).toFile
 		doc := fandoc.parseStr(FandocParser(), fandocFile.readAllStr)
 
-		contents := Type:Str[:] { ordered = true }
-			.add(HelpPublishPage#,	"Publishing Pods")
-			.add(HelpFandocPage#, 	"Writing Documentation")
-			.add(HelpFanrPage#, 	"Using fanr")
-
-		contents.each |title, pageType| { 
-			link  := pages[pageType]
-			// TODO: tidy this tenuous link!
-			if (fileName.toStr[0..<-7] == pageType.name[0..<-4]) {
-				html.add("<h4 class=\"text-muted\">").add(title).add("</h4>")
-				heads := doc.findHeadings
-				doToc(heads, html, heads.first?.level ?: 0, 0, true)
-			} else
-				html.add("<h4>").add("<a href=\"${link.pageUrl.encode}\">").add(title).add("</a>").add("</h4>")
-			
-		}
+//		html.add("<h4 class=\"text-muted\">").add(fileName.name.toDisplayName).add("</h4>")
+		heads := doc.findHeadings
+		doToc(heads, html, heads.first?.level ?: 0, 0, true)
 		
 		return html.toStr
 	}

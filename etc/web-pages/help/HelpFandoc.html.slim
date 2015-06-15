@@ -20,14 +20,14 @@
 				div.col-md-6
 					h3	Fandoc Text
 					pre.text-prewrap
-						== printFandocRaw(`CheatSheet.fandoc`)
+						== printFandocRaw(`/etc/web-pages/help/CheatSheet.fandoc`)
 			
 				div.col-md-6
 					h3	Rendered HTML
-					== printFandocHelp(`CheatSheet.fandoc`)
+					== printFandoc(`/etc/web-pages/help/CheatSheet.fandoc`)
 						
-			== printFandocHelp(`HelpFandoc.fandoc`)
+			== printFandoc(`/etc/web-pages/help/HelpFandoc.fandoc`)
 
 		nav.col-sm-3
 			hr.visible-xs
-			== app.renderHelpToc(`HelpFandoc.fandoc`)
+			== app.renderHelpToc(`/etc/web-pages/help/HelpFandoc.fandoc`)
