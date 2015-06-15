@@ -99,6 +99,6 @@ class WebModule {
 		
 		config[DuvetConfigIds.requireJsTimeout]				= 8sec
 		
-		config["afPodRepo.aboutFandocExists"]				= `etc/web-pages/About.fandoc`.toFile.exists
+		config["afPodRepo.aboutFandocExists"]				= `about.fandoc`.toFile.exists
 	}
 }
