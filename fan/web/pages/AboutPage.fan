@@ -13,10 +13,11 @@ const mixin AboutPage : PrPage {
 	Void initRender() {
 		if (!aboutFandocExists)
 			throw HttpStatusErr(404)
+		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
 	}
-	
-	Str printFandocAbout() {
-		fandocFile := `etc/web-pages/about.fandoc`.toFile
+
+	Str printFandoc(Uri name) {
+		fandocFile := name.relTo(`/`).toFile
 		return fandocWriter.writeStrToHtml(fandocFile.readAllStr, LinkResolverCtx())
-	}	
+	}
 }

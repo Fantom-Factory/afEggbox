@@ -3,9 +3,14 @@
 	ol.breadcrumb
 		li.active	About
 
-	article
-		h1.podHeading
-			span	all
-			| About
+	div.row
+		article.col-sm-9
+			h1.podHeading
+				span	all
+				| About
+		
+			== printFandoc(`/about.fandoc`)
 
-		== printFandocAbout
+		nav.col-sm-3
+			hr.visible-xs
+			== app.renderFandocToc(`/about.fandoc`)

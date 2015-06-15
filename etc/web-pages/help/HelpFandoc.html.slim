@@ -24,10 +24,10 @@
 			
 				div.col-md-6
 					h3	Rendered HTML
-					== printFandocHelp(`/etc/web-pages/help/CheatSheet.fandoc`)
+					== printFandoc(`/etc/web-pages/help/CheatSheet.fandoc`)
 						
-			== printFandocHelp(`/etc/web-pages/help/HelpFandoc.fandoc`)
+			== printFandoc(`/etc/web-pages/help/HelpFandoc.fandoc`)
 
 		nav.col-sm-3
 			hr.visible-xs
-			== app.renderHelpToc(`HelpFandoc.fandoc`)
+			== app.renderHelpToc(`/etc/web-pages/help/HelpFandoc.fandoc`)
