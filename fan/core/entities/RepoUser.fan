@@ -54,7 +54,7 @@ class RepoUser {
 	}
 	
 	Bool isAdmin() {
-		repoConfig != null && (repoConfig.autoLoginEnabled && repoConfig.autoLoginEmail == email)
+		repoConfig != null && (repoConfig.adminEnabled && repoConfig.adminEmail == email)
 	}
 	
 	Str aboutMeHtml() {
