@@ -15,13 +15,12 @@ const mixin PrHelpPage : PrPage {
 	}
 
 	Str printFandocHelp(Uri name) {
-		// FIXME: also read from pod 
-		fandocFile := `etc/web-pages/help/${name}`.toFile
+		fandocFile := name.relTo(`/`).toFile.exists ? name.relTo(`/`).toFile : typeof.pod.file(name)
 		return fandocWriter.writeStrToHtml(fandocFile.readAllStr, LinkResolverCtx())
 	}
 
 	Str printFandocRaw(Uri name) {
-		fandocFile := `etc/web-pages/help/${name}`.toFile
+		fandocFile := name.relTo(`/`).toFile.exists ? name.relTo(`/`).toFile : typeof.pod.file(name)
 		return fandocFile.readAllStr.toXml
 	}
 }

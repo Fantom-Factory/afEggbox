@@ -1,0 +1,58 @@
+About Fantom
+************
+Fantom is an elegant open source, object-oriented, software language that runs on the Java Virtual Machine (JVM).
+
+Designed to be portable, Fantom also runs on the .NET Common Language Runtime (CLR) and even compiles to Javascript!
+
+Concise core APIs, familiar syntax and sensible libraries let you concentrate on the problem, not the language!
+
+> Fantom; it's what [Java 2.0]`article:from-java-to-fantom-in-10-steps` would look like!
+
+
+
+About This Repository
+*********************
+A central public repository of libraries is a valuable asset to any language, and Fantom is no exception. While Fantom has no official repository, the community has been reliably served by a functional one over at [Status302]`http://repo.status302.com/`.
+
+This Pod Repository was created by taking some ideas of the Status302 repository and enhancing it a cleaner visual style and a host of features, such as:
+
+ - Pod documentation available for all pod versions
+ - Fandoc syntax highlighting
+ - Fandoc tables
+ - Fandoc images served from pod resources
+ - Fandoc link validation
+ - Atom (RSS) feeds for individual pods
+ - Basic Gravatar integration
+
+
+
+About Fantom-Factory
+********************
+[Fantom-Factory]`http://www.fantomfactory.org` is a website that helps others learn and program Fantom. It has:
+
+ - [Articles for beginners]`article:http://www.fantomfactory.org/articles/fantom-for-beginners`
+ - [Articles on creating web applications]`article:bed-nap-tutorial`
+ - [Articles on Chuck Norris]`article:fantom-meets-chuck-norris`
+
+
+
+About Me
+********
+Hello! I'm Steve Eynon and I'm a computer programmer!
+
+I started programming when I was 8 years old. I was lured in by a rubber keyed ZX Spectrum 48K. There I quickly progressed to Assembler and wrote [3D Vector Demos]`http://www.alienfactory.co.uk/equinox/demos` on the Commodore Amiga. Subsequently I moved through C and Visual Basic before turning to Java, where I stayed for 10 years or more. More recently I've been involved with C# and Javascript.
+
+All that experience has led to me to really appreciate the Fantom language. It tackles all the hard concepts like *concurrency*, *state* and *serialisation*, and *does them right!* It means I can concentrate on real application problems, and not pseudo-problems introduced by the language. (Why should I care about mutual exclusion and double locking failures? Managers don't!)
+
+Fantom also has small things like field properties, nullable types, and even [Elvis(!)]`docLang::Expressions#nullConvenience` that make it a joy to program. It's a pragmatic language that lets me get stuff done.
+
+So now I write programs and libraries in Fantom.
+
+I post on the [Fantom Forum]`http://fantom.org/forum/topic/` under the pseudonym 'SlimerDuude' and give updates on the [Fantom Google+]`https://plus.google.com/b/109974465895605281260/communities/108121220239226647550` page.
+
+
+
+About The Future
+****************
+- Why Fantom is great for projects (future ideas)
+

@@ -1,8 +1,12 @@
 using afIoc
+using afIocConfig
 using afDuvet
 using afEfanXtra
  
 const mixin TopNavBarPrivate : PrComponent { 
+
+	@Config
+	@Inject abstract Bool			aboutFandocExists
 
 	@InitRender
 	Void init() {
