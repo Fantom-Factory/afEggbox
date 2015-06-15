@@ -14,14 +14,13 @@ const mixin PrHelpPage : PrPage {
 		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
 	}
 
-	Str printFandocHelp(Uri name) {
-		// FIXME: also read from pod 
-		fandocFile := `etc/web-pages/help/${name}`.toFile
+	Str printFandoc(Uri name) {
+		fandocFile := name.relTo(`/`).toFile.exists ? name.relTo(`/`).toFile : typeof.pod.file(name)
 		return fandocWriter.writeStrToHtml(fandocFile.readAllStr, LinkResolverCtx())
 	}
 
 	Str printFandocRaw(Uri name) {
-		fandocFile := `etc/web-pages/help/${name}`.toFile
+		fandocFile := name.relTo(`/`).toFile.exists ? name.relTo(`/`).toFile : typeof.pod.file(name)
 		return fandocFile.readAllStr.toXml
 	}
 }

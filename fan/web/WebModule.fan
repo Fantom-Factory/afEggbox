@@ -95,8 +95,10 @@ class WebModule {
 		if (repoConfig.googleAccDomain != null)
 			config[GoogleAnalyticsConfigIds.accountDomain]	= repoConfig.googleAccDomain
 		
-		config[BedSheetConfigIds.fileAssetCacheControl]	= "max-age=${1day.toSec}"	// it's better than nothing!
+		config[BedSheetConfigIds.fileAssetCacheControl]		= "max-age=${1day.toSec}"	// it's better than nothing!
 		
-		config[DuvetConfigIds.requireJsTimeout]			= 8sec
+		config[DuvetConfigIds.requireJsTimeout]				= 8sec
+		
+		config["afPodRepo.aboutFandocExists"]				= `about.fandoc`.toFile.exists
 	}
 }

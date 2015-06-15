@@ -8,9 +8,13 @@ const mixin IndexPage : PrPage {
 
 	@Inject abstract BedSheetServer	bedServer
 	@Inject	abstract RepoPodDao		podDao
+			abstract RepoPod[]		newPods
+			abstract RepoPod[]		newVers
 	
 	@InitRender
 	Void initRender() {
+		this.newPods = _newPods
+		this.newVers = _newVers
 	}
 	
 	** Need to wait until *after* layout has rendered to find the HTML tag.
@@ -32,7 +36,7 @@ const mixin IndexPage : PrPage {
 		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
 	}
 	
-	RepoPod[] newPods() {
+	RepoPod[] _newPods() {
 		pods := podDao.findPublicNewest(loggedInUser).sortr(RepoPodDao.byBuildDate)
 		idx  := 0
 		return pods.map |oldPod| { 
@@ -44,17 +48,10 @@ const mixin IndexPage : PrPage {
 			idx ++
 			return newPod
 		}.exclude { it == null }
-//		pods = pods.size < 10 ? pods : pods[0..<10]
-//		return pods.map { podDao.findOne(it.name) }
 	}
 
-	RepoPod[] newVers() {
+	RepoPod[] _newVers() {
 		pods := podDao.findPublic(loggedInUser).sortr(RepoPodDao.byBuildDate)
-		return pods.size < 10 ? pods : pods[0..<10]
-	}
-
-	RepoPod[] allPods() {
-		pods := podDao.findPublic(loggedInUser)
 		return pods.size < 10 ? pods : pods[0..<10]
 	}
 }

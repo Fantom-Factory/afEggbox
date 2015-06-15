@@ -1,0 +1,24 @@
+Overview
+********
+Pod Repository is a Fantom Repository Web Application.
+
+
+
+Usage
+*****
+
+config.properties
+
+give sample for cut and paste
+
+About page
+ - about.fandoc
+
+
+Dependencies
+ - My pods
+ - gravatar
+ - anchorId
+ - bootstrap
+ - jquery
+

@@ -1,8 +1,12 @@
 using afIoc
+using afIocConfig
 using afDuvet
 using afEfanXtra
  
 const mixin TopNavBarPublic : PrComponent { 
+
+	@Config
+	@Inject abstract Bool			aboutFandocExists
 
 	@InitRender
 	Void init() {
@@ -14,5 +18,9 @@ const mixin TopNavBarPublic : PrComponent {
 		html += """<a href="${pageUrl(page)}">${name}</a>"""
 		html += "</li>"
 		return html
+	}
+	
+	Str helpDdCss() {
+		pageMeta.pageType.fits(PrHelpPage#) ? "active" : ""
 	}
 }
