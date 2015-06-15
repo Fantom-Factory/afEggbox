@@ -22,4 +22,8 @@ const mixin TopNavBarPrivate : PrComponent {
 		html += "</li>"
 		return html
 	}
+	
+	Str helpDdCss() {
+		pageMeta.pageType.fits(PrHelpPage#) ? "active" : ""
+	}
 }

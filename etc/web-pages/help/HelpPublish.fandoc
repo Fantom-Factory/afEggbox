@@ -307,3 +307,21 @@ Quick Start
 This section does not.
 <pre
 
+
+
+Pod Images
+**********
+The pod icon shown in pod listings is taken from the pod file:
+
+  /doc/icon.png
+
+The image should have a square aspect ratio and, as a guide, be about 128px x 128px in size.
+
+Should the pod's summary page be shared on social media (Facebook, Reddit, etc...) the following pod images are used for the [Open Graph]`http://ogp.me/#metadata` 'og:ogimage' meta data:
+
+  /doc/ogimage.png
+  /doc/ogimage.jpg
+
+Requirements for ogimages differ from media site to media site, but typically they should be *large!*
+
+Alien-Factory takes the middle ground and usually defines it's ogimages as 512px x 512px versions of pod icons.
