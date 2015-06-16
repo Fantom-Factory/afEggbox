@@ -1,4 +1,5 @@
 using util
+using concurrent
 
 ** Limit Results
 ** #############
@@ -15,10 +16,10 @@ using util
 **   row+exe:createIocPod(#COL[0], #COL[1], #COL[2])
 **   Name    Version  Summary
 **   -----   -------  -------
-**   afPod1  1.01     pod-1
-**   afPod2  1.02     pod-2
-**   afPod3  1.03     pod-3
-**   afPod4  1.04     pod-4
+**   afPod   1.01     pod-1
+**   afPod   1.02     pod-2
+**   afPod   1.03     pod-3
+**   afPod   1.04     pod-4
 ** 
 ** When I query the repository with the URL [/query?*]`exe:queryRepo(#TEXT)` *without* a 'Fanr-NumVersions' header
 ** then it should return the following JSON:
@@ -28,24 +29,24 @@ using util
 ** {
 **   "pods": [
 **     {
-**       "pod.name"    : "afPod1",
-**       "pod.version" : "1.01",
+**       "pod.name"    : "afPod",
+**       "pod.version" : "1.04",
 **       "pod.depends" : "sys 1.0",
-**       "pod.summary" : "pod-1",
+**       "pod.summary" : "pod-4",
 **       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **     },
 **     {
-**       "pod.name"    : "afPod2",
-**       "pod.version" : "1.02",
-**       "pod.depends" : "sys 1.0",
-**       "pod.summary" : "pod-2",
-**       "build.ts"    : "2006-06-06T06:06:00Z UTC"
-**     },
-**     {
-**       "pod.name"    : "afPod3",
+**       "pod.name"    : "afPod",
 **       "pod.version" : "1.03",
 **       "pod.depends" : "sys 1.0",
 **       "pod.summary" : "pod-3",
+**       "build.ts"    : "2006-06-06T06:06:00Z UTC"
+**     },
+**     {
+**       "pod.name"    : "afPod",
+**       "pod.version" : "1.02",
+**       "pod.depends" : "sys 1.0",
+**       "pod.summary" : "pod-2",
 **       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **     }
 **   ]
@@ -61,10 +62,10 @@ using util
 ** {
 **   "pods": [
 **     {
-**       "pod.name"    : "afPod1",
-**       "pod.version" : "1.01",
+**       "pod.name"    : "afPod",
+**       "pod.version" : "1.04",
 **       "pod.depends" : "sys 1.0",
-**       "pod.summary" : "pod-1",
+**       "pod.summary" : "pod-4",
 **       "build.ts"    : "2006-06-06T06:06:00Z UTC"
 **     }
 **   ]
@@ -79,7 +80,9 @@ class TestFanrQueryLimit : FanrFixture {
 		meta["pod.version"]	= version
 		meta["pod.depends"]	= "sys 1.0"
 		meta["pod.summary"]	= summary
+		meta["build.ts"]	= DateTime.now.toStr
 		super.createPod
+		Actor.sleep(1sec)
 	}
 	
 	override Void queryRepo(Str url) {

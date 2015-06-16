@@ -100,6 +100,7 @@ abstract class FanrFixture : RepoFixture {
 		map.remove("licence.name")
 		map.remove("vcs.uri")
 		if (map.containsKey("build.ts"))
-			map["build.ts"] = DateTime(map["build.ts"]).toUtc.toStr
+//			map["build.ts"] = DateTime(map["build.ts"]).toUtc.toStr
+			map["build.ts"] = "2006-06-06T06:06:00Z UTC"
 	}
 }

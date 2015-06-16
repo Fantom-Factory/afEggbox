@@ -76,6 +76,22 @@ using afFancordion
 **   foo#frag                       fandoc:/foo/doc/foo?v=2.0#frag
 **   bar.txt                        fandoc:/foo/doc/bar.txt?v=2.0
 **
+** Check core pod handling - cos the code looked dodgy!
+** 
+**   table:
+**   col[0]+exe:parseFantomUri("foo-2.0", #TEXT)
+**   col[1]+eq:fandocUri
+** 
+**   Fantom URI In                  Fandoc URI Out
+**   -----------------------------  ------------------------------
+**   sys::index                     fandoc:/sys/
+**   sys::pod-doc                   fandoc:/sys/doc/
+**   sys::Bar                       fandoc:/sys/api/Bar
+**   sys::Bar.poo                   fandoc:/sys/api/Bar#poo
+**   sys::foo                       fandoc:/sys/doc/foo
+**   sys::foo#frag                  fandoc:/sys/doc/foo#frag
+**   sys::src-Bar                   fandoc:/sys/api/Bar/src
+** 
 ** Check Fantom URLs in the ctx of 'poo-1.0' pod:
 ** 
 **   table:

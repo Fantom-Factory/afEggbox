@@ -150,6 +150,13 @@ abstract const class FandocUri {
 		pod 		:= podDao.findOne(podName)
 
 		if (pod == null && corePods.isCorePod(podName)) {
+			if (typeName[0].isLower || uri.frag != null) {
+				docUri := `/doc/` + typeName.toUri.pathOnly
+				if (docUri.ext == null)
+					docUri = `${docUri}.fandoc`
+				headingId := uri.frag
+				return reg.autobuild(FandocDocUri#, [podName, null, docUri, headingId])
+			}
 			slotName := (Str?) null
 			if (typeName.contains(".") && typeName.split('.').size == 2 && typeName[0].isUpper) {
 				slotName = typeName.split('.').getSafe(1)
@@ -179,7 +186,7 @@ abstract const class FandocUri {
 			if (podApi[ctx.type].slot(typeName, false) != null)
 				return reg.autobuild(FandocApiUri#, [pod.name, pod.version, ctx.type, typeName])
 		
-		docUri := `/doc/`.plusName(typeName.toUri.pathStr)
+		docUri := `/doc/` + typeName.toUri.pathOnly
 		if (docUri.ext == null)
 			docUri = `${docUri}.fandoc`
 		headingId := uri.frag
