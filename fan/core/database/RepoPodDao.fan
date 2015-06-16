@@ -77,7 +77,8 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			query.field("meta.repo\\u002epublic").eq(true)
 		else
 			query.or([field("meta.repo\\u002epublic").eq(true), field("ownerId").eq(user._id)])
-		return datastore.query(query).orderByIndex("_builtOn_").limit(limit).findAll
+		p:= datastore.query(query).orderByIndex("_builtOn_").limit(limit).findAll
+		return p
 	}
 	
 	override RepoPod? findOne(Str name, Version? version := null) {

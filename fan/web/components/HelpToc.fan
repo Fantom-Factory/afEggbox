@@ -17,7 +17,7 @@ const mixin HelpToc : PrComponent {
 		html	:= StrBuf()
 		html.add("<h3>Get Started</h3>")
 
-		fandocFile := fileName.toFile
+		fandocFile := fileName.relTo(`/`).toFile
 		doc := fandoc.parseStr(FandocParser(), fandocFile.readAllStr)
 
 		contents := Type:Str[:] { ordered = true }
@@ -28,7 +28,7 @@ const mixin HelpToc : PrComponent {
 		contents.each |title, pageType| { 
 			link  := pages[pageType]
 			// TODO: tidy this tenuous link!
-			if (fileName.toStr[0..<-7] == pageType.name[0..<-4]) {
+			if (fileName.name.toStr[0..<-7] == pageType.name[0..<-4]) {
 				html.add("<h4 class=\"text-muted\">").add(title).add("</h4>")
 				heads := doc.findHeadings
 				doToc(heads, html, heads.first?.level ?: 0, 0, true)

@@ -1,14 +1,12 @@
-#Fantom Pod Repository v0.0.0
+#Fantom Pod Repository v0.0.2
 ---
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom.org/)
-[![pod: v0.0.0](http://img.shields.io/badge/pod-v0.0.0-yellow.svg)](http://www.fantomfactory.org/pods/afPodRepo)
+[![pod: v0.0.2](http://img.shields.io/badge/pod-v0.0.2-yellow.svg)](http://www.fantomfactory.org/pods/afPodRepo)
 ![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
 
 ## Overview
 
-*Fantom Pod Repository is a support library that aids Alien-Factory in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.*
-
-`Repo Web` is a Fantom Repository Web Application.
+Pod Repository is a Fantom Repository Web Application.
 
 ## Install
 
@@ -22,9 +20,23 @@ To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan
 
 ## Documentation
 
-Full API & fandocs are available on the [Status302 repository](http://repo.status302.com/doc/afPodRepo/).
+Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fantomfactory.org/pods/afPodRepo/).
 
 ## Usage
 
-Blah.
+config.properties
+
+give sample for cut and paste
+
+About page
+
+- about.fandoc
+
+Dependencies
+
+- My pods
+- gravatar
+- anchorId
+- bootstrap
+- jquery
 
