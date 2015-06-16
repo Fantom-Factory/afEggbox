@@ -98,7 +98,8 @@ const class FanrHandler {
 
 		// query can be GET query part or POST body
 		query 		:= (req.httpMethod == "GET" ? req.url.queryStr : req.body.str) ?: sendErr(400, "Missing '?query' in URL")
-		numVersions := 100.min(Int.fromStr(req.headers["Fanr-NumVersions"] ?: "3", 10, false) ?: 3)
+		// for 'Fanr-NumVersions' vs 'Fan-NumVersions' see http://fantom.org/forum/topic/2411
+		numVersions := 100.min(Int.fromStr((req.headers["Fanr-NumVersions"] ?: req.headers["Fan-NumVersions"]) ?: "3", 10, false) ?: 3)
 
 		// do the query
 		RepoPod[]? pods := null

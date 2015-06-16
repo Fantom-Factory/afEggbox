@@ -26,7 +26,7 @@ Fantom also has small things like field properties, nullable types, and even [El
 
 So now I write programs and libraries in Fantom.
 
-I post on the [Fantom Forum]`http://fantom.org/forum/topic/` under the pseudonym **SlimerDude** and give updates on the [Fantom Google+]`https://plus.google.com/b/109974465895605281260/communities/108121220239226647550` page.
+I post on the [Fantom Forum]`http://fantom.org/forum/topic/` under the pseudonym **SlimerDude** and give updates on the [Fantom Google+]`https://plus.google.com/communities/108121220239226647550` page.
 
 
 
@@ -47,11 +47,13 @@ What does the future hold for Fantom?
 So far, I personally have created:
  - Games - e.g. [Gundam]`http://www.alienfactory.co.uk/gundam/playonline`
  - Desktop Applications - e.g. [Explorer]`http://pods.fantomfactory.org/pods/afExplorer/`
- - A multitude of websites - e.g. this one!
+ - A multitude of web sites and web applications - e.g. this one!
 
-But why stop there? Fantom was specifically created to run on embedded devices, so think Raspberry Pi and beyond.
+But why stop there? Fantom was specifically created to run on embedded devices, which means it's fast. [Faster than Java]`article:fantom-faster-than-java-and-kotlin` even! So think Raspberry Pi and beyond.
 
-Fantom on mobile applications (Android) is possible but currently it needs a patch. Lobby this post on the Fantom Forum - [Android Demo]`http://fantom.org/forum/topic/2391` - to urge the Fantom developers implement it in Fantom core.
+Fantom on mobile applications (Android) is also possible but currently it needs a patch. Lobby this post on the Fantom Forum - [Android Demo]`http://fantom.org/forum/topic/2391` - to urge the Fantom developers to create an official implementation.
+
+As for me, my next big Fantom project is distributed Artificial Intelligence with Neural Nets and Genetic Algorithms in a gaming environment. Oh boy, it's gonna be cool!
 
 > Make your future a Fantomastic one!
 

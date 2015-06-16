@@ -52,7 +52,7 @@ const class PodRoutes : Route {
 		if (reqPath.isEmpty && podSection == "feed.atom")
 			return atomPages.generateForPod(podName)			
 
-		if (reqPath.isEmpty && podSection == "download") {
+		if (reqPath.size == 1 && podSection == "download" && reqPath.first == "${podName}.pod") {
 			pod := podDao.findOne(podName, podVersion)
 			podDownloadDao.create(RepoPodDownload(pod, "web", userSession.user))
 			httpResponse.saveAsAttachment("${pod.name}.pod")
@@ -190,7 +190,7 @@ const class PodRoutes : Route {
 	private static const Int[] delims := ":/?#[]@\\".chars
 
 	// Encode the Str *to* URI standard form
-	// see http://fantom.org/sidewalk/topic/2357
+	// see http://fantom.org/forum/topic/2357
 	private static Str? encodeUri(Str? str) {
 		if (str == null) return null
 		buf := StrBuf(str.size + 8) // allow for 8 escapes

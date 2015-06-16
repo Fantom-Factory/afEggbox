@@ -81,14 +81,15 @@ const class FanrRepo {
 		
 		return podDao.query |c| {
 			c.hint = "_builtOn_"
-			pods := RepoPod[,] 
-			while (c.hasNext && pods.size < numVersions) {
+			pods := Str:RepoPod[][:] 
+			while (c.hasNext) {
 				pod := podDao.toPod(c.next)
-				if (user == null || user.owns(pod))
-					if (q.include(pod.toPodSpec))
-						pods.add(pod)
+				if ((pods[pod.name]?.size ?: 0) < numVersions)
+					if (pod.isPublic || (user != null && user.owns(pod)))
+						if (q.include(pod.toPodSpec))
+							pods.getOrAdd(pod.name) { RepoPod[,] }.add(pod)
 			}
-			return pods
+			return pods.vals.flatten
 		}
 	}
 	
