@@ -39,8 +39,16 @@
 			-- if (newPods.size > 0)
 				h2.sm-text-center	Latest Pods
 				== app.renderPodList(newPods)
-				
+				div.sm-text-center
+					| See more in 
+					a (href="${pageUrl(PodsPage#)}") All Pods
+					| ...
+
 		div.col-sm-6.col-md-6
 			-- if (newVers.size > 0)
 				h2.sm-text-center	Latest Updates
 				== app.renderPodList(newVers)
+				div.sm-text-center
+					| See more in 
+					a (href="${pageUrl(PodsPage#)}") All Pods
+					| ...
