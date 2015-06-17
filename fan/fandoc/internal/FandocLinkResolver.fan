@@ -147,7 +147,9 @@ abstract const class FandocUri {
 		podDao 		:= (RepoPodDao)		reg.serviceById(RepoPodDao#.qname)
 		podApiDao	:= (RepoPodApiDao)	reg.serviceById(RepoPodApiDao#.qname)
 		corePods	:= (CorePods) 		reg.serviceById(CorePods#.qname)
-		pod 		:= podDao.findOne(podName)
+		
+		// if the context has the same pod name, use the same pod version too 
+		pod 		:= (podName == ctx.pod?.name) ? ctx.pod : podDao.findOne(podName)
 
 		if (pod == null && corePods.isCorePod(podName)) {
 			if (typeName[0].isLower || uri.frag != null) {
