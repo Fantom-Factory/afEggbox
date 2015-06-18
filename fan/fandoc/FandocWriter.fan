@@ -25,7 +25,8 @@ const class FandocWriter {
 			out.pre
 			out.w("Fandoc ERRORS:\n")
 			parser.errs.each |err| {
-				out.w("Line ${err.line} : ${err.msg}")
+				out.w("Line ${err.line} - ${err.msg}")
+				InvalidLinks.add("Fandoc ERROR : Line ${err.line} - ${err.msg}")
 			}
 			out.w("\n\n")
 			out.writeXml(fandoc)
