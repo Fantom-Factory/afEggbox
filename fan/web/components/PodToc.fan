@@ -73,9 +73,9 @@ const mixin PodToc : EfanComponent {
 				continue
 			}
 			if (h.level > level) {
-//				html.add("<li>")
+				html.add("<li>")
 				i = doToc(page, headings, html, h.level, i, false)
-//				html.add("</li>")
+				html.add("</li>")
 				continue
 			}
 
