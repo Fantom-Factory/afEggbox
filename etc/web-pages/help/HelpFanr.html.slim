@@ -13,6 +13,6 @@
 			-- echo(host)
 			== printFandoc(`/etc/web-pages/help/HelpFanr.fandoc`).replace("@@fanrUrl@@", host.plusSlash.plusName("fanr").encode)
 
-		nav.col-sm-3
+		nav.col-sm-3.fixedsticky
 			hr.visible-xs
 			== app.renderHelpToc(`/etc/web-pages/help/HelpFanr.fandoc`)

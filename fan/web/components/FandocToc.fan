@@ -42,7 +42,9 @@ const mixin FandocToc : PrComponent {
 				continue
 			}
 			if (h.level > level) {
+				html.add("<li>")
 				i = doToc(headings, html, h.level, i, false)
+				html.add("</li>")
 				continue
 			}
 
