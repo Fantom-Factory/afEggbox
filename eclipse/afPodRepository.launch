@@ -14,6 +14,6 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
 <stringAttribute key="project" value="Pod Repo"/>
-<stringAttribute key="scriptArguments" value="8069 -proxy"/>
+<stringAttribute key="scriptArguments" value="8069 -proxy -watchAllPods"/>
 <stringAttribute key="workingDir" value="${workspace_loc:Pod Repo}"/>
 </launchConfiguration>

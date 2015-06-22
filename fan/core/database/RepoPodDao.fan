@@ -125,10 +125,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 
 	override RepoPod create(Obj entity) {
-		repoPod := (RepoPod) entity
-		if (repoPod._id == null)
-			repoPod._id = _id(repoPod.name, repoPod.version)
-		return datastore.insert(repoPod)
+		datastore.insert(entity)
 	}
 	
 	// TODO: as map reduce is intended for background queries, should the repo get large, we may have to 
