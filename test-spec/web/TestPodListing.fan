@@ -1,4 +1,5 @@
 using afIoc
+using afFancordion
 
 ** Pod Listing
 ** ###########
@@ -49,9 +50,10 @@ using afIoc
 **   foo    1.3
 **   poo    1.0.1
 ** 
+@Fixture { failFast=false }
 class TestPodListing : WebFixture {
 
-	Str[][]? pods
+	Str[][]? 	pods
 	
 	Str:Str podMeta := [
 		"pod.summary" : "Stuff",
@@ -74,17 +76,21 @@ class TestPodListing : WebFixture {
 	}
 	
 	Void listPublicPods() {
-		pods = podDao.findPublic(null).map { Str[it.name, it.version.toStr] }
+		pods = podDao.findLatestPods.map { Str[it.name, it.version.toStr] }
 	}
 
 	Void listPrivatePods() {
 		user := getOrMakeUser("mouse")
-		pods = podDao.findPrivateOwned(user).map { Str[it.name, it.version.toStr] }
+		((RepoPodDaoImpl) podDao).testUserRef.val = user
+		pods = podDao.findLatestPods(user).map { Str[it.name, it.version.toStr] }
+		((RepoPodDaoImpl) podDao).testUserRef.cleanUp
 	}
 
 	Void listPublicPodsForUser() {
 		user := getOrMakeUser("mouse")
-		pods = podDao.findPublic(user).map { Str[it.name, it.version.toStr] }
+		((RepoPodDaoImpl) podDao).testUserRef.val = user
+		pods = podDao.findLatestPods.map { Str[it.name, it.version.toStr] }
+		((RepoPodDaoImpl) podDao).testUserRef.cleanUp
 	}
 	
 	private Buf makePod(Str:Str meta, |Zip|? f := null) {	

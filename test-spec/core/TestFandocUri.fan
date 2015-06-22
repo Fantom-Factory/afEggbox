@@ -197,7 +197,7 @@ class TestFandocUri : RepoFixture {
 
 	Void parseFantomUri(Str podCtx, Str uri) {
 		InvalidLinks.gather |->| {
-			pod := podDao[podCtx]
+			pod := podDao.get(podCtx)
 			ctx := LinkResolverCtx(pod) { it.type = "Bar" }
 			fandocUri := FandocUri.fromFantomUri(reg, ctx, uri)
 			InvalidLinks.setLinkBeingResolved(uri)

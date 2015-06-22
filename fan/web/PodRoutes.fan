@@ -53,7 +53,7 @@ const class PodRoutes : Route {
 			return atomPages.generateForPod(podName)			
 
 		if (reqPath.size == 1 && podSection == "download" && reqPath.first == "${podName}.pod") {
-			pod := podDao.findOne(podName, podVersion)
+			pod := podDao.findPod(podName, podVersion)
 			podDownloadDao.create(RepoPodDownload(pod, "web", userSession.user))
 			httpResponse.saveAsAttachment("${pod.name}.pod")
 			return PodDownloadAsset(pod.podFileDao, pod)
@@ -66,7 +66,7 @@ const class PodRoutes : Route {
 				backdoor.login
 
 			if (userSession.isLoggedIn) {
-				pod := podDao.findOne(podName, podVersion)
+				pod := podDao.findPod(podName, podVersion)
 				if (pod == null) {
 					v := (podVersion != null) ? " v${podVersion}" : ""
 					return HttpStatus(404, "Pod ${podName}${v} not found")
@@ -138,7 +138,7 @@ const class PodRoutes : Route {
 		if (podName == null)
 			return null
 
-		pod := podDao.findOne(podName, podVersion)
+		pod := podDao.findPod(podName, podVersion)
 		if (pod == null) {
 			v := (podVersion != null) ? " v${podVersion}" : ""
 			return HttpStatus(404, "Pod ${podName}${v} not found")

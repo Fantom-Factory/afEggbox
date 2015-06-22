@@ -22,7 +22,7 @@ const class AuthenticationMiddleware : Middleware {
 		strUrl := httpRequest.url.toStr
 
 		if (strUrl.startsWith("/pods/") && httpRequest.url.path.size > 1) {
-			pod := podDao.findOne(httpRequest.url.path[1])
+			pod := podDao.findPod(httpRequest.url.path[1])
 			if (pod == null || pod.isPublic) {
 				pipeline.service; return				
 			}

@@ -78,11 +78,10 @@
 			hr.visible-xs
 			== app.renderPodToc(fandocUri)
 		
-			-- versions := podDao.findVersions(loggedInUser, pod.name, null)
-			-- if (versions.size > 1)
-				h3	${versions.size} Releases
+			-- if (podVersions.size > 1)
+				h3	${podVersions.size} Releases
 				ul
-					-- versions.each
+					-- podVersions.each
 						li;	a (href="${it.toSummaryUri.toClientUrl.encode}") ${it.version}
 
 	script |

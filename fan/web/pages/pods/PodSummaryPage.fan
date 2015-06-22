@@ -13,9 +13,11 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract SyntaxWriter		syntaxWriter
 	@Inject			abstract BedSheetServer		bedServer
 	@PageContext	abstract FandocSummaryUri	fandocUri
+					abstract RepoPod[]			podVersions
 	
 	@BeforeRender
 	Void beforeRender() {
+		podVersions = podDao.findPodVersions(pod.name)
 		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
 	}
 
