@@ -1,6 +1,5 @@
 using afIoc
 using fandoc
-using concurrent
 
 internal const class FandocLinkResolver : LinkResolver {
 
@@ -322,7 +321,6 @@ const class FandocApiUri : FandocUri {
 	@Inject private const RepoPodApiDao	podApiDao
 					const Str? 			typeName
 					const Str? 			slotName
-					const AtomicRef		allDocTypesRef	:= AtomicRef()
 
 	new make(Str podName, Version? podVersion, Str? typeName, Str? slotName, |This| in) : super(podName, podVersion, in) { 
 		this.typeName	= typeName
@@ -387,15 +385,7 @@ const class FandocApiUri : FandocUri {
 	}
 
 	private DocType[] allDocTypes() {
-		if (allDocTypesRef.val == null && pod.hasApi)
-			allDocTypesRef.val = podApiDao[pod._id].allTypes
-				.exclude |DocType t->Bool| {
-					t.hasFacet("sys::NoDoc")     ||
-					DocFlags.isInternal(t.flags) ||
-					DocFlags.isPrivate(t.flags)  ||
-					DocFlags.isSynthetic(t.flags)
-				}.toImmutable
-		return allDocTypesRef.val ?: DocType[,]
+		pod.hasApi ? podApiDao[pod._id].allTypes : DocType[,]
 	}
 
 	override Bool validate() {
