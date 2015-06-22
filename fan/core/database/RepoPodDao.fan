@@ -1,6 +1,4 @@
 using afIoc
-using afConcurrent
-using concurrent
 using afBson
 using afMongo
 using afMorphia
@@ -9,9 +7,7 @@ const mixin RepoPodDao : EntityDao {
 	const static Func byProjName  := |RepoPod p1, RepoPod p2 -> Int| { p1.projectName.compareIgnoreCase(p2.projectName) }
 	const static Func byBuildDate := |RepoPod p1, RepoPod p2 -> Int| { p1.builtOn.compare(p2.builtOn) }
 
-//	@Operator
-	abstract RepoPod?		get(Str name, Bool checked := true)
-
+	abstract RepoPod?		get(Str id, Bool checked := true)
 	abstract RepoPod? 		findPod(Str name, Version? version := null)
 	abstract RepoPod[]		findPodVersions(Str name, Int? limit := null)
 
@@ -20,10 +16,6 @@ const mixin RepoPodDao : EntityDao {
 	abstract RepoPod[] 		findLatestVersions(Int limit)				// for main public atom feed	
 	abstract Int			countPods(RepoUser? user := null)			// for All Pods and User page
 	abstract Int			countVersions(RepoUser? user := null)		// for All Pods and User page
-
-//	abstract RepoPod[] 		findPublicNewest(RepoUser? loggedInUser)	// for All Pods page & sitemap
-//	abstract RepoPod[] 		findPrivateOwned(RepoUser loggedInUser)		// for My Pods page
-//	abstract RepoPod[] 		findPublicOwned(RepoUser loggedInUser)		// for Users page
 
 	** used for fanr queries
 	abstract RepoPod[] 		doQuery(|Cursor->Obj?| f)
@@ -41,8 +33,6 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 
 	@Inject	const DirtyCash 	dirtyCache
 	@Inject	const UserSession	userSession
-	@Inject	const LocalRef		testUserRef
-
 	
 	// see http://stackoverflow.com/questions/7717109/how-can-i-compare-arbitrary-version-numbers/7717160#7717160
 	private const Str	reduceByVersionFunc	:= 
@@ -173,13 +163,10 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	}
 	
 	private Query allPods() {
-		loggedIn := 			 Actor.locals.containsKey("web.req") ? userSession.isLoggedIn : testUserRef.isMapped 
-		user 	 := (RepoUser?) (Actor.locals.containsKey("web.req") ? userSession.user : testUserRef.val) 
-		
-		return loggedIn
+		userSession.isLoggedIn
 			? Query().or([
 				field("meta.repo\\u002epublic").eq(true), 
-				field("ownerId").eq(user._id)
+				field("ownerId").eq(userSession.user._id)
 			])
 			: Query().field("meta.repo\\u002epublic").eq(true)
 	}

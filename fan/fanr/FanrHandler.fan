@@ -12,6 +12,7 @@ const class FanrHandler {
 	@Inject private const HttpResponse	res
 	@Inject private const Log			log
 	@Inject private const RepoPodDownloadDao	podDownloadDao
+	@Inject private const UserSession	userSession
 
 	** Dir to store temp files, defaults to 'Env.tempDir'
 	const File tempDir := Env.cur.tempDir
@@ -112,7 +113,7 @@ const class FanrHandler {
 		return Text.fromJsonObj(["pods" : pods.map { it.toJsonObj }])
 	}
 
-	private Obj? authenticate() {
+	private RepoUser? authenticate() {
 		// if username header wasn't specified, then assume public request
 		username := req.headers["Fanr-Username"]
 		if (username == null) return null
@@ -148,6 +149,7 @@ const class FanrHandler {
 			sendUnauthErr("Invalid password (invalid signature)")
 
 		// at this point we have authenticated the user
+		userSession.loginRequestAs(user)
 		return user
 	}
 
