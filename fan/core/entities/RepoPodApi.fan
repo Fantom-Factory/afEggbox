@@ -51,6 +51,10 @@ class RepoPodApi {
 	}
 
 	DocType[] allTypes() {
-		docTypes.size == api.size ? docTypes : api.keys.map { this.get(it) }
+		docTypes.size == api.size ? docTypes.vals : api.keys.map { this.get(it) }
+	}
+	
+	Str[] srcDocs() {
+		allTypes.map { it.loc.file }.unique
 	}
 }

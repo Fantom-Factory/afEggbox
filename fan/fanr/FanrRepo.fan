@@ -54,15 +54,19 @@ const class FanrRepo {
 				throw PodPublishErr(errs.first)
 		}
 
+		podDocs := RepoPodDocs(pod, podContents.docContents)
+		podApi	:= RepoPodApi (pod, podContents.apiContents)
+		podSrc	:= RepoPodSrc (pod, podContents.srcContents, podApi.srcDocs)
+		
 		// all good - commit the data to the database
 		pod = podDao.create(pod)
 		podFileDao.create(RepoPodFile(pod, podContents.podBuf))
 		if (!podContents.docContents.isEmpty)
-			podDocsDao.create(RepoPodDocs(pod, podContents.docContents))
-		if (!podContents.srcContents.isEmpty)
-			podSrcDao .create(RepoPodSrc (pod, podContents.srcContents))
-		if (!podContents.apiContents.isEmpty)
-			podApiDao .create(RepoPodApi (pod, podContents.apiContents))
+			podDocsDao.create(podDocs)
+		if (!podApi.allTypes.isEmpty)
+			podApiDao .create(podApi)
+		if (!podSrc.isEmpty)
+			podSrcDao .create(podSrc)
 		registry.injectIntoFields(pod)
 		pod.validateDocumentLinks.save
 
@@ -143,7 +147,7 @@ class PodContents {
 		if (metaProps.isEmpty)
 			throw PodPublishErr(Msgs.publish_missingPodFile(`/meta.props`))
 
-		pod = RepoPod(user, podBuf.size, metaProps, docContents, apiContents, rootFileNames)
+		pod = RepoPod(user, podBuf.size, metaProps, docContents, rootFileNames)
 		
 		// Naa - we'll not enforce this, just print an embarrassing msg instead
 //		if (pod.isPublic && !docContents.containsKey(`/doc/pod.fandoc`))

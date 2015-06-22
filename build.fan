@@ -96,12 +96,9 @@ class Build : BuildPod {
 		// abort build if something went wrong
 		if (status != 0) Env.cur.exit(status)
 
-//		(scriptDir + `lib-fan/afBedSheet.pod`).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
-		(scriptDir + `lib-fan/afAtom.pod`		).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
-		(scriptDir + `lib-fan/afButter.pod`		).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
-		(scriptDir + `lib-fan/afFormBean.pod`	).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
-		(scriptDir + `lib-fan/afMorphia.pod`	).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
-		(scriptDir + `lib-fan/afSlim.pod`		).copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+		(scriptDir + `lib-fan/afAtom.pod`).listFiles(Regex.glob("*.pod")).each {
+			it.copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+		}
 	}
 
 	private Void patchMimeTypes(Str:Str extToMimeTypes) {

@@ -8,12 +8,13 @@ const class RepoPodSrc {
 	
 	new make(|This|f) { f(this) }
 	
-	static new fromFile(RepoPod pod, Uri:Str contents) {
+	static new fromFile(RepoPod pod, Uri:Str contents, Str[] typeSrcFiles) {
 		newContents := Str:Str[:] { ordered = true }
 		contents.keys.sort.each |uri| {
 			if (!uri.isDir && uri.toStr.startsWith("/src/")) {
 				key := uri.relTo(`/src/`)
-				newContents[key.toStr] = contents[uri]
+				if (typeSrcFiles.contains(key.toStr))
+					newContents[key.toStr] = contents[uri]
 			}
 		}
 		
@@ -26,5 +27,9 @@ const class RepoPodSrc {
 	@Operator
 	Str? get(Str fileName, Bool checked := true) {
 		src[fileName] ?: (checked ? throw Err("Pod src `$fileName` not found") : null)
+	}
+	
+	Bool isEmpty() {
+		src.isEmpty
 	}
 }

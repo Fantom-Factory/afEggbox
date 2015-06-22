@@ -11,7 +11,7 @@ class RepoPod {
 	@Inject private InvalidLinks?	invalidLinkFinder
 	@Inject private Registry?		registry
 
-	@Property{}	Str?			_id
+	@Property{}	Str				_id
 	@Property{}	RepoPodMeta		meta
 	@Property{}	Int				fileSize
 	@Property{}	Int				ownerId
@@ -26,14 +26,13 @@ class RepoPod {
 
 	new make(|This|f) { f(this) }
 
-	static new fromContents(RepoUser user, Int podSize, Str:Str metaProps, Uri:Buf docContents, Uri:Str apiContents, Str[] rootFileNames) {
+	static new fromContents(RepoUser user, Int podSize, Str:Str metaProps, Uri:Buf docContents, Str[] rootFileNames) {
 		return RepoPod() {
 			it.meta			= RepoPodMeta(metaProps)
 			it.fileSize		= podSize
 			it.ownerId		= user._id
 			it.aboutFandoc	= findAboutFandoc(docContents)
 			it.invalidLinks	= InvalidLink#.emptyList
-			it.hasApi		= apiContents.size > 0
 			it.hasDocs		= docContents.containsKey(`/doc/pod.fandoc`)
 			it.hasIcon		= docContents.containsKey(`/doc/icon.png`)
 			
@@ -42,6 +41,8 @@ class RepoPod {
 			
 			if (rootFileNames.contains("${meta.name}.js"))
 				it.meta.jsEnabled = true
+			
+			it._id			= "${name}-${version}".lower
 		}
 	}
 	
