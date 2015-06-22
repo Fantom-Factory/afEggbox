@@ -16,14 +16,14 @@ const mixin PodsPage : PrPage {
 	@InitRender
 	Void initRender() {
 		sortByName	= httpRequest.url.query.containsKey("sortByName")
-		allPods	= podDao.findPublic(loggedInUser).exclude { it.isDeprecated }
+		allPods	= podDao.findLatestPods.exclude { it.isDeprecated }
 		if (sortByName)
 			allPods = allPods.sort(RepoPodDao.byProjName)
 		else
 			allPods = allPods.sortr(RepoPodDao.byBuildDate)
 		injector.injectRequireModule("rowLink")
-		countPublicVersions = podDao.countPublicVersions(null)
-		countPublicPods		= podDao.countPublicPods(null)
+		countPublicVersions = podDao.countVersions(null)
+		countPublicPods		= podDao.countPods(null)
 	}
 	
 	Str s(Int size) {

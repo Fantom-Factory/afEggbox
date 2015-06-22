@@ -17,10 +17,10 @@ const mixin UsersPage : PrPage, SitemapSource {
 
 	@BeforeRender
 	Void beforeRender() {
-		allPods = podDao.findPublicOwned(user).exclude { it.isDeprecated }
+		allPods = podDao.findLatestPods(user).exclude { it.isDeprecated }
 		injector.injectRequireModule("rowLink")
-		countPublicVersions = podDao.countPublicVersions(user)
-		countPublicPods		= podDao.countPublicPods(user)
+		countPublicVersions = podDao.countVersions(user)
+		countPublicPods		= podDao.countPods(user)
 	}
 	
 	Str s(Int size) {

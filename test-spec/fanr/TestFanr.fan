@@ -6,7 +6,7 @@ using afButter
 ** Fantom ships with the command line tool *fanr* which allows you to query and download pods from a remote repository.
 ** 
 ** Alien-Factory's Pod Repository aims to be compatible with *fanr* and so should support the HTTP REST protocol as outlined 
-** in the fanr [Web Repository]`http:docFanr::WebRepos` documentation.
+** in the fanr [Web Repository]`docFanr::WebRepos` documentation.
 ** 
 ** pre>
 ** Method   Uri                       Operation

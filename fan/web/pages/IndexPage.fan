@@ -37,12 +37,12 @@ const mixin IndexPage : PrPage {
 	}
 	
 	RepoPod[] _newPods() {
-		pods := podDao.findPublicNewest(loggedInUser).sortr(RepoPodDao.byBuildDate)
+		pods := podDao.findOldestPods.sortr(RepoPodDao.byBuildDate)
 		idx  := 0
 		return pods.map |oldPod| { 
 			if (idx >= 10)
 				return null
-			newPod := podDao.findOne(oldPod.name)
+			newPod := podDao.findPod(oldPod.name)
 			if (newPod.isDeprecated)
 				return null
 			idx ++
@@ -51,7 +51,7 @@ const mixin IndexPage : PrPage {
 	}
 
 	RepoPod[] _newVers() {
-		pods := podDao.findPublic(loggedInUser).sortr(RepoPodDao.byBuildDate)
+		pods := podDao.findLatestPods.sortr(RepoPodDao.byBuildDate)
 		return pods.size < 10 ? pods : pods[0..<10]
 	}
 }

@@ -35,7 +35,7 @@
 			|  to publish your pods to this site!
 
 	div.row
-		div.col-sm-6.col-md-6
+		div.col-sm-6.col-md-6.latestPods
 			-- if (newPods.size > 0)
 				h2.sm-text-center	Latest Pods
 				== app.renderPodList(newPods)
@@ -44,7 +44,7 @@
 					a (href="${pageUrl(PodsPage#)}") All Pods
 					| ...
 
-		div.col-sm-6.col-md-6
+		div.col-sm-6.col-md-6.latestVersions
 			-- if (newVers.size > 0)
 				h2.sm-text-center	Latest Updates
 				== app.renderPodList(newVers)

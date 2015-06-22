@@ -17,8 +17,8 @@ const class SitemapPages : SitemapSource {
 		dirtyCash.cash |->SitemapUrl[]| {
 			urls := SitemapUrl[,]
 			
-			// only map the latest pod versions
-			podDao.findPublic(null).each |pod| {
+			// only map the latest pods
+			podDao.findLatestPods.each |pod| {
 				// Pod Summary Page
 				urls.add(SitemapUrl(bedServer.toAbsoluteUrl(pod.toSummaryUri.toClientUrl)) {
 					lastMod		= pod.builtOn

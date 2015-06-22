@@ -19,7 +19,7 @@ const class FanrRepo {
 	new make(|This|in) { in(this) }
 
 	RepoPod? find(RepoUser? user, Str name, Version? version) {
-		pod := podDao.findOne(name, version)
+		pod := podDao.findPod(name, version)
 		if (pod == null)
 			return null
 		if (pod.isPublic)
@@ -36,7 +36,7 @@ const class FanrRepo {
 		pod := podContents.pod
 		
 		// validate the pod before we publish it
-		existing	:= podDao.findOne(pod.name)
+		existing	:= podDao.findPod(pod.name)
 		if (existing != null) {
 			if (existing.ownerId != user._id) {
 				exUser := userDao.get(existing.ownerId, false).screenName
@@ -75,11 +75,11 @@ const class FanrRepo {
 
 		// a quick speed hack - fanr (when installing) uses query not find, so we re-route it!
 		if (query.trim.all { it.isAlphaNum })
-			return podDao.findVersions(user, query.trim, numVersions)
+			return podDao.findPodVersions(query.trim, numVersions)
 		
 		q := Query.fromStr(query)
 		
-		return podDao.query |c| {
+		return podDao.doQuery |c| {
 			c.hint = "_builtOn_"
 			pods := Str:RepoPod[][:] 
 			while (c.hasNext) {

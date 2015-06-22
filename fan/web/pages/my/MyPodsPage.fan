@@ -16,7 +16,7 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 
 	@InitRender
 	Void initRender() {
-		allPods = podDao.findPrivateOwned(userSession.user)
+		allPods = podDao.findLatestPods(userSession.user)
 		injector.injectRequireModule("fileInput")
 		injector.injectRequireModule("rowLink")
 	}

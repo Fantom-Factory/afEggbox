@@ -15,6 +15,6 @@ const class PodValueEncoder : ValueEncoder {
 
 	override Obj? toValue(Str clientValue) {
 		if (clientValue.isEmpty) return null
-		return podDao.get(clientValue, true)
+		return podDao.findPod(clientValue) ?: throw Err("Could not find pod: ${clientValue}")
 	}
 }

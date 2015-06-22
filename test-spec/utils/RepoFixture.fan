@@ -1,5 +1,5 @@
 using afBounce
-using afFancordion
+using afFancordion::FancordionRunner
 using afIoc
 
 ** The super class for all Web Fixtures

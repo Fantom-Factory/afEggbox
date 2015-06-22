@@ -33,5 +33,6 @@
 ** 
 **  - [FandocUri]`run:TestFandocUri#`
 **  - [Smoke]`run:TestSmoke#`
+**  - [Private Pod Versions]`run:TestPrivatePodVersions#`
 ** 
 class RepoTests : RepoFixture { }

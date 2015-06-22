@@ -149,7 +149,7 @@ abstract const class FandocUri {
 		corePods	:= (CorePods) 		reg.serviceById(CorePods#.qname)
 		
 		// if the context has the same pod name, use the same pod version too 
-		pod 		:= (podName == ctx.pod?.name) ? ctx.pod : podDao.findOne(podName)
+		pod 		:= (podName == ctx.pod?.name) ? ctx.pod : podDao.findPod(podName)
 
 		if (pod == null && corePods.isCorePod(podName)) {
 			if (typeName[0].isLower || uri.frag != null) {
@@ -206,11 +206,11 @@ abstract const class FandocUri {
 	}
 
 	Bool isLatest() {
-		podVersion == null || podVersion == podDao.findOne(podName)?.version
+		podVersion == null || podVersion == podDao.findPod(podName)?.version
 	}
 
 	Bool isCorePod() {
-		podDao.findOne(podName, podVersion) == null && corePods.isCorePod(podName)
+		podDao.findPod(podName, podVersion) == null && corePods.isCorePod(podName)
 	}
 
 	abstract FandocUri? toParentUri()
@@ -248,7 +248,7 @@ abstract const class FandocUri {
 	}
 	
 	RepoPod? pod() {
-		podDao.findOne(podName, podVersion)
+		podDao.findPod(podName, podVersion)
 	}
 	
 	Str etag() {
@@ -264,13 +264,13 @@ abstract const class FandocUri {
 	virtual Uri toUri() {
 		bse := baseUri
 		uri := bse == null ? `fandoc:/${podName}/` : `fandoc:/${podName}/` + bse
-		ver := podVersion != null ? podVersion : podDao.findOne(podName)?.version
+		ver := podVersion != null ? podVersion : podDao.findPod(podName)?.version
 		return ver == null ? uri : uri.plusQuery(["v":ver.toStr])
 	}
 
 	virtual Uri toClientUrl() {
 		url := baseUri
-		latestPod := podDao.findOne(podName)
+		latestPod := podDao.findPod(podName)
 		path := (podVersion == null || podVersion == latestPod.version) 
 			? `/pods/${podName}/` 
 			: `/pods/${podName}/${podVersion}/`

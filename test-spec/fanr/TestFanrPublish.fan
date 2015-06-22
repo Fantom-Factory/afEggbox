@@ -55,6 +55,6 @@ class TestFanrPublish : FanrFixture {
 	}
 	
 	Obj findPod(Str podName) {
-		podDao[podName]
+		podDao.get(podName)
 	}
 }
