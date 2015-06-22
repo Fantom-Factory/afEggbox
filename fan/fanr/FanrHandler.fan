@@ -13,6 +13,8 @@ const class FanrHandler {
 	@Inject private const Log			log
 	@Inject private const RepoPodDownloadDao	podDownloadDao
 	@Inject private const UserSession	userSession
+	@Inject private const ErrEmailer	errEmailer
+	@Inject private const ErrPrinterStr	errPrinter
 
 	** Dir to store temp files, defaults to 'Env.tempDir'
 	const File tempDir := Env.cur.tempDir
@@ -89,6 +91,9 @@ const class FanrHandler {
 			return Text.fromJsonObj(["published" : pod.toJsonObj])
 			
 		} catch (Err err) {
+			log.err(errPrinter.errToStr(err))
+			errEmailer.emailErr(err)
+
 			// return publish errs in json format
 			return sendErr(500, err.msg)
 		}

@@ -1,6 +1,6 @@
 using afBounce
-using afFancordion::FancordionRunner
 using afFancordion::FixtureTest
+using afFancordion::FancordionRunner
 using afIoc
 
 ** The super class for all Web Fixtures
