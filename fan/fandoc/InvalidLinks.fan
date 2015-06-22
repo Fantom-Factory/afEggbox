@@ -19,22 +19,24 @@ const class InvalidLinks {
 			return InvalidLinks.gather |->| {
 				InvalidLinks.setWhereLinkIsFound(fandocUri.toSummaryUri)
 				fandoc.writeStrToHtml(pod.aboutFandoc, linkCtx)
-	
-				podDocsRepo.get(pod._id, false)?.fandocPages?.each |page, fileUri| {
-					InvalidLinks.setWhereLinkIsFound(fandocUri.toDocUri(fileUri))
-					fandoc.writeStrToHtml(page, linkCtx)
-				}
-	
-				podApiRepo.get(pod._id, false)?.allTypes?.each |type| {
-					linkCtx.type = type.name
-					InvalidLinks.setWhereLinkIsFound(fandocUri.toApiUri(type.name))
-					fandoc.writeStrToHtml(type.doc.text, linkCtx)
-	
-					type.slots.each |slot| {
-						InvalidLinks.setWhereLinkIsFound(fandocUri.toApiUri(type.name, slot.name))
-						fandoc.writeStrToHtml(slot.doc.text, linkCtx)
+
+				if (pod.hasDocs)
+					podDocsRepo.get(pod._id).fandocPages.each |page, fileUri| {
+						InvalidLinks.setWhereLinkIsFound(fandocUri.toDocUri(fileUri))
+						fandoc.writeStrToHtml(page, linkCtx)
 					}
-				}
+	
+				if (pod.hasApi)
+					podApiRepo.get(pod._id).allTypes.each |type| {
+						linkCtx.type = type.name
+						InvalidLinks.setWhereLinkIsFound(fandocUri.toApiUri(type.name))
+						fandoc.writeStrToHtml(type.doc.text, linkCtx)
+		
+						type.slots.each |slot| {
+							InvalidLinks.setWhereLinkIsFound(fandocUri.toApiUri(type.name, slot.name))
+							fandoc.writeStrToHtml(slot.doc.text, linkCtx)
+						}
+					}
 		}
 		}
 	}

@@ -15,7 +15,14 @@ class RepoPodApi {
 		contents.keys.sort.each |uri| {
 			if (!uri.isDir && uri.toStr.startsWith("/doc/") && uri.ext == "apidoc") {
 				key := uri.relTo(`/doc/`).plusName(uri.name[0..<-7])
-				newContents[key.toStr] = contents[uri]
+
+				// filter out unwanted docs
+				docType := ApiDocParser(pod.name, contents[uri].in).parseType
+				if (!docType.hasFacet("sys::NoDoc")     &&
+					!DocFlags.isInternal(docType.flags) &&
+					!DocFlags.isPrivate(docType.flags)  &&
+					!DocFlags.isSynthetic(docType.flags))
+					newContents[key.toStr] = contents[uri]
 			}
 		}
 
@@ -25,16 +32,16 @@ class RepoPodApi {
 			it.api		= newContents
 		}
 	}
-	
+
 	Bool hasType(Str typeName) {
 		api.containsKey(typeName)
 	}
-	
+
 	@Operator
 	DocType? get(Str typeName, Bool checked := true) {
 		if (docTypes.containsKey(typeName))
 			return docTypes[typeName]
-		
+
 		apidoc := api[typeName] ?: (checked ? throw Err("Pod api `$typeName` not found") : null)
 		if (apidoc == null)
 			return apidoc
@@ -42,8 +49,8 @@ class RepoPodApi {
 		docTypes[typeName] = docType
 		return docType
 	}
-	
+
 	DocType[] allTypes() {
-		api.keys.map { this.get(it) }
+		docTypes.size == api.size ? docTypes : api.keys.map { this.get(it) }
 	}
 }

@@ -72,10 +72,24 @@ const class FanrRepo {
 
 	RepoPod[] query(RepoUser? user, Str query, Int numVersions := 1) {
 		if (numVersions < 1) throw ArgErr("numVersions < 1")
-
+		
 		// a quick speed hack - fanr (when installing) uses query not find, so we re-route it!
 		if (query.trim.all { it.isAlphaNum })
 			return podDao.findPodVersions(query.trim, numVersions)
+
+		// another speed hack - for when looking for a specific pod
+		if (query.trim.split.size == 2) {
+			nom := query.trim.split[0]
+			ver := Version.fromStr(query.trim.split[1], false)
+			if (nom.all { it.isAlphaNum } && ver != null) {
+				pod := podDao.findPod(nom, ver)
+				return pod != null ? [pod] : RepoPod[,] 
+			}
+		}
+
+		// speed hacks for globs is tricy, 'cos we still numVersions to honour
+		// we can't just search the latest pods
+		// TODO: have reduceByVersion() / aggregation return a customisable number of pod versions 
 		
 		q := Query.fromStr(query)
 		
@@ -92,7 +106,7 @@ const class FanrRepo {
 			return pods.vals.flatten
 		}
 	}
-	
+		
 	Void delete(RepoUser user, RepoPod pod) {
 		// TODO: make deleting public pods configurable
 //		if (pod.isPublic)
