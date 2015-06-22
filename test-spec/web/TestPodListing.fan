@@ -81,16 +81,16 @@ class TestPodListing : WebFixture {
 
 	Void listPrivatePods() {
 		user := getOrMakeUser("mouse")
-		((RepoPodDaoImpl) podDao).testUserRef.val = user
+		userSession.loginRequestAs(user)
 		pods = podDao.findLatestPods(user).map { Str[it.name, it.version.toStr] }
-		((RepoPodDaoImpl) podDao).testUserRef.cleanUp
+		userSession.logout
 	}
 
 	Void listPublicPodsForUser() {
 		user := getOrMakeUser("mouse")
-		((RepoPodDaoImpl) podDao).testUserRef.val = user
+		userSession.loginRequestAs(user)
 		pods = podDao.findLatestPods.map { Str[it.name, it.version.toStr] }
-		((RepoPodDaoImpl) podDao).testUserRef.cleanUp
+		userSession.logout
 	}
 	
 	private Buf makePod(Str:Str meta, |Zip|? f := null) {	
