@@ -57,6 +57,7 @@ const class FanrRepo {
 		podDocs := RepoPodDocs(pod, podContents.docContents)
 		podApi	:= RepoPodApi (pod, podContents.apiContents)
 		podSrc	:= RepoPodSrc (pod, podContents.srcContents, podApi.srcDocs)
+		pod.hasApi = !podApi.allTypes.isEmpty
 		
 		// all good - commit the data to the database
 		pod = podDao.create(pod)
