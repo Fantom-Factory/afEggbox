@@ -1,22 +1,23 @@
+ syntax: fandoc
 
 Syntax Highlighting
 *******************
 Preformatted text may have syntax highlighting applied (courtesy of the core [syntax]`syntax::index` pod). Simply prefix the 'pre' text with:
 
-  syntax: XXXX
+  syntax: fandoc
   syntax: XXXX
 
 Where 'XXXX' is the name of the syntax to use. Example:
 
 pre>
- syntax: fantom
+ syntax: fandoc
  pre>
  syntax: fantom
 
  class Example {
- 	Void main() {
- 		echo("Hello Mum!")
- 	}
+    Void main() {
+        echo("Hello Mum!")
+    }
  }
  <pre
 <pre
@@ -43,6 +44,7 @@ Table parsing is simple, but expressive. The first line to start with a '-' char
 
 Example:
 pre>
+ syntax: fandoc
  pre>
  table:
 
@@ -69,6 +71,7 @@ Steve Eynon  Steve       Eynon
 Note that any lines consisting entirely of '-' or '+' characters are ignored. This means the above table could also be written as:
 
 pre>
+ syntax: fandoc
  pre>
  table:
  +-------------+-------+--------+
@@ -97,6 +100,8 @@ Pod Repository supports the full suite of Fantom URIs, which is the easy way to 
 API Links:
 
 pre>
+syntax: fandoc
+
 `sys::index`                Link to the summary page of pod 'sys'
 `web::pod-doc`              Link to User Guide of pod 'web'
 `sys::Str`                  Link to type (API page)
@@ -108,6 +113,8 @@ pre>
 
 Doc Links:
 pre>
+syntax: fandoc
+
 `docLang::closures`         Link to /doc/Closures.fandoc
 `docLang::closures#syntax`  Link to anchor in /doc/Closures.fandoc
 `closures`                  Link to /doc/Closures.fandoc (within same pod)
@@ -122,6 +129,8 @@ Fandoc URIs
 Pod Repository also offers an alternative 'fandoc' scheme. It's format is very similar to the URLs used by the website:
 
 pre>
+syntax: fandoc
+
 `fandoc:/foo/`             Link to pod summary page
 `fandoc:/foo/api/`         Link to API page
 `fandoc:/foo/api/Bar`      Link to type
@@ -135,6 +144,8 @@ pre>
 Linking to specific pod versions is achieved by appending the pod version as a query string:
 
 pre>
+syntax: fandoc
+
 `fandoc:/foo/?v=2.0`         Link pod summary page - version 2.0
 `fandoc:/foo/api/Bar?v=2.1`  Link to type - version 2.1
 `fandoc:/foo/doc/?v=2.2`     Link to User Guide - version 2.2
@@ -143,6 +154,8 @@ pre>
 Any 'fandoc' URI may be used with anchor text:
 
 pre>
+syntax: fandoc
+
 [User Guide]`fandoc:/foo/doc/`  Link to User Guide (/doc/pod.fandoc)
 [Foo v2.0]`fandoc:/foo/?v=2.0`  Link pod summary page - version 2.0
 <pre
@@ -154,6 +167,7 @@ Fan URIs
 Fantom's 'fan:' scheme may be used to link to resources held in the '/doc/' directory of pods.
 
 pre>
+syntax: fandoc
 `fan://foo/doc/bar.txt`     Link to /doc/bar.txt
 <pre
 
@@ -163,6 +177,7 @@ Image URIs
 **********
 Resources from any pod's '/doc/' directory may be served up by simply linking to it. This makes it easy to link to, and serve up images.
 
+  syntax: fandoc
   ![Foo]`foo.png`  Displays /doc/foo.png
 
 

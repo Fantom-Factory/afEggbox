@@ -31,9 +31,11 @@ const mixin IndexPage : PrPage {
 		injector.injectMeta.withProperty("og:image"	).withContent(absImgUrl.encode)
 		
 		// ---- Open Graph Meta ---- Optional
-		injector.injectMeta.withProperty("og:description"	).withContent("3rd Party Libraries for the Fantom programming language")
+		injector.injectMeta.withProperty("og:description"	).withContent("A website for uploading, viewing and downloading 3rd Party Fantom libraries")
 		injector.injectMeta.withProperty("og:locale"		).withContent("en_GB")
 		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
+		
+		injector.injectMeta.withName("description").withContent("A website for uploading, viewing and downloading 3rd Party Fantom libraries")
 	}
 	
 	RepoPod[] _newPods() {
