@@ -42,37 +42,37 @@ const class InvalidLinks {
 	}
 	
 	static Void	setWhereLinkIsFound(FandocUri uri) {
-		if (Actor.locals["afPodRepo.invalidLinks"] != null)
-			Actor.locals["afPodRepo.whereLinkIsFound"] = uri
+		if (Actor.locals["afEggbox.invalidLinks"] != null)
+			Actor.locals["afEggbox.whereLinkIsFound"] = uri
 	}
 	static Void	setLinkBeingResolved(Str link) {
-		if (Actor.locals["afPodRepo.invalidLinks"] != null)
-			Actor.locals["afPodRepo.linkBeingResolved"] = link
+		if (Actor.locals["afEggbox.invalidLinks"] != null)
+			Actor.locals["afEggbox.linkBeingResolved"] = link
 	}
 
 	static Obj? add(Str msg) {
 		invalidLinks?.add(InvalidLink {
-			it.where	= Actor.locals["afPodRepo.whereLinkIsFound"]
-			it.link		= Actor.locals["afPodRepo.linkBeingResolved"]
+			it.where	= Actor.locals["afEggbox.whereLinkIsFound"]
+			it.link		= Actor.locals["afEggbox.linkBeingResolved"]
 			it.msg		= msg
 		})
 		return null
 	}
 
 	static InvalidLink[] gather(|->| func) {
-		Actor.locals["afPodRepo.invalidLinks"] = InvalidLink[,]
+		Actor.locals["afEggbox.invalidLinks"] = InvalidLink[,]
 		try {
 			func()
 			return invalidLinks
 		} finally {
-			Actor.locals.remove("afPodRepo.linkBeingResolved")
-			Actor.locals.remove("afPodRepo.whereLinkIsFound")
-			Actor.locals.remove("afPodRepo.invalidLinks")
+			Actor.locals.remove("afEggbox.linkBeingResolved")
+			Actor.locals.remove("afEggbox.whereLinkIsFound")
+			Actor.locals.remove("afEggbox.invalidLinks")
 		}
 	}
 	
 	static InvalidLink[]? invalidLinks() {
-		Actor.locals["afPodRepo.invalidLinks"]
+		Actor.locals["afEggbox.invalidLinks"]
 	}
 }
 

@@ -14,12 +14,12 @@ internal const class RepoPodDownloadDaoImpl : RepoPodDownloadDao {
 	@Inject
 	override const IntSequences	intSeqs
 
-	@Inject	private const PodRepoConfig	repoConfig
+	@Inject	private const EggboxConfig	eggboxConfig
 
 	new make(|This| in) { in(this) }
 	
 	override RepoPodDownload create(Obj entity) {
-		repoConfig.logDownloadsEnabled
+		eggboxConfig.logDownloadsEnabled
 			? EntityDao.super.create(entity)
 			: entity
 	}

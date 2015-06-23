@@ -11,7 +11,7 @@ const mixin Layout : PrComponent {
 	@Inject abstract HttpRequest	httpReq
 	@Inject abstract IocEnv			iocEnv
 	@Inject	abstract Alert			alert
-	@Inject	abstract PodRepoConfig	repoConfig
+	@Inject	abstract EggboxConfig	eggboxConfig
 	@Inject	abstract EfanXtra		efanXtra
 
 	abstract Str? title
@@ -40,7 +40,7 @@ const mixin Layout : PrComponent {
 	}
 	
 	Bool googleAnalyticsEnabled() {
-		repoConfig.googleAnalyticsEnabled ? isPublic : false
+		eggboxConfig.googleAnalyticsEnabled ? isPublic : false
 	}
 	
 	Bool isIndexPage() {

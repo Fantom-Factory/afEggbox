@@ -5,15 +5,15 @@
 <stringAttribute key="mainScript" value=""/>
 <stringAttribute key="nature" value="com.xored.fanide.core.nature"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/Pod Repo"/>
+<listEntry value="/Eggbox"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
-<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 </listAttribute>
-<stringAttribute key="project" value="Pod Repo"/>
-<stringAttribute key="scriptArguments" value="8069 -proxy -watchAllPods"/>
-<stringAttribute key="workingDir" value="${workspace_loc:Pod Repo}"/>
+<stringAttribute key="project" value="Eggbox"/>
+<stringAttribute key="scriptArguments" value="8069"/>
+<stringAttribute key="workingDir" value="${workspace_loc:Eggbox}"/>
 </launchConfiguration>

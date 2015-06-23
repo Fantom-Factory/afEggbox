@@ -1,16 +1,16 @@
-#Fantom Pod Repository v0.0.2
+#Eggbox v0.0.2
 ---
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom.org/)
-[![pod: v0.0.2](http://img.shields.io/badge/pod-v0.0.2-yellow.svg)](http://www.fantomfactory.org/pods/afPodRepo)
+[![pod: v0.0.2](http://img.shields.io/badge/pod-v0.0.2-yellow.svg)](http://www.fantomfactory.org/pods/afEggbox)
 ![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
 
 ## Overview
 
-Pod Repository is a website for uploading, viewing and downloading Fantom pods. It is [fanr](http://fantom.org/doc/docFanr/Tool.html) compatible and backed by MongoDB.
+Eggbox is a website for uploading, viewing and downloading Fantom pods. It is [fanr](http://fantom.org/doc/docFanr/Tool.html) compatible and backed by MongoDB.
 
-To see Pod Repository in action, visit [http://pods.fantomfactory.org/](http://pods.fantomfactory.org/). If you like what you see and wish to host your own Pod Repository, at work or at home, then the setup couldn't be simpler!
+To see Eggbox in action, visit [http://pods.fantomfactory.org/](http://pods.fantomfactory.org/). If you like what you see and wish to host your own pod repository, at work or at home, then the setup couldn't be simpler!
 
-Pod Repository features:
+Eggbox features:
 
 - Editable Pod properties
 - Enhanced Fandoc documentation
@@ -26,17 +26,17 @@ Pod Repository features:
 
 ## Install
 
-Install `Fantom Pod Repository` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
+Install `Eggbox` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
 
-    C:\> fanr install -r http://repo.status302.com/fanr/ afPodRepo
+    C:\> fanr install -r http://repo.status302.com/fanr/ afEggbox
 
 To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
 
-    depends = ["sys 1.0", ..., "afPodRepo 0.0"]
+    depends = ["sys 1.0", ..., "afEggbox 0.0"]
 
 ## Documentation
 
-Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fantomfactory.org/pods/afPodRepo/).
+Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fantomfactory.org/pods/afEggbox/).
 
 ## Quick Start
 
@@ -49,9 +49,9 @@ Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fant
         waiting for connections on port 27017
 
 
-2. Start the Fantom Pod Repository website:
+2. Start the Eggbox website:
 
-        C:\>fan afPodRepo 8069
+        C:\>fan afEggbox 8069
            ___    __                 _____        _
           / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
          / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
@@ -60,12 +60,12 @@ Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fant
         
         IoC Registry built in 303ms and started up in 892ms
         
-        Bed App 'Fantom Pod Repository' listening on http://localhost:8069/
+        Bed App 'Eggbox' listening on http://localhost:8069/
 
 
 3. Point your browser to [http://localhost:8069/](http://localhost:8069/) and Job Done!
 
-  ![Quickstart Screenshot](http://pods.fantomfactory.org/pods/afPodRepo/doc/quickstart-screenshot.png)
+  ![Quickstart Screenshot](http://pods.fantomfactory.org/pods/afEggbox/doc/quickstart-screenshot.png)
 
 
 
@@ -75,26 +75,26 @@ The website is configured with various properties which may be set as environmen
 
 ### MongoDB URL
 
-This defines the MongoDB instance the Pod Repository should connect to. It takes the form of the standard [MongoDB connection URL](http://pods.fantomfactory.org/pods/afMongo/api/ConnectionManagerPooled):
+This defines the MongoDB instance Eggbox should connect to. It takes the form of the standard [MongoDB connection URL](http://pods.fantomfactory.org/pods/afMongo/api/ConnectionManagerPooled):
 
-    afPodRepo.mongoDbUrl = mongodb://db1.example.net:2500/?connectTimeoutMS=30000
+    afEggbox.mongoDbUrl = mongodb://db1.example.net:2500/?connectTimeoutMS=30000
 
-Defaults to `mongodb://localhost:27017/podrepo`
+Defaults to `mongodb://localhost:27017/eggbox`
 
 ### Public URL
 
 The public URL is used in [Sitemap](http://www.sitemaps.org/) generation, [Atom (RSS)](http://tools.ietf.org/html/rfc4287) feeds, [og:image](http://ogp.me/#metadata) meta tags, and other components that require an absolute URL. It is used to set the BedSheet [host](http://pods.fantomfactory.org/pods/afBedSheet/api/BedSheetConfigIds#host) config property.
 
-    afPodRepo.publicUrl = http://pods.fantomfactory.org
+    afEggbox.publicUrl = http://pods.fantomfactory.org
 
 Defaults to `http://localhost:<port>`
 
 ### Contact Details
 
-The contact details, as shown as a link in the bottom left hand corner of all Pod Repository pages, are set via the following properties:
+The contact details, as shown as a link in the bottom left hand corner of all Eggbox pages, are set via the following properties:
 
-    afPodRepo.contactName  = Micky Mouse
-    afPodRepo.contactEmail = micky.mouse@disney.com
+    afEggbox.contactName  = Micky Mouse
+    afEggbox.contactEmail = micky.mouse@disney.com
 
 Contact details are disabled by default.
 
@@ -102,8 +102,8 @@ Contact details are disabled by default.
 
 If the following properties are set then, Google's Universal Analytics script is included on all public pages.
 
-    afPodRepo.googleAccNo     = XX-99999999-9
-    afPodRepo.googleAccDomain = //pods.fantomfactory.org/
+    afEggbox.googleAccNo     = XX-99999999-9
+    afEggbox.googleAccDomain = //pods.fantomfactory.org/
 
 See [Google Analytics's Pod](http://pods.fantomfactory.org/pods/afGoogleAnalytics/api/index) for more details.
 
@@ -111,23 +111,23 @@ Google analytics is disabled by default.
 
 ### Error Reporting
 
-The Pod Repository can email a detailed error report whenever an unhandled error occurs on the server. To enable, set the following properties:
+Eggbox can email a detailed error report whenever an unhandled error occurs on the server. To enable, set the following properties:
 
-    afPodRepo.errorEmails.smtpHost     = mail.example.com
-    afPodRepo.errorEmails.smtpPort     = 25
-    afPodRepo.errorEmails.smtpUsername = micky.mouse
-    afPodRepo.errorEmails.smtpPassword = password
-    afPodRepo.errorEmails.smtpSsl      = false
-    afPodRepo.errorEmails.sendTo       = micky.mouse@disney.com
+    afEggbox.errorEmails.smtpHost     = mail.example.com
+    afEggbox.errorEmails.smtpPort     = 25
+    afEggbox.errorEmails.smtpUsername = micky.mouse
+    afEggbox.errorEmails.smtpPassword = password
+    afEggbox.errorEmails.smtpSsl      = false
+    afEggbox.errorEmails.sendTo       = micky.mouse@disney.com
 
 Email sending is disabled by default.
 
 ### Event Logging
 
-The Pod Repository can log events to MongoDB. To enable, set the following properties to true:
+Eggbox can log events to MongoDB. To enable, set the following properties to true:
 
-    afPodRepo.logDownloads = true
-    afPodRepo.logActivity  = true
+    afEggbox.logDownloads = true
+    afEggbox.logActivity  = true
 
 The event info is not currently used, but may be used to present statistics in future repository releases.
 
@@ -137,7 +137,7 @@ Event logging is disabled by default.
 
 The admin user has access to, and may edit, all pods. The admin user is any user with the same email address as this property.
 
-    afPodRepo.adminEmail = micky.mouse@disney.com
+    afEggbox.adminEmail = micky.mouse@disney.com
 
 The admin user is disable by default.
 
@@ -145,74 +145,74 @@ The admin user is disable by default.
 
 If this property is set, then should *anyone* visit a private URL, they will be automatically logged in as this user.
 
-    afPodRepo.autoLoginEmail = micky.mouse@disney.com
+    afEggbox.autoLoginEmail = micky.mouse@disney.com
 
 Note that the user must already exist on the system.
 
 Auto login is disabled by default.
 
-> TIP: By setting `afPodRepo.adminEmail` and `afPodRepo.autoLoginEmail` to the same email address (and having people bookmark a private URL such as `/my/pods`) you create an open Pod Repository accessible to all.
+> TIP: By setting `afEggbox.adminEmail` and `afEggbox.autoLoginEmail` to the same email address (and having people bookmark a private URL such as `/my/pods`) you create an open pod repository accessible to all.
 
 ## About Page
 
-The Pod Repository may have an optional *About* page. To enable, create an `about.fandoc` file in the current / same directory that the website is started in, next to `config.properties`. Existence of this file enables the *About* link in the top nav bar. The file is rendered as the *About* page.
+Eggbox may have an optional *About* page. To enable, create an `about.fandoc` file in the current / same directory that the website is started in, next to `config.properties`. Existence of this file enables the *About* link in the top nav bar. The file is rendered as the *About* page.
 
 The *About* page is disabled by default.
 
 ## Environment Overrides
 
-Sometimes it is convenient to have different configurations for different environments, such as `dev` or `test`. All the Pod Repository properties may have environment specific properties that override the normal properties. Just prefix them with the environment:
+Sometimes it is convenient to have different configurations for different environments, such as `dev` or `test`. All the Eggbox properties may have environment specific properties that override the normal properties. Just prefix them with the environment:
 
-    afPodRepo.mongoDbUrl      = mongodb://localhost:27017/podrepo
-    dev.afPodRepo.mongoDbUrl  = mongodb://localhost:27017/podrepo-dev
-    test.afPodRepo.mongoDbUrl = mongodb://localhost:27017/podrepo-test
+    afEggbox.mongoDbUrl      = mongodb://localhost:27017/eggbox
+    dev.afEggbox.mongoDbUrl  = mongodb://localhost:27017/eggbox-dev
+    test.afEggbox.mongoDbUrl = mongodb://localhost:27017/eggbox-test
 
-Using the properties above will make the Pod Repository connect to the `podrepo` database by default, but it will connect to `podrepo-dev` in a `dev` environment and to `podrepo-test` in `test`.
+Using the properties above will make Eggbox connect to the `eggbox` database by default, but it will connect to `eggbox-dev` in a `dev` environment and to `eggbox-test` in `test`.
 
 The environment is set via the command line `env` argument:
 
-    C:\>fan afPodRepo -env test 8069
+    C:\>fan afEggbox -env test 8069
 
-Note that all the Pod Repository properties may be overridden in the same manner.
+Note that all Eggbox properties may be overridden in the same manner.
 
 ## Sample config.properties
 
 Here is a sample `config.properties` for you to cut'n'paste. Uncomment / remove the leading `#` symbol, from any line you wish to use.
 
 ```
-# config.properties for Pod Repository
+# config.properties for Eggbox
 # ************************************
 #
-# See http://pods.fantomfactory.org/pods/afPodRepo
+# See http://pods.fantomfactory.org/pods/afEggbox
 #
 
-#afPodRepo.mongoDbUrl               = mongodb://localhost:27017/podrepo
+#afEggbox.mongoDbUrl               = mongodb://localhost:27017/eggbox
 
-#afPodRepo.publicUrl                = http://example.com
+#afEggbox.publicUrl                = http://example.com
 
-#afPodRepo.contactName              = Micky Mouse
-#afPodRepo.contactEmail             = micky.mouse@disney.com
+#afEggbox.contactName              = Micky Mouse
+#afEggbox.contactEmail             = micky.mouse@disney.com
 
-#afPodRepo.googleAccNo              = XX-99999999-9
-#afPodRepo.googleAccDomain          = //example.com/
+#afEggbox.googleAccNo              = XX-99999999-9
+#afEggbox.googleAccDomain          = //example.com/
 
-#afPodRepo.errorEmails.smtpHost     = mail.example.com
-#afPodRepo.errorEmails.smtpPort     = 25
-#afPodRepo.errorEmails.smtpUsername = micky.mouse
-#afPodRepo.errorEmails.smtpPassword = password
-#afPodRepo.errorEmails.smtpSsl      = false
-#afPodRepo.errorEmails.sendTo       = micky.mouse@disney.com
+#afEggbox.errorEmails.smtpHost     = mail.example.com
+#afEggbox.errorEmails.smtpPort     = 25
+#afEggbox.errorEmails.smtpUsername = micky.mouse
+#afEggbox.errorEmails.smtpPassword = password
+#afEggbox.errorEmails.smtpSsl      = false
+#afEggbox.errorEmails.sendTo       = micky.mouse@disney.com
 
-#afPodRepo.logDownloads             = true
-#afPodRepo.logActivity              = true
+#afEggbox.logDownloads             = true
+#afEggbox.logActivity              = true
 
-#afPodRepo.adminEmail               = micky.mouse@disney.com
-#afPodRepo.autoLoginEmail           = micky.mouse@disney.com
+#afEggbox.adminEmail               = micky.mouse@disney.com
+#afEggbox.autoLoginEmail           = micky.mouse@disney.com
 ```
 
 ## Acknowledgements
 
-The following, non-Fantom, libraries and services are used by Pod Repository:
+The following, non-Fantom, libraries and services are used by Eggbox:
 
 - [AnchorJs](http://bryanbraun.github.io/anchorjs/)
 - [Bootstrap](http://getbootstrap.com/)

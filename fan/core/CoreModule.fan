@@ -24,8 +24,8 @@ class CoreModule {
 	}
 
 	@Build
-	static PodRepoConfig buildPodRepoConfig(IocEnv iocEnv) {
-		PodRepoConfig(iocEnv)
+	static EggboxConfig buildEggboxConfig(IocEnv iocEnv) {
+		EggboxConfig(iocEnv)
 	}
 
 	@Contribute { serviceType=Converters# }
@@ -36,14 +36,14 @@ class CoreModule {
 
 	@Contribute { serviceType=RegistryStartup# }
 	internal static Void contributeRegistryStartup(Configuration config) {
-		config.set("afPodRepo.ensureIndexes", |->| {
+		config.set("afEggbox.ensureIndexes", |->| {
 			indexes := (Indexes) config.autobuild(Indexes#)
 			indexes.ensureIndexes
 		}).after("afMorphia.testConnection")
 	}
 	
 	@Contribute { serviceType=ApplicationDefaults# }
-	static Void contributeApplicationDefaults(Configuration config, PodRepoConfig repoConfig) {
-		config[MorphiaConfigIds.mongoUrl]	= repoConfig.mongoDbUrl
+	static Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig) {
+		config[MorphiaConfigIds.mongoUrl]	= eggboxConfig.mongoDbUrl
 	}
 }

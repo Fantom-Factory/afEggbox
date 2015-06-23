@@ -4,7 +4,7 @@
 <stringAttribute key="mainScript" value=""/>
 <stringAttribute key="nature" value="com.xored.fanide.core.nature"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/Pod Repo"/>
+<listEntry value="/Eggbox"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
@@ -15,6 +15,6 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.dltk.testing.engineId" value="com.xored.fanide.testing.fantest.testingEngine"/>
 <stringAttribute key="process_factory_id" value="org.eclipse.dltk.launching.scriptProcessFactory"/>
-<stringAttribute key="project" value="Pod Repo"/>
-<stringAttribute key="workingDir" value="${workspace_loc:Pod Repo}"/>
+<stringAttribute key="project" value="Eggbox"/>
+<stringAttribute key="workingDir" value="${workspace_loc:Eggbox}"/>
 </launchConfiguration>
