@@ -1,4 +1,5 @@
 using build
+using compiler
 using fanr
 
 class Build : BuildPod {
@@ -44,7 +45,7 @@ class Build : BuildPod {
 			"afFormBean   0+",
 			"afColdFeet   1.3.4  - 1.3",
 			"afSitemap    1.0.0  - 1.0",
-			"afGoogleAnalytics 0.0  - 1.0",
+			"afGoogleAnalytics 0.0 - 1.0",
 			"afAtom       1.0.0  - 2.0",
 
 			"syntax       1.0.67 - 1.0",
@@ -61,9 +62,18 @@ class Build : BuildPod {
 		srcDirs = [`test-spec/`, `test-spec/web/`, `test-spec/web/login/`, `test-spec/utils/`, `test-spec/fanr/`, `test-spec/core/`, `fan/`, `fan/web/`, `fan/web/util/`, `fan/web/services/`, `fan/web/pages/`, `fan/web/pages/pods/`, `fan/web/pages/my/`, `fan/web/pages/help/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/fanr/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`, `fan/bedframe/`]
 		resDirs = [`res/`, `test/res/`]
 		
-		docApi = false
+		meta["afBuild.docApi"] = "false"
+		meta["afBuild.docSrc"] = "false"
 	}
 
+	
+	override Void onCompileFan(CompilerInput ci) {
+		if (ci.resFiles == null)
+			ci.resFiles = Uri[,]
+		addRecursive(ci.resFiles, `etc/web-components/`.toFile)
+		addRecursive(ci.resFiles, `etc/web-pages/`.toFile)
+		addRecursive(ci.resFiles, `etc/web-static/`.toFile)
+	}
 	
 	@Target { help = "Heroku pre-compile hook, use to install dependencies" }
 	Void herokuPreCompile() {
@@ -73,7 +83,8 @@ class Build : BuildPod {
 			pod := Pod.find(depend.name, false)
 			return (pod == null) ? true : !depend.match(pod.version)
 		}
-		installFromRepo(pods, "http://repo.status302.com/fanr/") // repo = "file:lib/fanr/"
+//		installFromRepo(pods, "http://repo.status302.com/fanr/") // repo = "file:lib/fanr/"
+		installFromRepo(pods, "http://pods.fantomfactory.org/fanr/")
 
 		// patch web font mime types
 		patchMimeTypes([
@@ -96,9 +107,9 @@ class Build : BuildPod {
 		// abort build if something went wrong
 		if (status != 0) Env.cur.exit(status)
 
-		(scriptDir + `lib-fan/afAtom.pod`).listFiles(Regex.glob("*.pod")).each {
-			it.copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
-		}
+//		(scriptDir + `lib-fan/afAtom.pod`).listFiles(Regex.glob("*.pod")).each {
+//			it.copyInto(devHomeDir + `lib/fan/`, ["overwrite" : true])
+//		}
 	}
 
 	private Void patchMimeTypes(Str:Str extToMimeTypes) {
@@ -122,5 +133,10 @@ class Build : BuildPod {
 			log.info("Done.")
 			log.unindent
 		}
+	}
+	
+	static Void addRecursive(Uri[] resDirs, File dir) {
+		if (!dir.isDir) throw Err("`${dir.normalize}` is not a directory")
+		dir.walk { if (it.isDir) resDirs.add(it.uri) }
 	}
 }

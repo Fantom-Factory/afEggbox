@@ -12,6 +12,7 @@ const class DirtyCash {
 	@Inject							private	const LocalRef	depthRef
 	@Inject							private	const HttpRequest	httpReq
 	@Inject							private	const IocEnv	iocEnv
+	@Inject							private	const Log		log
 	
 	
 	new make(|This| in) { in(this) }
@@ -54,20 +55,21 @@ const class DirtyCash {
 			size.max(key.size)
 		}
 		
-		echo("\nDirty Cache Results for: ${httpReq.url}")
+		str := "\nDirty Cash Results for: ${httpReq.url}\n"
 		cache.keys.each |Str k| {
 			hits	:= (Int) cacheHits  .get(k, 0)
 			misses	:= (Int) cacheMisses.get(k, 0)
 			if (hits > 0 || misses > 0) {
-				echo("  ${k.justl(idSize)} : ${hits.toStr.justr(3)} -> $misses")
+				str += "  ${k.justl(idSize)} : ${hits.toStr.justr(3)} -> ${misses}\n"
 				totalHits   += hits
 				totalMisses += misses
 			}
 		}
 		per := (totalHits == 0 || totalMisses == 0) ? 0f : 100 - ((totalMisses * 100).toFloat / totalHits)
-		echo("  ".padr(idSize + 13, '-'))
-		echo("  ".padr(idSize + 2,  ' ') + " : ${totalHits.toStr.justr(3)} -> $totalMisses = " + per.toLocale("0.00") + "% effective!")
-		echo("\n")		
+		str += "  ".padr(idSize + 13, '-') + "\n"
+		str += "  ".padr(idSize + 2,  ' ') + " : ${totalHits.toStr.justr(3)} -> $totalMisses = " + per.toLocale("0.00") + "% effective!\n"
+		str += "\n"
+		log.debug(str)
 	}
 	
 	virtual Void put(Type type, Str id, Obj? val) {
