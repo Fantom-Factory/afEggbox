@@ -9,7 +9,7 @@ const class ErrEmailer {
 	@Inject private const Log 				log
 	@Inject private const HttpRequest		req
 	@Inject private const BedSheetServer	bedServer
-	@Inject private const PodRepoConfig		repoConfig
+	@Inject private const EggboxConfig		eggboxConfig
 	@Inject private const ErrPrinterStr		errPrinter
 	@Inject private const RepoActivityDao	activityDao
 			private const Synchronized		lock
@@ -23,7 +23,7 @@ const class ErrEmailer {
 	}
 	
 	Void emailErr(Err err) {
-		if (!repoConfig.errorEmailsEnabled)	return
+		if (!eggboxConfig.errorEmailsEnabled)	return
 		
 		// pass in 'req.absUri' 'cos the new thread ain't got no HTTP request!
 		reqUri := bedServer.toAbsoluteUrl(req.url)
@@ -46,7 +46,7 @@ const class ErrEmailer {
 	
 			podName := bedServer.appPod ?: "unknown"
 			appName	:= bedServer.appPod?.meta?.get("proj.name") ?: "Unknown"
-			to		:= repoConfig.errorEmailsSendTo?.toStr ?: "null"
+			to		:= eggboxConfig.errorEmailsSendTo?.toStr ?: "null"
 			from	:= "${podName}@${bedServer.host.host}"
 
 			log.info("Sending error email to ${to} from ${from} ...")
@@ -58,7 +58,7 @@ const class ErrEmailer {
 				it.body		= TextPart { text = emailBody }
 			}
 			
-			repoConfig.errorEmailsSmtpClient.send(email)
+			eggboxConfig.errorEmailsSmtpClient.send(email)
 			
 			endTime		:= DateTime.nowTicks
 			duration	:= endTime.minus(startTime).toDuration

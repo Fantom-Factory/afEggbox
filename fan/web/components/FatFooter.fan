@@ -5,11 +5,11 @@ using afDuvet
 
 const mixin FatFooter : PrComponent { 
 
-	@Inject abstract PodRepoConfig repoConfig
+	@Inject abstract EggboxConfig eggboxConfig
 	
 	@InitRender
 	Void initRender() {
-		if (repoConfig.contactEnabled)
+		if (eggboxConfig.contactEnabled)
 			injector.injectRequireModule("unscramble", null, ["contactUs"])
 	}
 	

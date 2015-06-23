@@ -17,12 +17,12 @@ internal const class RepoActivityDaoImpl : RepoActivityDao {
 	override const IntSequences	intSeqs
 	
 	@Inject	private const Log			log
-	@Inject	private const PodRepoConfig	repoConfig
+	@Inject	private const EggboxConfig	eggboxConfig
 
 	new make(|This| in) { in(this) }
 	
 	override RepoActivity create(Obj entity) {
-		repoConfig.logActivityEnabled
+		eggboxConfig.logActivityEnabled
 			? EntityDao.super.create(entity)
 			: entity
 	}

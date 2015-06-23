@@ -14,7 +14,7 @@ using util
 **   exe:verifyJson(#TEXT)
 **   {
 **       "fanr.version" : "1.0.67",
-**       "fanr.type"    : "afPodRepo::FanrRepo"
+**       "fanr.type"    : "afEggbox::FanrRepo"
 **   }
 ** 
 ** 

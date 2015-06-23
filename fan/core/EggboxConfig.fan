@@ -2,8 +2,8 @@ using afIocEnv
 using afBeanUtils
 using email
 
-const class PodRepoConfig {
-	private static const Log			log			:= PodRepoConfig#.pod.log
+const class EggboxConfig {
+	private static const Log			log			:= EggboxConfig#.pod.log
 	private static const TypeCoercer	typeCoercer	:= TypeCoercer()
 	
 	const Uri		mongoDbUrl
@@ -27,22 +27,22 @@ const class PodRepoConfig {
 	
 	static new make(IocEnv iocEnv) {
 		configProps := ConfigProperty[
-			ConfigProperty(#mongoDbUrl,					"afPodRepo.mongoDbUrl",					`mongodb://localhost:27017/podrepo`),
-			ConfigProperty(#publicUrl,					"afPodRepo.publicUrl",					null),
-			ConfigProperty(#googleAccNo,				"afPodRepo.googleAccNo",				null),
-			ConfigProperty(#googleAccDomain,			"afPodRepo.googleAccDomain",			null),
-			ConfigProperty(#errorEmailsSmtpHost,		"afPodRepo.errorEmails.smtpHost",		null),
-			ConfigProperty(#errorEmailsSmtpPort,		"afPodRepo.errorEmails.smtpPort",		null),
-			ConfigProperty(#errorEmailsSmtpUsername,	"afPodRepo.errorEmails.smtpUsername",	null),
-			ConfigProperty(#errorEmailsSmtpPassword,	"afPodRepo.errorEmails.smtpPassword",	null),
-			ConfigProperty(#errorEmailsSmtpSsl,			"afPodRepo.errorEmails.smtpSsl",		false),
-			ConfigProperty(#errorEmailsSendTo,			"afPodRepo.errorEmails.sendTo",			null),
-			ConfigProperty(#autoLoginEmail,				"afPodRepo.autoLoginEmail",				null),
-			ConfigProperty(#adminEmail,					"afPodRepo.adminEmail",					null),
-			ConfigProperty(#contactName,				"afPodRepo.contactName",				null),
-			ConfigProperty(#contactEmail,				"afPodRepo.contactEmail",				null),
-			ConfigProperty(#logDownloads,				"afPodRepo.logDownloads",				false),
-			ConfigProperty(#logActivity,				"afPodRepo.logActivity",				false),
+			ConfigProperty(#mongoDbUrl,					"afEggbox.mongoDbUrl",					`mongodb://localhost:27017/podrepo`),
+			ConfigProperty(#publicUrl,					"afEggbox.publicUrl",					null),
+			ConfigProperty(#googleAccNo,				"afEggbox.googleAccNo",					null),
+			ConfigProperty(#googleAccDomain,			"afEggbox.googleAccDomain",				null),
+			ConfigProperty(#errorEmailsSmtpHost,		"afEggbox.errorEmails.smtpHost",		null),
+			ConfigProperty(#errorEmailsSmtpPort,		"afEggbox.errorEmails.smtpPort",		null),
+			ConfigProperty(#errorEmailsSmtpUsername,	"afEggbox.errorEmails.smtpUsername",	null),
+			ConfigProperty(#errorEmailsSmtpPassword,	"afEggbox.errorEmails.smtpPassword",	null),
+			ConfigProperty(#errorEmailsSmtpSsl,			"afEggbox.errorEmails.smtpSsl",			false),
+			ConfigProperty(#errorEmailsSendTo,			"afEggbox.errorEmails.sendTo",			null),
+			ConfigProperty(#autoLoginEmail,				"afEggbox.autoLoginEmail",				null),
+			ConfigProperty(#adminEmail,					"afEggbox.adminEmail",					null),
+			ConfigProperty(#contactName,				"afEggbox.contactName",					null),
+			ConfigProperty(#contactEmail,				"afEggbox.contactEmail",				null),
+			ConfigProperty(#logDownloads,				"afEggbox.logDownloads",				false),
+			ConfigProperty(#logActivity,				"afEggbox.logActivity",					false),
 		]
 		
 		configFileName	:= (fromCmdArg(Env.cur.args, "-file") ?: fromCmdArg(Env.cur.args, "f")) ?: "config.properties"
@@ -67,7 +67,7 @@ const class PodRepoConfig {
 		fieldVals := Field:Obj?[:]
 		configProps.each { fieldVals[it.field] = it.value }
 		itBlockFunc := Field.makeSetFunc(fieldVals)
-		return PodRepoConfig(itBlockFunc).validate
+		return EggboxConfig(itBlockFunc).validate
 	}
 	
 	This validate() {

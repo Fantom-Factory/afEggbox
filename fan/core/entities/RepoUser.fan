@@ -31,7 +31,7 @@ class RepoUser {
 	@Property{}	Str		userSecret
 
 	@Inject{} FandocWriter?		fandocRenderer
-	@Inject{} PodRepoConfig?	repoConfig
+	@Inject{} EggboxConfig?		eggboxConfig
 	@Inject{} RepoActivityDao?	activityDao
 	
 	new make(|This| in) { in(this) }
@@ -54,7 +54,7 @@ class RepoUser {
 	}
 	
 	Bool isAdmin() {
-		repoConfig != null && (repoConfig.adminEnabled && repoConfig.adminEmail == email)
+		eggboxConfig != null && (eggboxConfig.adminEnabled && eggboxConfig.adminEmail == email)
 	}
 	
 	Str aboutMeHtml() {

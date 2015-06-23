@@ -5,14 +5,13 @@ using fanr
 class Build : BuildPod {
 
 	new make() {
-		podName = "afPodRepo"
+		podName = "afEggbox"
 		summary = "A website for uploading, viewing and downloading Fantom pods; fanr compatible and backed by MongoDB"
 		version = Version("0.0.2")
 
 		meta = [
-			"proj.name"		: "Fantom Pod Repository",
-			"afIoc.module"	: "afPodRepo::CoreModule",
-			"internal"		: "true",
+			"proj.name"		: "Eggbox",
+			"afIoc.module"	: "afEggbox::CoreModule",
 			"tags"			: "app",
 			"repo.private"	: "true"
 		]

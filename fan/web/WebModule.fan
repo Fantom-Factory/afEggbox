@@ -58,14 +58,14 @@ class WebModule {
 	static Void contributeScriptModules(Configuration config) {
 		config.add(ScriptModule("jquery"		).atUrl(`//code.jquery.com/jquery-1.11.2.min.js`).fallbackToUrl(`/js/jquery-1.11.2.min.js`))
 		config.add(ScriptModule("bootstrap"		).atUrl(`/js/bootstrap.min.js`).requires("jquery"))
-		config.add(ScriptModule("podRepoModules").atUrl(`/js/podRepoModules.js`))
+		config.add(ScriptModule("eggboxModules"	).atUrl(`/js/eggboxModules.js`))
 	}
 	
 	@Contribute { serviceType=RequireJsConfigTweaks# }
 	static Void contributeRequireJsConfigTweaks(Configuration conf) {
 		conf["app.bundles"] = |Str:Obj? config| {
 			bundles := (Str:Str[]) config.getOrAdd("bundles") { [Str:Str[]][:] }
-			bundles["podRepoModules"] = "fileInput unscramble rowLink anchorJS".split
+			bundles["eggboxModules"] = "fileInput unscramble rowLink anchorJS".split
 		}
 	}
 	
@@ -86,19 +86,19 @@ class WebModule {
 	}
 	
 	@Contribute { serviceType=ApplicationDefaults# }
-	static Void contributeApplicationDefaults(Configuration config, PodRepoConfig repoConfig, IocEnv iocEnv) {
+	static Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig, IocEnv iocEnv) {
 		
-		if (repoConfig.publicUrl != null)
-			config[BedSheetConfigIds.host]					= repoConfig.publicUrl
-		if (repoConfig.googleAccNo != null)
-			config[GoogleAnalyticsConfigIds.accountNumber]	= repoConfig.googleAccNo
-		if (repoConfig.googleAccDomain != null)
-			config[GoogleAnalyticsConfigIds.accountDomain]	= repoConfig.googleAccDomain
+		if (eggboxConfig.publicUrl != null)
+			config[BedSheetConfigIds.host]					= eggboxConfig.publicUrl
+		if (eggboxConfig.googleAccNo != null)
+			config[GoogleAnalyticsConfigIds.accountNumber]	= eggboxConfig.googleAccNo
+		if (eggboxConfig.googleAccDomain != null)
+			config[GoogleAnalyticsConfigIds.accountDomain]	= eggboxConfig.googleAccDomain
 		
 		config[BedSheetConfigIds.fileAssetCacheControl]		= "max-age=${1day.toSec}"	// it's better than nothing!
 		
 		config[DuvetConfigIds.requireJsTimeout]				= 8sec
 		
-		config["afPodRepo.aboutFandocExists"]				= `about.fandoc`.toFile.exists
+		config["afEggbox.aboutFandocExists"]				= `about.fandoc`.toFile.exists
 	}
 }

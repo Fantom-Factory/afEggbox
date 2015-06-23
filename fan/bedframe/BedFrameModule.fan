@@ -33,13 +33,13 @@ const class BedFrameModule {
 	static Void contributeFileHandler(Configuration config, Log log) {
 		if (!`etc/web-static/`.toFile.exists) {
 			
-			tempFile := File.createTemp("afPodRepo-", "-etc")
+			tempFile := File.createTemp("afEggbox-", "-etc")
 			dirName	 := tempFile.name
 			tempFile.delete
 			tempDir  := Env.cur.tempDir.createDir(dirName).deleteOnExit
 			log.info("Copying 'web-static' files to: ${tempDir.normalize.osPath}")
 			
-			podFile := Env.cur.findPodFile(PodRepoConfig#.pod.name)
+			podFile := Env.cur.findPodFile(EggboxConfig#.pod.name)
 			
 			zip	:= Zip.read(podFile.in)
 			try {
