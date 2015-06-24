@@ -27,7 +27,7 @@ const class EggboxConfig {
 	
 	static new make(IocEnv iocEnv) {
 		configProps := ConfigProperty[
-			ConfigProperty(#mongoDbUrl,					"afEggbox.mongoDbUrl",					`mongodb://localhost:27017/podrepo`),
+			ConfigProperty(#mongoDbUrl,					"afEggbox.mongoDbUrl",					`mongodb://localhost:27017/eggbox`),
 			ConfigProperty(#publicUrl,					"afEggbox.publicUrl",					null),
 			ConfigProperty(#googleAccNo,				"afEggbox.googleAccNo",					null),
 			ConfigProperty(#googleAccDomain,			"afEggbox.googleAccDomain",				null),
