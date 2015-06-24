@@ -18,7 +18,7 @@ const mixin RepoPodDao : EntityDao {
 	abstract Int			countVersions(RepoUser? user := null)		// for All Pods and User page
 
 	** used for fanr queries
-	abstract RepoPod[] 		doQuery(|Cursor->Obj?| f)
+	abstract RepoPod[] 		doQuery(Str? podName, |Cursor->Obj?| f)
 
 	abstract RepoPod 		toPod(Obj doc)	
 }
@@ -116,8 +116,9 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		return datastore.collection.aggregate(pipeline).first?.get("count") ?: 0
 	}
 
-	override RepoPod[] doQuery(|Cursor->Obj?| f) {
-		datastore.collection.find(allPods.toMongo(datastore), f)
+	override RepoPod[] doQuery(Str? podName, |Cursor->Obj?| f) {
+		query := (Query) (podName == null ? allPods : allPods.field("meta.pod\\u002ename").eq(podName))
+		return datastore.collection.find(query.toMongo(datastore), f)
 	}
 	
 	override RepoPod toPod(Obj doc) {

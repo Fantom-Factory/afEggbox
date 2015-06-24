@@ -83,12 +83,15 @@ const class FanrRepo {
 			return podDao.findPodVersions(query.trim, numVersions)
 
 		// another speed hack - for when looking for a specific pod
+		podName := (Str?) null
 		if (query.trim.split.size == 2) {
 			nom := query.trim.split[0]
 			ver := Version.fromStr(query.trim.split[1], false)
 			if (nom.all { it.isAlphaNum } && ver != null) {
-				pod := podDao.findPod(nom, ver)
-				return pod != null ? [pod] : RepoPod[,] 
+				podName = nom
+				// need to match 0.0 against 0.0.2
+//				pod := podDao.findPod(nom, ver)
+//				return pod != null ? [pod] : RepoPod[,] 
 			}
 		}
 
@@ -98,7 +101,7 @@ const class FanrRepo {
 		
 		q := Query.fromStr(query)
 		
-		return podDao.doQuery |c| {
+		return podDao.doQuery(podName) |c| {
 			c.hint = "_builtOn_"
 			pods := Str:RepoPod[][:] 
 			while (c.hasNext) {

@@ -6,7 +6,7 @@ class Build : BuildPod {
 
 	new make() {
 		podName = "afEggbox"
-		summary = "A website for uploading, viewing and downloading Fantom pods; fanr compatible and backed by MongoDB"
+		summary = "A website for uploading, viewing, and downloading Fantom pods"
 		version = Version("0.0.2")
 
 		meta = [
@@ -137,8 +137,7 @@ class Build : BuildPod {
 		// copy over syntax-fandoc.fog
 		if (etcFile == null) {
 			etcFile = (Env.cur.workDir + etcUri).normalize
-			podUri	:= `fan://afExplorer/res/syntax/syntax-fandoc.fog`
-			podFile := Explorer#.pod.file(podUri, false)
+			podFile	:= `res/syntax-fandoc.fog`.toFile
 			
 			try {
 				podFile.copyTo(etcFile)
