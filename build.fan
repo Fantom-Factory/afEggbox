@@ -12,8 +12,8 @@ class Build : BuildPod {
 		meta = [
 			"proj.name"		: "Eggbox",
 			"afIoc.module"	: "afEggbox::CoreModule",
-			"tags"			: "app",
-			"repo.private"	: "true"
+			"repo.tags"		: "app",
+			"repo.public"	: "true"
 		]
 
 		depends = [
@@ -175,5 +175,4 @@ class Build : BuildPod {
 		if (!dir.isDir) throw Err("`${dir.normalize}` is not a directory")
 		dir.walk { if (it.isDir) resDirs.add(it.uri) }
 	}
-
 }

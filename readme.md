@@ -6,7 +6,7 @@
 
 ## Overview
 
-Eggbox is a website for uploading, viewing and downloading Fantom pods. It is [fanr](http://fantom.org/doc/docFanr/Tool.html) compatible and backed by MongoDB.
+Eggbox is a website for uploading, viewing and downloading Fantom pods. Eggbox is [fanr](http://fantom.org/doc/docFanr/Tool.html) compatible and backed by MongoDB.
 
 To see Eggbox in action, visit [http://pods.fantomfactory.org/](http://pods.fantomfactory.org/). If you like what you see and wish to host your own pod repository, at work or at home, then the setup couldn't be simpler!
 
@@ -181,7 +181,7 @@ Here is a sample `config.properties` for you to cut'n'paste. Uncomment / remove 
 
 ```
 # config.properties for Eggbox
-# ************************************
+# ****************************
 #
 # See http://pods.fantomfactory.org/pods/afEggbox
 #
