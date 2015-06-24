@@ -21,7 +21,7 @@ const mixin IndexPage : PrPage {
 	@AfterRender
 	Void afterRender(StrBuf buf) {
 		htmlIndex	:= buf.toStr.index("<html ") + "<html ".size
-		absImgUrl	:= bedServer.toAbsoluteUrl(fileHandler.fromLocalUrl(`/images/ogimage.png`).clientUrl)
+		absImgUrl	:= bedServer.toAbsoluteUrl(fileHandler.fromLocalUrl(`/images/ogimage.jpg`).clientUrl)
 
 		// ---- Open Graph Meta ---- Mandatory
 		buf.insert(htmlIndex, "prefix=\"og: http://ogp.me/ns#\" ")
