@@ -36,7 +36,7 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectMeta.withProperty("og:type"	).withContent("website")
 		injector.injectMeta.withProperty("og:title"	).withContent("${pod.projectName} ${pod.version}")
 		injector.injectMeta.withProperty("og:url"	).withContent(absPageUrl.encode)
-		injector.injectMeta.withProperty("og:image"	).withContent(ogimage.encode)
+		injector.injectMeta.withProperty("og:image"	).withContent(bedServer.toAbsoluteUrl(ogimage).encode)
 		
 		// ---- Open Graph Meta ---- Optional
 		injector.injectMeta.withProperty("og:description"	).withContent(fandocUri.pod.meta.summary)
