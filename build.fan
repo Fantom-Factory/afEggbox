@@ -36,7 +36,7 @@ class Build : BuildPod {
 			"afMorphia    1.0.2  - 1.0",
 			
 			// ---- Web -------------------------
-			"afBedSheet   1.4.8  - 1.4",
+			"afBedSheet   1.4.10  - 1.4",
 			"afEfanXtra   1.1.2  - 1.1",
 			"afPillow     1.0.22 - 1.0",
 			"afDuvet      1.0.8  - 1.0",
