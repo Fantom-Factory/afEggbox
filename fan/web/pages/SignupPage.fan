@@ -18,8 +18,7 @@ const mixin SignupPage : PrPage {
 		signUpDetails = SignUpDetails()
 		formBean.formFields[SignUpDetails#password].formValue = ""
 		
-		// TODO: use httpSession.flashExists when BedSheet is released 
-		if (httpSession.exists && httpSession.containsKey("afBedSheet.flash") && httpSession.flash["signUp.email"] != null)
+		if (httpSession.flashExists && httpSession.flash["signUp.email"] != null)
 			signUpDetails.email = httpSession.flash["signUp.email"]
 	}
 
