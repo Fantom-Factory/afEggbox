@@ -55,7 +55,7 @@ class Build : BuildPod {
 			"util         1.0.67 - 1.0",
 			"afBounce     1.0.20 - 1.0",
 			"afButter     1.1.2  - 1.1",
-			"afFancordion 1.0.0  - 1.0"
+			"afFancordion 1.0.2  - 1.0"
 		]
 
 		srcDirs = [`test-spec/`, `test-spec/web/`, `test-spec/web/login/`, `test-spec/utils/`, `test-spec/fanr/`, `test-spec/core/`, `fan/`, `fan/web/`, `fan/web/util/`, `fan/web/services/`, `fan/web/pages/`, `fan/web/pages/pods/`, `fan/web/pages/my/`, `fan/web/pages/help/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/fanr/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`, `fan/bedframe/`]
