@@ -6,7 +6,7 @@ using afFancordion
 class RepoRunner : FancordionRunner {
     private BedServer? server
 
-    new make(|This|? f := null) : super(f) {
+    new make() {
         outputDir = `fancordion-results/`.toFile
     }
 

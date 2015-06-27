@@ -275,8 +275,8 @@ class Build : BuildPod {
 
 
 
-Ordering
---------
+Default Ordering
+----------------
 The User Guide page ( 'pod.fandoc' ) is always first in the documentation list. Other '.fandoc' pages are then listed in alphabetical order. The 'fandoc' file names are used to create page titles.
 
 Example, if a pod contained the following files:
@@ -290,6 +290,23 @@ Then the documentation pages would be listed as:
   User Guide
   Disaster Recovery
   Release Notes
+
+
+
+Custom Ordering
+---------------
+You can customise the URLs and order of the documentation pages by supplying the text file '/doc/contents.fog'. Fantom Object Graph (FOG) files are in Fantom's [serialisation format]`http://fantom.org/doc/docLang/Serialization` and 'contents.fog' is just a 'Uri:Str' map:
+
+Example '/doc/contents.fog'
+
+  syntax: fantom
+
+  [Uri:Str][
+      `/doc/pod.fandoc`           : "User Guide",
+      `/doc/page2.fandoc`         : "Page 2",
+      `http://www.example.com`    : "External Link",
+      `/doc/releaseNotes.fandoc`  : "Release Notes"
+  ]
 
 
 

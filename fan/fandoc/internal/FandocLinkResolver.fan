@@ -551,6 +551,7 @@ const class FandocSrcUri : FandocUri {
 
 const class FandocDocUri : FandocUri {
 	@Inject private const RepoPodDocsDao	podDocDao
+	@Inject private const Log				log
 					const Uri 				fileUri
 					const Str? 				headingId
 	
@@ -581,8 +582,19 @@ const class FandocDocUri : FandocUri {
 	}
 	
 	Uri:Str pageContents() {
-		// TODO: look for a contents.fog
-		pageUris := (Uri[]) podDocDao[pod._id].fandocPages.keys.exclude { it == `/doc/pod.fandoc`}.sort
+		podDoc := podDocDao[pod._id]
+		contentsFog := podDoc.get(`/doc/contents.fog`, false)
+		
+		if (contentsFog != null) {
+			try {
+				contents := (Uri:Str) contentsFog.in.readObj
+				return contents
+			} catch (Err err) {
+				log.warn("Could not load `${pod._id}/doc/contents.fog`: ${err.typeof.name} - ${err.msg}", err)
+			}
+		}
+		
+		pageUris := (Uri[]) podDoc.fandocPages.keys.exclude { it == `/doc/pod.fandoc`}.sort
 		contents := Uri:Str[:] { it.ordered = true }.add(`/doc/pod.fandoc`, "User Guide")
 		pageUris.each {
 			contents[it] = it.name[0..<it.name.indexr(".")].toDisplayName
