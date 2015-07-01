@@ -38,7 +38,7 @@
 
 			h2#delete.alert.alert-danger	Delete Pod
 			
-			p	Use this form to delete the ${pod.projectName} library.
+			p	Use this form to delete ${pod.projectName} ${pod.version}.
 
 			form.clearfix (action="${deleteUrl}" method="post")
 				== podDeleteFormBean.renderErrors

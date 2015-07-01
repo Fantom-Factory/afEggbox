@@ -90,10 +90,10 @@ mixin Msgs {
 	}
 
 	static Str alert_podUpdated(RepoPod pod) {
-		"Updated pod ${pod.name}"
+		"Updated pod ${pod.name} ${pod.version}"
 	}
 
 	static Str alert_podDeleted(RepoPod pod) {
-		"Deleted pod ${pod.name}"
+		"Deleted pod ${pod.name} ${pod.version}"
 	}
 }
