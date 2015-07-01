@@ -51,7 +51,7 @@ class RepoPodApi {
 	}
 
 	DocType[] allTypes() {
-		docTypes.size == api.size ? docTypes.vals : api.keys.map { this.get(it) }
+		docTypes.size == api.size ? docTypes.vals.sort |p1, p2| { p1.name <=> p2.name } : api.keys.map { this.get(it) }
 	}
 	
 	Str[] srcDocs() {
