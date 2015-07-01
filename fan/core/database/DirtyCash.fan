@@ -69,6 +69,7 @@ const class DirtyCash {
 		str += "  ".padr(idSize + 13, '-') + "\n"
 		str += "  ".padr(idSize + 2,  ' ') + " : ${totalHits.toStr.justr(3)} -> $totalMisses = " + per.toLocale("0.00") + "% effective!\n"
 		str += "\n"
+		// set afEggbox=debug
 		log.debug(str)
 	}
 	

@@ -1273,7 +1273,7 @@ ul{padding-left:32px;} .nowrap{white-space:nowrap;} .text-prewrap{white-space:pr
 .syntax q:after{content:"";} .anchorjs-link{transition:all .25s linear;text-decoration:none;margin-left:0.3em !important;} *:hover > .anchorjs-link{text-decoration:none;margin-left:0 !important;} #contactUs{font-family:Menlo,Monaco,Consolas,"Courier New",monospace;} .table.rowlink td:not(.rowlink-skip),
 .table .rowlink td:not(.rowlink-skip){cursor:pointer;} header.navbar .fannyTheFantom{position:absolute;top:0;width:80px;} header.navbar .navbar-brand span{display:inline-block;padding-left:90px;}@media (min-width:768px) {
   #indexPage .sm-text-center{text-align:center;}
-} #podsPage .podList hr:last-child{display:none;} #podSummaryPage article h2,
+} #podApiIndexPage article table td p{margin:0;} #podsPage .podList hr:last-child{display:none;} #podSummaryPage article h2,
 #podSummaryPage article h3{margin-top:40px;} #podSummaryPage .installText{cursor:pointer;} #podSummaryPage .installText input{width:100%;background-color:transparent;border-width:0;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box;padding-right:32px;position:relative;} #podSummaryPage .installText .copyIcon{position:absolute;right:24px;} #podSummaryPage .downloadPod{margin-bottom:20px;font-size:16px;font-weight:300;line-height:1.4;margin:20px 32px;}@media (min-width:768px) {
   #podSummaryPage .downloadPod{font-size:21px;}
 }
