@@ -1,6 +1,11 @@
 Versions
 ********
 
+v0.0.4
+======
+ - Bug: Tables in Pod API Page weren't sorted alphabetically.
+ - Bug: Links in 'DocTypeRef' (API hierarchy) went to the wrong version of the linked pod.
+
 v0.0.2
 ======
  - New: Preview release.
