@@ -33,6 +33,7 @@ class WebModule {
 		config.overrideValue("password",	BootstrapTextSkin())
 		config.overrideValue("checkbox",	BootstrapCheckboxSkin())
 		config.overrideValue("textarea",	BootstrapTextAreaSkin())
+		config.overrideValue("select",		config.autobuild(BootstrapSelectSkin#))
 		config.set			("static",		BootstrapStaticSkin())
 		config.set			("honeyPot",	BootstrapHoneyPotSkin())
 	}
