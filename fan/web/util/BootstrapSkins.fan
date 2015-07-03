@@ -57,7 +57,7 @@ const class BootstrapStaticSkin : BootstrapSkin {
 	}
 }
 
-const class BootstrapCheckboxSkin : BootstrapSkin {
+const class BootstrapCheckboxSkin : InputSkin {
 	override Str render(SkinCtx skinCtx) {
 		hint	:= skinCtx.input.hint ?: skinCtx.msg("field.${skinCtx.name}.hint")
 		checked := (skinCtx.value == "true" || skinCtx.value == "on") ? " checked" : Str.defVal
@@ -74,6 +74,37 @@ const class BootstrapCheckboxSkin : BootstrapSkin {
 		
 		html	+= """</div>"""
 		return html + "\n"
+	}
+}
+
+const class BootstrapSelectSkin : BootstrapSkin {
+	@Inject private const	ValueEncoders		valueEncoders
+	@Inject private const	OptionsProviders	optionsProviders
+
+	new make(|This| in) { in(this) }
+	
+	override Str render(SkinCtx skinCtx) {
+		renderFormGroup("", skinCtx) |attrs| {
+			html	:= "<select ${attrs}>"
+	
+			optionsProvider := skinCtx.formField.optionsProvider ?: optionsProviders.find(skinCtx.field.type)
+	
+			showBlank := skinCtx.input.showBlank ?: optionsProvider.showBlank  
+			if (showBlank) {
+				blankLabel := skinCtx.input.blankLabel ?: optionsProvider.blankLabel  
+				html += """<option value="">${blankLabel?.toXml}</option>"""
+			}
+			
+			optionsProvider.options(skinCtx.field).each |value, label| {
+				optLabel := skinCtx.msg("option.${label}.label") ?: label
+				optValue := skinCtx.toClient(value)
+				optSelec := (optValue.equalsIgnoreCase(skinCtx.value)) ? " selected" : Str.defVal
+				html += """<option value="${optValue}"${optSelec}>${optLabel}</option>"""
+			}
+	
+			html	+= "</select>"
+			return html
+		}
 	}
 }
 
