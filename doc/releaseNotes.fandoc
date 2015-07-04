@@ -3,9 +3,11 @@ Versions
 
 v0.0.4
 ======
+ - New: Using ScrollSpy highlighting on Pod doc pages.
  - Chg: Duvet Modules are cached via ColdFeet.
  - Bug: Tables in Pod API Page weren't sorted alphabetically.
  - Bug: Links in 'DocTypeRef' (API hierarchy) went to the wrong version of the linked pod.
+ - Bug: Ensured that Fandoc anchor IDs are alphaNumeric - required for Bootstrap ScrollSpy.
 
 v0.0.2
 ======
