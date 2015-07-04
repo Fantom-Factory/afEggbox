@@ -628,8 +628,8 @@ const class FandocDocUri : FandocUri {
 
 			// validate Heading
 			doc		:= fandocRenderer.parseStr(FandocParser(), docFile.readAllStr)
-			heading	:= doc.findHeadings.find { (it.anchorId ?: it.title.fromDisplayName) == headingId }
-			headings := doc.findHeadings.map {  it.anchorId ?: it.title.fromDisplayName }.sort.join(", ")
+			heading	:= doc.findHeadings.find { (it.anchorId ?: Utils.fromDisplayName(it.title)) == headingId }
+			headings := doc.findHeadings.map {  it.anchorId ?: Utils.fromDisplayName(it.title) }.sort.join(", ")
 			if (heading == null)
 				return InvalidLinks.add(InvalidLinkMsgs.couldNotFindHeading(headingId, headings))
 			
