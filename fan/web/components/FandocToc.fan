@@ -48,7 +48,7 @@ const mixin FandocToc : PrComponent {
 				continue
 			}
 
-			id  := h.anchorId ?: h.title.fromDisplayName
+			id  := h.anchorId ?: Utils.fromDisplayName(h.title)
 
 			html.add("<li><a href=\"#${id.toUri.encode}\">${h.title}</a></li>")
 			i++

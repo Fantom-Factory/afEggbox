@@ -28,7 +28,7 @@ internal class HtmlWriter : DocWriter {
 			case DocNodeId.heading:
 				heading := elem as Heading
 				// auto generate an ID if one isn't set explicitly
-				id := heading.anchorId ?: heading.title.fromDisplayName
+				id := heading.anchorId ?: Utils.fromDisplayName(heading.title)
 				skin.h(heading.level, id)
 			
 			case DocNodeId.para:
