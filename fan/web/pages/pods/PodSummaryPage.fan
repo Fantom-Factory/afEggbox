@@ -19,6 +19,7 @@ const mixin PodSummaryPage : PrPage {
 	Void beforeRender() {
 		podVersions = podDao.findPodVersions(pod.name)
 		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
+		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
 	}
 
 	** Need to wait until *after* layout has rendered to find the HTML tag.

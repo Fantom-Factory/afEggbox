@@ -1,19 +1,18 @@
 using afIoc::Inject
 using afEfanXtra
 using afPillow
-using afDuvet
 using fandoc
+using afDuvet::HtmlInjector
 
-const mixin PodToc : EfanComponent {
+const mixin PodToc : PrComponent {
 
-	@Inject	abstract Pages	 	pages
-	@Inject	abstract HtmlInjector	injector
-			abstract FandocUri	fandocUri
+	abstract FandocUri		fandocUri
 	
 	@InitRender
 	Void initRender(FandocUri fandocUri) {
 		this.fandocUri = fandocUri
 		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('body').scrollspy({ target: '#navToc' })")
+		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
 	}
 	
 	Str podsUrl() {

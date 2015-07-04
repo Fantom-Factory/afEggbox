@@ -11,6 +11,8 @@ const mixin HelpToc : PrComponent {
 	@InitRender
 	Void initRender(Uri fileName) {
 		this.fileName = fileName
+//		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('body').scrollspy({ target: '#navToc' })")
+		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
 	}
 	
 	override Str renderTemplate() {
@@ -55,7 +57,7 @@ const mixin HelpToc : PrComponent {
 				continue
 			}
 			if (h.level > level) {
-				html.add("<li>")
+				html.removeRange(-5..-1)
 				i = doToc(headings, html, h.level, i, false)
 				html.add("</li>")
 				continue

@@ -75,14 +75,15 @@
 						| No
 
 		nav.col-sm-3.fixedsticky
-			hr.visible-xs
-			== app.renderPodToc(fandocUri)
-		
-			-- if (podVersions.size > 1)
-				h3	${podVersions.size} Releases
-				ul
-					-- podVersions.each
-						li;	a (href="${it.toSummaryUri.toClientUrl.encode}") ${it.version}
+			div.sideMenu
+				hr.visible-xs
+				== app.renderPodToc(fandocUri)
+			
+				-- if (podVersions.size > 1)
+					h3	${podVersions.size} Releases
+					ul
+						-- podVersions.each
+							li;	a (href="${it.toSummaryUri.toClientUrl.encode}") ${it.version}
 
 	script |
 		function copyInstallText() {

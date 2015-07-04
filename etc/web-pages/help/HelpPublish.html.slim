@@ -13,5 +13,6 @@
 			== printFandoc(`/etc/web-pages/help/HelpPublish.fandoc`)
 
 		nav.col-sm-3.fixedsticky
-			hr.visible-xs
-			== app.renderHelpToc(`/etc/web-pages/help/HelpPublish.fandoc`)
+			div.sideMenu
+				hr.visible-xs
+				== app.renderHelpToc(`/etc/web-pages/help/HelpPublish.fandoc`)
