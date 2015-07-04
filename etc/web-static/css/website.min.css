@@ -1273,7 +1273,9 @@ ul{padding-left:32px;} .nowrap{white-space:nowrap;} .text-prewrap{white-space:pr
 .syntax q:after{content:"";} .anchorjs-link{transition:all .25s linear;text-decoration:none;margin-left:0.3em !important;} *:hover > .anchorjs-link{text-decoration:none;margin-left:0 !important;} #contactUs{font-family:Menlo,Monaco,Consolas,"Courier New",monospace;} .table.rowlink td:not(.rowlink-skip),
 .table .rowlink td:not(.rowlink-skip){cursor:pointer;} header.navbar .fannyTheFantom{position:absolute;top:0;width:80px;} header.navbar .navbar-brand span{display:inline-block;padding-left:90px;}@media (min-width:768px) {
   #indexPage .sm-text-center{text-align:center;}
-} #podApiIndexPage article table td p{margin:0;} #podsPage .podList hr:last-child{display:none;} #podSummaryPage article h2,
+} #podApiIndexPage article table td p{margin:0;} body{position:relative;} #podDocPage #navToc ul > li > ul{display:none;padding-left:20px;} #podDocPage #navToc ul > li.active > ul{display:block;} #podDocPage #navToc ul > li:hover > ul{display:block;} #podDocPage #navToc li > a{display:block;} #podDocPage #navToc .nav > li > a{padding:1px 0 1px 5px;} #podDocPage #navToc .nav > li > a:hover,
+#podDocPage #navToc .nav > li > a:focus{background-color:transparent;text-decoration:underline;} #podDocPage #navToc li > a{padding-left:5px;} #podDocPage #navToc li.active > a,
+#podDocPage #navToc li.active > a:hover{border-left:3px solid #5cb85c;border-radius:4px;padding-left:2px;} #podsPage .podList hr:last-child{display:none;} #podSummaryPage article h2,
 #podSummaryPage article h3{margin-top:40px;} #podSummaryPage .installText{cursor:pointer;} #podSummaryPage .installText input{width:100%;background-color:transparent;border-width:0;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box;padding-right:32px;position:relative;} #podSummaryPage .installText .copyIcon{position:absolute;right:24px;} #podSummaryPage .downloadPod{margin-bottom:20px;font-size:16px;font-weight:300;line-height:1.4;margin:20px 32px;}@media (min-width:768px) {
   #podSummaryPage .downloadPod{font-size:21px;}
 }
