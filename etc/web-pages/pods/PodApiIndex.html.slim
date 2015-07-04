@@ -52,10 +52,11 @@
 							td;	== uri.typeFirstSentenceHtml
 
 		nav.col-sm-3.fixedsticky
-			hr.visible-xs
-			== app.renderPodToc(fandocUri)
-
-			h3	All Types
-			ul.list-unstyled
-				-- fandocUri.allTypes.each |uri|
-					li;	a (href="${uri.toClientUrl.encode}"); == uri.title
+			div.sideMenu
+				hr.visible-xs
+				== app.renderPodToc(fandocUri)
+	
+				h3	All Types
+				ul.list-unstyled
+					-- fandocUri.allTypes.each |uri|
+						li;	a (href="${uri.toClientUrl.encode}"); == uri.title

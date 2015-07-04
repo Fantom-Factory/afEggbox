@@ -3,6 +3,7 @@ Versions
 
 v0.0.4
 ======
+ - New: Side menus are Bootstrap affixed in place.
  - New: Using ScrollSpy highlighting on Pod doc pages.
  - Chg: Duvet Modules are cached via ColdFeet.
  - Bug: Tables in Pod API Page weren't sorted alphabetically.

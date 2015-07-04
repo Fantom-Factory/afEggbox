@@ -85,18 +85,19 @@
 						== slotUri.slotHtml
 	
 		nav.col-sm-3.fixedsticky
-			hr.visible-xs
-			== app.renderPodToc(fandocUri)
-
-			h3	Source
-			ul.list-unstyled
-				-- typeSrcUri := fandocUri.toTypeSrcUri
-				-- if (typeSrcUri.hasSrc)
-					li;	a (href="${typeSrcUri.toClientUrl.encode}")	View Source
-				-- else
-					li	Not available
+			div.sideMenu
+				hr.visible-xs
+				== app.renderPodToc(fandocUri)
 	
-			h3	Slots
-			ul.list-unstyled
-				-- type.slots.each |slot|
-					li;	a (href="#${slot.name}")	${slot.name}
+				h3	Source
+				ul.list-unstyled
+					-- typeSrcUri := fandocUri.toTypeSrcUri
+					-- if (typeSrcUri.hasSrc)
+						li;	a (href="${typeSrcUri.toClientUrl.encode}")	View Source
+					-- else
+						li	Not available
+		
+				h3	Slots
+				ul.list-unstyled
+					-- type.slots.each |slot|
+						li;	a (href="#${slot.name}")	${slot.name}
