@@ -18,7 +18,7 @@ About Me
 ********
 Hello! I'm Steve Eynon and I'm a computer programmer!
 
-I started programming when I was 8 years old. I was lured in by a rubber keyed ZX Spectrum 48K. There I quickly progressed to Assembler and wrote [3D Vector Demos]`http://www.alienfactory.co.uk/equinox/demos` on the Commodore Amiga. Subsequently I moved through C and Visual Basic before turning to web applications and Java, where I stayed for 10 years or more. More recently I've been involved with Ruby, C# and Javascript.
+I started programming when I was 8 years old. I was lured in by a rubber keyed ZX Spectrum 48K. There I quickly progressed to Assembler and wrote [3D Vector Demos]`http://www.alienfactory.co.uk/equinox/demos` on the Commodore Amiga. Subsequently I moved through C and Visual Basic before turning to Java and web applications, where I stayed for 10 years or more. More recently I've been involved with Ruby, C# and Javascript.
 
 All that experience has led to me to really appreciate the Fantom language. It tackles all the hard concepts like *concurrency*, *state* and *serialisation*, and *does them right!* It means I can concentrate on real application problems, and not pseudo-problems introduced by the language. (Why should I care about mutual exclusion and double locking failures? Managers don't!)
 
@@ -47,7 +47,7 @@ What does the future hold for Fantom?
 So far, I personally have created:
  - Games - e.g. [Gundam]`http://www.alienfactory.co.uk/gundam/playonline`
  - Desktop Applications - e.g. [Explorer]`http://pods.fantomfactory.org/pods/afExplorer/`
- - A multitude of web sites and web applications - e.g. this one!
+ - A multitude of web sites and web applications - e.g. [this one]`http://pods.fantomfactory.org/pods/afEggbox/`!
 
 But why stop there? Fantom was specifically created to run on embedded devices, which means it's fast. [Faster than Java]`article:fantom-faster-than-java-and-kotlin` even! So think Raspberry Pi and beyond.
 
