@@ -84,18 +84,15 @@ const class FanrRepo {
 
 		// another speed hack - for when looking for a specific pod
 		podName := (Str?) null
-		if (query.trim.split.size == 2) {
-			nom := query.trim.split[0]
-			ver := Version.fromStr(query.trim.split[1], false)
-			if (nom.all { it.isAlphaNum } && ver != null) {
-				podName = nom
-				// need to match 0.0 against 0.0.2
-//				pod := podDao.findPod(nom, ver)
-//				return pod != null ? [pod] : RepoPod[,] 
-			}
+		depend  := Depend(query.trim, false) 
+		if (depend != null) {
+			podName = depend.name
+			// need to match 0.0 against 0.0.2, and find latest for 2.0.7 - 2.0
+//			pod := podDao.findPod(nom, ver)
+//			return pod != null ? [pod] : RepoPod[,] 
 		}
 
-		// speed hacks for globs is tricy, 'cos we still numVersions to honour
+		// speed hacks for globs is tricy, 'cos we still have numVersions to honour
 		// we can't just search the latest pods
 		// TODO: have reduceByVersion() / aggregation return a customisable number of pod versions 
 		
