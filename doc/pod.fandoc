@@ -225,6 +225,8 @@ The following, non-Fantom, libraries and services are used by Eggbox:
  - [Jasny Bootstrap Row Link]`http://jasny.github.io/bootstrap/javascript/#rowlink`
  - [jQuery]`https://jquery.com/`
  - [RequireJs]`http://requirejs.org/`
+ - [Shields.io]`http://shields.io/`
+ - [Tinysort]`http://tinysort.sjeiti.com/`
 
 Cheers!
 
