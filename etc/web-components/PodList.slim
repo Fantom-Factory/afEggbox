@@ -1,7 +1,7 @@
 
 div.podList
 	-- pods.each |pod|
-		div.media
+		div.media (data-date="${Duration(pod.builtOn.ticks).toMin}" data-name="${pod.projectName}")
 			div.media-left.tableIcon
 				a (href="${podSummaryUrl(pod)}")
 					div.media-object
@@ -26,4 +26,4 @@ div.podList
 					== podDocsHtml(pod)
 					-- if (pod.meta.jsEnabled)
 						span.pull-right.jsIcon (title="Pod available in Javascript")
-		hr				
+			hr				

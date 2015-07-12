@@ -2,10 +2,10 @@
 syntax: regexp
 ^fancordion-results$
 ^config\.properties$
+^deploy-to-live\.cmd$
+^lib-fan$
 
 syntax: glob
 .git
-syntax: regexp
-^deploy-to-live\.cmd$
-syntax: regexp
-^lib-fan$
+bin
+build

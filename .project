@@ -21,10 +21,5 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 	<linkedResources>
-		<link>
-			<name>workDir</name>
-			<type>2</type>
-			<location>C:/Repositories/Fantom</location>
-		</link>
 	</linkedResources>
 </projectDescription>

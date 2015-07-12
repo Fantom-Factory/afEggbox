@@ -21,9 +21,10 @@ const mixin PodsPage : PrPage {
 			allPods = allPods.sort(RepoPodDao.byProjName)
 		else
 			allPods = allPods.sortr(RepoPodDao.byBuildDate)
-		injector.injectRequireModule("rowLink")
 		countPublicVersions = podDao.countVersions(null)
 		countPublicPods		= podDao.countPods(null)
+		
+		injector.injectRequireModule("sortBy")
 	}
 	
 	Str s(Int size) {
