@@ -1,7 +1,7 @@
 
 div.podList
 	-- pods.each |pod|
-		div.media (data-date="${Duration(pod.builtOn.ticks).toMin}" data-name="${pod.projectName}")
+		div.media.${tagCss(pod)} (data-date="${Duration(pod.builtOn.ticks).toMin}" data-name="${pod.projectName}")
 			div.media-left.tableIcon
 				a (href="${podSummaryUrl(pod)}")
 					div.media-object
@@ -23,11 +23,10 @@ div.podList
 				== pod.summaryHtml
 				br
 				-- pod.meta.tags.each |tag|
-					div.pull-right.tag
-						span.label.label-default
+					div.pull-right.tagContainer
+						span.tag.label.tag-${tag.fromDisplayName}
 							i.fa.fa-tag ${tag}
 
-						
 				span (style="display: inline-block")
 					== podDocsHtml(pod)
 					-- if (pod.meta.jsEnabled)
