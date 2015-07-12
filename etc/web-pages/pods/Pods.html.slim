@@ -23,6 +23,36 @@
 					a (href="${pageUrl(SignupPage#)}") Sign Up
 					|  to publish your pods to this site! 
 
-		div.row.fixedsticky
+
+		-- activeTagCss := allTags.join(" ") { "tag-${it}-active" } 
+		div#tags.row.${activeTagCss}
+			p.text-right
+				button.btn.btn-default.btn-xs (type="button") All
+				| &nbsp;|&nbsp;
+				//span.tag.label
+				//	i.fa.fa-tag ALL
+				-- allTags.each |tag|
+					span.tag.label.tag-${tag.fromDisplayName}
+						i.fa.fa-tag ${tag}
+					| &nbsp;
+				| |&nbsp;
+				button.btn.btn-default.btn-xs (type="button") None
 			div.col-sm-10.col-sm-offset-1
 				== app.renderPodList(allPods)
+
+		
+	style
+		-- allTags.each |tag|
+			|
+				#podsPage .tag-${tag}-active .tag.label.tag-${tag} {
+					background-color:	#5cb85c;	/* @brand-success / @label-success-bg */
+				}
+				#podsPage .tag-${tag}-active .podList .media.tag-${tag} {
+					display:			block;
+					/*
+					opacity : 1;
+					height : auto;
+					transition : opacity 800ms, height 0 800ms;
+					*/
+				}
+		

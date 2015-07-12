@@ -12,6 +12,7 @@ const mixin PodsPage : PrPage {
 			abstract Int			countPublicVersions
 			abstract Int			countPublicPods
 			abstract Bool			sortByName
+			abstract Str[]			allTags
 
 	@InitRender
 	Void initRender() {
@@ -21,6 +22,8 @@ const mixin PodsPage : PrPage {
 			allPods = allPods.sort(RepoPodDao.byProjName)
 		else
 			allPods = allPods.sortr(RepoPodDao.byBuildDate)
+		allTags = allPods.map { it.meta.tags }.flatten.unique.sort
+		
 		countPublicVersions = podDao.countVersions(null)
 		countPublicPods		= podDao.countPods(null)
 		

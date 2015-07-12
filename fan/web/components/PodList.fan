@@ -25,6 +25,10 @@ const mixin PodList : PrComponent {
 		return ""
 	}
 	
+	Str tagCss(RepoPod pod) {
+		pod.meta.tags.join(" ") { "tag-${it.fromDisplayName}" }
+	}
+	
 	Str editUrl(RepoPod pod) {
 		pod.toSummaryUri.toClientUrl.plusSlash.plusName("edit").encode
 	}
