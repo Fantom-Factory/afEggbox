@@ -22,6 +22,12 @@ div.podList
 				br
 				== pod.summaryHtml
 				br
+				-- pod.meta.tags.each |tag|
+					div.pull-right.tag
+						span.label.label-default
+							i.fa.fa-tag ${tag}
+
+						
 				span (style="display: inline-block")
 					== podDocsHtml(pod)
 					-- if (pod.meta.jsEnabled)
