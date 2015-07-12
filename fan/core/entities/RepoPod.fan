@@ -315,9 +315,9 @@ class RepoPodMeta {
 		set { set("vcs.uri", it?.toStr)		}
 	}
 
-	Str? tags {
-		get { get("repo.tags")			}
-		set { set("repo.tags", it)		}
+	Str[] tags {
+		get { get("repo.tags")?.toStr?.split(',') ?: Str#.emptyList }
+		set { set("repo.tags", it.join(", "))	}
 	}
 
 	Bool jsEnabled {

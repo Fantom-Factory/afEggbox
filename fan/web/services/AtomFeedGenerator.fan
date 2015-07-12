@@ -98,7 +98,7 @@ class AtomPodWrapper : AtomEntryWrapper {
 			it.label	= pod.projectName
 		})
 		
-		pod.meta.tags?.split(',')?.each |tag| {
+		pod.meta.tags.each |tag| {
 			entry.categories.add(Category(tag) {
 				it.label	= tag.toDisplayName
 			})
