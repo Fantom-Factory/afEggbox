@@ -1,0 +1,33 @@
+-- app.renderLayout(true, "Stats")
+
+	ol.breadcrumb
+		li.active	Stats
+
+	div.row
+		article.col-sm-9
+			h1.podHeading
+				span	basic
+				| Stats
+		
+			h2 Users
+			ul.list-unstyled
+				-- allUsers.each |user|
+					li;	a (href="${userUrl(user)}")	${user.screenName}
+
+			h2 Downloads
+			table#downloads.table
+				thead
+					tr
+						th;a	Pod
+						th;a	via Fanr
+						th;a	via Web
+						th;a	Total
+				tbody
+					-- allDownloads.each |dl|
+						tr
+							td	${dl.pod}
+							td	${dl.fanr}
+							td	${dl.web}
+							td	${dl.total}
+			
+		nav.col-sm-3.fixedsticky

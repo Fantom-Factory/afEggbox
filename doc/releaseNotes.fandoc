@@ -7,6 +7,7 @@ v0.0.4
  - New: Pod tags are displayed in pod listings.
  - New: Side menus are Bootstrap affixed in place.
  - New: Using ScrollSpy highlighting on Pod doc pages.
+ - New: Added basic Stats page for tracking downloads.
  - Chg: Duvet Modules are cached via ColdFeet.
  - Bug: Tables in Pod API Page weren't sorted alphabetically.
  - Bug: Links in 'DocTypeRef' (API hierarchy) went to the wrong version of the linked pod.
