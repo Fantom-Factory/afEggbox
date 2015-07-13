@@ -112,26 +112,103 @@ function AnchorJS(A){"use strict";this.options=A||{},this._applyRemainingDefault
 
 define("sortBy", ["jquery", "tinysort"], function($, tinysort) {
 
-	$(document).ready( function() {
-		$("#sortByName").on("click", function(event) {
-			$("#sortByName").addClass("active");
-			$("#sortByDate").removeClass("active");
+	$(document).ready(function() {
+
+		var $btnSortByName	= $("#sortByName");
+		var $btnSortByDate	= $("#sortByDate");
+		var $tags   		= $("#tags");
+		var allTags 		= $tags.attr("data-allTags").split(" ");
+
+		function encodeUrl(allOrNone) {
+			var query = "";
+			if ($btnSortByName.hasClass("active"))
+				query = "?sortByName=true";
+			if ($btnSortByDate.hasClass("active"))
+				query = "?sortByDate=true";
+
+			var tags = [];
+			if (allOrNone !== undefined) {
+				if (allOrNone === true)
+					tags.push("all");
+				else
+					tags.push("none");
+			} else
+				$.each($tags.attr("class").split(" "), function(i, val) {
+					if (val.indexOf("tag-") === 0 && val.indexOf("-active") > 0)
+						tags.push(val.slice(4, -7));
+				});
+			if (tags.length > 0) {
+				query += "&tags=";
+				$.each(tags, function(i, val) {
+					if (i > 0)
+						query += ",";
+					query += val;
+				});
+			}
+
+			history.pushState({}, "", query);
+		}
+
+		function decodeUrl() {
+			// see http://stackoverflow.com/a/2880929/1532548
+			var match,
+				pl     = /\+/g,  // Regex for replacing addition symbol with a space
+				search = /([^&=]+)=?([^&]*)/g,
+				decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+				query  = window.location.search.substring(1),
+				params = {};
+			while (match = search.exec(query))
+				params[decode(match[1])] = decode(match[2]);
+
+			if (params["sortByName"] === "true")
+				sortByName();
+			if (params["sortByDate"] === "true")
+				sortByDate();
+			if (params["tags"]) {
+				if (params["tags"] === "all") {
+					$.each(allTags, function(i, tag) {
+						$tags.addClass(tag);
+					});
+				} else {
+					$.each(allTags, function(i, tag) {
+						$tags.removeClass(tag);
+					});
+					if (params["tags"] !== "none") {
+						$.each(params["tags"].split(","), function (i, val) {
+							$tags.addClass("tag-" + val + "-active");
+						});
+					}
+				}
+			}
+		}
+
+		function sortByName() {
+			$btnSortByName.addClass("active");
+			$btnSortByDate.removeClass("active");
 			tinysort(".podList > .media", {data:"name"});
-			return false;
-		});
-		$("#sortByDate").on("click", function(event, element) {
-			$("#sortByDate").addClass("active");
-			$("#sortByName").removeClass("active");
+		}
+
+		function sortByDate() {
+			$btnSortByDate.addClass("active");
+			$btnSortByName.removeClass("active");
 			tinysort(".podList > .media", {data:"date", order:"desc"});
+		}
+
+		$(window).on("popstate", function() {
+			decodeUrl();
+		});
+
+		$btnSortByName.on("click", function(event) {
+			sortByName();
+			encodeUrl();
+			return false;
+		});
+		$btnSortByDate.on("click", function(event, element) {
+			sortByDate();
+			encodeUrl();
 			return false;
 		});
 
-		//$.each($(".media"), function(i, val) {
-		//	val.attr("data-height", val.height());
-		//});
-
-		var $tags   = $("#tags");
-		var allTags = $tags.attr("data-allTags").split(" ");
 		$tags.on("click", ".tag", function(event) {
 			var $tag = $(event.target).closest(".tag");
 			$.each($tag.attr("class").split(" "), function(i, val) {
@@ -147,18 +224,24 @@ define("sortBy", ["jquery", "tinysort"], function($, tinysort) {
 					}
 				}
 			});
+			encodeUrl();
 		});
 
 		$("#btnAllTags").on("click", function(event) {
 			$.each(allTags, function(i, tag) {
 				$tags.addClass(tag);
 			});
+			encodeUrl(true);
 		});
 		$("#btnNoTags").on("click", function(event) {
 			$.each(allTags, function(i, tag) {
 				$tags.removeClass(tag);
 			});
+			encodeUrl(false);
 		});
+
+		// kick off Pod sorting on page load
+		decodeUrl();
 	});
 
 });
