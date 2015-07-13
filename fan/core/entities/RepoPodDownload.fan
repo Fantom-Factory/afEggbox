@@ -13,7 +13,7 @@ class RepoPodDownload {
 	new makeViaIoc(|This|f) { f(this) }
 
 	new make(RepoPod pod, Str how, RepoUser? user := null) {
-		this.pod		= pod.name 
+		this.pod		= pod.name.lower
 		this.ver		= pod.version.toStr 
 		this.userId		= user?._id 
 		this.when		= DateTime.now(1sec)
