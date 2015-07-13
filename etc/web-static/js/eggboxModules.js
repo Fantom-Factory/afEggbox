@@ -291,7 +291,6 @@ define("notFound", ["jquery"], function($) {
 	var $body	= $(".glow");
 	var speed	= 100;
 	var time	= 0;
-	var timerId	= null;
 
 	function rgbToHex(R,G,B) {return toHex(R)+toHex(G)+toHex(B)}
 	function toHex(n) {
@@ -309,10 +308,6 @@ define("notFound", ["jquery"], function($) {
 		return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
 	};
 
-	var roundy = function(num) {
-		return Math.ceil(num * 100) / 100;
-	};
-
 	var pulse = function() {
 		time += speed;
 		if (time > 3000 || time < 0) {
@@ -325,38 +320,27 @@ define("notFound", ["jquery"], function($) {
 		var g = 0xEE * size / 250;
 		var b = 0x23 * size / 250;
 		var c = "#"+rgbToHex(r,g,b);
-
 		$body.css({ background: c })
-
-		// green - #20ee23
-		// yellow - #ffff23
-		// http://css-tricks.com/moving-highlight/
-//		var bgMoz    = "   -moz-radial-gradient(300px 300px, circle, #20ee23, #131313 " + size + "px) #131313";
-//		var bgWebKit = "-webkit-radial-gradient(300px 300px, circle, #20ee23, #131313 " + size + "px) #131313";
-//		$body.css({ background: bgMoz    })
-//			 .css({ background: bgWebKit });
 	};
 
 	$(document).ready(function() {
 		setInterval(pulse, 100);
 	});
 
-	var grid = document.getElementsByClassName("tilt")[0];
-	var blueprint = document.getElementsByClassName("hive")[0];
+	var hive = document.getElementsByClassName("hive")[0];
 	var pageX, pageY, x, y, dx, dy;
 	var maxTiltAngle = 30;
 
-	// use jQuery for cross browser eventing (required?) vs querySelector()?
-	$('[data-gridtilt=hoverPad]').on("mousemove", function(e) {
+	$("body").on("mousemove", function(e) {
 		pageX = e.pageX;
 		pageY = e.pageY;
 
-		x  = pageX - grid.offsetLeft - (grid.offsetWidth  / 2);
-		y  = pageY - grid.offsetTop  - (grid.offsetHeight / 2);
+		x  = (pageX - hive.offsetLeft - (hive.offsetWidth  / 2)) / 4;
+		y  = (pageY - hive.offsetTop  - (hive.offsetHeight / 2)) / 4;
 
-		dx = x * maxTiltAngle / (-grid.offsetWidth  / 2);
-		dy = y * maxTiltAngle / (-grid.offsetHeight / 2);
+		dx = -x % 202;
+		dy = -y % 229;
 
-		blueprint.style.transform = "rotateY(" + dx + "deg) rotateX(" + dy + "deg)";
+		hive.style.backgroundPosition = dx + "px " + dy + "px";
 	})
 });
