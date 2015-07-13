@@ -10,8 +10,6 @@ install MongoDB on VM
 
 Future
 ======
-sticky mozilla on doc pages
-https://developer.mozilla.org/en-US/docs/Web/CSS/position#Sticky_positioning
 
 User, grab default details from gravatar -> have a Populate button
 

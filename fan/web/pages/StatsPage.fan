@@ -82,3 +82,23 @@ const class DownloadStat {
 	const Int	total
 	new make(|This|in) { in(this) }
 }
+
+class Migrate {
+	static Void main() {
+		
+		mongoClient := MongoClient(ActorPool(), `mongodb://heroku:password@ds039331.mongolab.com:39331/podrepo`)
+        collection  := mongoClient.db("podrepo").collection("podDownload")
+		
+		ds := collection.findAll
+		updates := 0
+		ds.each |Str:Obj val| {
+			if (val["pod"].toStr.any { it.isUpper }) {
+				updates++
+				val["pod"] = val["pod"].toStr.lower
+				collection.update(["_id" : val["_id"]], val)
+			}
+		}
+		
+		echo("updated $updates")
+	}
+}
