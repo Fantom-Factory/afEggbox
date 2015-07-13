@@ -25,7 +25,7 @@ div.podList
 				-- pod.meta.tags.each |tag|
 					div.pull-right.tagContainer
 						span.tag.label.tag-${tag.fromDisplayName}
-							i.fa.fa-tag ${tag}
+							i.fa.fa-tag |  ${tag}
 
 				span (style="display: inline-block")
 					== podDocsHtml(pod)

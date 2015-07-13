@@ -186,6 +186,12 @@ class PodEditDetails {
 		get { pod.meta.vcsUrl ?: `` }
 		set { pod.meta.vcsUrl  = it }
 	}	
+
+	@HtmlInput { type="text"; minLength=3; maxLength=256 }
+	Str tags {
+		get { pod.meta.tags.join(", ") }
+		set { pod.meta.tags = it.split(',') }
+	}	
 }
 
 class PodDeleteDetails {

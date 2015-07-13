@@ -12,47 +12,40 @@
 			p	This repository has no pods! Why don't you upload one?
 		
 		-- else
-			p
-				div.pull-right.btn-group
-					a#sortByName.btn.btn-default.${nameActive} (href="${pageMeta.pageUrl.plusQuery(["sortByName":"true"])}") Sort by Name
-					a#sortByDate.btn.btn-default.${dateActive} (href="${pageMeta.pageUrl.plusQuery(["sortByDate":"true"])}") Sort by Date
+			div.pull-left
+				p	This repository has ${countPublicVersions} public version${s(countPublicVersions)} of ${countPublicPods} public pod${s(countPublicPods)}. 
+				-- if (!loggedIn)
+					p.pull-left;	i 
+						a (href="${pageUrl(SignupPage#)}") Sign Up
+						|  to publish your pods to this site! 
 
-			p	This repository has ${countPublicVersions} public version${s(countPublicVersions)} of ${countPublicPods} public pod${s(countPublicPods)}. 
-			-- if (!loggedIn)
-				p;	i 
-					a (href="${pageUrl(SignupPage#)}") Sign Up
-					|  to publish your pods to this site! 
+			div.pull-right.btn-group
+				a#sortByName.btn.btn-default.${nameActive} (href="${pageMeta.pageUrl.plusQuery(["sortByName":"true"])}") Sort by Name
+				a#sortByDate.btn.btn-default.${dateActive} (href="${pageMeta.pageUrl.plusQuery(["sortByDate":"true"])}") Sort by Date
 
-
-		-- activeTagCss := allTags.join(" ") { "tag-${it}-active" } 
-		div#tags.row.${activeTagCss}
-			p.text-right
-				button.btn.btn-default.btn-xs (type="button") All
-				| &nbsp;|&nbsp;
-				//span.tag.label
-				//	i.fa.fa-tag ALL
+			-- activeTagCss := allTags.join(" ") { "tag-${it}-active" } 
+			div#tags.clear-both.${activeTagCss} (data-allTags="${activeTagCss}")
+				p.text-center
+					button#btnNoTags.btn.btn-default.btn-xs (type="button" title="Show no tags") None
+					| &nbsp; | &nbsp;
+					-- allTags.each |tag|
+						span.tag.label.tag-${tag.fromDisplayName} (title="Toggle '${tag}' pods")
+							i.fa.fa-tag |  ${tag}
+						| &nbsp; 
+					| | &nbsp;
+					button#btnAllTags.btn.btn-default.btn-xs (type="button" title="Show all tags") All
+					
+				div.row
+					div.col-sm-10.col-sm-offset-1
+						== app.renderPodList(allPods)
+		
+			style
 				-- allTags.each |tag|
-					span.tag.label.tag-${tag.fromDisplayName}
-						i.fa.fa-tag ${tag}
-					| &nbsp;
-				| |&nbsp;
-				button.btn.btn-default.btn-xs (type="button") None
-			div.col-sm-10.col-sm-offset-1
-				== app.renderPodList(allPods)
-
-		
-	style
-		-- allTags.each |tag|
-			|
-				#podsPage .tag-${tag}-active .tag.label.tag-${tag} {
-					background-color:	#5cb85c;	/* @brand-success / @label-success-bg */
-				}
-				#podsPage .tag-${tag}-active .podList .media.tag-${tag} {
-					display:			block;
-					/*
-					opacity : 1;
-					height : auto;
-					transition : opacity 800ms, height 0 800ms;
-					*/
-				}
-		
+					// @brand-success / @label-success-bg
+					|
+						#podsPage .tag-${tag}-active .tag.label.tag-${tag} {
+							background-color:	#5cb85c;
+						}
+						#podsPage .tag-${tag}-active .podList .media.tag-${tag} {
+							display:			block;
+						}
