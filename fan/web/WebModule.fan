@@ -3,6 +3,7 @@ using afIocConfig
 using afIocEnv
 using afBedSheet
 using afDuvet
+using afPillow
 using afEfanXtra::TemplateConverters
 using afFormBean::InputSkins
 using afFormBean::ErrorSkin
@@ -25,6 +26,11 @@ class WebModule {
 		config.add(config.autobuild(PodRoutes#))
 	}
 	
+	@Contribute { serviceType=HttpStatusResponses# }
+	static Void contribute404Response(Configuration config) {
+		config[404] = MethodCall(Pages#renderPage, [Error404Page#]).toImmutableFunc
+	}
+
 	@Contribute { serviceType=InputSkins# }
 	static Void contributeInputSkins(Configuration config) {
 		config.overrideValue("email",		BootstrapTextSkin())
