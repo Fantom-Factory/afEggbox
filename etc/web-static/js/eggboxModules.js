@@ -282,3 +282,81 @@ define("tableSort", ["tinysort"], function(tinysort) {
 		});
 	}
 });
+
+
+
+// ---- NotFound ---------------------------------------------------------------------------------
+
+define("notFound", ["jquery"], function($) {
+	var $body	= $(".glow");
+	var speed	= 100;
+	var time	= 0;
+	var timerId	= null;
+
+	function rgbToHex(R,G,B) {return toHex(R)+toHex(G)+toHex(B)}
+	function toHex(n) {
+		n = parseInt(n,10);
+		if (isNaN(n)) return "00";
+		n = Math.max(0,Math.min(n,255));
+		return "0123456789ABCDEF".charAt((n-n%16)/16) + "0123456789ABCDEF".charAt(n%16);
+	}
+
+	// https://github.com/danro/jquery-easing/blob/master/jquery.easing.js
+	// t: current time, b: start value, c: end value, d: total time
+	var easeInOutBack = function (t, b, c, d, s) {
+		if (s == undefined) s = 1.70158;
+		if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+		return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+	};
+
+	var roundy = function(num) {
+		return Math.ceil(num * 100) / 100;
+	};
+
+	var pulse = function() {
+		time += speed;
+		if (time > 3000 || time < 0) {
+			speed = -speed;
+			time  += speed;
+		}
+		var size = easeInOutBack(time, 75, 175, 3000);
+
+		var r = 0x20 * size / 250;
+		var g = 0xEE * size / 250;
+		var b = 0x23 * size / 250;
+		var c = "#"+rgbToHex(r,g,b);
+
+		$body.css({ background: c })
+
+		// green - #20ee23
+		// yellow - #ffff23
+		// http://css-tricks.com/moving-highlight/
+//		var bgMoz    = "   -moz-radial-gradient(300px 300px, circle, #20ee23, #131313 " + size + "px) #131313";
+//		var bgWebKit = "-webkit-radial-gradient(300px 300px, circle, #20ee23, #131313 " + size + "px) #131313";
+//		$body.css({ background: bgMoz    })
+//			 .css({ background: bgWebKit });
+	};
+
+	$(document).ready(function() {
+		setInterval(pulse, 100);
+	});
+
+	var grid = document.getElementsByClassName("tilt")[0];
+	var blueprint = document.getElementsByClassName("hive")[0];
+	var pageX, pageY, x, y, dx, dy;
+	var maxTiltAngle = 30;
+
+	// use jQuery for cross browser eventing (required?) vs querySelector()?
+	$('[data-gridtilt=hoverPad]').on("mousemove", function(e) {
+		pageX = e.pageX;
+		pageY = e.pageY;
+
+		x  = pageX - grid.offsetLeft - (grid.offsetWidth  / 2);
+		y  = pageY - grid.offsetTop  - (grid.offsetHeight / 2);
+
+		dx = x * maxTiltAngle / (-grid.offsetWidth  / 2);
+		dy = y * maxTiltAngle / (-grid.offsetHeight / 2);
+
+		blueprint.style.transform = "rotateY(" + dx + "deg) rotateX(" + dy + "deg)";
+	})
+});
