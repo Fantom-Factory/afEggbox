@@ -5,6 +5,7 @@ v0.0.4
 ======
  - New: Pods may be filtered by tag category on All Pods page.
  - New: Pod tags are displayed in pod listings.
+ - New: 404 Not Found Page.
  - New: Side menus are Bootstrap affixed in place.
  - New: Using ScrollSpy highlighting on Pod doc pages.
  - New: Added basic Stats page for tracking downloads.
