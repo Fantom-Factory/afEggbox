@@ -108,9 +108,9 @@ function AnchorJS(A){"use strict";this.options=A||{},this._applyRemainingDefault
 
 
 
-// ---- SortBy ------------------------------------------------------------------------------------
+// ---- Pod Page Pod Filtering --------------------------------------------------------------------
 
-define("sortBy", ["jquery", "tinysort"], function($, tinysort) {
+define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 
 	$(document).ready(function() {
 
@@ -244,4 +244,41 @@ define("sortBy", ["jquery", "tinysort"], function($, tinysort) {
 		decodeUrl();
 	});
 
+});
+
+
+
+// ---- TableSort ---------------------------------------------------------------------------------
+
+define("tableSort", ["tinysort"], function(tinysort) {
+
+	return function(tableId) {
+		var table = document.getElementById(tableId)
+			,tableHead    = table.querySelector('thead')
+			,tableHeaders = tableHead.querySelectorAll('th')
+			,tableBody    = table.querySelector('tbody')
+		;
+		tableHead.addEventListener('click',function(e){
+			var tableHeader  = e.target
+				,textContent = tableHeader.textContent
+				,tableHeaderIndex,isAscending,order
+			;
+			if (textContent!=='add row') {
+				while (tableHeader.nodeName!=='TH') {
+					tableHeader = tableHeader.parentNode;
+				}
+				tableHeaderIndex = Array.prototype.indexOf.call(tableHeaders,tableHeader);
+				isAscending = tableHeader.getAttribute('data-order')==='asc';
+				order = isAscending?'desc':'asc';
+				tableHeader.setAttribute('data-order',order);
+				tinysort(
+					tableBody.querySelectorAll('tr')
+					,{
+						selector:'td:nth-child('+(tableHeaderIndex+1)+')'
+						,order: order
+					}
+				);
+			}
+		});
+	}
 });

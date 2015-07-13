@@ -34,7 +34,7 @@ const class Indexes {
 		activityCol.index("_userId_")	.ensure(["userId"		: Index.ASC])
 		activityCol.index("_when_")		.ensure(["when"			: Index.DESC])
 		
-		podDownloadCol.index("_podId_")	.ensure(["podId"		: Index.ASC])
+		podDownloadCol.index("_pod_")	.ensure(["pod"			: Index.ASC])
 		podDownloadCol.index("_when_")	.ensure(["when"			: Index.DESC])
 		
 		// we can't run mapReduce commands on a collection that doesn't exist

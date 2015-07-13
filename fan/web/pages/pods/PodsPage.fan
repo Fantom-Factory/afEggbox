@@ -29,7 +29,7 @@ const mixin PodsPage : PrPage {
 		countPublicVersions = podDao.countVersions(null)
 		countPublicPods		= podDao.countPods(null)
 		
-		injector.injectRequireModule("sortBy")
+		injector.injectRequireModule("podFiltering")
 		
 		// with all the params flying around on this page, ensure Google only indexes the main version
 		// see https://support.google.com/webmasters/answer/139066
