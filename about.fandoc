@@ -9,8 +9,9 @@ This Pod Repository was created by taking some existing ideas and enhancing it w
  - Fandoc tables
  - Fandoc images served from pod resources
  - Fandoc link validation
- - Atom (RSS) feeds for individual pods
- - Basic Gravatar integration
+ - [Atom]`http://tools.ietf.org/html/rfc4287` (RSS) feeds for individual pods
+ - [Sitemap]`http://www.sitemaps.org/` XML generation
+ - Basic [Gravatar]`http://en.gravatar.com/` integration
 
 
 

@@ -4,9 +4,10 @@ class BuildEggbox {
 		AppBuilder("afEggbox") {
 			it.useEnv = false
 			it.scriptArgs = "afEggbox 8069"
-			// TODO: copy sample config.props
 		}.build |bob| {
-			bob.copyFile(`fan://afEggbox/licence.txt`.get, `./`)
+			bob.copyFile(`fan://afEggbox/licence.txt`.get,		`./`)
+			bob.copyFile(`etc/build/config.properties`.toFile,	`./`)
+			bob.copyFile(`etc/build/about.fandoc`.toFile, 		`./`)
 		}
 	}
 }
@@ -236,7 +237,7 @@ const class AppBuilder {
 		bshScript 	:= "#!/bin/bash\n\n. \"\${0%/*}/fanlaunch\"\nfanlaunch Fan ${scriptArgs} \"\$@\""
 		bshFile 	:= (_distDir + `${baseFileName}`).normalize.out.writeChars(bshScript).close
 		log("  - copied ${baseFileName}")
-		cmdScript	:= "@set FAN_HOME=.\n@java -cp \"%FAN_HOME%\\lib\\java\\sys.jar\" fanx.tools.Fan ${scriptArgs} %*"
+		cmdScript	:= "@set FAN_HOME=.\n@set FAN_ENV=\n@java -cp \"%FAN_HOME%\\lib\\java\\sys.jar\" fanx.tools.Fan ${scriptArgs} %*"
 		cmdFile 	:= (_distDir + `${baseFileName}.cmd`).normalize.out.writeChars(cmdScript).close
 		log("  - copied ${baseFileName}.cmd")
 	}

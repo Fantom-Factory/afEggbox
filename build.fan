@@ -7,13 +7,13 @@ class Build : BuildPod {
 	new make() {
 		podName = "afEggbox"
 		summary = "A website for uploading, viewing, and downloading Fantom pods"
-		version = Version("0.0.3")
+		version = Version("0.0.4")
 
 		meta = [
 			"proj.name"		: "Eggbox",
 			"afIoc.module"	: "afEggbox::CoreModule",
 			"repo.tags"		: "app",
-			"repo.public"	: "false"
+			"repo.public"	: "true"
 		]
 
 		depends = [
@@ -47,15 +47,17 @@ class Build : BuildPod {
 			"afGoogleAnalytics 0.0 - 1.0",
 			"afAtom       1.0.0  - 2.0",
 
+			// ---- Other -----------------------
+			"afButter     1.1.2  - 1.1",
 			"syntax       1.0.67 - 1.0",
+			"util         1.0.67 - 1.0",
 			"web          1.0.67 - 1.0",
 			"xml          1.0.67 - 1.0",
 
 			// ---- Test ------------------------
-			"util         1.0.67 - 1.0",
 			"afBounce     1.0.20 - 1.0",
-			"afButter     1.1.2  - 1.1",
-			"afFancordion 1.0.2  - 1.0"
+			"afFancordion 1.0.4  - 1.0",
+			"afFancordionBootstrap 1.0.0  - 1.0"
 		]
 
 		srcDirs = [`test-spec/`, `test-spec/web/`, `test-spec/web/login/`, `test-spec/utils/`, `test-spec/fanr/`, `test-spec/core/`, `fan/`, `fan/web/`, `fan/web/util/`, `fan/web/services/`, `fan/web/pages/`, `fan/web/pages/pods/`, `fan/web/pages/my/`, `fan/web/pages/help/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/fanr/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`, `fan/bedframe/`]
@@ -65,7 +67,19 @@ class Build : BuildPod {
 		meta["afBuild.docSrc"] = "false"
 	}
 
-	
+	override Void compile() {
+		// remove test pods from final build
+		testPods := "afBounce afFancordion afFancordionBootstrap".split
+		depends = depends.exclude { testPods.contains(it.split.first) }
+		
+		// remove test dir from final build
+		// I'm not so keen on relying on 'striptest' in %FAN_HOME%/etc/build.props
+		srcDirs = srcDirs.dup.exclude |uri| { uri.path.first.startsWith("test") }
+		resDirs = resDirs.dup.exclude |uri| { uri.path.first.startsWith("test") }
+
+		super.compile
+	}
+
 	override Void onCompileFan(CompilerInput ci) {
 		if (ci.resFiles == null)
 			ci.resFiles = Uri[,]

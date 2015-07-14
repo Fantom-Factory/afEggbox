@@ -1,7 +1,7 @@
-#Eggbox v0.0.2
+#Eggbox v0.0.4
 ---
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom.org/)
-[![pod: v0.0.2](http://img.shields.io/badge/pod-v0.0.2-yellow.svg)](http://www.fantomfactory.org/pods/afEggbox)
+[![pod: v0.0.4](http://img.shields.io/badge/pod-v0.0.4-yellow.svg)](http://www.fantomfactory.org/pods/afEggbox)
 ![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
 
 ## Overview
@@ -30,7 +30,7 @@ Eggbox features:
 
 Install `Eggbox` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
 
-    C:\> fanr install -r http://repo.status302.com/fanr/ afEggbox
+    C:\> fanr install -r http://pods.fantomfactory.org/fanr/ afEggbox
 
 To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
 
@@ -51,7 +51,7 @@ Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fant
         waiting for connections on port 27017
 
 
-2. Start the Eggbox website:
+2. If Eggbox was installed as a pod, start the website with:
 
         C:\>fan afEggbox 8069
            ___    __                 _____        _
@@ -65,11 +65,21 @@ Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fant
         Bed App 'Eggbox' listening on http://localhost:8069/
 
 
+
+  Or if using the [Eggbox standalone application](#standaloneApp), just run the script. (Edit the script to change the port.)
+
+
 3. Point your browser to [http://localhost:8069/](http://localhost:8069/) and Job Done!
 
   ![Quickstart Screenshot](http://pods.fantomfactory.org/pods/afEggbox/doc/quickstart-screenshot.png)
 
 
+
+## Standalone Installation
+
+Eggbox may be run as a (portable) standalone application without the need to have Fantom installed. Just download the `.zip` file from [Eggbox Downloads Page](https://bitbucket.org/AlienFactory/afeggbox/downloads), extract, and run the bundled script.
+
+Note that the standalone application *does* require `java` to be installed and available on the command line.
 
 ## Configuration
 
@@ -182,6 +192,7 @@ Note that all Eggbox properties may be overridden in the same manner.
 Here is a sample `config.properties` for you to cut'n'paste. Uncomment / remove the leading `#` symbol, from any line you wish to use.
 
 ```
+// do not edit this comment - see http://fantom.org/forum/topic/2436
 # config.properties for Eggbox
 # ****************************
 #
@@ -222,6 +233,8 @@ The following, non-Fantom, libraries and services are used by Eggbox:
 - [Jasny Bootstrap Row Link](http://jasny.github.io/bootstrap/javascript/#rowlink)
 - [jQuery](https://jquery.com/)
 - [RequireJs](http://requirejs.org/)
+- [Shields.io](http://shields.io/)
+- [Tinysort](http://tinysort.sjeiti.com/)
 
 Cheers!
 

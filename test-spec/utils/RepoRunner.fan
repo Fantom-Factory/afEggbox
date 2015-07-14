@@ -8,6 +8,7 @@ class RepoRunner : FancordionRunner {
 
     new make() {
         outputDir = `fancordion-results/`.toFile
+		skinType = afFancordionBootstrap::BootstrapSkin#
     }
 
     override Void suiteSetup() {
