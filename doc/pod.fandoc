@@ -30,7 +30,7 @@ Quick Start
     db version v3.0.5
     waiting for connections on port 27017
 
-2. Start the Eggbox website:
+2. If Eggbox was installed as a pod, start the website with:
 
     C:\>fan afEggbox 8069
        ___    __                 _____        _
@@ -43,9 +43,19 @@ Quick Start
 
     Bed App 'Eggbox' listening on http://localhost:8069/
 
+  Or if using the [Eggbox standalone application]`#standaloneApp`, just run the script. (Edit the script to change the port.)
+
 3. Point your browser to `http://localhost:8069/` and Job Done!
 
    ![Quickstart Screenshot]`quickstart-screenshot.png`
+
+
+
+Standalone Installation [#standaloneApp]
+***********************
+Eggbox may be run as a (portable) standalone application without the need to have Fantom installed. Just download the '.zip' file from [Eggbox Downloads Page]`https://bitbucket.org/AlienFactory/afeggbox/downloads`, extract, and run the bundled script.
+
+Note that the standalone application *does* require 'java' to be installed and available on the command line.
 
 
 
@@ -183,6 +193,7 @@ Sample config.properties
 Here is a sample 'config.properties' for you to cut'n'paste. Uncomment / remove the leading '#' symbol, from any line you wish to use.
 
 pre>
+// do not edit this comment - see http://fantom.org/forum/topic/2436
 # config.properties for Eggbox
 # ****************************
 #

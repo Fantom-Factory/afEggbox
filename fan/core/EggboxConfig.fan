@@ -47,7 +47,7 @@ const class EggboxConfig {
 		
 		configFileName	:= (fromCmdArg(Env.cur.args, "-file") ?: fromCmdArg(Env.cur.args, "f")) ?: "config.properties"
 		configFile		:= File.os(configFileName).normalize
-		fileProps		:= configFile.exists ? configFile.readProps : Str:Str[:]
+		fileProps		:= configFile.exists ? readProps(configFile) : Str:Str[:]
 
 		// override via environment variables
 		setFromEnvVars(configProps, Env.cur.vars)
@@ -68,6 +68,14 @@ const class EggboxConfig {
 		configProps.each { fieldVals[it.field] = it.value }
 		itBlockFunc := Field.makeSetFunc(fieldVals)
 		return EggboxConfig(itBlockFunc).validate
+	}
+	
+	private static Str:Str readProps(File propsFile) {
+		// I added this method to investigate this Fantom bug:
+		// http://fantom.org/forum/topic/2436
+		try return propsFile.readProps
+		catch (Err err)
+			throw IOErr("Could not read file ${propsFile.normalize.osPath}", err)
 	}
 	
 	This validate() {
