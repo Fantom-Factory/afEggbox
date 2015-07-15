@@ -112,6 +112,7 @@ function AnchorJS(A){"use strict";this.options=A||{},this._applyRemainingDefault
 
 define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 
+	// TODO: should refactor this to have a model
 	$(document).ready(function() {
 
 		var $btnSortByName	= $("#sortByName");
@@ -119,7 +120,7 @@ define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 		var $tags   		= $("#tags");
 		var allTags 		= $tags.attr("data-allTags").split(" ");
 
-		function encodeUrl(allOrNone) {
+		function encodeUrl(all, none) {
 			var query = "";
 			if ($btnSortByName.hasClass("active"))
 				query = "?sortByName=true";
@@ -127,10 +128,10 @@ define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 				query = "?sortByDate=true";
 
 			var tags = [];
-			if (allOrNone !== undefined) {
-				if (allOrNone === true)
+			if (all || none) {
+				if (all === true)
 					tags.push("all");
-				else
+				if (none === true)
 					tags.push("none");
 			} else
 				$.each($tags.attr("class").split(" "), function(i, val) {
@@ -200,44 +201,54 @@ define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 
 		$btnSortByName.on("click", function(event) {
 			sortByName();
-			encodeUrl();
+			encodeUrl(false, false);
 			return false;
 		});
 		$btnSortByDate.on("click", function(event, element) {
 			sortByDate();
-			encodeUrl();
+			encodeUrl(false, false);
 			return false;
 		});
 
 		$tags.on("click", ".tag", function(event) {
 			var $tag = $(event.target).closest(".tag");
+			var valid = false;
 			$.each($tag.attr("class").split(" "), function(i, val) {
-				if (val.indexOf("tag-") === 0) {
-					var toggle = $tag.closest(".podList").length === 0;
-					if (toggle)
-						$tags.toggleClass(val + "-active");
-					else {
+				// check tag value to prevent "all" from triggering it
+				if (val.indexOf("tag-") === 0 && allTags.indexOf(val + "-active") > -1) {
+					// no more toggling!
+					//var toggle = $tag.closest(".podList").length === 0;
+					//if (toggle)
+					//	$tags.toggleClass(val + "-active");
+					//else {
 						$.each(allTags, function(i, tag) {
 							$tags.removeClass(tag);
 						});
 						$tags.addClass(val + "-active");
-					}
+						valid = true;
+					//}
 				}
 			});
-			encodeUrl();
+			if (valid)
+				encodeUrl(false, false);
+		});
+
+		$.each(allTags, function(i, val) {
+			var tagName = val.slice(4, -7);
+			$("." + val.slice(0, -7)).attr("title", "Show '" + tagName + "' pods");
 		});
 
 		$("#btnAllTags").on("click", function(event) {
 			$.each(allTags, function(i, tag) {
 				$tags.addClass(tag);
 			});
-			encodeUrl(true);
+			encodeUrl(true, false);
 		});
 		$("#btnNoTags").on("click", function(event) {
 			$.each(allTags, function(i, tag) {
 				$tags.removeClass(tag);
 			});
-			encodeUrl(false);
+			encodeUrl(false, true);
 		});
 
 		// kick off Pod sorting on page load
