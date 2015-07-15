@@ -26,15 +26,15 @@
 			-- activeTagCss := allTags.join(" ") { "tag-${it}-active" } 
 			div#tags.clear-both.${activeTagCss} (data-allTags="${activeTagCss}")
 				p.text-center
-					button#btnNoTags.btn.btn-default.btn-xs (type="button" title="Show no tags") None
-					| &nbsp; | &nbsp;
 					-- allTags.each |tag|
-						span.tag.label.tag-${tag.fromDisplayName} (title="Toggle '${tag}' pods")
+						span.tag.label.tag-${tag.fromDisplayName} (title="Show '${tag}' pods")
 							i.fa.fa-tag |  ${tag}
 						| &nbsp; 
-					| | &nbsp;
-					button#btnAllTags.btn.btn-default.btn-xs (type="button" title="Show all tags") All
+					span#btnAllTags.tag.label (title="Show all pods")
+						i.fa.fa-tag |  All
 					
+				hr
+
 				div.row
 					div.col-sm-10.col-sm-offset-1
 						== app.renderPodList(allPods)
