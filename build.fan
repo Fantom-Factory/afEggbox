@@ -67,6 +67,7 @@ class Build : BuildPod {
 		meta["afBuild.docSrc"] = "false"
 	}
 
+	@Target { help = "Compile to pod file and associated natives" }
 	override Void compile() {
 		// remove test pods from final build
 		testPods := "afBounce afFancordion afFancordionBootstrap".split
