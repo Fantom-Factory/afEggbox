@@ -6,7 +6,6 @@ using afEfanXtra
 
 const mixin IndexPage : PrPage {
 
-	@Inject abstract BedSheetServer	bedServer
 	@Inject	abstract RepoPodDao		podDao
 			abstract RepoPod[]		newPods
 			abstract RepoPod[]		newVers

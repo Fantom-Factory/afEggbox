@@ -11,12 +11,13 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract Registry			registry
 	@Inject			abstract RepoPodDao			podDao
 	@Inject			abstract SyntaxWriter		syntaxWriter
-	@Inject			abstract BedSheetServer		bedServer
 	@PageContext	abstract FandocSummaryUri	fandocUri
 					abstract RepoPod[]			podVersions
 	
 	@BeforeRender
 	Void beforeRender() {
+		if (fandocUri.toClientUrl != bedServer.toClientUrl(httpRequest.url) )
+			throw ReProcessErr(Redirect.movedTemporarily(fandocUri.toClientUrl))
 		podVersions = podDao.findPodVersions(pod.name)
 		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
 		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")

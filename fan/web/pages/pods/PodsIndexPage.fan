@@ -4,17 +4,22 @@ using afEfanXtra
 using afPillow
 
 @Page { disableRoutes = true }
-const mixin PodsPage : PrPage {
+const mixin PodsIndexPage : PrPage {
 
 	@Inject abstract Registry		registry
 	@Inject abstract RepoPodDao		podDao
 	@Inject abstract HttpResponse	httpResponse
-	@Inject abstract BedSheetServer	bedServer
 			abstract RepoPod[]		allPods
 			abstract Int			countPublicVersions
 			abstract Int			countPublicPods
 			abstract Bool			sortByName
 			abstract Str[]			allTags
+
+	@BeforeRender
+	Void beforeRender() {
+		if (httpRequest.url.isDir.not)
+			throw ReProcessErr(Redirect.movedTemporarily(pages[PodsIndexPage#].pageUrl))
+	}
 
 	@InitRender
 	Void initRender() {

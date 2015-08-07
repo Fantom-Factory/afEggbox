@@ -42,15 +42,15 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 	}
 
 	Str podEditUrl(RepoPod pod) {
-		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plusName("edit").encode
+		pages[PodsIndexPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plusName("edit").encode
 	}
 
 	Str podDeleteUrl(RepoPod pod) {
-		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plus(`edit#delete`).encode
+		pages[PodsIndexPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plus(`edit#delete`).encode
 	}
 
 	Str podValidateUrl(RepoPod pod) {
-		pages[PodsPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plus(`edit#validate`).encode
+		pages[PodsIndexPage#].pageUrl.plusSlash.plusName(pod.name).plusSlash.plus(`edit#validate`).encode
 	}
 
 	private FandocUri fandocUri(RepoPod pod) {

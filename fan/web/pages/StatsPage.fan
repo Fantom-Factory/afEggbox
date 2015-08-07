@@ -62,15 +62,16 @@ const mixin StatsPage : PrPage, SitemapExempt {
 			]
 		]
 		
-		res:=collection.aggregate(pipeline)
-		echo(res)
-		
-		return res.map |r| { DownloadStat { 
-			it.pod	 = r["_id"]; 
-			it.web	 = r["web"] 
-			it.fanr	 = r["fanr"] 
-			it.total = r["total"] 
-		} }.sortr |DownloadStat p1, DownloadStat p2 ->Int| { p1.total <=> p2.total }
+		res := collection.aggregate(pipeline)
+
+		return res.map |r| { 
+			DownloadStat { 
+				it.pod	 = r["_id"] ?: "null"; 
+				it.web	 = r["web"] 
+				it.fanr	 = r["fanr"] 
+				it.total = r["total"] 
+			} 
+		}.sortr |DownloadStat p1, DownloadStat p2 ->Int| { p1.total <=> p2.total }
 	}
 	
 }

@@ -11,6 +11,8 @@ const mixin PodDocPage : PrPage {
 
 	@BeforeRender
 	Void beforeRender() {
+		if (fandocUri.toClientUrl != bedServer.toClientUrl(httpRequest.url) )
+			throw ReProcessErr(Redirect.movedTemporarily(fandocUri.toClientUrl))
 		injector.injectRequireModule("anchorJS", null, [".fandoc h2, .fandoc h3, .fandoc h4"])
 	}
 
