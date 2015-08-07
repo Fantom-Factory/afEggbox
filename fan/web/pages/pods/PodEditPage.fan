@@ -22,7 +22,6 @@ const mixin PodEditPage : PrPage {
 		this.pod		 = pod
 		this.editDetails = PodEditDetails(pod)
 	}
-	
 
 	Str:Str[] invalidLinkMap() {
 		map := Str:Str[][:] { ordered = true }

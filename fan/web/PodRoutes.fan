@@ -40,7 +40,7 @@ const class PodRoutes : Route {
 
 		podName		:= chomp(reqPath)
 		if (podName == null)
-			return pages.renderPage(PodsPage#)
+			return pages.renderPage(PodsIndexPage#)
 		
 		if (reqPath.isEmpty && podName == "feed.atom")
 			return atomPages.generateAll

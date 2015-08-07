@@ -7,7 +7,6 @@ using afSitemap
 
 const mixin UsersPage : PrPage, SitemapSource {
 	
-	@Inject			abstract BedSheetServer	bedServer
 	@Inject 		abstract RepoPodDao		podDao
 	@Inject			abstract RepoUserDao	userDao
 	@PageContext	abstract RepoUser		user

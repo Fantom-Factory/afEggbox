@@ -6,6 +6,7 @@ using afEfanXtra::EfanComponent
 using afDuvet::HtmlInjector
 using afBedSheet::HttpRequest
 using afBedSheet::FileHandler
+using afBedSheet::BedSheetServer
 
 @Abstract
 const mixin PrComponent : EfanComponent {
@@ -18,6 +19,7 @@ const mixin PrComponent : EfanComponent {
 	@Inject	abstract UserSession		userSession
 	@Inject	abstract LinkResolvers		linkResolvers
 	@Inject	abstract RepoActivityDao	activityDao
+	@Inject	abstract BedSheetServer		bedServer
 	
 //	Str assetUrl(Uri localUrl) {
 //		fileHandler.fromLocalUrl(localUrl).clientUrl.encode 

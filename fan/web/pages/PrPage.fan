@@ -14,6 +14,6 @@ const mixin PrPage : PrComponent {
 	}
 	
 	Str podsUrl() {
-		pageUrl(PodsPage#)
+		pageUrl(PodsIndexPage#)
 	}
 }

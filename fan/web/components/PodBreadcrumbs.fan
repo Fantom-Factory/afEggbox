@@ -12,7 +12,7 @@ const mixin PodBreadcrumbs : PrComponent {
 	}
 	
 	Str podsUrl() {
-		pages[PodsPage#].pageUrl.encode
+		pages[PodsIndexPage#].pageUrl.encode
 	}
 
 	override Str renderTemplate() {

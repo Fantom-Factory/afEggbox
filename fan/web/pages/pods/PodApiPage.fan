@@ -8,10 +8,11 @@ const mixin PodApiPage : PrPage {
 
 	@PageContext	abstract FandocApiUri		fandocUri
 	
-//	@BeforeRender
-//	Void beforeRender() {
-//		injector.injectRequireModule("anchorJS", null, ["dt"])
-//	}
+	@BeforeRender
+	Void beforeRender() {
+		if (fandocUri.toClientUrl != bedServer.toClientUrl(httpRequest.url) )
+			throw ReProcessErr(Redirect.movedTemporarily(fandocUri.toClientUrl))
+	}
 
 	RepoPod pod() {
 		fandocUri.pod
