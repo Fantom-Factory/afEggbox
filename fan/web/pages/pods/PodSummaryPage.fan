@@ -13,9 +13,11 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract SyntaxWriter		syntaxWriter
 	@PageContext	abstract FandocSummaryUri	fandocUri
 					abstract RepoPod[]			podVersions
+					abstract RepoPod?			pod
 	
 	@BeforeRender
 	Void beforeRender() {
+		pod = fandocUri.pod
 		if (fandocUri.toClientUrl != bedServer.toClientUrl(httpRequest.url) )
 			throw ReProcessErr(Redirect.movedTemporarily(fandocUri.toClientUrl))
 		podVersions = podDao.findPodVersions(pod.name)
@@ -26,7 +28,6 @@ const mixin PodSummaryPage : PrPage {
 	** Need to wait until *after* layout has rendered to find the HTML tag.
 	@AfterRender
 	Void afterRender(StrBuf buf) {
-		pod			:= fandocUri.pod
 		ogasset		:= fandocUri.toDocUri(`/doc/ogimage.png`)
 		ogasset		 = ogasset.exists ? ogasset : fandocUri.toDocUri(`/doc/ogimage.jpg`)
 		ogimage		:= ogasset.exists ? ogasset.toAsset.clientUrl : fileHandler.fromLocalUrl(`/images/defaultPodOgimage.png`).clientUrl
@@ -49,16 +50,11 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectMeta.withName("description").withContent(metaDesc)
 	}
 
-	RepoPod pod() {
-		fandocUri.pod
-	}
-
 	Str installPodName() {
 		fandocUri.isLatest ? pod.name : "\"${pod.name} ${pod.version}\""
 	}
 	
 	Str podVersionRange() {
-		pod := pod
 		return pod.version.segments.size > 2 
 			? "${Version(pod.version.segments[0..2])} - ${Version(pod.version.segments[0..1])}"
 			: pod.version.toStr

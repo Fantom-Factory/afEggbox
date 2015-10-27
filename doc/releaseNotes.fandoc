@@ -4,7 +4,8 @@ v0.0.6
 ======
  - New: Added Fantom-Factory icon to 404 page.
  - Chg: Tweaked the behaviour of the tag buttons on the *All Pods* page.
- - Chg: Upgrated to Bootstrap v3.3.5.
+ - Chg: Upgraded to Bootstrap v3.3.5.
+ - Chg: Added Documentation section to Pod Summary pages.
 
 v0.0.4
 ======

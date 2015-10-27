@@ -33,12 +33,24 @@
 
 					 
 			
-			h2	Configure
+			h2	Use
 			p	To use ${pod.projectName} in a Fantom project, add a dependency to the project's <code>build.fan</code>:
 			== syntaxWriter.writeSyntax("""depends = ["sys 1.0", ..., "${pod.name} ${podVersionRange}"]""", "fan", false)
 		
-		
-		
+
+
+			-- if (pod.hasApi && pod.hasDocs)
+				h2	Documentation
+				ul.lead
+					-- if (pod.hasApi)
+						li; a (href="${pod.toApiUri.toClientUrl.encode}") API
+					-- if (pod.hasDocs)
+						-- docUri := pod.toDocUri
+						-- docUri.pageContents.each |title, page|
+							li; a (href="${docUri.toDocUri(page).toClientUrl.encode}") ${title}		
+
+
+
 			h2	Information
 			p	Meta information on the ${pod.projectName} pod:
 
