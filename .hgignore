@@ -1,0 +1,11 @@
+
+syntax: regexp
+^fancordion-results$
+^config\.properties$
+^deploy-to-live\.cmd$
+^lib-fan$
+^bin$
+^build$
+
+syntax: glob
+.git

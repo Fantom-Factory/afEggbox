@@ -1,0 +1,34 @@
+-- app.renderLayout(false, "404 Not Found")
+
+	ol.breadcrumb
+		li.active	404 Not Found
+
+	div.row
+		article.col-sm-12
+			div.centre
+				div.effect
+					div.glow
+					div.hive
+					div.hole
+						img.img-responsive (src="/images/theHole.png" alt="A tear in the Fantomverse")
+					div.fantomFactory
+						img (src="/images/fantomFactory.png" alt="Fantom-Factory")
+
+			h1.podHeading
+				span	404
+				| Not Found
+		
+			div.space
+
+	
+	-- if (renderGa)
+		script (type="text/javascript") |
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+			ga('create', '<%= accountNumber %>', '<%= accountDomain %>');
+			
+			// route all 404's to a custom 404 page
+			// see https://developers.google.com/analytics/devguides/collection/analyticsjs/pages
+			ga('send', 'pageview', '/error404');

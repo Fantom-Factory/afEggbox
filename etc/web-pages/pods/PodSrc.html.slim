@@ -1,0 +1,16 @@
+-- app.renderLayout(isPublic, "${fandocUri.qname} Src")
+
+	== app.renderPodBreadcrumbs(fandocUri)
+
+	div.row
+		article.col-sm-9.api
+			== app.renderPodIcon(pod)
+			h1.podHeading
+				span source
+				== fandocUri.podName + "::" + fandocUri.srcFile.toXml
+
+			== fandocUri.src
+
+		nav.col-sm-3.fixedsticky
+			hr.visible-xs
+			== app.renderPodToc(fandocUri)

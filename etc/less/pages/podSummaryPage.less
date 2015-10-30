@@ -1,0 +1,34 @@
+
+#podSummaryPage {
+	article {	// don't affect the sidebarnav
+		h2, h3 {
+			margin-top:			@line-height-computed * 2;
+		}
+	}
+
+	.installText {
+		cursor:				pointer;
+		
+		input {
+			width:				100%;
+			background-color:	transparent;	// inherit no work on IE
+			border-width:		0;
+			cursor:				pointer;
+			white-space:		nowrap;
+			overflow:			hidden;
+			text-overflow:		ellipsis;
+			box-sizing:			border-box;
+			padding-right:		@padding-large-horizontal + 16px;
+			position:			relative;	// to position icon
+		}
+		.copyIcon {
+			position:			absolute;
+			right:				@padding-large-horizontal + 8px;
+		}
+	}
+	
+	.downloadPod {
+		.lead;
+		margin:		(@padding-large-vertical *2) (@padding-large-horizontal *2);
+	}
+}

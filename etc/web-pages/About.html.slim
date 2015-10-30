@@ -1,0 +1,17 @@
+-- app.renderLayout(true, "About")
+
+	ol.breadcrumb
+		li.active	About
+
+	div.row
+		article.col-sm-9
+			h1.podHeading
+				span	all
+				| About
+		
+			== printFandoc(`/about.fandoc`)
+
+		nav.col-sm-3.fixedsticky
+			div.sideMenu
+				hr.visible-xs
+				== app.renderFandocToc(`/about.fandoc`)

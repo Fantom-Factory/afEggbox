@@ -1,0 +1,43 @@
+
+
+email reza
+****
+
+TODO
+====
+install MongoDB on VM
+
+
+Future
+======
+
+User, grab default details from gravatar -> have a Populate button
+
+email notifications of new pod uploads
+did you forget your password?
+email confirmation
+upvote / star a pod
+contents.fog
+Remember me login checkbox
+
+Games:
+ - No of pods uploaded
+ - Upload a diff version of same pod
+ - public pods / private pods
+ - download / install pods
+ - no of downloads your pod get
+  
+http://avatars.io/ support
+
+make web-app work in non-root ctx, .e.g. localhost/*repo*/pods/etc - see docAssets, RSS urls, etc
+
+Delete user account
+
+404 / 500 page
+
+MongoDB text search
+
+
+
+
+

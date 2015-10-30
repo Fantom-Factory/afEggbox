@@ -1,0 +1,56 @@
+H2 Heading
+**********
+
+H3 Heading
+==========
+
+H4 Heading [#id]
+----------------
+H1 headings are provided by page templates.
+IDs are optional.
+
+Paragraphs are separated by a blank line.
+
+Text may be formatted
+... as 'inline code'
+... as **bold**
+... as *italics*.
+
+A hyperlink to [Fantom]`http://fantom.org`.
+So is this `http://fantom.org`.
+
+  Preformatted text is indented
+  by 2 or more spaces
+
+Or...
+
+pre>
+Preformatted text may be
+wrapped in pre tags
+<pre
+
+Unordered lists:
+
+- item 1
+- item 2
+   - sub 2a
+   - sub 2b
+- item 3
+
+Ordered lists:
+
+I. Chapter I
+  1. Section 1
+  2. Section 2
+    a. Subsection a
+    b. Subsection b
+II. Chapter II
+  A. Section A
+  B. Section B
+    i. Subsection i
+    ii.Subsection ii
+
+Block quotes lines start with the '>' char:
+
+> Simon says, "Hello Mum!"
+

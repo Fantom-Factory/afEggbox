@@ -1,0 +1,27 @@
+Versions
+********
+v0.0.6
+======
+ - New: Added Fantom-Factory icon to 404 page.
+ - Chg: Tweaked the behaviour of the tag buttons on the *All Pods* page.
+ - Chg: Upgraded to Bootstrap v3.3.5.
+ - Chg: Added Documentation section to Pod Summary pages.
+ - Chg: Pod pages masquerade as the Summary page when sending page views to Google Analytics; for better reporting.
+
+v0.0.4
+======
+ - New: Pods may be filtered by tag category on All Pods page.
+ - New: Pod tags are displayed in pod listings.
+ - New: 404 Not Found Page.
+ - New: Side menus are Bootstrap affixed in place.
+ - New: Using ScrollSpy highlighting on Pod doc pages.
+ - New: Added basic Stats page for tracking downloads.
+ - Chg: Duvet Modules are cached via ColdFeet.
+ - Bug: Tables in Pod API Page weren't sorted alphabetically.
+ - Bug: Links in 'DocTypeRef' (API hierarchy) went to the wrong version of the linked pod.
+ - Bug: Ensured that Fandoc anchor IDs are alphaNumeric - required for Bootstrap ScrollSpy.
+
+v0.0.2
+======
+ - New: Preview release.
+

@@ -1,0 +1,104 @@
+-- app.renderLayout(isPublic, "${pod.projectName} Summary")
+
+	== app.renderPodBreadcrumbs(fandocUri)
+
+	div.row
+		article.col-sm-9
+			== app.renderPodIcon(pod)
+			h1.podHeading	${pod.projectName} ${pod.version}
+				div.small;	== pod.summaryHtml
+
+			-- if (pod.meta.isInternal)
+				p;	i	${pod.projectName} is a support library that aids ${pod.meta.orgName ?: pod.owner.screenName} in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.
+
+			== aboutHtml.replace("${pod.projectName} ", "<mark>${pod.projectName}</mark> ").replace("${pod.projectName}.", "<mark>${pod.projectName}</mark>.").replace("${pod.projectName},", "<mark>${pod.projectName}</mark>,")
+
+
+		
+			h2	Install
+			p	To install ${pod.projectName} with the Fantom Repository Manager (<a class="externalLink" href="http://fantom.org/doc/docFanr/Tool.html#install">fanr</a>), cut'n'paste the following into a command prompt, terminal or shell: 
+				
+			a [href="#" onclick="return copyInstallText();" onmouseup="return false;" title="Click to hightlight, Ctrl+C to copy"]
+				pre.installText
+					input [type="text" readonly="readonly" value="fanr install -r ${bedServer.host}fanr/ ${installPodName}" onfocus="return copyInstallText();" onmouseup="return false;"]
+					i.fa.fa-clipboard.copyIcon
+			
+			p	Or to install manually, download the pod file and copy it to the <code>%FAN_HOME%/lib/fan/</code> directory.
+			
+			p.downloadPod
+				i.fa.fa-download.fa-lg
+				a (href="${fandocUri.toDownloadUrl.encode}" rel="nofollow")
+					|  ${pod.name}.pod 
+					small() ($${toFileSize(pod.fileSize)}) 
+
+					 
+			
+			h2	Use
+			p	To use ${pod.projectName} in a Fantom project, add a dependency to the project's <code>build.fan</code>:
+			== syntaxWriter.writeSyntax("""depends = ["sys 1.0", ..., "${pod.name} ${podVersionRange}"]""", "fan", false)
+		
+
+
+			-- if (pod.hasApi && pod.hasDocs)
+				h2	Documentation
+				ul.lead
+					-- if (pod.hasApi)
+						li; a (href="${pod.toApiUri.toClientUrl.encode}") API
+					-- if (pod.hasDocs)
+						-- docUri := pod.toDocUri
+						-- docUri.pageContents.each |title, page|
+							li; a (href="${docUri.toDocUri(page).toClientUrl.encode}") ${title}		
+
+
+
+			h2	Information
+			p	Meta information on the ${pod.projectName} pod:
+
+			dl.dl-horizontal
+				dt	Published by 
+				dd;	a (href="${userUrl(pod.owner)}") ${pod.owner.screenName}
+				-- if (pod.meta.orgName != null)
+					dt	Organisation 
+					-- if (pod.meta.orgUrl != null)
+						dd;	a.externalLink (href="${pod.meta.orgUrl.encode}") ${pod.meta.orgName}
+					-- else
+						dd ${pod.meta.orgName}
+				dt	Pod file size
+				dd	$${toFileSize(pod.fileSize)}
+				-- if (pod.meta.licenceName != null)
+					dt	Licence
+					dd	${pod.meta.licenceName}
+				dt	Built on
+				dd	${format(pod.builtOn)}
+				-- if (pod.meta.vcsUrl != null)
+					dt	Source code
+					dd	 
+						-- if (pod.meta.vcsName != null)
+							| via ${pod.meta.vcsName} 
+						| at 
+						a.externalLink (href="${pod.meta.vcsUrl.encode}") ${pod.meta.vcsUrl}
+				dt	Depends on 
+				dd;	== pod.dependsOn.join(", ") { linkToPod(it) }
+				dt	Contains Javascript
+				dd
+					-- if (pod.meta.jsEnabled)
+						span.jsIcon
+					-- else
+						| No
+
+		nav.col-sm-3.fixedsticky
+			div.sideMenu
+				hr.visible-xs
+				== app.renderPodToc(fandocUri)
+			
+				-- if (podVersions.size > 1)
+					h3	${podVersions.size} Releases
+					ul
+						-- podVersions.each
+							li;	a (href="${it.toSummaryUri.toClientUrl.encode}") ${it.version}
+
+	script |
+		function copyInstallText() {
+			document.querySelector(".installText input").select();
+			return false;
+		}

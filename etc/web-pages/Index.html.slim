@@ -1,0 +1,54 @@
+-- app.renderLayout(true, "Fantom Pod Repository")
+
+	h1.page-header.text-center	Fantom Pod Repository		
+
+	div.h1.text-center
+		p.small Libraries for the <a href="http://fantom.org">Fantom</a> Language are called <i>pods</i>. 
+		p.small This is a <i>repository</i> of pods.
+		
+	p	&nbsp;
+
+	div.row.hidden-xs
+		div.col-sm-4.col-md-4
+			h2.text-center	Publish Pods
+			ul.text-center.list-unstyled
+				li	<b>Public Pods</b> - anybody access them 
+				li	<b>Private Pods</b> - only you can access them
+
+		div.col-sm-4.col-md-4
+			h2.text-center	Read Pods
+			ul.text-center.list-unstyled
+				li	<b>User Guides</b>
+				li	<b>API</b> documentation
+
+		div.col-sm-4.col-md-4
+			h2.text-center	Download Pods
+			ul.text-center.list-unstyled
+				li	<b>Download</b> manually
+				li	<b>Install</b> with the <a href="http://fantom.org/doc/docFanr/Tool">fanr</a> tool
+				
+		p	&nbsp;
+
+	-- if (!loggedIn)
+		p.sm-text-center;	i 
+			a (href="${pageUrl(SignupPage#)}") Sign Up
+			|  to publish your pods to this site!
+
+	div.row
+
+		div.col-sm-6.col-sm-push-6.latestVersions
+			-- if (newVers.size > 0)
+				h2.sm-text-center	Latest Updates
+				== app.renderPodList(newVers)
+				div.sm-text-center
+					| See more in 
+					a (href="${pageUrl(PodsIndexPage#)}") All Pods
+					| ...
+		div.col-sm-6.col-sm-pull-6.latestPods
+			-- if (newPods.size > 0)
+				h2.sm-text-center	Latest Pods
+				== app.renderPodList(newPods)
+				div.sm-text-center
+					| See more in 
+					a (href="${pageUrl(PodsIndexPage#)}") All Pods
+					| ...

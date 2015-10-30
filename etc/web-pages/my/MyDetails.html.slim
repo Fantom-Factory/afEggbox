@@ -1,0 +1,18 @@
+-- app.renderLayout(false, "My Details")
+
+	ol.breadcrumb
+		li.active	Users
+		li;	a (href="${pages[UsersPage#].withContext([user.screenName]).pageUrl.encode}")	${user.screenName}
+		li.active	Edit
+
+	div.row
+		div.col-sm-6
+			h1.podHeading
+				span	edit
+				== user.screenName
+
+			form (action="${saveUrl}" method="post")
+				== formBean.renderErrors
+				== formBean.renderBean(user)
+				div.pull-right
+					button.btn.btn-primary (type="submit" name="save") Save

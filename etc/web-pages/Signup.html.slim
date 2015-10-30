@@ -1,0 +1,20 @@
+-- app.renderLayout(true, "Sign Up")
+
+	div.row
+		div.col-sm-offset-1.col-md-offset-2.col-sm-10.col-md-8
+			h1.page-header	Sign Up
+
+	div.row
+		div.col-sm-offset-3.col-sm-6
+	
+			form.clearfix.${formCss} (action="${signUpUrl}" method="post")
+				== formBean.renderErrors
+				== formBean.renderBean(signUpDetails)
+				div.pull-right
+					//a.btn.btn-link (href="${pageUrl(LoginPage#)}") Login
+					button.btn.btn-primary (type="submit" name="signUp") Sign Up!
+	
+			p	&nbsp;
+			p.pull-right	Already registered? Then 
+				a (href="${pageUrl(LoginPage#)}") Login
+				| !

@@ -1,0 +1,60 @@
+About This Repository
+*********************
+A central public repository of libraries is a valuable asset to any language, and Fantom is no exception. While Fantom has no official repository, the community has been reliably served by a functional repository at [Status302]`http://repo.status302.com/`.
+
+This Pod Repository was created by taking some existing ideas and enhancing it with a cleaner visual style and a host of features, such as:
+
+ - Pod documentation available for all pod versions
+ - Fandoc syntax highlighting
+ - Fandoc tables
+ - Fandoc images served from pod resources
+ - Fandoc link validation
+ - [Atom]`http://tools.ietf.org/html/rfc4287` (RSS) feeds for individual pods
+ - [Sitemap]`http://www.sitemaps.org/` XML generation
+ - Basic [Gravatar]`http://en.gravatar.com/` integration
+
+
+
+About Me
+********
+Hello! I'm Steve Eynon and I'm a computer programmer!
+
+I started programming when I was 8 years old. I was lured in by a rubber keyed ZX Spectrum 48K. There I quickly progressed to Assembler and wrote [3D Vector Demos]`http://www.alienfactory.co.uk/equinox/demos` on the Commodore Amiga. Subsequently I moved through C and Visual Basic before turning to Java and web applications, where I stayed for 10 years or more. More recently I've been involved with Ruby, C# and Javascript.
+
+All that experience has led to me to really appreciate the Fantom language. It tackles all the hard concepts like *concurrency*, *state* and *serialisation*, and *does them right!* It means I can concentrate on real application problems, and not pseudo-problems introduced by the language. (Why should I care about mutual exclusion and double locking failures? Managers don't!)
+
+Fantom also has small things like field properties, nullable types, and even [Elvis(!)]`docLang::Expressions#nullConvenience` that make it a joy to program. It's a pragmatic language that lets me get stuff done.
+
+So now I write programs and libraries in Fantom.
+
+I post on the [Fantom Forum]`http://fantom.org/forum/topic/` under the pseudonym **SlimerDude** and give updates on the [Fantom Google+]`https://plus.google.com/communities/108121220239226647550` page.
+
+
+
+About Fantom-Factory
+********************
+[Fantom-Factory]`http://www.fantomfactory.org` is a stylish website I created to help others learn about, and program in, Fantom. It has:
+
+ - [Articles for beginners]`article:http://www.fantomfactory.org/articles/fantom-for-beginners`
+ - [Articles on creating web applications]`article:bed-nap-tutorial`
+ - [Articles on Chuck Norris]`article:fantom-meets-chuck-norris`
+
+
+
+About The Future
+****************
+What does the future hold for Fantom?
+
+So far, I personally have created:
+ - Games - e.g. [Gundam]`http://www.alienfactory.co.uk/gundam/playonline`
+ - Desktop Applications - e.g. [Explorer]`http://pods.fantomfactory.org/pods/afExplorer/`
+ - A multitude of web sites and web applications - e.g. [this one]`http://pods.fantomfactory.org/pods/afEggbox/`!
+
+But why stop there? Fantom was specifically created to run on embedded devices, which means it's fast. [Faster than Java]`article:fantom-faster-than-java-and-kotlin` even! So think Raspberry Pi and beyond.
+
+Fantom on mobile applications (Android) is also possible but currently it needs a patch. Lobby this post on the Fantom Forum - [Android Demo]`http://fantom.org/forum/topic/2391` - to urge the Fantom developers to create an official implementation.
+
+As for me, my next big Fantom project is distributed Artificial Intelligence with Neural Nets and Genetic Algorithms in a gaming environment. Oh boy, it's gonna be cool!
+
+> Make your future a Fantomastic one!
+

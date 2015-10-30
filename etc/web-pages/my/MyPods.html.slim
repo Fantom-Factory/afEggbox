@@ -1,0 +1,69 @@
+-- app.renderLayout(false, "My Pods" + (allPods.isEmpty ? "" : " (${allPods.size})"))
+
+	ol.breadcrumb
+		li.active	My Pods
+
+	h1.podHeading
+		span	my
+		| Pods
+
+	-- if (allPods.isEmpty)
+		p	You have no pods! Why don't you upload one?
+	
+	-- else
+		p	You have ${allPods.size} pod${s(allPods.size)}.
+		div.table-responsive
+			table.table.table-striped.table-hover
+				thead
+					tr
+						th	Name
+						th	Version
+						th.text-nowrap	Built On
+						th.text-centre	Public
+						th.text-centre	D
+							span.hidden-xs.hidden-sm	eprecated
+						th.hidden-xs.hidden-sm.hidden-md	Summary
+						th	Documentation
+						th.text-nowrap.text-centre	Doc Errs
+						th.text-centre	Actions
+				tbody.rowlink (data-link="row")
+					-- allPods.each |pod|
+						tr.${pod.ownerId == loggedInUser._id ? "" : "bg-danger"}
+							td.text-nowrap;						b; a (href="${podSummaryUrl(pod)}") ${pod.projectName}
+							td.text-nowrap;						== pod.version
+							td.text-nowrap;						== pod.builtOn.toLocale("DDD MMM YYYY")
+							td.text-centre;						== pod.isPublic ? "\u2611" : "" // "\u2610";
+							td.text-centre;						== pod.isDeprecated ? "\u2611" : "" // "\u2610";
+							td.hidden-xs.hidden-sm.hidden-md;	== pod.summaryHtml
+							td.rowlink-skip.text-nowrap;		== podDocsHtml(pod)
+							td.rowlink-skip.text-centre;
+								-- if (pod.invalidLinks.isEmpty)
+									| -
+								-- else
+									a (href="${podValidateUrl(pod)}" title="Goto pod validate page")
+										span.badge.label.label-warning ${pod.invalidLinks.size}	
+							td.rowlink-skip.text-centre.text-nowrap
+								a.btn.btn-xs.btn-primary (href="${podEditUrl(pod)}") &nbsp;&nbsp;Edit Pod&nbsp;&nbsp;
+
+
+
+	p	&nbsp;
+
+	h2	Upload Pod File
+
+	div.row
+		div.col-sm-6
+
+			form.clearfix (action="${uploadUrl}" enctype="multipart/form-data" method="post")
+				== formBean.renderErrors
+				div.form-group
+					label (for="podFile")	Pod File
+					div.input-group
+						input.form-control (type="text" placeholder="No file selected..." disabled)
+						span.input-group-btn
+							span.btn.btn-info.btn-file	Browse&hellip; 
+								input#podFile (name="podFile" type="file" accept=".pod")
+
+				div.pull-right
+					button.btn.btn-primary (type="submit" name="upload") Upload
+			

@@ -1,0 +1,75 @@
+-- app.renderLayout(false, "${pod.projectName} Edit")
+
+	-- if (pod.owner != loggedInUser)
+		div.alert.alert-danger.alert-dismissible (role="alert")
+			button.close (type="button" data-dismiss="alert" aria-label="Close")
+				span (aria-hidden="true") &times;
+			span.t-alertMsg	This pod is owned by ${pod.owner.screenName} 
+
+	ol.breadcrumb
+		li;	a (href="${podsUrl}")	Pods
+		li;	a (href="${podSummaryUrl.toClientUrl.encode}")	${podSummaryUrl.title}
+		li.active	Edit
+
+	div.row
+		div.col-sm-12
+			h1.podHeading
+				span edit
+				| ${pod.projectName} ${pod.version}
+
+	div.row
+		div.col-sm-6
+		
+		
+		
+			h2#edit.alert.alert-info	Pod Details
+			
+			p Editing pod details only changes what is displayed on this website, it does <i>not</i> alter the contents of the uploaded pod.  
+			
+			form.clearfix (action="${saveUrl}" method="post")
+				== podEditFormBean.renderErrors
+				== podEditFormBean.renderBean(editDetails)
+				div.pull-right
+					button.btn.btn-primary (type="submit" name="save") Save	
+			
+			hr
+
+
+
+			h2#delete.alert.alert-danger	Delete Pod
+			
+			p	Use this form to delete ${pod.projectName} ${pod.version}.
+
+			form.clearfix (action="${deleteUrl}" method="post")
+				== podDeleteFormBean.renderErrors
+				== podDeleteFormBean.renderBean(null)
+				div.pull-right
+					button.btn.btn-danger (type="submit" name="delete") Delete
+
+			hr.visible-xs-block
+
+
+
+		div.col-sm-6
+			-- if (pod.invalidLinks.isEmpty)
+				h2.alert.alert-success	Documentation Errors
+				
+				p No documentation / linking errors were found.
+				
+			
+			-- if (pod.invalidLinks.size > 0)
+				h2#validate.alert.alert-warning	Documentation Errors
+
+				p ${pod.invalidLinks.size} document / linking errors were found on ${format(pod.linksValidatedOn)}:
+				ul.list-unstyled;	-- invalidLinkMap.each |msgs, uri|
+					li
+						b
+							a (href="${uri}") ${uri}
+						ul
+							-- msgs.each
+								li;	== it
+
+			form.clearfix (action="${validateUrl}" method="post")
+				div.pull-right
+					button.btn.btn-warning (type="submit" name="validate") Re-Validate
+					

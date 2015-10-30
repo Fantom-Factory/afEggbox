@@ -1,0 +1,62 @@
+-- app.renderLayout(isPublic, "${pod.projectName} API")
+
+	== app.renderPodBreadcrumbs(fandocUri)
+
+	div.row
+		article.col-sm-9.api
+			== app.renderPodIcon(pod)
+			h1.podHeading
+				span	pod
+				== pod.name
+
+			p;	== pod.summaryHtml
+			
+			-- if (!fandocUri.mixins.isEmpty)
+				h2	Mixins
+				table.table.table-striped.table-condensed.table-responsive
+					-- fandocUri.mixins.each |uri|
+						tr
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
+
+			-- if (!fandocUri.classes.isEmpty)
+				h2	Classes
+				table.table.table-striped.table-condensed.table-responsive
+					-- fandocUri.classes.each |uri|
+						tr
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
+			
+			-- if (!fandocUri.enums.isEmpty)
+				h2	Enums
+				table.table.table-striped.table-condensed.table-responsive
+					-- fandocUri.enums.each |uri|
+						tr
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
+
+			-- if (!fandocUri.facets.isEmpty)
+				h2	Facets
+				table.table.table-striped.table-condensed.table-responsive
+					-- fandocUri.facets.each |uri|
+						tr
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
+
+			-- if (!fandocUri.errs.isEmpty)
+				h2	Errs
+				table.table.table-striped.table-condensed.table-responsive
+					-- fandocUri.errs.each |uri|
+						tr
+							td;	a (href="${uri.toClientUrl.encode}"); == uri.title
+							td;	== uri.typeFirstSentenceHtml
+
+		nav.col-sm-3.fixedsticky
+			div.sideMenu
+				hr.visible-xs
+				== app.renderPodToc(fandocUri)
+	
+				h3	All Types
+				ul.list-unstyled
+					-- fandocUri.allTypes.each |uri|
+						li;	a (href="${uri.toClientUrl.encode}"); == uri.title

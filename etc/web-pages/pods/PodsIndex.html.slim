@@ -1,0 +1,50 @@
+-- app.renderLayout(true, "All Pods" + (countPublicPods == 0 ? "" : " (${countPublicPods})"))
+
+	style
+		-- allTags.each |tag|
+			|
+				#podsIndexPage .tag-${tag}-active .tag.label.tag-${tag} {
+					background-color:	#5cb85c;
+				}
+				#podsIndexPage .tag-${tag}-active .podList .media.tag-${tag} {
+					display:			block;
+				}
+
+	ol.breadcrumb
+		li.active	Pods
+
+	article
+		h1.podHeading
+			span	all
+			| Pods
+
+		-- if (allPods.isEmpty)
+			p	This repository has no pods! Why don't you upload one?
+		
+		-- else
+			div.pull-left
+				p	This repository has ${countPublicVersions} public version${s(countPublicVersions)} of ${countPublicPods} public pod${s(countPublicPods)}. 
+				-- if (!loggedIn)
+					p.pull-left;	i 
+						a (href="${pageUrl(SignupPage#)}") Sign Up
+						|  to publish your pods to this site! 
+
+			div.pull-right.btn-group
+				a#sortByName.btn.btn-default.${nameActive} (href="${pageMeta.pageUrl.plusQuery(["sortByName":"true"])}") Sort by Name
+				a#sortByDate.btn.btn-default.${dateActive} (href="${pageMeta.pageUrl.plusQuery(["sortByDate":"true"])}") Sort by Date
+
+			-- activeTagCss := allTags.join(" ") { "tag-${it}-active" } 
+			div#tags.clear-both.${activeTagCss} (data-allTags="${activeTagCss}")
+				p.text-center
+					-- allTags.each |tag|
+						span.tag.label.tag-${tag.fromDisplayName} (title="Show '${tag}' pods")
+							i.fa.fa-tag |  ${tag}
+						| &nbsp; 
+					span#btnAllTags.tag.label (title="Show all pods")
+						i.fa.fa-tag |  All
+					
+				hr
+
+				div.row
+					div.col-sm-10.col-sm-offset-1
+						== app.renderPodList(allPods)
