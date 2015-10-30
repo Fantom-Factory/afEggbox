@@ -51,7 +51,9 @@ const class UserSession {
 	}
 }
 
-@Serializable
-class UserSessionState {
-	Uri? email
+//@Serializable
+const class UserSessionState {
+	const Uri? email
+	
+	new make(|This|in) { in(this) }
 }
