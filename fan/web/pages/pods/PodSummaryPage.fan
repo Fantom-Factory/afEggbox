@@ -27,7 +27,7 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
 
 		if (eggboxConfig.googleAnalyticsEnabled)
-			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toUri)
+			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toClientUrl)
 	}
 
 	** Need to wait until *after* layout has rendered to find the HTML tag.
