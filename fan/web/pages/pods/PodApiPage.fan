@@ -6,12 +6,17 @@ using afPillow
 @Page { disableRoutes = true }
 const mixin PodApiPage : PrPage {
 
-	@PageContext	abstract FandocApiUri		fandocUri
-	
+	@PageContext	abstract FandocApiUri	fandocUri
+	@Inject	abstract EggboxConfig			eggboxConfig
+	@Inject	abstract GoogleAnalytics		googleAnalytics
+
 	@BeforeRender
 	Void beforeRender() {
 		if (fandocUri.toClientUrl != bedServer.toClientUrl(httpRequest.url) )
 			throw ReProcessErr(Redirect.movedTemporarily(fandocUri.toClientUrl))
+
+		if (eggboxConfig.googleAnalyticsEnabled)
+			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toUri)
 	}
 
 	RepoPod pod() {

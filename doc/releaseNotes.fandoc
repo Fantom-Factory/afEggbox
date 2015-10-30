@@ -6,6 +6,7 @@ v0.0.6
  - Chg: Tweaked the behaviour of the tag buttons on the *All Pods* page.
  - Chg: Upgraded to Bootstrap v3.3.5.
  - Chg: Added Documentation section to Pod Summary pages.
+ - Chg: Pod pages masquerade as the Summary page when sending page views to Google Analytics; for better reporting.
 
 v0.0.4
 ======

@@ -8,11 +8,12 @@ using afDuvet
 
 const mixin Layout : PrComponent {
 	
-	@Inject abstract HttpRequest	httpReq
-	@Inject abstract IocEnv			iocEnv
-	@Inject	abstract Alert			alert
-	@Inject	abstract EggboxConfig	eggboxConfig
-	@Inject	abstract EfanXtra		efanXtra
+	@Inject abstract HttpRequest		httpReq
+	@Inject abstract IocEnv				iocEnv
+	@Inject	abstract Alert				alert
+	@Inject	abstract EggboxConfig		eggboxConfig
+	@Inject	abstract EfanXtra			efanXtra
+	@Inject	abstract GoogleAnalytics	googleAnalytics
 
 	abstract Str? title
 	abstract Str? pageId
@@ -29,8 +30,11 @@ const mixin Layout : PrComponent {
 		
 		injector.injectStylesheet.fromLocalUrl(`/css/website.min.css`)
 		injector.injectRequireModule("bootstrap")
+
+		if (googleAnalyticsEnabled)
+			googleAnalytics.sendPageView
 	}
-	
+
 	Str pageTitle() {
 		title
 	}
@@ -47,4 +51,3 @@ const mixin Layout : PrComponent {
 		pageMeta.pageType == IndexPage#
 	}
 }
-

@@ -23,8 +23,7 @@ class TestPrivatePodVersions : WebFixture {
 	}
 	
 	Void checkLatestPod() {
-		
-		podLink := Link(".latestPod .podList .media-heading a")[0]
+		podLink := Link(".latestPods .podList .media-heading a")[0]
 		podLink.verifyHrefEq(`/pods/foo/`)
 		podLink.verifyTextEq("Foo 1.0")
 

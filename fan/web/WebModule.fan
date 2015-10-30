@@ -7,11 +7,10 @@ using afPillow
 using afEfanXtra::TemplateConverters
 using afFormBean::InputSkins
 using afFormBean::ErrorSkin
-using afGoogleAnalytics::GoogleAnalyticsConfigIds
 
-@SubModule { modules=[BedFrameModule#, FandocModule#] }
+@SubModule { modules=[BedFrameModule#, FandocModule#, GoogleAnalyticsModule#] }
 class WebModule {
-	
+
 	static Void defineServices(ServiceDefinitions defs) {
 		defs.add(Alert#)
 		defs.add(ErrorSkin#, BootstrapErrorSkin#)

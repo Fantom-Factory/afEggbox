@@ -11,6 +11,8 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract Registry			registry
 	@Inject			abstract RepoPodDao			podDao
 	@Inject			abstract SyntaxWriter		syntaxWriter
+	@Inject			abstract EggboxConfig		eggboxConfig
+	@Inject			abstract GoogleAnalytics	googleAnalytics
 	@PageContext	abstract FandocSummaryUri	fandocUri
 					abstract RepoPod[]			podVersions
 					abstract RepoPod?			pod
@@ -23,6 +25,9 @@ const mixin PodSummaryPage : PrPage {
 		podVersions = podDao.findPodVersions(pod.name)
 		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
 		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
+
+		if (eggboxConfig.googleAnalyticsEnabled)
+			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toUri)
 	}
 
 	** Need to wait until *after* layout has rendered to find the HTML tag.
