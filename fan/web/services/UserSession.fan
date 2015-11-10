@@ -51,7 +51,7 @@ const class UserSession {
 	}
 }
 
-//@Serializable
+@Serializable
 const class UserSessionState {
 	const Uri? email
 	
