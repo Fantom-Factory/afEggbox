@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 using fandoc
 
-@Page { disableRoutes = true }
+@Page { disableRouting = true }
 const mixin PodDocPage : PrPage {
 
 	@PageContext	abstract FandocDocUri	fandocUri

@@ -3,7 +3,7 @@ using afEfanXtra
 using afIoc
 using afIocConfig
 
-@Page { disableRoutes=true }
+@Page { disableRouting=true }
 const mixin Error404Page : PrPage {
 		
 	@Config { id="afGoogleAnalytics.accountNumber" }

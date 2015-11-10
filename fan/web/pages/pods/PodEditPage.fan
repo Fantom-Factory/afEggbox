@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 using afFormBean
 
-@Page { disableRoutes = true }
+@Page { disableRouting = true }
 const mixin PodEditPage : PrPage {
 
 					abstract RepoPod		pod
