@@ -5,7 +5,7 @@ using afPillow
 using syntax
 using web
 
-@Page { disableRoutes = true }
+@Page { disableRouting = true }
 const mixin PodSrcPage : PrPage {
 
 	@PageContext	abstract FandocSrcUri	fandocUri

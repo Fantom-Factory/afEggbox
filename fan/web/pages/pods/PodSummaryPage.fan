@@ -3,7 +3,7 @@ using afBedSheet
 using afEfanXtra
 using afPillow
 
-@Page { disableRoutes = true }
+@Page { disableRouting = true }
 const mixin PodSummaryPage : PrPage {
 	private static const Unit	bytes	:= Unit("byte")
 	private static const Unit[] units 	:= ["petabyte", "terabyte", "gigabyte", "megabyte", "kilobyte", "byte"].map { Unit(it) }
