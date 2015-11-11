@@ -18,8 +18,13 @@ const mixin PodBreadcrumbs : PrComponent {
 	override Str renderTemplate() {
 		html := StrBuf()
 
-		if (!fandocUri.isLatest)
-			html.add("""<div class="alert alert-warning" role="alert"><b>Warning:</b> This page pertains to an older version of ${fandocUri.pod.projectName}. <a href="${fandocUri.toLatest.toClientUrl.encode}">Click here for the latest.</a></div>""")
+		if (!fandocUri.isLatest) {
+			latestUrl := fandocUri.toLatest.toClientUrl
+			html.add("""<div class="alert alert-warning" role="alert"><b>Warning:</b> This page pertains to an older version of ${fandocUri.pod.projectName}. <a href="${latestUrl.encode}">Click here for the latest.</a></div>""")
+			injector.injectLink
+				.setAttr("rel",	"canonical")
+				.setAttr("href", bedServer.toAbsoluteUrl(latestUrl).encode)
+		}
 
 		html.add("<ol class=\"breadcrumb\">")
 		html.add("<li>")

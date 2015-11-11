@@ -94,7 +94,7 @@
 					-- podVersions.each |podVers|
 						li
 							-- podVers.each |podVer, i|
-								a (href="${podVer.toSummaryUri.toClientUrl.encode}") ${podVer.version}
+								a (href="${podVer.toSummaryUri.toClientUrl.encode}" rel="nofollow") ${podVer.version}
 								-- if (i != podVers.size-1)
 									|  -
 
