@@ -14,7 +14,7 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract EggboxConfig		eggboxConfig
 	@Inject			abstract GoogleAnalytics	googleAnalytics
 	@PageContext	abstract FandocSummaryUri	fandocUri
-					abstract RepoPod[]			podVersions
+					abstract RepoPod[][]		podVersions
 					abstract RepoPod?			pod
 	
 	@BeforeRender
@@ -22,7 +22,9 @@ const mixin PodSummaryPage : PrPage {
 		pod = fandocUri.pod
 		if (fandocUri.toClientUrl != bedServer.toClientUrl(httpRequest.url) )
 			throw ReProcessErr(Redirect.movedTemporarily(fandocUri.toClientUrl))
-		podVersions = podDao.findPodVersions(pod.name)
+		podVersions = groupBy(podDao.findPodVersions(pod.name)) |RepoPod item->Version| {
+			return Version([item.version.major, item.version.minor])
+		}.vals
 		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
 		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
 
@@ -92,6 +94,14 @@ const mixin PodSummaryPage : PrPage {
 	private static Str? conv(Unit unit, Float size) {
 		scalar	:= bytes.convertTo(size, unit)
 		return (scalar > 1f) ? ((unit.name == "byte") ? "$size.toInt bytes" : scalar.toLocale("#,##0.00") + "&#160;$unit.symbol") : null
+	}
+	
+	static Obj:Obj[] groupBy(Obj[] list, |Obj item, Int index->Obj| keyFunc) {
+		list.reduce(Obj:Obj[][:] { it.ordered = true}) |Obj:Obj[] bucketList, val, i| {
+			key := keyFunc(val, i)
+			bucketList.getOrAdd(key) { Obj[,] }.add(val)
+			return bucketList
+		}
 	}
 }
 
