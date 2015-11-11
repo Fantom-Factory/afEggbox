@@ -86,16 +86,23 @@
 					-- else
 						| No
 
+			-- podVersionsSize := podVersions.flatten.size
+			-- if (podVersionsSize > 1)
+				h2	Releases
+				p	There have been ${podVersionsSize} releases of ${pod.projectName}:
+				ul
+					-- podVersions.each |podVers|
+						li
+							-- podVers.each |podVer, i|
+								a (href="${podVer.toSummaryUri.toClientUrl.encode}") ${podVer.version}
+								-- if (i != podVers.size-1)
+									|  -
+
 		nav.col-sm-3.fixedsticky
 			div.sideMenu
 				hr.visible-xs
 				== app.renderPodToc(fandocUri)
 			
-				-- if (podVersions.size > 1)
-					h3	${podVersions.size} Releases
-					ul
-						-- podVersions.each
-							li;	a (href="${it.toSummaryUri.toClientUrl.encode}") ${it.version}
 
 	script |
 		function copyInstallText() {

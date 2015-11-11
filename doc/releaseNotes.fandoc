@@ -7,6 +7,7 @@ v0.0.6
  - Chg: Upgraded to Bootstrap v3.3.5.
  - Chg: Added Documentation section to Pod Summary pages.
  - Chg: Pod pages masquerade as the Summary page when sending page views to Google Analytics; for better reporting.
+ - Chg: Moved 'Releases' from a side menu to a sub heading on Pod summary pages. This gives documentation better visibility.
 
 v0.0.4
 ======
