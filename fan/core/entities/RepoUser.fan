@@ -85,10 +85,12 @@ class RepoUser {
 			if (res.statusCode == 200) {
 				try {
 					json := res.body.jsonMap
-					name := json->get("entry")?->getSafe(0)?->get("name")?->get("formatted")
-					abut := json->get("entry")?->getSafe(0)?->get("aboutMe")
+					enty := json->get("entry")?->getSafe(0)
+					name := enty?->get("name")
+					pref := (Bool) name?->isEmpty ? enty?->get("displayName") : name?->get("formatted")
+					abut := enty?->get("aboutMe")
 					if (realName?.trimToNull == null)
-						realName = name
+						realName = pref
 					if (aboutMe?.trimToNull == null)
 						aboutMe = abut
 					
