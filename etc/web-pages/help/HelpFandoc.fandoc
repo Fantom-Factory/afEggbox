@@ -126,7 +126,7 @@ syntax: fandoc
 
 Fandoc URIs
 ===========
-Pod Repository also offers an alternative 'fandoc' scheme. It's format is very similar to the URLs used by the website:
+Pod Repository also offers an alternative 'fandoc' scheme. It's format is very similar to the URLs used by the website. Taking the pod 'foo' as an example:
 
 pre>
 syntax: fandoc
