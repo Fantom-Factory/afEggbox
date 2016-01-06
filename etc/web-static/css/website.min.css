@@ -1437,5 +1437,5 @@ a.fandoc .brokenLink:focus{color:#843534;} .fandoc h2,
 #podDocPage #navToc li.active > a:hover{border-left:3px solid #5cb85c;border-radius:4px;padding-left:2px;} #podSummaryPage article h2,
 #podSummaryPage article h3{margin-top:40px;} #podSummaryPage .installText{cursor:pointer;} #podSummaryPage .installText input{width:100%;background-color:transparent;border-width:0;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box;padding-right:32px;position:relative;} #podSummaryPage .installText .copyIcon{position:absolute;right:24px;} #podSummaryPage .downloadPod{margin-bottom:20px;font-size:16px;font-weight:300;line-height:1.4;margin:20px 32px;}@media (min-width:768px) {
   #podSummaryPage .downloadPod{font-size:21px;}
-} #podsIndexPage .btn-group{margin-bottom:10px;} #podsIndexPage #tags{padding:10px 0;} #podsIndexPage .tag:hover{cursor:pointer;} #podsIndexPage .tag.label{background-color:#777777;} #podsIndexPage .podList .media{display:none;}
+} #podSummaryPage .podVersions .podVersion{display:inline-block;min-width:60px;} #podsIndexPage .btn-group{margin-bottom:10px;} #podsIndexPage #tags{padding:10px 0;} #podsIndexPage .tag:hover{cursor:pointer;} #podsIndexPage .tag.label{background-color:#777777;} #podsIndexPage .podList .media{display:none;}
 /*# sourceMappingURL=website.css.map */

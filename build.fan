@@ -44,7 +44,7 @@ class Build : BuildPod {
 			"afFormBean   1.0.0  - 1.1",
 			"afColdFeet   1.3.4  - 1.3",
 			"afSitemap    1.0.0  - 1.0",
-//			"afGoogleAnalytics 0.0 - 1.0",
+//			"afGoogleAnalytics 0.0 - 1.0",	// we've incorporated our own version until 1.0.68 is released
 			"afAtom       1.0.0  - 2.0",
 
 			// ---- Other -----------------------

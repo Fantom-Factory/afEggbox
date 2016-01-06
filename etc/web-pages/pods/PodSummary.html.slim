@@ -90,13 +90,14 @@
 			-- if (podVersionsSize > 1)
 				h2	Releases
 				p	There have been ${podVersionsSize} releases of ${pod.projectName}:
-				ul
+				ul.podVersions
 					-- podVersions.each |podVers|
 						li
 							-- podVers.each |podVer, i|
-								a (href="${podVer.toSummaryUri.toClientUrl.encode}" rel="nofollow") ${podVer.version}
-								-- if (i != podVers.size-1)
-									|  -
+								span.podVersion
+									a (href="${podVer.toSummaryUri.toClientUrl.encode}" rel="nofollow") ${podVer.version}
+									-- if (i != podVers.size-1)
+										| , 
 
 		nav.col-sm-3.fixedsticky
 			div.sideMenu
