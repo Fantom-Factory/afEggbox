@@ -40,49 +40,50 @@
 					-- type.slots.each |s|
 						-- if (DocFlags.isEnum(s.flags))
 							li;	a (href="#${s.name}")	${s.name}
-			
-			dl
-				-- type.slots.each |slot|
-					-- slotSrcUri := fandocUri.toSrcUri(type.name, slot.name)
-					dt
-						// put the ID in a div - 'cos the ID top offset fix don't work on dt tags
-						div#${slot.name}.id	$slot.name
-					dd
-						-- if (slotSrcUri.hasSrc)
-							p.src
-								a (href="${slotSrcUri.toClientUrl.encode}") Source
-	
-						p.sig; code
-							-- slot.facets.each |f|
-								== app.renderDocFacetTemplate(ctx, f)
-								br
-							
-							-- if (slot is DocField)
-								-- field := (DocField) slot
-								== DocFlags.toSlotDis(field.flags) + " "
-								== app.renderDocTypeRefTemplate(ctx, field.type, false)
-								== " ${field.name}"
-								== field.init != null ? " := ${field.init.toXml}" : ""
-								== field.setterFlags != null ? " { " + DocFlags.toSlotDis(field.setterFlags) + " set }" : ""
-							
-							-- else
-								-- method := (DocMethod) slot
-								-- if (DocFlags.isCtor(method.flags))
-									== DocFlags.isStatic(method.flags) ? "static " : ""
-									== "new"
+
+			section.slots
+				dl
+					-- type.slots.each |slot|
+						-- slotSrcUri := fandocUri.toSrcUri(type.name, slot.name)
+						dt
+							// put the ID in a div - 'cos the ID top offset fix don't work on dt tags
+							div#${slot.name}.id	$slot.name
+						dd
+							-- if (slotSrcUri.hasSrc)
+								p.src
+									a (href="${slotSrcUri.toClientUrl.encode}") Source
+		
+							p.sig; code
+								-- slot.facets.each |f|
+									== app.renderDocFacetTemplate(ctx, f)
+									br
+								
+								-- if (slot is DocField)
+									-- field := (DocField) slot
+									== DocFlags.toSlotDis(field.flags) + " "
+									== app.renderDocTypeRefTemplate(ctx, field.type, false)
+									== " ${field.name}"
+									== field.init != null ? " := ${field.init.toXml}" : ""
+									== field.setterFlags != null ? " { " + DocFlags.toSlotDis(field.setterFlags) + " set }" : ""
+								
 								-- else
-									== DocFlags.toSlotDis(method.flags) + " "
-									== app.renderDocTypeRefTemplate(ctx, method.returns, false)
-								== " $method.name("
-								-- method.params.each |param, i|
-									== i > 0 ? ", " : ""
-									== app.renderDocTypeRefTemplate(ctx, param.type, false)
-									== " $param.name"
-									== param.def != null ? " := $param.def.toXml" : ""
-								== ")"
-						
-						-- slotUri := fandocUri.toApiUri(type.name, slot.name)
-						== slotUri.slotHtml
+									-- method := (DocMethod) slot
+									-- if (DocFlags.isCtor(method.flags))
+										== DocFlags.isStatic(method.flags) ? "static " : ""
+										== "new"
+									-- else
+										== DocFlags.toSlotDis(method.flags) + " "
+										== app.renderDocTypeRefTemplate(ctx, method.returns, false)
+									== " $method.name("
+									-- method.params.each |param, i|
+										== i > 0 ? ", " : ""
+										== app.renderDocTypeRefTemplate(ctx, param.type, false)
+										== " $param.name"
+										== param.def != null ? " := $param.def.toXml" : ""
+									== ")"
+							
+							-- slotUri := fandocUri.toApiUri(type.name, slot.name)
+							== slotUri.slotHtml
 	
 		nav.col-sm-3.fixedsticky
 			div.sideMenu
