@@ -11,7 +11,7 @@ const mixin PodToc : PrComponent {
 	@InitRender
 	Void initRender(FandocUri fandocUri) {
 		this.fandocUri = fandocUri
-		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('body').scrollspy({ target: '#navToc' })")
+		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('body').scrollspy({ target: '#navToc', offset: 71 })")
 		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
 	}
 	

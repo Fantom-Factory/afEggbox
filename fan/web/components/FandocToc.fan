@@ -12,7 +12,7 @@ const mixin FandocToc : PrComponent {
 	@InitRender
 	Void initRender(Uri fileName) {
 		this.fileName = fileName
-//		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('body').scrollspy({ target: '#navToc' })")
+//		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('body').scrollspy({ target: '#navToc', offset: 71 })")
 		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
 	}
 	
