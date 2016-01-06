@@ -49,10 +49,11 @@ class Build : BuildPod {
 
 			// ---- Other -----------------------
 			"afButter     1.1.2  - 1.1",
-			"syntax       1.0.67 - 1.0",
-			"util         1.0.67 - 1.0",
-			"web          1.0.67 - 1.0",
-			"xml          1.0.67 - 1.0",
+			"afPegger     0.0.4",
+			"syntax       1.0.67",
+			"util         1.0.67",
+			"web          1.0.67",
+			"xml          1.0.67",
 
 			// ---- Test ------------------------
 			"afBounce     1.0.20 - 1.0",
@@ -60,7 +61,7 @@ class Build : BuildPod {
 			"afFancordionBootstrap 1.0.0  - 1.0"
 		]
 
-		srcDirs = [`test-spec/`, `test-spec/web/`, `test-spec/web/login/`, `test-spec/utils/`, `test-spec/fanr/`, `test-spec/core/`, `fan/`, `fan/web/`, `fan/web/util/`, `fan/web/services/`, `fan/web/pages/`, `fan/web/pages/pods/`, `fan/web/pages/my/`, `fan/web/pages/help/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/fanr/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/core/`, `fan/core/entities/`, `fan/core/database/`, `fan/bedframe/`, `fan/afGoogleAnal/`]
+		srcDirs = [`fan/`, `fan/afGoogleAnal/`, `fan/bedframe/`, `fan/core/`, `fan/core/database/`, `fan/core/entities/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanr/`, `fan/web/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/web/pages/`, `fan/web/pages/help/`, `fan/web/pages/my/`, `fan/web/pages/pods/`, `fan/web/services/`, `fan/web/util/`, `test-spec/`, `test-spec/core/`, `test-spec/fanr/`, `test-spec/utils/`, `test-spec/web/`, `test-spec/web/login/`]
 		resDirs = [`doc/`, `res/`, `test/res/`]
 		
 		meta["afBuild.docApi"] = "false"
