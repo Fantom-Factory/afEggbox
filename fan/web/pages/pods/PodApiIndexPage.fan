@@ -12,8 +12,9 @@ const mixin PodApiIndexPage : PrPage {
 
 	@BeforeRender
 	Void beforeRender() {
-		if (fandocUri.toClientUrl != bedServer.toClientUrl(httpRequest.url) )
-			throw ReProcessErr(Redirect.movedTemporarily(fandocUri.toClientUrl))
+		// redirect on dodgy name casing - this keeps GoogleAnalytics happy
+		if (fandocUri.podName != pod.name)
+			throw ReProcessErr(Redirect.movedTemporarily(pod.toApiUri.toClientUrl))
 
 		if (eggboxConfig.googleAnalyticsEnabled)
 			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toClientUrl)

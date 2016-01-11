@@ -57,6 +57,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	new make(|This| in) { in(this) }
 	
 	override RepoPod? get(Str id, Bool checked := true) {
+		// no cache as it's only used by testing
 		datastore.query(allPods.field("_id").eq(id.lower)).findOne(checked)
 	}
 

@@ -109,9 +109,9 @@ class RepoPod {
 		registry.autobuild(FandocApiUri#, [name, version, typeName, slotName])
 	}
 
-//	FandocSrcUri toSrcUri(Str typeName, Str? slotName := null) {
-//		registry.autobuild(FandocSrcUri#, [podName, podVersion, typeName, slotName])
-//	}
+	FandocSrcUri toSrcUri(Str typeName, Str? slotName := null) {
+		registry.autobuild(FandocSrcUri#, [name, version, typeName, slotName])
+	}
 
 	FandocDocUri toDocUri(Uri fileUri := `/doc/pod.fandoc`, Str? headingId := null) {
 		registry.autobuild(FandocDocUri#, [name, version, fileUri, headingId])

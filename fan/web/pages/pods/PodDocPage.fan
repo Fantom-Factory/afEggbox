@@ -13,8 +13,10 @@ const mixin PodDocPage : PrPage {
 
 	@BeforeRender
 	Void beforeRender() {
-		if (fandocUri.toClientUrl != bedServer.toClientUrl(httpRequest.url) )
-			throw ReProcessErr(Redirect.movedTemporarily(fandocUri.toClientUrl))
+		// redirect on dodgy name casing - this keeps GoogleAnalytics happy
+		if (fandocUri.podName != pod.name)
+			throw ReProcessErr(Redirect.movedTemporarily(pod.toDocUri(fandocUri.fileUri).toClientUrl))
+
 		injector.injectRequireModule("anchorJS", null, [".fandoc h2, .fandoc h3, .fandoc h4"])
 
 		if (eggboxConfig.googleAnalyticsEnabled)

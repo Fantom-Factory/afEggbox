@@ -20,8 +20,11 @@ const mixin PodSummaryPage : PrPage {
 	@BeforeRender
 	Void beforeRender() {
 		pod = fandocUri.pod
-		if (fandocUri.toClientUrl != bedServer.toClientUrl(httpRequest.url) )
-			throw ReProcessErr(Redirect.movedTemporarily(fandocUri.toClientUrl))
+
+		// redirect on dodgy name casing - this keeps GoogleAnalytics happy
+		if (fandocUri.podName != pod.name)
+			throw ReProcessErr(Redirect.movedTemporarily(pod.toSummaryUri.toClientUrl))
+
 		podVersions = groupBy(podDao.findPodVersions(pod.name)) |RepoPod item->Version| {
 			return Version([item.version.major, item.version.minor])
 		}.vals
