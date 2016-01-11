@@ -13,6 +13,9 @@
 
 			== aboutHtml.replace("${pod.projectName} ", "<mark>${pod.projectName}</mark> ").replace("${pod.projectName}.", "<mark>${pod.projectName}</mark>.").replace("${pod.projectName},", "<mark>${pod.projectName}</mark>,")
 
+			-- if (pod.hasDocs)
+				p;	a (href="${fandocUri.toDocUri.toClientUrl.encode}") Read more...
+
 
 		
 			h2	Install
@@ -31,7 +34,7 @@
 					|  ${pod.name}.pod 
 					small() ($${toFileSize(pod.fileSize)}) 
 
-					 
+
 			
 			h2	Use
 			p	To use ${pod.projectName} in a Fantom project, add a dependency to the project's <code>build.fan</code>:
