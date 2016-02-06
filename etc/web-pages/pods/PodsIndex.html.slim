@@ -42,9 +42,9 @@
 					div.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3
 						div.input-group
 							span.input-group-addon;	i.fa-search
-							input#searchBox.form-control (type="text" name="searchBox" placeholder="Search for pod..." value="" list="projNames" autocomplete="off")
+							input#searchBox.form-control (type="text" name="searchBox" placeholder="Search pods..." value="" list="projNames" autocomplete="off")
 							span.input-group-btn
-								button#searchGo.btn.btn-default (type="submit" data-exactMatch="false" disabled);	i Go!
+								button#searchGo.btn.btn-default (type="submit" disabled);	i Go!
 					datalist#projNames
 						-- allPods.each |pod|
 							option (value="${pod.projectName}")
