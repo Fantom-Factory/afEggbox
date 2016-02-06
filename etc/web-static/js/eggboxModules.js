@@ -389,6 +389,7 @@ define("podSearch", ["jquery", "debounce"], function($, debounce) {
 
 		$searchBox.focus();
 		$searchBox.select();
+		filterPods();
 	});
 });
 
