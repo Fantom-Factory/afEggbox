@@ -1,7 +1,7 @@
 
 div.podList
 	-- pods.each |pod|
-		div.media.${tagCss(pod)} (data-date="${Duration(pod.builtOn.ticks).toMin}" data-name="${pod.projectName}")
+		div.media.${tagCss(pod)} (data-date="${Duration(pod.builtOn.ticks).toMin}" data-name="${pod.projectName}" data-podname="${pod.name}")
 			div.media-left.tableIcon
 				a (href="${podSummaryUrl(pod)}")
 					div.media-object

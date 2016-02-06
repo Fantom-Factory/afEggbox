@@ -73,6 +73,12 @@
       "src": "fontawesome"
     },
     {
+      "uid": "ec21fe3492bb04d9e29103c319556ed8",
+      "css": "search",
+      "code": 61442,
+      "src": "mfglabs"
+    },
+    {
       "uid": "05a2f4c4839012434774cc1ceb4c0f9b",
       "css": "download",
       "code": 61465,

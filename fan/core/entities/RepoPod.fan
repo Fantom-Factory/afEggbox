@@ -11,18 +11,18 @@ class RepoPod {
 	@Inject private InvalidLinks?	invalidLinkFinder
 	@Inject private Registry?		registry
 
-	@Property{}	Str				_id
-	@Property{}	RepoPodMeta		meta
-	@Property{}	Int				fileSize
-	@Property{}	Int				ownerId
-	@Property{}	Str				aboutFandoc
-	@Property{}	InvalidLink[]	invalidLinks
-	@Property{}	DateTime?		linksValidatedOn
+	@Property	Str				_id
+	@Property	RepoPodMeta		meta
+	@Property	Int				fileSize
+	@Property	Int				ownerId
+	@Property	Str				aboutFandoc
+	@Property	InvalidLink[]	invalidLinks
+	@Property	DateTime?		linksValidatedOn
 
-	@Property{}	Bool			hasApi
-	@Property{}	Bool			hasDocs
-	@Property{}	Bool			hasIcon
-	@Property{}	Str?			iconDataUri
+	@Property	Bool			hasApi
+	@Property	Bool			hasDocs
+	@Property	Bool			hasIcon
+	@Property	Str?			iconDataUri
 
 	new make(|This|f) { f(this) }
 

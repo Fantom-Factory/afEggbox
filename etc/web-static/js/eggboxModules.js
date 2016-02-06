@@ -110,7 +110,7 @@ function AnchorJS(A){"use strict";this.options=A||{},this._applyRemainingDefault
 
 // ---- Pod Page Pod Filtering --------------------------------------------------------------------
 
-define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
+define("podFiltering", ["jquery", "tinysort", "debounce"], function($, tinysort, debounce) {
 
 	// TODO: should refactor this to have a model
 	$(document).ready(function() {
@@ -118,28 +118,42 @@ define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 		var $btnSortByName	= $("#sortByName");
 		var $btnSortByDate	= $("#sortByDate");
 		var $tags   		= $("#tags");
+		var $searchBox 		= $("#searchBox");
+		var $searchGo		= $("#searchGo");
 		var allTags 		= $tags.attr("data-allTags").split(" ");
 
 		function encodeUrl(all, none) {
 			var query = "";
 			if ($btnSortByName.hasClass("active"))
 				query = "?sortByName=true";
-			if ($btnSortByDate.hasClass("active"))
-				query = "?sortByDate=true";
+
+			// 'sortByDate' is the default, so just don't inlcude it in the URL
+			//if ($btnSortByDate.hasClass("active"))
+			//	query = "?sortByDate=true";
 
 			var tags = [];
 			if (all || none) {
-				if (all === true)
-					tags.push("all");
+			// 'all' is the default, so just don't inlcude it in the URL
+			//	if (all === true)
+			//		tags.push("all");
 				if (none === true)
 					tags.push("none");
-			} else
-				$.each($tags.attr("class").split(" "), function(i, val) {
-					if (val.indexOf("tag-") === 0 && val.indexOf("-active") > 0)
-						tags.push(val.slice(4, -7));
+			} else {
+				var allActive = true;
+				var activeTags = $tags.attr("class").split(" ");
+				$.each(allTags, function(i, tag) {
+					if ($.inArray(tag, activeTags) > -1)
+						tags.push(tag.slice(4, -7));
+					else
+						allActive = false;
 				});
+				if (allActive)
+					// 'all' is the default, so just don't inlcude it in the URL
+					tags.length = 0;
+			}
 			if (tags.length > 0) {
-				query += "&tags=";
+				query += (query === "") ? "?" : "&";
+				query += "tags=";
 				$.each(tags, function(i, val) {
 					if (i > 0)
 						query += ",";
@@ -147,13 +161,20 @@ define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 				});
 			}
 
-			history.pushState({}, "", query);
+			var searchBoxVal = $searchBox.val().trim();
+			if (searchBoxVal !== "") {
+				query += (query === "") ? "?" : "&";
+				query += "q=" + encodeURIComponent(searchBoxVal);
+			}
+
+			query += (query === "") ? "?" : "";
+			history.replaceState({}, "", query);
 		}
 
 		function decodeUrl() {
 			// see http://stackoverflow.com/a/2880929/1532548
 			var match,
-				pl     = /\+/g,  // Regex for replacing addition symbol with a space
+				pl     = /\+/g,  // Regex for replacing '+' symbol with a ' '
 				search = /([^&=]+)=?([^&]*)/g,
 				decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
 				query  = window.location.search.substring(1),
@@ -181,6 +202,10 @@ define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 					}
 				}
 			}
+			if (params["q"]) {
+				$searchBox.val(params["q"])
+				filterPods();
+			}
 		}
 
 		function sortByName() {
@@ -193,6 +218,54 @@ define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 			$btnSortByDate.addClass("active");
 			$btnSortByName.removeClass("active");
 			tinysort(".podList > .media", {data:"date", order:"desc"});
+		}
+
+		function filterPods() {
+			var searchTerm = $searchBox.val().trim().toLowerCase();
+			if (searchTerm === "")
+				$tags.removeClass("search-active");
+			else
+				$tags.addClass("search-active");
+
+			var exactMatch = false;
+			$(".podList > .media").each(function() {
+				var $this = $(this);
+				if ($this.data("name").toLowerCase().indexOf(searchTerm) > -1)
+					$this.removeClass("search-notFound");
+				else
+					$this.addClass("search-notFound");
+
+				if ($this.data("name").toLowerCase() === searchTerm)
+					exactMatch = true;
+			});
+
+			if (exactMatch) {
+				$searchGo.removeClass("btn-default");
+				$searchGo.addClass("btn-primary");
+				$searchGo.prop("disabled", false);
+				$searchGo.data("exactMatch", exactMatch);
+			} else {
+				$searchGo.removeClass("btn-primary");
+				$searchGo.addClass("btn-default");
+				$searchGo.prop("disabled", true);
+				$searchGo.data("exactMatch", exactMatch);
+			}
+
+			encodeUrl(false, false);
+		}
+
+		function submitSearch() {
+			var searchTerm	= $searchBox.val().trim().toLowerCase();
+			var podName		= null;
+
+			$(".podList > .media").each(function() {
+				var $this = $(this);
+				if ($this.data("name").toLowerCase() === searchTerm)
+					podName = $this.data("podname");
+			});
+
+			if (podName != null)
+				window.location.href = "/pods/" + podName + "/";
 		}
 
 		$(window).on("popstate", function() {
@@ -211,31 +284,27 @@ define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 		});
 
 		$tags.on("click", ".tag", function(event) {
-			var $tag = $(event.target).closest(".tag");
-			var valid = false;
+			var $tag 	= $(event.target).closest(".tag");
+			var tagName	= null;	// --> tag-web
 			$.each($tag.attr("class").split(" "), function(i, val) {
 				// check tag value to prevent "all" from triggering it
 				if (val.indexOf("tag-") === 0 && allTags.indexOf(val + "-active") > -1) {
-					// no more toggling!
-					//var toggle = $tag.closest(".podList").length === 0;
-					//if (toggle)
-					//	$tags.toggleClass(val + "-active");
-					//else {
-						$.each(allTags, function(i, tag) {
-							$tags.removeClass(tag);
-						});
-						$tags.addClass(val + "-active");
-						valid = true;
-					//}
+					tagName = val;
 				}
 			});
-			if (valid)
+			if (tagName != null) {
+				$.each(allTags, function(i, tag) {
+					$tags.removeClass(tag);
+				});
+				$tags.addClass(tagName + "-active");
 				encodeUrl(false, false);
+			}
 		});
 
+		// do this in JS because  tags are only buttons on the All Pods page
 		$.each(allTags, function(i, val) {
 			var tagName = val.slice(4, -7);
-			$("." + val.slice(0, -7)).attr("title", "Show '" + tagName + "' pods");
+			$(".tag." + val.slice(0, -7)).attr("title", "Show '" + tagName + "' pods");
 		});
 
 		$("#btnAllTags").on("click", function(event) {
@@ -244,15 +313,19 @@ define("podFiltering", ["jquery", "tinysort"], function($, tinysort) {
 			});
 			encodeUrl(true, false);
 		});
-		$("#btnNoTags").on("click", function(event) {
-			$.each(allTags, function(i, tag) {
-				$tags.removeClass(tag);
-			});
-			encodeUrl(false, true);
+
+		$searchBox.on("input", $.debounce(100, filterPods));
+
+		$("#searchForm").submit(function(event) {
+			event.preventDefault();
+			submitSearch();
 		});
 
 		// kick off Pod sorting on page load
 		decodeUrl();
+
+		$searchBox.focus();
+		$searchBox.select();
 	});
 
 });
@@ -292,6 +365,23 @@ define("tableSort", ["tinysort"], function(tinysort) {
 			}
 		});
 	}
+});
+
+
+
+// ---- TableSort ---------------------------------------------------------------------------------
+
+define("debounce", ["jquery"], function($) {
+
+	/*
+	 * jQuery throttle / debounce - v1.1 - 3/7/2010
+	 * http://benalman.com/projects/jquery-throttle-debounce-plugin/
+	 *
+	 * Copyright (c) 2010 "Cowboy" Ben Alman
+	 * Dual licensed under the MIT and GPL licenses.
+	 * http://benalman.com/about/license/
+	 */
+	(function(b,c){var $=b.jQuery||b.Cowboy||(b.Cowboy={}),a;$.throttle=a=function(e,f,j,i){var h,d=0;if(typeof f!=="boolean"){i=j;j=f;f=c}function g(){var o=this,m=+new Date()-d,n=arguments;function l(){d=+new Date();j.apply(o,n)}function k(){h=c}if(i&&!h){l()}h&&clearTimeout(h);if(i===c&&m>e){l()}else{if(f!==true){h=setTimeout(i?k:l,i===c?e-m:e)}}}if($.guid){g.guid=j.guid=j.guid||$.guid++}return g};$.debounce=function(d,e,f){return f===c?a(d,e,false):a(d,f,e!==false)}})(window);
 });
 
 
