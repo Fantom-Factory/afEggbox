@@ -9,6 +9,10 @@
 				#podsIndexPage .tag-${tag}-active .podList .media.tag-${tag} {
 					display:			block;
 				}
+				
+		| #podsIndexPage .search-active .podList .media.search-notFound {
+			display:	none;
+		}
 
 	ol.breadcrumb
 		li.active	Pods
@@ -33,6 +37,18 @@
 				a#sortByName.btn.btn-default.${nameActive} (href="${pageMeta.pageUrl.plusQuery(["sortByName":"true"])}") Sort by Name
 				a#sortByDate.btn.btn-default.${dateActive} (href="${pageMeta.pageUrl.plusQuery(["sortByDate":"true"])}") Sort by Date
 
+			p.row
+				form#searchForm (onsubmit="return false;")
+					div.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3
+						div.input-group
+							span.input-group-addon;	i.fa-search
+							input#searchBox.form-control (type="text" name="searchBox" placeholder="Search for pod..." value="" list="projNames" autocomplete="off")
+							span.input-group-btn
+								button#searchGo.btn.btn-default (type="submit" data-exactMatch="false" disabled);	i Go!
+					datalist#projNames
+						-- allPods.each |pod|
+							option (value="${pod.projectName}")
+
 			-- activeTagCss := allTags.join(" ") { "tag-${it}-active" } 
 			div#tags.clear-both.${activeTagCss} (data-allTags="${activeTagCss}")
 				p.text-center
@@ -48,3 +64,5 @@
 				div.row
 					div.col-sm-10.col-sm-offset-1
 						== app.renderPodList(allPods)
+
+						
