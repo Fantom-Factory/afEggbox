@@ -5,7 +5,8 @@ using afDuvet
 using afEfanXtra
 
 const mixin IndexPage : PrPage {
-
+	private static const Int noOfPodsInList	:= 5
+	
 	@Inject	abstract RepoPodDao		podDao
 			abstract RepoPod[]		newPods
 			abstract RepoPod[]		newVers
@@ -46,7 +47,7 @@ const mixin IndexPage : PrPage {
 		pods := podDao.findOldestPods.sortr(RepoPodDao.byBuildDate)
 		idx  := 0
 		return pods.map |oldPod| { 
-			if (idx >= 10)
+			if (idx >= noOfPodsInList)
 				return null
 			newPod := podDao.findPod(oldPod.name)
 			if (newPod.isDeprecated)
@@ -58,6 +59,6 @@ const mixin IndexPage : PrPage {
 
 	RepoPod[] _newVers() {
 		pods := podDao.findLatestPods.sortr(RepoPodDao.byBuildDate)
-		return pods.size < 10 ? pods : pods[0..<10]
+		return pods.size < noOfPodsInList ? pods : pods[0..<noOfPodsInList]
 	}
 }
