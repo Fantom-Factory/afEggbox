@@ -6,7 +6,22 @@
 		p.small Libraries for the <a href="http://fantom.org">Fantom</a> Language are called <i>pods</i>. 
 		p.small This is a <i>repository</i> of pods.
 		
+
 	p	&nbsp;
+
+	p.row
+		form#searchForm (onsubmit="return false;")
+			div.col-sm-10.col-sm-offset-1
+				div.input-group.input-group-lg
+					span.input-group-addon;	i.fa-search
+					input#searchBox.form-control (type="text" name="searchBox" placeholder="Search pods..." value="" list="projNames" autocomplete="off")
+					span.input-group-btn
+						button#searchGo.btn.btn-default (type="submit" disabled);	i Go!
+			datalist#projNames
+				-- allPods.each |pod|
+					option (value="${pod.projectName}" data-podname="${pod.name}")
+
+	p.row	&nbsp;
 
 	div.row.hidden-xs
 		div.col-sm-4.col-md-4
@@ -37,18 +52,22 @@
 	div.row
 
 		div.col-sm-6.col-sm-push-6.latestVersions
-			-- if (newVers.size > 0)
-				h2.sm-text-center	Latest Updates
-				== app.renderPodList(newVers)
-				div.sm-text-center
-					| See more in 
-					a (href="${pageUrl(PodsIndexPage#)}") All Pods
-					| ...
+			div.row
+				div.col-sm-12.col-md-10.col-md-offset-1.col-lg-8.col-lg-offset-2
+					-- if (newVers.size > 0)
+						h2.sm-text-center	Latest Updates
+						== app.renderPodList(newVers)
+						div.sm-text-center
+							| See more in 
+							a (href="${pageUrl(PodsIndexPage#)}") All Pods
+							| ...
 		div.col-sm-6.col-sm-pull-6.latestPods
-			-- if (newPods.size > 0)
-				h2.sm-text-center	Latest Pods
-				== app.renderPodList(newPods)
-				div.sm-text-center
-					| See more in 
-					a (href="${pageUrl(PodsIndexPage#)}") All Pods
-					| ...
+			div.row
+				div.col-sm-12.col-md-10.col-md-offset-1.col-lg-8.col-lg-offset-2
+					-- if (newPods.size > 0)
+						h2.sm-text-center	Latest Pods
+						== app.renderPodList(newPods)
+						div.sm-text-center
+							| See more in 
+							a (href="${pageUrl(PodsIndexPage#)}") All Pods
+							| ...

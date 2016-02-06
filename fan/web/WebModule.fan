@@ -71,7 +71,7 @@ class WebModule {
 	static Void contributeRequireJsConfigTweaks(Configuration conf) {
 		conf["app.bundles"] = |Str:Obj? config| {
 			bundles := (Str:Str[]) config.getOrAdd("bundles") { [Str:Str[]][:] }
-			bundles["eggboxModules"] = "fileInput unscramble rowLink anchorJS tinysort podFiltering tableSort debounce notFound".split
+			bundles["eggboxModules"] = "fileInput unscramble rowLink anchorJS tinysort podFiltering podSearch tableSort debounce notFound".split
 		}
 	}
 	

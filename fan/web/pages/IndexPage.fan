@@ -9,11 +9,14 @@ const mixin IndexPage : PrPage {
 	@Inject	abstract RepoPodDao		podDao
 			abstract RepoPod[]		newPods
 			abstract RepoPod[]		newVers
+			abstract RepoPod[]		allPods
 	
 	@InitRender
 	Void initRender() {
+		this.allPods = podDao.findLatestPods.exclude { it.isDeprecated }
 		this.newPods = _newPods
 		this.newVers = _newVers
+
 	}
 	
 	** Need to wait until *after* layout has rendered to find the HTML tag.
@@ -35,6 +38,8 @@ const mixin IndexPage : PrPage {
 		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
 		
 		injector.injectMeta.withName("description").withContent("A website for uploading, viewing and downloading 3rd Party Fantom libraries")
+		
+		injector.injectRequireModule("podSearch")
 	}
 	
 	RepoPod[] _newPods() {

@@ -243,12 +243,10 @@ define("podFiltering", ["jquery", "tinysort", "debounce"], function($, tinysort,
 				$searchGo.removeClass("btn-default");
 				$searchGo.addClass("btn-primary");
 				$searchGo.prop("disabled", false);
-				$searchGo.data("exactMatch", exactMatch);
 			} else {
 				$searchGo.removeClass("btn-primary");
 				$searchGo.addClass("btn-default");
 				$searchGo.prop("disabled", true);
-				$searchGo.data("exactMatch", exactMatch);
 			}
 
 			encodeUrl(false, false);
@@ -328,6 +326,70 @@ define("podFiltering", ["jquery", "tinysort", "debounce"], function($, tinysort,
 		$searchBox.select();
 	});
 
+});
+
+
+
+// ---- Index Page Pod Search ---------------------------------------------------------------------
+
+define("podSearch", ["jquery", "debounce"], function($, debounce) {
+
+	$(document).ready(function() {
+
+		var $searchBox 		= $("#searchBox");
+		var $searchGo		= $("#searchGo");
+		var allProjNames	= [];
+
+		$("#projNames option").each(function() {
+			allProjNames.push(this.getAttribute("value"));
+		});
+
+		function filterPods() {
+			var searchTerm = $searchBox.val().trim().toLowerCase();
+
+			var exactMatch = false;
+			$.each(allProjNames, function(i, val) {
+				if (val.toLowerCase() == searchTerm)
+					exactMatch = true;
+			});
+
+			$searchGo.prop("disabled", searchTerm === "");
+
+			if (exactMatch) {
+				$searchGo.removeClass("btn-default");
+				$searchGo.addClass("btn-primary");
+			} else {
+				$searchGo.removeClass("btn-primary");
+				$searchGo.addClass("btn-default");
+			}
+		}
+
+		function submitSearch() {
+			var searchTerm	= $searchBox.val().trim().toLowerCase();
+			var podName		= null;
+
+			$("#projNames option").each(function() {
+				var $this = $(this);
+				if ($this.val().toLowerCase() === searchTerm)
+					podName = $this.data("podname");
+			});
+
+			if (podName != null)
+				window.location.href = "/pods/" + podName + "/";
+			else
+				window.location.href = "/pods/?q=" + encodeURIComponent(searchTerm);
+		}
+
+		$searchBox.on("input", $.debounce(100, filterPods));
+
+		$("#searchForm").submit(function(event) {
+			event.preventDefault();
+			submitSearch();
+		});
+
+		$searchBox.focus();
+		$searchBox.select();
+	});
 });
 
 
