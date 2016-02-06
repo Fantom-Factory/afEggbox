@@ -10,6 +10,7 @@ const mixin PodsIndexPage : PrPage {
 	@Inject abstract RepoPodDao		podDao
 	@Inject abstract HttpResponse	httpResponse
 			abstract RepoPod[]		allPods
+			abstract Int			countPublicPods
 			abstract Bool			sortByName
 			abstract Str[]			allTags
 
@@ -28,6 +29,8 @@ const mixin PodsIndexPage : PrPage {
 		else
 			allPods = allPods.sortr(RepoPodDao.byBuildDate)
 		allTags = allPods.map { it.meta.tags }.flatten.unique.sort
+		
+		countPublicPods		= podDao.countPods(null)
 		
 		injector.injectRequireModule("podFiltering")
 		
