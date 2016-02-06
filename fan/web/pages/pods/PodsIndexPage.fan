@@ -10,8 +10,6 @@ const mixin PodsIndexPage : PrPage {
 	@Inject abstract RepoPodDao		podDao
 	@Inject abstract HttpResponse	httpResponse
 			abstract RepoPod[]		allPods
-			abstract Int			countPublicVersions
-			abstract Int			countPublicPods
 			abstract Bool			sortByName
 			abstract Str[]			allTags
 
@@ -31,9 +29,6 @@ const mixin PodsIndexPage : PrPage {
 			allPods = allPods.sortr(RepoPodDao.byBuildDate)
 		allTags = allPods.map { it.meta.tags }.flatten.unique.sort
 		
-		countPublicVersions = podDao.countVersions(null)
-		countPublicPods		= podDao.countPods(null)
-		
 		injector.injectRequireModule("podFiltering")
 		
 		// with all the params flying around on this page, ensure Google only indexes the main version
@@ -41,10 +36,6 @@ const mixin PodsIndexPage : PrPage {
 		canonicalUrl := bedServer.toAbsoluteUrl(pageMeta.pageUrl)
 		httpResponse.headers["Link"] = "<${canonicalUrl.encode}>; rel=\"canonical\""
 		injector.injectLink.fromExternalUrl(canonicalUrl).withRel("canonical")
-	}
-	
-	Str s(Int size) {
-		size > 1 ? "s" : "" 
 	}
 	
 	Str nameActive() {

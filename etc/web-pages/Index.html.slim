@@ -9,19 +9,26 @@
 
 	p	&nbsp;
 
-	p.row
-		form#searchForm (onsubmit="return false;")
-			div.col-sm-10.col-sm-offset-1
-				div.input-group.input-group-lg
-					span.input-group-addon;	i.fa-search
-					input#searchBox.form-control (type="text" name="searchBox" placeholder="Search pod names..." value="" list="projNames" autocomplete="off")
-					span.input-group-btn
-						button#searchGo.btn.btn-default (type="submit" disabled);	i Go!
-			datalist#projNames
-				-- allPods.each |pod|
-					option (value="${pod.projectName}" data-podname="${pod.name}")
+	form#searchForm.row (onsubmit="return false;")
+		div.col-sm-10.col-sm-offset-1
+			div.input-group.input-group-lg
+				span.input-group-addon;	i.fa-search
+				input#searchBox.form-control (type="text" name="searchBox" placeholder="Search pod names..." value="" list="projNames" autocomplete="off")
+				span.input-group-btn
+					button#searchGo.btn.btn-default (type="submit" disabled);	i Go!
+		datalist#projNames
+			-- allPods.each |pod|
+				option (value="${pod.projectName}" data-podname="${pod.name}")
 
-	p.row	&nbsp;
+	p	&nbsp;
+
+	p.row.text-center.text-muted	This repository has ${countPublicVersions} public version${s(countPublicVersions)} of ${countPublicPods} public pod${s(countPublicPods)}. 
+	-- if (!loggedIn)
+		p.row.sm-text-center.text-muted;	i 
+			a (href="${pageUrl(SignupPage#)}") Sign Up
+			|  to publish your pods to this site!
+
+	p	&nbsp;
 
 	div.row.hidden-xs
 		div.col-sm-4.col-md-4
@@ -44,13 +51,8 @@
 				
 		p	&nbsp;
 
-	-- if (!loggedIn)
-		p.sm-text-center;	i 
-			a (href="${pageUrl(SignupPage#)}") Sign Up
-			|  to publish your pods to this site!
 
 	div.row
-
 		div.col-sm-6.col-sm-push-6.latestVersions
 			div.row
 				div.col-sm-12.col-md-10.col-md-offset-1.col-lg-8.col-lg-offset-2

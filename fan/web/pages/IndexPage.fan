@@ -11,13 +11,16 @@ const mixin IndexPage : PrPage {
 			abstract RepoPod[]		newPods
 			abstract RepoPod[]		newVers
 			abstract RepoPod[]		allPods
+			abstract Int			countPublicVersions
+			abstract Int			countPublicPods
 	
 	@InitRender
 	Void initRender() {
 		this.allPods = podDao.findLatestPods.exclude { it.isDeprecated }
 		this.newPods = _newPods
 		this.newVers = _newVers
-
+		this.countPublicVersions	= podDao.countVersions(null)
+		this.countPublicPods		= podDao.countPods(null)
 	}
 	
 	** Need to wait until *after* layout has rendered to find the HTML tag.
@@ -60,5 +63,9 @@ const mixin IndexPage : PrPage {
 	RepoPod[] _newVers() {
 		pods := podDao.findLatestPods.sortr(RepoPodDao.byBuildDate)
 		return pods.size < noOfPodsInList ? pods : pods[0..<noOfPodsInList]
+	}
+	
+	Str s(Int size) {
+		size > 1 ? "s" : "" 
 	}
 }
