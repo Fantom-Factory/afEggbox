@@ -322,10 +322,16 @@ define("podFiltering", ["jquery", "tinysort", "debounce"], function($, tinysort,
 		// kick off Pod sorting on page load
 		decodeUrl();
 
-		$searchBox.focus();
-		$searchBox.select();
+		// the stoopid IE dropbox takes up most of the page!
+		var ua		= window.navigator.userAgent;
+		var msie	= ua.indexOf('MSIE ') > 0;
+		var trident = ua.indexOf('Trident/') > 0;
+		var edge	= ua.indexOf('Edge/') > 0;
+		if (!msie && !trident && !edge) {
+			$searchBox.focus();
+			$searchBox.select();
+		}
 	});
-
 });
 
 
@@ -387,8 +393,15 @@ define("podSearch", ["jquery", "debounce"], function($, debounce) {
 			submitSearch();
 		});
 
-		$searchBox.focus();
-		$searchBox.select();
+		// the stoopid IE dropbox takes up most of the page!
+		var ua		= window.navigator.userAgent;
+		var msie	= ua.indexOf('MSIE ') > 0;
+		var trident = ua.indexOf('Trident/') > 0;
+		var edge	= ua.indexOf('Edge/') > 0;
+		if (!msie && !trident && !edge) {
+			$searchBox.focus();
+			$searchBox.select();
+		}
 		filterPods();
 	});
 });
