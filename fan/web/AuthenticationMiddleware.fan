@@ -13,9 +13,6 @@ const class AuthenticationMiddleware : Middleware {
 	@Inject private const Pages			pages
 	@Inject	private const RepoPodDao	podDao
 
-	@Config { id="afColdFeet.urlPrefix" }
-	@Inject private const Str			coldFeetPrefix 
-
 	new make(|This|in) { in(this) }
 	
 	override Void service(MiddlewarePipeline pipeline)  {

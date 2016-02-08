@@ -9,7 +9,7 @@ const mixin LogoutPage : PrPage, SitemapExempt {
 		user := userSession.logout
 		if (user != null) {
 			alert.success = Msgs.alert_userLoggedOut(user)
-			activityDao.create(RepoActivity(user, LogMsgs.loggedIn))
+			activityDao.create(RepoActivity(user, LogMsgs.loggedOut))
 		}
 		throw ReProcessErr(Redirect.afterPost(pages[LoginPage#].pageUrl))
 	}
