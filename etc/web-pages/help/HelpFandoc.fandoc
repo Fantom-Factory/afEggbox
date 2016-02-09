@@ -1,5 +1,3 @@
- syntax: fandoc
-
 Syntax Highlighting
 *******************
 Preformatted text may have syntax highlighting applied (courtesy of the core [syntax]`syntax::index` pod). Simply prefix the 'pre' text with:
