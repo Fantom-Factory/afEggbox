@@ -38,7 +38,7 @@ const mixin PodBreadcrumbs : PrComponent {
 			uri = uri.toParentUri
 		}
 		
-		uris.eachRange(0..<-1){
+		uris.eachRange(0..<-1) {
 			html.add("<li>")
 			html.add("<a href=\"${it.toClientUrl.encode}\">${it.title.toXml}</a>")
 			html.add("</li>")

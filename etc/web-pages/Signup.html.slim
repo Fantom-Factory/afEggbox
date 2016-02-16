@@ -7,6 +7,9 @@
 	div.row
 		div.col-sm-offset-3.col-sm-6
 	
+			p.text-center	Sign up to create an account on this Pod Repository.
+			p.text-center	Registered users may upload and distribute their pods for free!
+	
 			form.clearfix.${formCss} (action="${signUpUrl}" method="post")
 				== formBean.renderErrors
 				== formBean.renderBean(signUpDetails)
