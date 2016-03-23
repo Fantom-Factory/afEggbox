@@ -1,7 +1,7 @@
-#Eggbox v0.0.4
+#Eggbox v0.0.6
 ---
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom.org/)
-[![pod: v0.0.4](http://img.shields.io/badge/pod-v0.0.4-yellow.svg)](http://www.fantomfactory.org/pods/afEggbox)
+[![pod: v0.0.6](http://img.shields.io/badge/pod-v0.0.6-yellow.svg)](http://www.fantomfactory.org/pods/afEggbox)
 ![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
 
 ## Overview
@@ -117,7 +117,7 @@ If the following properties are set then, Google's Universal Analytics script is
     afEggbox.googleAccNo     = XX-99999999-9
     afEggbox.googleAccDomain = //pods.fantomfactory.org/
 
-See [Google Analytics's Pod](http://pods.fantomfactory.org/pods/afGoogleAnalytics/api/index) for more details.
+See [Google Analytics's Pod](http://pods.fantomfactory.org/pods/afGoogleAnalytics) for more details.
 
 Google analytics is disabled by default.
 
