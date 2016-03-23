@@ -104,7 +104,7 @@ If the following properties are set then, Google's Universal Analytics script is
   afEggbox.googleAccNo     = XX-99999999-9
   afEggbox.googleAccDomain = //pods.fantomfactory.org/
 
-See [Google Analytics's Pod]`afGoogleAnalytics::index` for more details.
+See [Google Analytics's Pod]`pod:afGoogleAnalytics` for more details.
 
 Google analytics is disabled by default.
 

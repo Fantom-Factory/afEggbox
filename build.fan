@@ -6,14 +6,14 @@ class Build : BuildPod {
 
 	new make() {
 		podName = "afEggbox"
-		summary = "A website for uploading, viewing, and downloading Fantom pods"
-		version = Version("0.0.5")
+		summary = "A website for uploading, viewing, and downloading Fantom pods. Host your very own Pod Repository!"
+		version = Version("0.0.6")
 
 		meta = [
 			"proj.name"		: "Eggbox",
 			"afIoc.module"	: "afEggbox::CoreModule",
 			"repo.tags"		: "app",
-			"repo.public"	: "false"
+			"repo.public"	: "true"			
 		]
 
 		depends = [
@@ -64,22 +64,13 @@ class Build : BuildPod {
 		srcDirs = [`fan/`, `fan/afGoogleAnal/`, `fan/bedframe/`, `fan/core/`, `fan/core/database/`, `fan/core/entities/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanr/`, `fan/web/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/web/pages/`, `fan/web/pages/help/`, `fan/web/pages/my/`, `fan/web/pages/pods/`, `fan/web/services/`, `fan/web/util/`, `test/`, `test/res/`, `test-spec/`, `test-spec/core/`, `test-spec/fanr/`, `test-spec/utils/`, `test-spec/web/`, `test-spec/web/login/`]
 		resDirs = [`doc/`, `res/`, `test/res/`]
 		
-		meta["afBuild.docApi"] = "false"
-		meta["afBuild.docSrc"] = "false"
-	}
+		docApi	= false
+		docSrc	= false
 
-	@Target { help = "Compile to pod file and associated natives" }
-	override Void compile() {
-		// remove test pods from final build
-		testPods := "afBounce afFancordion afFancordionBootstrap".split
-		depends = depends.exclude { testPods.contains(it.split.first) }
-		
-		// remove test dir from final build
-		// I'm not so keen on relying on 'striptest' in %FAN_HOME%/etc/build.props
-		srcDirs = srcDirs.dup.exclude |uri| { uri.path.first.startsWith("test") }
-		resDirs = resDirs.dup.exclude |uri| { uri.path.first.startsWith("test") }
-
-		super.compile
+		meta["afBuild.docApi"]		= "false"
+		meta["afBuild.docSrc"]		= "false"
+		meta["afBuild.testPods"]	= "afBounce afFancordion afFancordionBootstrap"
+		meta["afBuild.testDirs"]	= "test/ test-spec/"
 	}
 
 	override Void onCompileFan(CompilerInput ci) {
