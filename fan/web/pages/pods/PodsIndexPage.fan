@@ -6,13 +6,15 @@ using afPillow
 @Page { disableRouting = true }
 const mixin PodsIndexPage : PrPage {
 
-	@Inject abstract Registry		registry
-	@Inject abstract RepoPodDao		podDao
-	@Inject abstract HttpResponse	httpResponse
-			abstract RepoPod[]		allPods
-			abstract Int			countPublicPods
-			abstract Bool			sortByName
-			abstract Str[]			allTags
+	@Inject abstract Registry			registry
+	@Inject abstract RepoPodDao			podDao
+	@Inject abstract HttpResponse		httpResponse
+	@Inject	abstract EggboxConfig		eggboxConfig
+	@Inject	abstract GoogleAnalytics	googleAnalytics
+			abstract RepoPod[]			allPods
+			abstract Int				countPublicPods
+			abstract Bool				sortByName
+			abstract Str[]				allTags
 
 	@BeforeRender
 	Void beforeRender() {
@@ -39,6 +41,9 @@ const mixin PodsIndexPage : PrPage {
 		canonicalUrl := bedServer.toAbsoluteUrl(pageMeta.pageUrl)
 		httpResponse.headers["Link"] = "<${canonicalUrl.encode}>; rel=\"canonical\""
 		injector.injectLink.fromExternalUrl(canonicalUrl).withRel("canonical")
+		
+		if (eggboxConfig.googleAnalyticsEnabled)
+			googleAnalytics.sendPageView(canonicalUrl)
 	}
 	
 	Str nameActive() {
