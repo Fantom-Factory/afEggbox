@@ -3,6 +3,7 @@ Versions
 v0.0.6
 ======
  - New: Added Pod search forms on the Index and Pods pages.
+ - New: Added Fantom-Factory branding to the top nav bar.
  - New: Added Fantom-Factory icon to 404 page.
  - Chg: Tweaked the behaviour of the tag buttons on the *All Pods* page.
  - Chg: Upgraded to Bootstrap v3.3.5.
