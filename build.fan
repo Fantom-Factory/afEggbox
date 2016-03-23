@@ -7,13 +7,13 @@ class Build : BuildPod {
 	new make() {
 		podName = "afEggbox"
 		summary = "A website for uploading, viewing, and downloading Fantom pods. Host your very own Pod Repository!"
-		version = Version("0.0.6")
+		version = Version("0.0.7")
 
 		meta = [
 			"proj.name"		: "Eggbox",
 			"afIoc.module"	: "afEggbox::CoreModule",
 			"repo.tags"		: "app",
-			"repo.public"	: "true"			
+			"repo.public"	: "false"			
 		]
 
 		depends = [
