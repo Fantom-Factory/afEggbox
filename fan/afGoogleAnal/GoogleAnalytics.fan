@@ -1,6 +1,7 @@
 using afIoc
 using afIocConfig
 using afDuvet
+using afBedSheet
 
 ** (Service) - 
 ** Renders the Google Universal Analytics script and sends page views and events.
@@ -11,6 +12,12 @@ const mixin GoogleAnalytics {
 
 	** Returns the account used to setup the google script. 
 	abstract Str accountNumber()
+
+	** Returns 'true' if this request has already sent a page view event.
+	** 
+	** This allows pages to send page views for canonical URLs and a layout component to send 
+	** general page views if the page hasn't done so. 
+	abstract Bool sentPageView()
 
 	** Sends a page view to google analytics. If 'url' is given then it should start with a leading '/', e.g. `/about`
 	abstract Void sendPageView(Uri? url := null)
@@ -34,6 +41,7 @@ internal const class GoogleAnalyticsImpl : GoogleAnalytics {
 	@Config { id="afIocEnv.isProd" }
 	@Inject	private const Bool? isProd
 
+	@Inject	private const HttpRequest	httpReq
 	@Inject	private const HtmlInjector	injector
 			private const Bool 			renderScripts
 			override const Str? 		accountDomain
@@ -55,9 +63,14 @@ internal const class GoogleAnalyticsImpl : GoogleAnalytics {
 		accountDomain = googleDomain.toStr.isEmpty ? bedSheetHost.host : googleDomain.host 
 	}
 	
+	override Bool sentPageView() {
+		httpReq.stash["afGoogleAnalytics.sentRequest"] == true
+	}
+	
 	override Void sendPageView(Uri? url := null) {
 		renderGuas
 		injector.injectScript.withScript(url == null ? "ga('send', 'pageview');" : "ga('send', 'pageview', '${url.encode}');")
+		httpReq.stash["afGoogleAnalytics.sentRequest"] = true
 	}
 
 	override Void sendEvent(Str category, Str action, Str? label := null) {
