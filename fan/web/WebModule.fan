@@ -62,7 +62,8 @@ class WebModule {
 	
 	@Contribute { serviceType=ScriptModules# }
 	static Void contributeScriptModules(Configuration config, FileHandler fh) {
-		config.add(ScriptModule("jquery"		).atUrl(`//code.jquery.com/jquery-1.11.2.min.js`).fallbackToUrl(fh.fromLocalUrl(`/js/jquery-1.11.2.min.js`).clientUrl))
+		// Internet explorer doesn't like CDN URLs starting with // so http:// is used 
+		config.add(ScriptModule("jquery"		).atUrl(`http://code.jquery.com/jquery-1.11.2.min.js`).fallbackToUrl(fh.fromLocalUrl(`/js/jquery-1.11.2.min.js`).clientUrl))
 		config.add(ScriptModule("bootstrap"		).atUrl(fh.fromLocalUrl(`/js/bootstrap.min.js`).clientUrl).requires("jquery"))
 		config.add(ScriptModule("eggboxModules"	).atUrl(fh.fromLocalUrl(`/js/eggboxModules.js`).clientUrl))
 	}
@@ -71,7 +72,7 @@ class WebModule {
 	static Void contributeRequireJsConfigTweaks(Configuration conf) {
 		conf["app.bundles"] = |Str:Obj? config| {
 			bundles := (Str:Str[]) config.getOrAdd("bundles") { [Str:Str[]][:] }
-			bundles["eggboxModules"] = "fileInput unscramble rowLink anchorJS tinysort podFiltering podSearch tableSort debounce notFound".split
+			bundles["eggboxModules"] = "fileInput unscramble rowLink anchorJS tinysort podFiltering podSearch tableSort debounce notFound hiveSparks".split
 		}
 	}
 	

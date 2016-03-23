@@ -30,6 +30,7 @@ const mixin Layout : PrComponent {
 		
 		injector.injectStylesheet.fromLocalUrl(`/css/website.min.css`)
 		injector.injectRequireModule("bootstrap")
+		injector.injectRequireModule("hiveSparks")
 
 		if (googleAnalyticsEnabled)
 			googleAnalytics.sendPageView

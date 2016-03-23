@@ -21,9 +21,9 @@ const mixin PrComponent : EfanComponent {
 	@Inject	abstract RepoActivityDao	activityDao
 	@Inject	abstract BedSheetServer		bedServer
 	
-//	Str assetUrl(Uri localUrl) {
-//		fileHandler.fromLocalUrl(localUrl).clientUrl.encode 
-//	}
+	Str assetUrl(Uri localUrl) {
+		fileHandler.fromLocalUrl(localUrl).clientUrl.encode 
+	}
 
 	Str pageUrl(Type pageType, Obj?[]? pageCtx := null) {
 		pages[pageType].withContext(pageCtx).pageUrl.encode
