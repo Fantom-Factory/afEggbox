@@ -91,6 +91,10 @@
 					-- else
 						| No
 
+			h2	Dependency Graph
+			div.dependencyGraph
+				span.text-muted	(style="position:absolute;") &nbsp; Use mouse to re-position pods
+
 			-- podVersionsSize := podVersions.flatten.size
 			-- if (podVersionsSize > 1)
 				h2	Previous Releases
@@ -108,6 +112,7 @@
 			div.sideMenu
 				hr.visible-xs
 				== app.renderPodToc(fandocUri)
+				
 			
 
 	script |

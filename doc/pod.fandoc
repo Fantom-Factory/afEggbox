@@ -232,9 +232,11 @@ The following, non-Fantom, libraries and services are used by Eggbox:
 
  - [AnchorJs]`http://bryanbraun.github.io/anchorjs/`
  - [Bootstrap]`http://getbootstrap.com/`
+ - [D3.js]`https://d3js.org/`
  - [Gravatar]`http://en.gravatar.com/`
  - [Jasny Bootstrap Row Link]`http://jasny.github.io/bootstrap/javascript/#rowlink`
  - [jQuery]`https://jquery.com/`
+ - [jQuery Throttle / Debounce]`http://benalman.com/projects/jquery-throttle-debounce-plugin/`
  - [RequireJs]`http://requirejs.org/`
  - [Shields.io]`http://shields.io/`
  - [Tinysort]`http://tinysort.sjeiti.com/`

@@ -1,5 +1,130 @@
 "use strict";
 
+// ---- Pod Dependency Graph ----------------------------------------------------------------------
+
+define("onReveal", ["jquery"], function ($) {
+	return function(div, func) {
+		$(document).ready(function () {
+			var $div = $(div);
+			if ($div.size() > 0 ) {
+
+				var revealed = false;
+				var divTop = $div.offset().top;
+				var revealCheck = function () {
+					if (!revealed && $(window).scrollTop() + $(window).height() > divTop) {
+						revealed = true;
+						func();
+					}
+				};
+
+				$(window).scroll(revealCheck);
+				revealCheck();
+			}
+		});
+	}
+});
+
+define("podGraph", ["d3", "jquery", "onReveal", "debounce"], function(d3, $, onReveal, debounce) {
+	return function(thePod, links) {
+		onReveal(".dependencyGraph", function() { boing(thePod, links) });
+	}
+
+	function boing(thePod, links) {
+
+		// based on http://bl.ocks.org/mbostock/1153292
+		var nodes = {};
+
+		// Compute the distinct nodes from the links.
+		links.forEach(function(link) {
+			link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+			link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+		});
+
+		// add the css styles
+		links.forEach(function(link) {
+			if (link.css !== "") nodes[link.target.name].css = link.css;
+		});
+		nodes[thePod].css = "thisPod";
+
+		var width  = d3.select(".dependencyGraph").node().getBoundingClientRect().width;
+		var height = 300;
+
+		var force = d3.layout.force()
+			.nodes(d3.values(nodes))
+			.links(links)
+			.size([width, height])
+			.linkDistance(90)
+			.charge(-1000)
+			.on("tick", tick)
+			.start();
+
+		var svg = d3.select(".dependencyGraph").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+		// define the arrow head
+		svg.append("defs").selectAll("marker")
+			.data(["end"])
+			.enter()
+			.append("marker")
+			.attr("id", function(d) { return d; })
+			.attr("viewBox", "0 -5 10 10")
+			.attr("refX", 30)
+			.attr("refY", 0)
+			.attr("markerWidth", 6)
+			.attr("markerHeight", 6)
+			.attr("orient", "auto")
+			.append("path")
+			.attr("d", "M0,-5L10,0L0,5");
+
+		// convert links to svg
+		var link = svg.append("g").selectAll("path")
+			.data(force.links())
+			.enter().append("line")
+			.attr("class", "link")
+			//.attr("stroke-width", "1.5px")
+			.attr("marker-end", "url(#end)");
+
+		// convert nodes to svg circles
+		var node = svg.append("g").selectAll("circle")
+			.data(force.nodes())
+			.enter().append("circle")
+			.attr("r", 16)
+			.attr("class", function(d) { return d.css; })
+			.call(force.drag);
+
+		// convert nodes to svg text labels
+		var text = svg.append("g").selectAll("text")
+			.data(force.nodes())
+			.enter().append("text")
+			.attr("x", 8)
+			.attr("y", ".31em")
+			.text(function(d) { return d.name; });
+
+		// Use elliptical arc path segments to doubly-encode directionality.
+		function tick() {
+			node.attr("transform", transform);
+			text.attr("transform", transform);
+			link.attr("x1", function(d) { return d.source.x; })
+				.attr("y1", function(d) { return d.source.y; })
+				.attr("x2", function(d) { return d.target.x; })
+				.attr("y2", function(d) { return d.target.y; });
+		}
+
+		function transform(d) {
+			return "translate(" + d.x + "," + d.y + ")";
+		}
+
+		$(window).on('resize', $.debounce(200, resizeGraph));
+		function resizeGraph() {
+			var width  = d3.select(".dependencyGraph").node().getBoundingClientRect().width;
+			svg.attr("width", width);
+			force.size([width, height]).resume();	// perturb the graph on resize
+		}
+	}
+});
+
+
 // ---- Unscramble Module -------------------------------------------------------------------------
 
 define("unscramble", [], function() {

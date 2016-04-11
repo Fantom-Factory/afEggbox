@@ -1,5 +1,9 @@
 Versions
 ********
+v0.0.8
+======
+ - New: Dependency graph force layout on pod summary page.
+ 
 v0.0.6
 ======
  - New: Added Pod search forms on the Index and Pods pages.

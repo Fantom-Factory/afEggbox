@@ -66,13 +66,14 @@ class WebModule {
 		config.add(ScriptModule("jquery"		).atUrl(`http://code.jquery.com/jquery-1.11.2.min.js`).fallbackToUrl(fh.fromLocalUrl(`/js/jquery-1.11.2.min.js`).clientUrl))
 		config.add(ScriptModule("bootstrap"		).atUrl(fh.fromLocalUrl(`/js/bootstrap.min.js`).clientUrl).requires("jquery"))
 		config.add(ScriptModule("eggboxModules"	).atUrl(fh.fromLocalUrl(`/js/eggboxModules.js`).clientUrl))
+		config.add(ScriptModule("d3"			).atUrl(fh.fromLocalUrl(`/js/d3.min.js`).clientUrl).exports("d3"))
 	}
 	
 	@Contribute { serviceType=RequireJsConfigTweaks# }
 	static Void contributeRequireJsConfigTweaks(Configuration conf) {
 		conf["app.bundles"] = |Str:Obj? config| {
 			bundles := (Str:Str[]) config.getOrAdd("bundles") { [Str:Str[]][:] }
-			bundles["eggboxModules"] = "fileInput unscramble rowLink anchorJS tinysort podFiltering podSearch tableSort debounce notFound hiveSparks".split
+			bundles["eggboxModules"] = "onReveal podGraph fileInput unscramble rowLink anchorJS tinysort podFiltering podSearch tableSort debounce notFound hiveSparks".split
 		}
 	}
 	
