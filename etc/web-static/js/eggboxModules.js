@@ -78,11 +78,10 @@ define("podGraph", ["d3", "jquery", "onReveal", "debounce"], function(d3, $, onR
 			.attr("d", "M0,-5L10,0L0,5");
 
 		// convert links to svg
-		var link = svg.append("g").selectAll("path")
+		var link = svg.append("g").selectAll("line")
 			.data(force.links())
 			.enter().append("line")
 			.attr("class", "link")
-			//.attr("stroke-width", "1.5px")
 			.attr("marker-end", "url(#end)");
 
 		// convert nodes to svg circles
@@ -101,10 +100,23 @@ define("podGraph", ["d3", "jquery", "onReveal", "debounce"], function(d3, $, onR
 			.attr("y", ".31em")
 			.text(function(d) { return d.name; });
 
-		// Use elliptical arc path segments to doubly-encode directionality.
+		// http://stackoverflow.com/a/16135837/1532548
+		var isIe = navigator.appVersion.indexOf("MSIE 10") !== -1;
+		if (!isIe)
+			isIe = navigator.userAgent.indexOf("Trident") !== -1 && navigator.userAgent.indexOf("rv:11") !== -1;
+
+		// this tick() func is run on every, um, tick!
 		function tick() {
+			// obligatory hack for IE
+			// see http://stackoverflow.com/a/18475039/1532548
+			if (isIe)
+				link.each(function() {
+					this.parentNode.insertBefore(this, this);
+				});
+
 			node.attr("transform", transform);
 			text.attr("transform", transform);
+
 			link.attr("x1", function(d) { return d.source.x; })
 				.attr("y1", function(d) { return d.source.y; })
 				.attr("x2", function(d) { return d.target.x; })
