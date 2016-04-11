@@ -46,6 +46,11 @@ class RepoPod {
 		}
 	}
 	
+	** Used by PodSummaryPage
+	Depend depend() {
+		Depend("$name $version")
+	}
+	
 	This save() {
 		(RepoPod) podDao.update(this)
 	}

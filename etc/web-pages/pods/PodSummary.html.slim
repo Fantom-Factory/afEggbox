@@ -82,6 +82,8 @@
 						a.externalLink (href="${pod.meta.vcsUrl.encode}") ${pod.meta.vcsUrl}
 				dt	Depends on 
 				dd;	== pod.dependsOn.join(", ") { linkToPod(it) }
+				dt	Referenced by 
+				dd;	== referencedBy.map { it.depend }.join(", ") { linkToPod(it) }
 				dt	Javascript Compatible
 				dd
 					-- if (pod.meta.jsEnabled)
@@ -91,7 +93,7 @@
 
 			-- podVersionsSize := podVersions.flatten.size
 			-- if (podVersionsSize > 1)
-				h2	Releases
+				h2	Previous Releases
 				p	There have been ${podVersionsSize} releases of ${pod.projectName}:
 				ul.podVersions
 					-- podVersions.each |podVers|
