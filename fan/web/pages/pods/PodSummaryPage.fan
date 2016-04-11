@@ -13,9 +13,11 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract SyntaxWriter		syntaxWriter
 	@Inject			abstract EggboxConfig		eggboxConfig
 	@Inject			abstract GoogleAnalytics	googleAnalytics
+	@Inject			abstract CorePods			corePods
 	@PageContext	abstract FandocSummaryUri	fandocUri
 					abstract RepoPod[][]		podVersions
 					abstract RepoPod[]			referencedBy
+					abstract Str:RepoPod		allPods
 					abstract RepoPod?			pod
 	
 	@BeforeRender
@@ -35,12 +37,37 @@ const mixin PodSummaryPage : PrPage {
 		if (eggboxConfig.googleAnalyticsEnabled)
 			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toClientUrl)
 	
-		
-		referencedBy = podDao.findLatestPods(loggedInUser).findAll |p| {
+		allPods = Str:RepoPod[:].addList(podDao.findLatestPods(loggedInUser)) { it.name }
+		referencedBy = allPods.vals.findAll |p| {
 			p.dependsOn.any {
 				it.name == pod.name && it.match(pod.version) 
 			}
 		}.sort |p1, p2| { p1.name <=> p2.name }
+		
+		deps := Str[][,]
+		pod.dependsOn.each { addDeps(pod.name, it, deps) }
+		deps = deps.unique.exclude { it[1] == "sys" }
+		json := deps.unique.map { ["source":it[0], "target":it[1], "css":it[2]] }
+		
+		injector.injectRequireModule("podGraph", null, [pod.projectName, json])
+	}
+	
+	private Void addDeps(Str source, Depend target, Str[][] deps) {
+		if (corePods.isCorePod(target.name)) {
+			src := allPods[source]?.projectName ?: source 
+			deps.add(Str[src, target.name, source == pod.name ? "direct" : ""])
+			corePods.depends(target.name).each {
+				addDeps(target.name, it, deps)
+			}
+		} else {
+			// test with BedSheet draft
+			src := allPods[source]?.projectName ?: source 
+			tPod := allPods[target.name]
+			deps.add(Str[src, tPod?.projectName ?: target.name, source == pod.name ? "direct" : ""])
+			tPod?.dependsOn?.each {
+				addDeps(tPod.name, it, deps)				
+			}
+		}
 	}
 
 	** Need to wait until *after* layout has rendered to find the HTML tag.

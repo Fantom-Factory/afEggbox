@@ -36,4 +36,35 @@
 		display:				inline-block;
 		min-width:				60px;
 	}
+
+	.dependencyGraph {
+		border	: 1px solid #000;
+		
+		.link {
+			fill			: none;
+			stroke			: #666;
+			stroke-width	: 1.5px;	// IE can't show 1.5px!
+		}
+
+		circle {
+			fill			: #ccc;
+			stroke			: #333;
+			stroke-width	: 1.5px;
+		}
+		circle.thisPod {
+			fill			: #0f0;
+		}
+		circle.direct {
+			fill			: #6c6;
+		}
+		circle:hover {
+			cursor			: pointer;
+		}
+
+		text {
+			font			: 13px sans-serif;
+			pointer-events	: none;
+			text-shadow		: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+		}
+	}
 }
