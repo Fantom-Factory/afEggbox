@@ -15,6 +15,7 @@ const mixin PodSummaryPage : PrPage {
 	@Inject			abstract GoogleAnalytics	googleAnalytics
 	@PageContext	abstract FandocSummaryUri	fandocUri
 					abstract RepoPod[][]		podVersions
+					abstract RepoPod[]			referencedBy
 					abstract RepoPod?			pod
 	
 	@BeforeRender
@@ -33,6 +34,13 @@ const mixin PodSummaryPage : PrPage {
 
 		if (eggboxConfig.googleAnalyticsEnabled)
 			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toClientUrl)
+	
+		
+		referencedBy = podDao.findLatestPods(loggedInUser).findAll |p| {
+			p.dependsOn.any {
+				it.name == pod.name && it.match(pod.version) 
+			}
+		}.sort |p1, p2| { p1.name <=> p2.name }
 	}
 
 	** Need to wait until *after* layout has rendered to find the HTML tag.
