@@ -301,7 +301,7 @@ Example '/doc/contents.fog'
 
   syntax: fantom
 
-  [Uri:Str][
+  [sys::Uri:sys::Str][
       `/doc/pod.fandoc`           : "User Guide",
       `/doc/page2.fandoc`         : "Page 2",
       `http://www.example.com`    : "External Link",
@@ -341,4 +341,4 @@ Should the pod's summary page be shared on social media (Facebook, Reddit, etc..
 
 Requirements for ogimages differ from media site to media site, but typically they should be *large!*
 
-Alien-Factory takes the middle ground and usually defines it's ogimages as 512px x 512px versions of pod icons.
+Alien-Factory takes the middle ground and usually defines it's ogimages as 1024px x 512px versions of pod icons.
