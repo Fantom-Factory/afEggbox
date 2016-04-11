@@ -43,7 +43,7 @@ const mixin PodsIndexPage : PrPage {
 		injector.injectLink.fromExternalUrl(canonicalUrl).withRel("canonical")
 		
 		if (eggboxConfig.googleAnalyticsEnabled)
-			googleAnalytics.sendPageView(canonicalUrl)
+			googleAnalytics.sendPageView(pageMeta.pageUrl)
 	}
 	
 	Str nameActive() {
