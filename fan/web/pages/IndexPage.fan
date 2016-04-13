@@ -66,6 +66,6 @@ const mixin IndexPage : PrPage {
 	}
 	
 	Str s(Int size) {
-		size > 1 ? "s" : "" 
+		size == 1 ? "" : "s" 
 	}
 }
