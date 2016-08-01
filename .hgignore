@@ -4,8 +4,8 @@ syntax: regexp
 ^config\.properties$
 ^deploy-to-live\.cmd$
 ^lib-fan$
-^bin$
-^build$
 
 syntax: glob
 .git
+build
+bin

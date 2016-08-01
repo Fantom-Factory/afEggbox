@@ -19,15 +19,20 @@
 
 		
 			h2	Install
-			p	To install ${pod.projectName} with the Fantom Repository Manager (<a class="externalLink" href="http://fantom.org/doc/docFanr/Tool.html#install">fanr</a>), cut'n'paste the following into a command prompt, terminal or shell: 
-				
+			p	To install ${pod.projectName} with <a class="externalLink" href="http://eggbox.fantomfactory.org/pods/afFpm/">Fantom Pod Manager</a>, cut'n'paste the following into a cmd prompt, terminal or shell:
+			a [href="#" onclick="return copyInstallText();" onmouseup="return false;" title="Click to hightlight, Ctrl+C to copy"]
+				pre.installText
+					input [type="text" readonly="readonly" value="fpm install ${installPodNameFpm}" onfocus="return copyInstallText();" onmouseup="return false;"]
+					i.fa.fa-clipboard.copyIcon
+			 
+			p	Or to install ${pod.projectName} with the Fantom Repository Manager (<a class="externalLink" href="http://fantom.org/doc/docFanr/Tool.html#install">fanr</a>), cut'n'paste the following into a cmd prompt, terminal or shell: 				
 			a [href="#" onclick="return copyInstallText();" onmouseup="return false;" title="Click to hightlight, Ctrl+C to copy"]
 				pre.installText
 					input [type="text" readonly="readonly" value="fanr install -r ${bedServer.host}fanr/ ${installPodName}" onfocus="return copyInstallText();" onmouseup="return false;"]
 					i.fa.fa-clipboard.copyIcon
 			
 			p	Or to install manually, download the pod file and copy it to the <code>%FAN_HOME%/lib/fan/</code> directory.
-			
+
 			p.downloadPod
 				i.fa.fa-download.fa-lg
 				a (href="${fandocUri.toDownloadUrl.encode}" rel="nofollow")

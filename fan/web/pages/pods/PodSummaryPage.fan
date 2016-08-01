@@ -98,6 +98,10 @@ const mixin PodSummaryPage : PrPage {
 	Str installPodName() {
 		fandocUri.isLatest ? pod.name : "\"${pod.name} ${pod.version}\""
 	}
+
+	Str installPodNameFpm() {
+		fandocUri.isLatest ? pod.name : "\"${pod.name}@${pod.version}\""
+	}
 	
 	Str podVersionRange() {
 		return pod.version.segments.size > 2 
