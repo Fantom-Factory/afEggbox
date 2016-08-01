@@ -89,7 +89,7 @@ class Build : BuildPod {
 			pod := Pod.find(depend.name, false)
 			return (pod == null) ? true : !depend.match(pod.version)
 		}
-		installFromRepo(pods, "http://pods.fantomfactory.org/fanr/")
+		installFromRepo(pods, "http://eggbox.fantomfactory.org/fanr/")
 
 		patchMimeTypes([
 			"eot"	: "application/vnd.ms-fontobject",

@@ -182,5 +182,5 @@ Resources from any pod's '/doc/' directory may be served up by simply linking to
 
 Fandoc Editor
 *************
-To write and edit Fandoc documents, try using the [Explorer application]`http://pods.fantomfactory.org/pods/afExplorer/`, using 'F12' to toggle between view and edit modes.
+To write and edit Fandoc documents, try using the [Explorer application]`http://eggbox.fantomfactory.org/pods/afExplorer/`, using 'F12' to toggle between view and edit modes.
 

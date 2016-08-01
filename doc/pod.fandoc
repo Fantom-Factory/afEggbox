@@ -2,7 +2,7 @@ Overview
 ********
 Eggbox is a website for uploading, viewing and downloading Fantom pods. Eggbox is [fanr]`docFanr::Tool` compatible and backed by MongoDB.
 
-To see Eggbox in action, visit `http://pods.fantomfactory.org/`.
+To see Eggbox in action, visit `http://eggbox.fantomfactory.org/`.
 
 Use Eggbox to host your very own pod repository, be it at home or at work! Eggbox is easy to setup and simple to configure.
 
@@ -80,7 +80,7 @@ Public URL
 ==========
 The public URL is used in [Sitemap]`http://www.sitemaps.org/` generation, [Atom (RSS)]`http://tools.ietf.org/html/rfc4287` feeds, [og:image]`http://ogp.me/#metadata` meta tags, and other components that require an absolute URL. It is used to set the BedSheet [host]`afBedSheet::BedSheetConfigIds.host` config property.
 
-  afEggbox.publicUrl = http://pods.fantomfactory.org
+  afEggbox.publicUrl = http://eggbox.fantomfactory.org
 
 Defaults to 'http://localhost:<port>'
 
@@ -102,7 +102,7 @@ Google Analytics
 If the following properties are set then, Google's Universal Analytics script is included on all public pages.
 
   afEggbox.googleAccNo     = XX-99999999-9
-  afEggbox.googleAccDomain = //pods.fantomfactory.org/
+  afEggbox.googleAccDomain = //eggbox.fantomfactory.org/
 
 See [Google Analytics's Pod]`pod:afGoogleAnalytics` for more details.
 
@@ -193,11 +193,10 @@ Sample config.properties
 Here is a sample 'config.properties' for you to cut'n'paste. Uncomment / remove the leading '#' symbol, from any line you wish to use.
 
 pre>
-// do not edit this comment - see http://fantom.org/forum/topic/2436
 # config.properties for Eggbox
 # ****************************
 #
-# See http://pods.fantomfactory.org/pods/afEggbox
+# See http://eggbox.fantomfactory.org/pods/afEggbox
 #
 
 #afEggbox.mongoDbUrl               = mongodb://localhost:27017/eggbox
