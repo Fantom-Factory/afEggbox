@@ -45,6 +45,8 @@ class WebModule {
 	
 	@Contribute { serviceType=MiddlewarePipeline# }
 	static Void contributeBedSheetMiddleware(Configuration config) {
+		// needed for Google WebMaster Tools to accept a change of domain
+		//config.set("DomainFilter", config.autobuild(DomainFilter#)).before("AuthMiddleware")
 		config.set("AuthMiddleware", config.autobuild(AuthenticationMiddleware#)).before("afBedSheet.routes")
 	}
 

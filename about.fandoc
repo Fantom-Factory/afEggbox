@@ -47,8 +47,8 @@ What does the future hold for Fantom?
 
 So far, I personally have created:
  - Games - e.g. [Gundam]`http://www.alienfactory.co.uk/gundam/playonline`
- - Desktop Applications - e.g. [Explorer]`http://pods.fantomfactory.org/pods/afExplorer/`
- - A multitude of web sites and web applications - e.g. [this one]`http://pods.fantomfactory.org/pods/afEggbox/`!
+ - Desktop Applications - e.g. [Explorer]`http://eggbox.fantomfactory.org/pods/afExplorer/`
+ - A multitude of web sites and web applications - e.g. [this one]`http://eggbox.fantomfactory.org/pods/afEggbox/`!
 
 But why stop there? Fantom was specifically created to run on embedded devices, which means it's fast. [Faster than Java]`article:fantom-faster-than-java-and-kotlin` even! So think Raspberry Pi and beyond.
 

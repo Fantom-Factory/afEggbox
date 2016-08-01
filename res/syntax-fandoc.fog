@@ -2,7 +2,7 @@ using syntax
 
 ** FluxText syntax rules for Fandoc files.
 ** 
-** @see http://pods.fantomfactory.org/pods/afExplorer
+** @see http://eggbox.fantomfactory.org/pods/afExplorer
 SyntaxRules {
 	brackets = "[]#*>"
 	comments = ["##", "**", "==", "--"]

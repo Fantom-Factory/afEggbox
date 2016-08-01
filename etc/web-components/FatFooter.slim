@@ -1,28 +1,25 @@
 
 // using an ID for CSS specificity
 footer#fatFooter.clearfix.hidden-print
-	hr
+	hr (style="margin-bottom: 10px;")
 	div.container
 
 		div.row
 			// .col-xs-12 gives horizontal padding on small screens
 			div.col-xs-12
 				-- if (eggboxConfig.contactEnabled)
-					p.pull-right
+					p.pull-right.small
 						| Contact ${eggboxConfig.contactName} at:
 						br
 						a#contactUs (href="#" data-unscramble="${eggboxConfig.contactEmail.encode.reverse}") ${"".padl(eggboxConfig.contactEmail.encode.size, '-')}
 
 				p
-					a (href="http://pods.fantomfactory.org/pods/afEggbox/")	${FatFooter#.pod.meta["proj.name"]} v${FatFooter#.pod.version}
-					// - © ${Date.today.year} Alien-Factory
+					a.shieldsio (href="http://fantom.org/" title="Fantom :: The JVM Programming Language")
+						| <svg xmlns="http://www.w3.org/2000/svg" width="114" height="20"><linearGradient id="shield-b" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"></stop><stop offset="1" stop-opacity=".1"></stop></linearGradient><mask id="shield-a"><rect width="114" height="20" rx="3" fill="#fff"></rect></mask><g mask="url(#shield-a)"><path fill="#555" d="M0 0h63v20H0z"></path><path fill="#9f9f9f" d="M63 0h51v20H63z"></path><path fill="url(#shield-b)" d="M0 0h114v20H0z"></path></g><g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11"><text x="31.5" y="15" fill="#010101" fill-opacity=".3">written in</text><text x="31.5" y="14">written in</text><text x="87.5" y="15" fill="#010101" fill-opacity=".3">Fantom</text><text x="87.5" y="14">Fantom</text></g></svg> 
+					a.shieldsio (href="http://eggbox.fantomfactory.org/pods/afBedSheet/" title="BedSheet :: Fantom Web Application Server")
+						| <svg height="20" width="142" xmlns="http://www.w3.org/2000/svg"><linearGradient y2="100%" x2="0" id="shield-d"><stop stop-opacity=".1" stop-color="#bbb" offset="0"></stop><stop stop-opacity=".1" offset="1"></stop></linearGradient><mask id="shield-c"><rect fill="#fff" rx="3" height="20" width="142"></rect></mask><g mask="url(#shield-c)"><path d="M0 0h77v20H0z" fill="#555"></path><path d="M77 0h65v20H77z" fill="#97CA00"></path><path d="M0 0h142v20H0z" fill="url(#shield-d)"></path></g><g font-size="11" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" text-anchor="middle" fill="#fff"><text fill-opacity=".3" fill="#010101" y="15" x="38.5">powered by</text><text y="14" x="38.5">powered by</text><text fill-opacity=".3" fill="#010101" y="15" x="108.5">BedSheet</text><text y="14" x="108.5">BedSheet</text></g></svg> 
 					br
-					a.shieldsio (href="http://www.fantom.org/")
-						// img (src="http://img.shields.io/badge/developed%20in-Fantom-lightgray.svg" alt="Developed in: Fantom")
-						| <svg xmlns="http://www.w3.org/2000/svg" width="135" height="20"><linearGradient id="b" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"></stop><stop offset="1" stop-opacity=".1"></stop></linearGradient><mask id="a"><rect width="135" height="20" rx="3" fill="#fff"></rect></mask><g mask="url(#a)"><path fill="#555" d="M0 0h83v20H0z"></path><path fill="#9f9f9f" d="M83 0h52v20H83z"></path><path fill="url(#b)" d="M0 0h135v20H0z"></path></g><g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11"><text x="41.5" y="15" fill="#010101" fill-opacity=".3">developed in</text><text x="41.5" y="14">developed in</text><text x="108" y="15" fill="#010101" fill-opacity=".3">Fantom</text><text x="108" y="14">Fantom</text></g></svg>
-					| &nbsp;&nbsp;
-					a.shieldsio (href="http://pods.fantomfactory.org/pods/afBedSheet")
-						// img (src="http://img.shields.io/badge/powered%20by-BedSheet-green.svg" alt="Powered by: BedSheet")
-						| <svg xmlns="http://www.w3.org/2000/svg" width="142" height="20"><linearGradient id="d" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"></stop><stop offset="1" stop-opacity=".1"></stop></linearGradient><mask id="c"><rect width="142" height="20" rx="3" fill="#fff"></rect></mask><g mask="url(#c)"><path fill="#555" d="M0 0h77v20H0z"></path><path fill="#97CA00" d="M77 0h65v20H77z"></path><path fill="url(#d)" d="M0 0h142v20H0z"></path></g><g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11"><text x="38.5" y="15" fill="#010101" fill-opacity=".3">powered by</text><text x="38.5" y="14">powered by</text><text x="108.5" y="15" fill="#010101" fill-opacity=".3">BedSheet</text><text x="108.5" y="14">BedSheet</text></g></svg>
+					a.small (href="http://eggbox.fantomfactory.org/pods/afEggbox/")	${FatFooter#.pod.meta["proj.name"]} v${FatFooter#.pod.version}
+					// - © ${Date.today.year} Alien-Factory
 
 			p	&nbsp;

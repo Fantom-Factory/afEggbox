@@ -8,7 +8,7 @@
 
 Eggbox is a website for uploading, viewing and downloading Fantom pods. Eggbox is [fanr](http://fantom.org/doc/docFanr/Tool.html) compatible and backed by MongoDB.
 
-To see Eggbox in action, visit [http://pods.fantomfactory.org/](http://pods.fantomfactory.org/).
+To see Eggbox in action, visit [http://eggbox.fantomfactory.org/](http://eggbox.fantomfactory.org/).
 
 Use Eggbox to host your very own pod repository, be it at home or at work! Eggbox is easy to setup and simple to configure.
 
@@ -30,7 +30,7 @@ Eggbox features:
 
 Install `Eggbox` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
 
-    C:\> fanr install -r http://pods.fantomfactory.org/fanr/ afEggbox
+    C:\> fanr install -r http://eggbox.fantomfactory.org/fanr/ afEggbox
 
 To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
 
@@ -38,7 +38,7 @@ To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan
 
 ## Documentation
 
-Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fantomfactory.org/pods/afEggbox/).
+Full API & fandocs are available on the [Fantom Pod Repository](http://eggbox.fantomfactory.org/pods/afEggbox/).
 
 ## Quick Start
 
@@ -71,7 +71,7 @@ Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fant
 
 3. Point your browser to [http://localhost:8069/](http://localhost:8069/) and Job Done!
 
-  ![Quickstart Screenshot](http://pods.fantomfactory.org/pods/afEggbox/doc/quickstart-screenshot.png)
+  ![Quickstart Screenshot](http://eggbox.fantomfactory.org/pods/afEggbox/doc/quickstart-screenshot.png)
 
 
 
@@ -87,7 +87,7 @@ The website is configured with various properties which may be set as environmen
 
 ### MongoDB URL
 
-This defines the MongoDB instance Eggbox should connect to. It takes the form of the standard [MongoDB connection URL](http://pods.fantomfactory.org/pods/afMongo/api/ConnectionManagerPooled):
+This defines the MongoDB instance Eggbox should connect to. It takes the form of the standard [MongoDB connection URL](http://eggbox.fantomfactory.org/pods/afMongo/api/ConnectionManagerPooled):
 
     afEggbox.mongoDbUrl = mongodb://db1.example.net:2500/?connectTimeoutMS=30000
 
@@ -95,9 +95,9 @@ Defaults to `mongodb://localhost:27017/eggbox`
 
 ### Public URL
 
-The public URL is used in [Sitemap](http://www.sitemaps.org/) generation, [Atom (RSS)](http://tools.ietf.org/html/rfc4287) feeds, [og:image](http://ogp.me/#metadata) meta tags, and other components that require an absolute URL. It is used to set the BedSheet [host](http://pods.fantomfactory.org/pods/afBedSheet/api/BedSheetConfigIds#host) config property.
+The public URL is used in [Sitemap](http://www.sitemaps.org/) generation, [Atom (RSS)](http://tools.ietf.org/html/rfc4287) feeds, [og:image](http://ogp.me/#metadata) meta tags, and other components that require an absolute URL. It is used to set the BedSheet [host](http://eggbox.fantomfactory.org/pods/afBedSheet/api/BedSheetConfigIds#host) config property.
 
-    afEggbox.publicUrl = http://pods.fantomfactory.org
+    afEggbox.publicUrl = http://eggbox.fantomfactory.org
 
 Defaults to `http://localhost:<port>`
 
@@ -115,9 +115,9 @@ Contact details are disabled by default.
 If the following properties are set then, Google's Universal Analytics script is included on all public pages.
 
     afEggbox.googleAccNo     = XX-99999999-9
-    afEggbox.googleAccDomain = //pods.fantomfactory.org/
+    afEggbox.googleAccDomain = //eggbox.fantomfactory.org/
 
-See [Google Analytics's Pod](http://pods.fantomfactory.org/pods/afGoogleAnalytics) for more details.
+See [Google Analytics's Pod](http://eggbox.fantomfactory.org/pods/afGoogleAnalytics) for more details.
 
 Google analytics is disabled by default.
 
@@ -192,11 +192,10 @@ Note that all Eggbox properties may be overridden in the same manner.
 Here is a sample `config.properties` for you to cut'n'paste. Uncomment / remove the leading `#` symbol, from any line you wish to use.
 
 ```
-// do not edit this comment - see http://fantom.org/forum/topic/2436
 # config.properties for Eggbox
 # ****************************
 #
-# See http://pods.fantomfactory.org/pods/afEggbox
+# See http://eggbox.fantomfactory.org/pods/afEggbox
 #
 
 #afEggbox.mongoDbUrl               = mongodb://localhost:27017/eggbox
