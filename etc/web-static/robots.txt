@@ -1,4 +1,4 @@
-# /robots.txt file for http://www.fantomfactory.org/
+# /robots.txt file for http://eggbox.fantomfactory.org/
 
 Sitemap: http://eggbox.fantomfactory.org/sitemap.xml
 
