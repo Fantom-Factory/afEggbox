@@ -1,8 +1,16 @@
 
 .syntax {
-	b   { color:#f00; font-weight:normal; }
-	i   { color:#00f; font-style:normal; }
-	em  { color:#077; font-style:normal; }
-	q   { color:#070; font-style:normal; }
-	q:before, q:after { content: ""; }	
+	// reset syntax
+	b   { font-weight:normal; }	// brackets
+	i   { font-style:normal; }	// keywords
+	em  { font-style:normal; }	// strings and URIs
+	q   { font-style:normal; }	// comments
+	q:before, q:after { content: ""; }
+	s	{ text-decoration: none; }	// comments
+
+	// theme source code
+	b   { color:#f00; }
+	i   { color:#00f; }
+	em  { color:#077; }
+	q,s { color:#070; }
 }
