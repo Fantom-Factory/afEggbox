@@ -3,6 +3,14 @@ using web
 
 const class SyntaxWriter {
 	
+	private static const SyntaxType:Str? htmlTags := [
+		SyntaxType.text		: null,
+		SyntaxType.bracket	: "b",
+		SyntaxType.keyword	: "i",
+		SyntaxType.literal	: "em",
+		SyntaxType.comment	: "s",	// don't use 'q' as wot 'SyntaxType' does as firefox, when CTRL+C, AWAYS adds quotes around it! 
+	]
+
 	Str writeSyntax(Str text, Str extension, Bool renderLineIds) {
 		ext	:= extension.lower
 		buf := StrBuf()
@@ -31,7 +39,7 @@ const class SyntaxWriter {
 		doc.eachLine |line| { 
 			if (renderLineIds) out.span("id=\"line${line.num}\"")
 			line.eachSegment |type, text| {
-				html := (Str?) SyntaxType#.field("html").get(type)
+				html := htmlTags[type]
 				if (html != null)
 					out.writeChar('<').print(html).writeChar('>')
 				out.writeXml(text)
