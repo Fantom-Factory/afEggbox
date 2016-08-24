@@ -21,7 +21,7 @@ const mixin PodSrcPage : PrPage {
 			throw ReProcessErr(Redirect.movedTemporarily(pod.toSrcUri(fandocUri.typeName, fandocUri.slotName).toClientUrl))
 
 		if (eggboxConfig.googleAnalyticsEnabled)
-			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toClientUrl)
+			googleAnalytics.renderPageView(fandocUri.toSummaryUri.toClientUrl)
 	}
 
 	RepoPod pod() {

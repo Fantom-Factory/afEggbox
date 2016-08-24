@@ -8,8 +8,8 @@ using afConcurrent::ActorPools
 
 const class BedFrameModule {
 
-	static Void defineServices(ServiceDefinitions defs) {
-		defs.add(ErrEmailer#)
+	static Void defineServices(RegistryBuilder defs) {
+		defs.addService(ErrEmailer#)
 	}
 
 	@Contribute { serviceType=ErrResponses# }

@@ -6,21 +6,21 @@ using afMorphia
 @SubModule { modules=[FanrModule#, WebModule#] }
 const class CoreModule {
 	
-	static Void defineServices(ServiceDefinitions defs) {
+	static Void defineServices(RegistryBuilder defs) {
 		
-		defs.add(UserSession#)
+		defs.addService(UserSession#)
 		
-		defs.add(RepoUserDao#)
-		defs.add(RepoPodDao#)
-		defs.add(RepoPodFileDao#)
-		defs.add(RepoPodDocsDao#)
-		defs.add(RepoPodSrcDao#)
-		defs.add(RepoPodApiDao#)
-		defs.add(RepoPodDownloadDao#)
-		defs.add(RepoActivityDao#)
+		defs.addService(RepoUserDao#)
+		defs.addService(RepoPodDao#)
+		defs.addService(RepoPodFileDao#)
+		defs.addService(RepoPodDocsDao#)
+		defs.addService(RepoPodSrcDao#)
+		defs.addService(RepoPodApiDao#)
+		defs.addService(RepoPodDownloadDao#)
+		defs.addService(RepoActivityDao#)
 		
-		defs.add(DirtyCash#)
-		defs.add(CorePods#)
+		defs.addService(DirtyCash#)
+		defs.addService(CorePods#)
 	}
 
 	@Build
@@ -36,7 +36,7 @@ const class CoreModule {
 
 	internal static Void onRegistryStartup(Configuration config) {
 		config.set("afEggbox.ensureIndexes", |->| {
-			indexes := (Indexes) config.autobuild(Indexes#)
+			indexes := (Indexes) config.build(Indexes#)
 			indexes.ensureIndexes
 		}).after("afMorphia.testConnection")
 	}

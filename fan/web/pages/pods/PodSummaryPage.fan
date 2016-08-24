@@ -9,7 +9,7 @@ const mixin PodSummaryPage : PrPage {
 	private static const Unit	bytes	:= Unit("byte")
 	private static const Unit[] units 	:= ["petabyte", "terabyte", "gigabyte", "megabyte", "kilobyte", "byte"].map { Unit(it) }
 
-	@Inject			abstract Registry			registry
+	@Inject			abstract Scope				scope
 	@Inject			abstract RepoPodDao			podDao
 	@Inject			abstract SyntaxWriter		syntaxWriter
 	@Inject			abstract EggboxConfig		eggboxConfig
@@ -36,7 +36,7 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
 
 		if (eggboxConfig.googleAnalyticsEnabled)
-			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toClientUrl)
+			googleAnalytics.renderPageView(fandocUri.toSummaryUri.toClientUrl)
 	
 		allPods = Str:RepoPod[:].addList(podDao.findLatestPods(loggedInUser)) { it.name }
 		referencedBy = allPods.vals.findAll |p| {
@@ -123,7 +123,7 @@ const mixin PodSummaryPage : PrPage {
 	}
 	
 	Str linkToPod(Depend pod) {
-		podUrl := FandocUri.fromUri(registry, `fandoc:/${pod.name}`)?.toClientUrl
+		podUrl := FandocUri.fromUri(scope, `fandoc:/${pod.name}`)?.toClientUrl
 
 		if (podUrl == null)
 			return """<span class="nowrap" title="${pod.toStr}">${pod.name}</span>"""

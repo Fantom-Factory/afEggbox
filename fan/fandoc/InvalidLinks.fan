@@ -3,7 +3,7 @@ using concurrent
 
 const class InvalidLinks {
 
-	@Inject private const Registry			registry
+	@Inject private const Scope				scope
 	@Inject private const RepoPodApiDao		podApiRepo
 	@Inject private const RepoPodDocsDao	podDocsRepo
 	@Inject private const FandocWriter		fandoc
@@ -14,7 +14,7 @@ const class InvalidLinks {
 	InvalidLink[] findInvalidLinks(RepoPod pod) {
 		dirtyCash.cash |->Obj?| {
 			linkCtx		:= LinkResolverCtx(pod)
-			fandocUri	:= (FandocUri) registry.autobuild(FandocSummaryUri#, [pod.name, pod.version])
+			fandocUri	:= (FandocUri) scope.build(FandocSummaryUri#, [pod.name, pod.version])
 	
 			return InvalidLinks.gather |->| {
 				InvalidLinks.setWhereLinkIsFound(fandocUri.toSummaryUri)

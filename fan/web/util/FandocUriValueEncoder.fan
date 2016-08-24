@@ -3,7 +3,7 @@ using afBedSheet
 
 const class FandocUriValueEncoder : ValueEncoder {
 	
-	@Inject private const Registry	registry
+	@Inject private const Scope	scope
 	
 	new make(|This| in) { in(this) }
 	
@@ -14,6 +14,6 @@ const class FandocUriValueEncoder : ValueEncoder {
 
 	override Obj? toValue(Str clientValue) {
 		if (clientValue.isEmpty) return null
-		return FandocUri.fromUri(registry, clientValue.toUri)
+		return FandocUri.fromUri(scope, clientValue.toUri)
 	}
 }

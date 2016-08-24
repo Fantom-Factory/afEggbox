@@ -153,7 +153,7 @@ using afFancordion
 @Fixture { failFast=false }
 class TestFandocUri : RepoFixture {
 	
-	@Inject{}	Registry?	reg
+	@Inject{}	Scope?		scope
 				Str?		fandocUri
 				Str?		clientUrl
 	
@@ -167,7 +167,7 @@ class TestFandocUri : RepoFixture {
 	
 	Void parseFandocUri(Str uri) {
 		InvalidLinks.gather |->| {
-			fandocUri := FandocUri.fromUri(reg, uri.toUri)
+			fandocUri := FandocUri.fromUri(scope, uri.toUri)
 			InvalidLinks.setLinkBeingResolved(uri)
 			InvalidLinks.setWhereLinkIsFound(fandocUri)
 			if (!fandocUri.validate) {
@@ -182,7 +182,7 @@ class TestFandocUri : RepoFixture {
 
 	Void parseClientUrl(Str uri) {
 		InvalidLinks.gather |->| {
-			fandocUri := FandocUri.fromClientUrl(reg, uri.toUri)
+			fandocUri := FandocUri.fromClientUrl(scope, uri.toUri)
 			InvalidLinks.setLinkBeingResolved(uri)
 			InvalidLinks.setWhereLinkIsFound(fandocUri)
 			if (!fandocUri.validate) {
@@ -199,7 +199,7 @@ class TestFandocUri : RepoFixture {
 		InvalidLinks.gather |->| {
 			pod := podDao.get(podCtx)
 			ctx := LinkResolverCtx(pod) { it.type = "Bar" }
-			fandocUri := FandocUri.fromFantomUri(reg, ctx, uri)
+			fandocUri := FandocUri.fromFantomUri(scope, ctx, uri)
 			InvalidLinks.setLinkBeingResolved(uri)
 			InvalidLinks.setWhereLinkIsFound(fandocUri)
 			if (!fandocUri.validate) {

@@ -9,7 +9,7 @@ class RepoPod {
 	@Inject private RepoUserDao?	userDao
 	@Inject internal RepoPodFileDao?podFileDao
 	@Inject private InvalidLinks?	invalidLinkFinder
-	@Inject private Registry?		registry
+	@Inject private Scope?			scope
 
 	@Property	Str				_id
 	@Property	RepoPodMeta		meta
@@ -107,19 +107,19 @@ class RepoPod {
 	}
 	
 	FandocSummaryUri toSummaryUri() {
-		registry.autobuild(FandocSummaryUri#, [name, version])
+		scope.build(FandocSummaryUri#, [name, version])
 	}
 
 	FandocApiUri toApiUri(Str? typeName := null, Str? slotName := null) {
-		registry.autobuild(FandocApiUri#, [name, version, typeName, slotName])
+		scope.build(FandocApiUri#, [name, version, typeName, slotName])
 	}
 
 	FandocSrcUri toSrcUri(Str typeName, Str? slotName := null) {
-		registry.autobuild(FandocSrcUri#, [name, version, typeName, slotName])
+		scope.build(FandocSrcUri#, [name, version, typeName, slotName])
 	}
 
 	FandocDocUri toDocUri(Uri fileUri := `/doc/pod.fandoc`, Str? headingId := null) {
-		registry.autobuild(FandocDocUri#, [name, version, fileUri, headingId])
+		scope.build(FandocDocUri#, [name, version, fileUri, headingId])
 	}
 	
 	Uri toAtomFeedUrl() {

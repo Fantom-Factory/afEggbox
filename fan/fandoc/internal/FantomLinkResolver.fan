@@ -23,7 +23,7 @@ using fandoc
 @NoDoc
 public const class FantomLinkResolver : LinkResolver {
 
-	@Inject private const Registry	reg
+	@Inject private const Scope	scope
 
 	new make(|This|in) { in(this) }
 	
@@ -31,7 +31,7 @@ public const class FantomLinkResolver : LinkResolver {
 	override Uri? resolve(Str str, LinkResolverCtx ctx) {
 		uri := str.toUri
 
-		fandocUri := FandocUri.fromFantomUri(reg, ctx, str)
+		fandocUri := FandocUri.fromFantomUri(scope, ctx, str)
 		if (fandocUri == null)
 			return null
 		

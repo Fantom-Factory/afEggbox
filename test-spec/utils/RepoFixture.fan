@@ -42,7 +42,7 @@ abstract class RepoFixture : FixtureTest {
 		return (existing != null) ? existing : userDao.create(newUser(email.toUri))
 	}
 
-	@Deprecated
+	// TODO kill me an use something else
 	RepoUser createOrUpdateUser(RepoUser user) {
 		existing := userDao.getByEmail(user.email, false)
 		if (existing != null)

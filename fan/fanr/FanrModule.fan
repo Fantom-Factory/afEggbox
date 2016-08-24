@@ -4,8 +4,8 @@ using fanr
 
 const class FanrModule {
 
-	static Void defineServices(ServiceDefinitions defs) {
-		defs.add(FanrRepo#)
+	static Void defineServices(RegistryBuilder defs) {
+		defs.addService(FanrRepo#)
 	}
 
 	@Contribute { serviceType=Routes# }

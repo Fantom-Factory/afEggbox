@@ -26,7 +26,7 @@ class RepoRunner : FancordionRunner {
 
         super.fixtureSetup(fixtureInstance)
         webFixture.client = server.makeClient
-        server.injectIntoFields(webFixture)
+        server.inject(webFixture)
         webFixture.setupFixture
     }
 

@@ -3,7 +3,7 @@ using afEfanXtra
  
 const mixin DocTypeRefTemplate : EfanComponent {
 
-	@Inject 	abstract Registry			reg
+	@Inject 	abstract Scope				scope
 	@Autobuild	abstract FantomLinkResolver	fantomLinkResolver
 				abstract DocTypeRef			ref
 				abstract Bool				full
@@ -21,7 +21,7 @@ const mixin DocTypeRefTemplate : EfanComponent {
 	Bool resolved() {
 		// TODO: resolve pod version to nearest matching
 		
-		fandocUri := (FandocApiUri) reg.autobuild(FandocApiUri#, [ref.pod, null, ref.name, null]) 
+		fandocUri := (FandocApiUri) scope.build(FandocApiUri#, [ref.pod, null, ref.name, null]) 
 		if (fandocUri.validate) {
 			typeUrl = fandocUri.toClientUrl.encode
 			return true

@@ -37,7 +37,7 @@ const mixin Layout : PrComponent {
 	@AfterRender
 	Void afterRender() {
 		if (googleAnalyticsEnabled && !googleAnalytics.pageViewRendered)
-			googleAnalytics.sendPageView		
+			googleAnalytics.renderPageView		
 	}
 
 	Str pageTitle() {
