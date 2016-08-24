@@ -7,9 +7,10 @@ using afPillow
 using afEfanXtra::TemplateConverters
 using afFormBean::InputSkins
 using afFormBean::ErrorSkin
+using afGoogleAnalytics
 
-@SubModule { modules=[BedFrameModule#, FandocModule#, GoogleAnalyticsModule#] }
-class WebModule {
+@SubModule { modules=[BedFrameModule#, FandocModule#] }
+const class WebModule {
 
 	static Void defineServices(ServiceDefinitions defs) {
 		defs.add(Alert#)
@@ -84,16 +85,17 @@ class WebModule {
 		config.remove("fandoc")	// so we can have help fandoc file named after the class
 	}
 
-	@Advise { serviceId="afPillow::Pages" }
-	static Void addTransations(MethodAdvisor[] methodAdvisors, DirtyCash dirtyCash) {
-		methodAdvisors
-			.find { it.method.name.startsWith("renderPage") }
-			.addAdvice |invocation -> Obj?| { 
-				return dirtyCash.cash |->Obj?| { 
-					return invocation.invoke
-				}
-			} 
-	}
+	// FIXME	DIRTY CASH!
+//	@Advise { serviceId="afPillow::Pages" }
+//	static Void addTransations(MethodAdvisor[] methodAdvisors, DirtyCash dirtyCash) {
+//		methodAdvisors
+//			.find { it.method.name.startsWith("renderPage") }
+//			.addAdvice |invocation -> Obj?| { 
+//				return dirtyCash.cash |->Obj?| { 
+//					return invocation.invoke
+//				}
+//			} 
+//	}
 	
 	@Contribute { serviceType=ApplicationDefaults# }
 	static Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig, IocEnv iocEnv) {

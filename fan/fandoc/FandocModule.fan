@@ -1,6 +1,6 @@
 using afIoc
 
-class FandocModule {
+const class FandocModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
 		defs.add(FandocWriter#)

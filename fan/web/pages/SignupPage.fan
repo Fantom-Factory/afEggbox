@@ -18,7 +18,7 @@ const mixin SignupPage : PrPage {
 		signUpDetails = SignUpDetails()
 		formBean.formFields[SignUpDetails#password].formValue = ""
 		
-		if (httpSession.flashExists && httpSession.flash["signUp.email"] != null)
+		if (httpSession.exists && httpSession.flash["signUp.email"] != null)
 			signUpDetails.email = httpSession.flash["signUp.email"]
 	}
 

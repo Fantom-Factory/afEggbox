@@ -1,6 +1,6 @@
 
 	code	@
-	-- app.renderDocTypeRefTemplate(ctx, ref.type, false)
+	== app.renderDocTypeRefTemplate(ctx, ref.type, false)
 	-- if (ref.fields.size > 0)
 		== " { "
 		== ref.fields.join("; ") |v,n| { "$n.toXml=$v.toXml" }

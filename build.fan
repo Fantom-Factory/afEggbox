@@ -17,51 +17,51 @@ class Build : BuildPod {
 		]
 
 		depends = [
-			"sys          1.0.67 - 1.0",
-			"concurrent   1.0.67 - 1.0",
-			"fanr         1.0.67 - 1.0",
-			"fandoc       1.0.67 - 1.0",
-			"email        1.0.67 - 1.0",
+			"sys          1.0.69 - 1.0",
+			"concurrent   1.0.69 - 1.0",
+			"fanr         1.0.69 - 1.0",
+			"fandoc       1.0.69 - 1.0",
+			"email        1.0.69 - 1.0",
 
 			// ---- Core ------------------------
-			"afBeanUtils  1.0.6  - 1.0", 
-			"afConcurrent 1.0.10 - 1.0", 
-			"afIoc        2.0.10 - 2.0", 
-			"afIocConfig  1.0.16 - 1.0", 
-			"afIocEnv     1.0.18 - 1.0", 
+			"afBeanUtils  1.0.8  - 1.0", 
+			"afConcurrent 1.0.14 - 1.0", 
+			"afIoc        3.0.4  - 3.0", 
+			"afIocConfig  1.1.0  - 1.1", 
+			"afIocEnv     1.1.0  - 1.1", 
 			
 			// ---- Database --------------------
 			"afBson       1.0.0  - 1.0",
-			"afMongo      1.0.4",
-			"afMorphia    1.0.10 - 1.0",
+			"afMongo      1.0.8  - 1.0",
+			"afMorphia    1.1.0  - 1.1",
 			
 			// ---- Web -------------------------
-			"afBedSheet   1.4.16 - 1.4",
-			"afEfanXtra   1.1.20 - 1.1",
-			"afPillow     1.0.22 - 1.0",
-			"afDuvet      1.0.12 - 1.0",
-			"afSlim       1.1.18 - 1.1",
-			"afFormBean   1.0.2  - 1.0",
-			"afColdFeet   1.3.4  - 1.3",
-			"afSitemap    1.0.0  - 1.0",
-//			"afGoogleAnalytics 0.0 - 1.0",	// we've incorporated our own version until 1.0.68 is released
-			"afAtom       1.0.2  - 2.0",
+			"afBedSheet   1.5.2  - 1.5",
+			"afEfanXtra   1.2.0  - 1.2",
+			"afPillow     1.1.2  - 1.1",
+			"afDuvet      1.1.2  - 1.1",
+			"afSlim       1.2.0  - 1.2",
+			"afFormBean   1.1.4  - 1.1",
+			"afColdFeet   1.4.0  - 1.4",
+			"afSitemap    1.1.0  - 1.1",
+			"afGoogleAnalytics 0.1.4 - 0.1",
+			"afAtom       1.0.2  - 1.0",
 
 			// ---- Other -----------------------
-			"afButter     1.1.8  - 1.1",
-			"afPegger     0.0.4  - 0.0",
-			"syntax       1.0.67",
-			"util         1.0.67",
-			"web          1.0.67",
-			"xml          1.0.67",
+			"afButter     1.2.2  - 1.2",
+			"afPegger     0.1.0  - 0.1",
+			"syntax       1.0.69 - 1.0",
+			"util         1.0.69 - 1.0",
+			"web          1.0.69 - 1.0",
+			"xml          1.0.69 - 1.0",
 
 			// ---- Test ------------------------
-			"afBounce     1.0.22 - 1.0",
-			"afFancordion 1.0.4  - 1.0",
-			"afFancordionBootstrap 1.0.0"
+			"afBounce     1.1.2  - 1.1",
+			"afFancordion 1.1.2  - 1.1",
+			"afFancordionBootstrap 1.0.2 - 1.0"
 		]
 
-		srcDirs = [`fan/`, `fan/afGoogleAnal/`, `fan/bedframe/`, `fan/core/`, `fan/core/database/`, `fan/core/entities/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanr/`, `fan/web/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/web/pages/`, `fan/web/pages/help/`, `fan/web/pages/my/`, `fan/web/pages/pods/`, `fan/web/services/`, `fan/web/util/`, `test/`, `test/res/`, `test-spec/`, `test-spec/core/`, `test-spec/fanr/`, `test-spec/utils/`, `test-spec/web/`, `test-spec/web/login/`]
+		srcDirs = [`fan/`, `fan/bedframe/`, `fan/core/`, `fan/core/database/`, `fan/core/entities/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanr/`, `fan/web/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/web/pages/`, `fan/web/pages/help/`, `fan/web/pages/my/`, `fan/web/pages/pods/`, `fan/web/services/`, `fan/web/util/`, `test/`, `test/res/`, `test-spec/`, `test-spec/core/`, `test-spec/fanr/`, `test-spec/utils/`, `test-spec/web/`, `test-spec/web/login/`]
 		resDirs = [`doc/`, `res/`, `test/res/`]
 		
 		docApi	= false

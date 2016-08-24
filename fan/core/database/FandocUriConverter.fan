@@ -12,7 +12,9 @@ const class FandocUriConverter : Converter {
 		return FandocUri.fromUri(registry, mongoObj.toStr.toUri)
 	}
 
-	override Obj? toMongo(Obj fantomObj) {
-		((FandocUri) fantomObj).toUri.toStr
+	override Obj? toMongo(Type fantomType, Obj? fantomObj) {
+		if (fantomObj == null) return null
+		
+		return ((FandocUri) fantomObj).toUri.toStr
 	}
 }

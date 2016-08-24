@@ -13,7 +13,7 @@ class RepoRunner : FancordionRunner {
 
     override Void suiteSetup() {
         super.suiteSetup
-        server = BedServer(CoreModule#).addModule(WebTestModule#).startup		
+        server = BedServer("afEggbox").addModule(WebTestModule#).startup		
     }
 
     override Void suiteTearDown(Type:FixtureResult resultsCache) {
@@ -38,7 +38,7 @@ class RepoRunner : FancordionRunner {
     }
 }
 
-class WebTestModule {
+const class WebTestModule {
 
     @Override
     static IocEnv overrideIocEnv() {

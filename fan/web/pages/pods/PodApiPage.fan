@@ -2,6 +2,7 @@ using afIoc
 using afBedSheet
 using afEfanXtra
 using afPillow
+using afGoogleAnalytics::GoogleAnalytics
 
 @Page { disableRouting = true }
 const mixin PodApiPage : PrPage {

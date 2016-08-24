@@ -4,6 +4,7 @@ using afEfanXtra
 using afPillow
 using syntax
 using web
+using afGoogleAnalytics::GoogleAnalytics
 
 @Page { disableRouting = true }
 const mixin PodSrcPage : PrPage {

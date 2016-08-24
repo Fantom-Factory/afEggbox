@@ -4,7 +4,7 @@ using afIocConfig
 using afMorphia
 
 @SubModule { modules=[FanrModule#, WebModule#] }
-class CoreModule {
+const class CoreModule {
 	
 	static Void defineServices(ServiceDefinitions defs) {
 		
@@ -30,12 +30,11 @@ class CoreModule {
 
 	@Contribute { serviceType=Converters# }
 	static Void contributeConverters(Configuration config) {		
-		config[RepoPodMeta#] 	= config.createProxy(Converter#, RepoPodMetaConverter#)
-		config[FandocUri#] 		= config.autobuild(FandocUriConverter#)
+		config[RepoPodMeta#] 	= config.build(RepoPodMetaConverter#)
+		config[FandocUri#] 		= config.build(FandocUriConverter#)
 	}
 
-	@Contribute { serviceType=RegistryStartup# }
-	internal static Void contributeRegistryStartup(Configuration config) {
+	internal static Void onRegistryStartup(Configuration config) {
 		config.set("afEggbox.ensureIndexes", |->| {
 			indexes := (Indexes) config.autobuild(Indexes#)
 			indexes.ensureIndexes
