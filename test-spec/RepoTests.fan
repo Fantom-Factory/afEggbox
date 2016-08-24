@@ -1,6 +1,6 @@
 
-** Pod Repository
-** ##############
+** Eggbox
+** ######
 ** Alien-Factory's Pod Repository is a web application for storing and retrieving Fantom libraries, known as *pods*.
 ** 
 ** Anyone may browse and download public pods. Registered users may upload public pods, they may also keep private pods for personal use.

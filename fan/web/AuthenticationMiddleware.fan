@@ -31,7 +31,7 @@ const class AuthenticationMiddleware : Middleware {
 				if (userSession.user.owns(pod)) {
 					pipeline.service; return	
 				}
-				throw HttpStatusErr(401, "Unauthorised")
+				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
 
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))

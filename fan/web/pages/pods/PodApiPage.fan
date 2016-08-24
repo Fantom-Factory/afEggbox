@@ -18,7 +18,7 @@ const mixin PodApiPage : PrPage {
 			throw ReProcessErr(Redirect.movedTemporarily(pod.toApiUri(fandocUri.typeName, fandocUri.slotName).toClientUrl))
 
 		if (eggboxConfig.googleAnalyticsEnabled)
-			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toClientUrl)
+			googleAnalytics.renderPageView(fandocUri.toSummaryUri.toClientUrl)
 		
 		injector.injectRequireModule("anchorJS", null, [".slots .id"])
 	}

@@ -12,18 +12,18 @@ using afGoogleAnalytics
 @SubModule { modules=[BedFrameModule#, FandocModule#] }
 const class WebModule {
 
-	static Void defineServices(ServiceDefinitions defs) {
-		defs.add(Alert#)
-		defs.add(ErrorSkin#, BootstrapErrorSkin#)
-		defs.add(Backdoor#)
-		defs.add(SitemapPages#)
-		defs.add(AtomFeedPages#)
-		defs.add(AtomFeedGenerator#)
+	static Void defineServices(RegistryBuilder defs) {
+		defs.addService(Alert#)
+		defs.addService(ErrorSkin#, BootstrapErrorSkin#)
+		defs.addService(Backdoor#)
+		defs.addService(SitemapPages#)
+		defs.addService(AtomFeedPages#)
+		defs.addService(AtomFeedGenerator#)
 	}
 
 	@Contribute { serviceType=Routes# }
 	static Void contributeRoutes(Configuration config) {
-		config.add(config.autobuild(PodRoutes#))
+		config.add(config.build(PodRoutes#))
 	}
 	
 	@Contribute { serviceType=HttpStatusResponses# }
@@ -39,7 +39,7 @@ const class WebModule {
 		config.overrideValue("password",	BootstrapTextSkin())
 		config.overrideValue("checkbox",	BootstrapCheckboxSkin())
 		config.overrideValue("textarea",	BootstrapTextAreaSkin())
-		config.overrideValue("select",		config.autobuild(BootstrapSelectSkin#))
+		config.overrideValue("select",		config.build(BootstrapSelectSkin#))
 		config.set			("static",		BootstrapStaticSkin())
 		config.set			("honeyPot",	BootstrapHoneyPotSkin())
 	}
@@ -48,19 +48,19 @@ const class WebModule {
 	static Void contributeBedSheetMiddleware(Configuration config) {
 		// needed for Google WebMaster Tools to accept a change of domain
 		//config.set("DomainFilter", config.autobuild(DomainFilter#)).before("AuthMiddleware")
-		config.set("AuthMiddleware", config.autobuild(AuthenticationMiddleware#)).before("afBedSheet.routes")
+		config.set("AuthMiddleware", config.build(AuthenticationMiddleware#)).before("afBedSheet.routes")
 	}
 
 	@Contribute { serviceType=ClientAssetProducers# }
 	static Void contributeAssetProducers(Configuration config) {
-		config["podAssetProducer"] = config.autobuild(PodAssetProducer#)
+		config["podAssetProducer"] = config.build(PodAssetProducer#)
 	}
 
 	@Contribute { serviceType=ValueEncoders# }
 	static Void contributeValueEncoders(Configuration config) {
-		config[RepoPod#]	= config.autobuild(PodValueEncoder#)
-		config[RepoUser#]	= config.autobuild(UserValueEncoder#)
-		config[FandocUri#]	= config.autobuild(FandocUriValueEncoder#)
+		config[RepoPod#]	= config.build(PodValueEncoder#)
+		config[RepoUser#]	= config.build(UserValueEncoder#)
+		config[FandocUri#]	= config.build(FandocUriValueEncoder#)
 	}
 	
 	@Contribute { serviceType=ScriptModules# }

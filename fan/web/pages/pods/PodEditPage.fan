@@ -10,7 +10,7 @@ const mixin PodEditPage : PrPage {
 					abstract RepoPod		pod
 	@Inject 		abstract RepoPodDao		podRepo
 	@Inject 		abstract FanrRepo		fanrRepo
-	@Inject 		abstract Registry		registry
+	@Inject 		abstract Scope			scope
 	@Inject { type=PodEditDetails# } 
 					abstract FormBean		podEditFormBean
 					abstract PodEditDetails	editDetails
@@ -32,7 +32,7 @@ const mixin PodEditPage : PrPage {
 	}
 	
 	FandocSummaryUri podSummaryUrl() {
-		registry.autobuild(FandocSummaryUri#, [pod.name, pod.version])
+		scope.build(FandocSummaryUri#, [pod.name, pod.version])
 	}
 
 	Str saveUrl() {

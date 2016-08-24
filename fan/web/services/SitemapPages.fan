@@ -4,7 +4,7 @@ using afSitemap
 
 const class SitemapPages : SitemapSource {
 	
-	@Inject private const Registry			registry
+	@Inject private const Scope				scope
 	@Inject private const DirtyCash			dirtyCash
 	@Inject private const BedSheetServer	bedServer
 	@Inject private const RepoPodDao		podDao
@@ -29,7 +29,7 @@ const class SitemapPages : SitemapSource {
 				// Pod Document Pages
 				if (pod.hasDocs) {
 					podDocsDao[pod._id].fandocPages.keys.each |fileUri| {
-						fandocDocUri := (FandocDocUri) registry.autobuild(FandocDocUri#, [pod.name, pod.version, fileUri, null])
+						fandocDocUri := (FandocDocUri) scope.build(FandocDocUri#, [pod.name, pod.version, fileUri, null])
 						urls.add(SitemapUrl(bedServer.toAbsoluteUrl(fandocDocUri.toClientUrl)) {
 							lastMod		= pod.builtOn
 							changefreq	= SitemapFreq.monthly
@@ -40,7 +40,7 @@ const class SitemapPages : SitemapSource {
 		
 				// Pod API Pages
 				if (pod.hasApi) {
-					fandocApiUri := (FandocApiUri) registry.autobuild(FandocApiUri#, [pod.name, pod.version, null, null])
+					fandocApiUri := (FandocApiUri) scope.build(FandocApiUri#, [pod.name, pod.version, null, null])
 					urls.add(SitemapUrl(bedServer.toAbsoluteUrl(fandocApiUri.toClientUrl)) {
 						lastMod		= pod.builtOn
 						changefreq	= SitemapFreq.monthly

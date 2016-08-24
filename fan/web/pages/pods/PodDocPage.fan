@@ -21,7 +21,7 @@ const mixin PodDocPage : PrPage {
 		injector.injectRequireModule("anchorJS", null, [".fandoc h2, .fandoc h3, .fandoc h4"])
 
 		if (eggboxConfig.googleAnalyticsEnabled)
-			googleAnalytics.sendPageView(fandocUri.toSummaryUri.toClientUrl)
+			googleAnalytics.renderPageView(fandocUri.toSummaryUri.toClientUrl)
 	}
 
 	RepoPod pod() {

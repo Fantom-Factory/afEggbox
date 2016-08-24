@@ -2,7 +2,7 @@ using afIoc
 
 internal const class FanLinkResolver : LinkResolver {
 
-	@Inject private const Registry	reg
+	@Inject private const Scope	scope
 	
 	new make(|This|in) { in(this) }
 	
@@ -14,7 +14,7 @@ internal const class FanLinkResolver : LinkResolver {
 		if (podName != null && uri.path.first != "doc")
 			return InvalidLinks.add(InvalidLinkMsgs.fanSchemeDocDirOnly)
 
-		fandocUri := FandocUri.fromUri(reg, `fandoc:/${podName}/` + uri.pathOnly.relTo(`/`))
+		fandocUri := FandocUri.fromUri(scope, `fandoc:/${podName}/` + uri.pathOnly.relTo(`/`))
 		if (fandocUri == null)
 			return null
 		

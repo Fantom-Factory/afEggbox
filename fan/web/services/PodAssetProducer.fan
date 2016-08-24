@@ -4,13 +4,13 @@ using afBedSheet
 const class PodAssetProducer : ClientAssetProducer {
 	
 	@Inject private const DirtyCash	dirtyCash
-	@Inject private const Registry	registry
+	@Inject private const Scope		scope
 	
 	new make(|This|in) { in(this) }
 	
 	override ClientAsset? produceAsset(Uri localUrl) {
 		dirtyCash.cash |->Obj?| {
-			fandocUri := FandocUri.fromClientUrl(registry, localUrl)
+			fandocUri := FandocUri.fromClientUrl(scope, localUrl)
 			if (fandocUri isnot FandocDocUri)
 				return null
 			if (!fandocUri.validate)

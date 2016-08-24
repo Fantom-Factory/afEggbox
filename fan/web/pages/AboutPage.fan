@@ -12,7 +12,7 @@ const mixin AboutPage : PrPage {
 	@InitRender
 	Void initRender() {
 		if (!aboutFandocExists)
-			throw HttpStatusErr(404)
+			throw HttpStatus.makeErr(404)
 		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
 	}
 

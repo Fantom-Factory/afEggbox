@@ -10,7 +10,7 @@ const class PodRoutes : Route {
 	@Inject	private const Pages	 		pages
 	@Inject	private const RepoPodDao	podDao
 	@Inject private const Backdoor		backdoor
-	@Inject private const Registry		reg
+	@Inject private const Scope			scope
 	@Inject private const AtomFeedPages	atomPages
 	@Inject private const HttpRequest	httpRequest
 	@Inject private const HttpResponse	httpResponse
@@ -74,12 +74,12 @@ const class PodRoutes : Route {
 
 				if (userSession.user.owns(pod)) 
 					return pages.renderPage(PodEditPage#, [pod])
-				throw HttpStatusErr(401, "Unauthorised")
+				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
 		}
 
-		fandocUri := FandocUri.fromClientUrl(reg, httpReq.url)
+		fandocUri := FandocUri.fromClientUrl(scope, httpReq.url)
 		if (fandocUri == null)
 			return null
 		
@@ -152,7 +152,7 @@ const class PodRoutes : Route {
 			if (userSession.isLoggedIn) {
 				if (userSession.user.owns(pod)) 
 					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onSave, null)
-				throw HttpStatusErr(401, "Unauthorised")
+				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
 		}
@@ -163,7 +163,7 @@ const class PodRoutes : Route {
 			if (userSession.isLoggedIn) {
 				if (userSession.user.owns(pod)) 
 					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onDelete, null)
-				throw HttpStatusErr(401, "Unauthorised")
+				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
 		}
@@ -174,7 +174,7 @@ const class PodRoutes : Route {
 			if (userSession.isLoggedIn) {
 				if (userSession.user.owns(pod)) 
 					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onValidate, null)
-				throw HttpStatusErr(401, "Unauthorised")
+				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
 			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
 		}

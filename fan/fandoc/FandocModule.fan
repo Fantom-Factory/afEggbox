@@ -2,29 +2,29 @@ using afIoc
 
 const class FandocModule {
 	
-	static Void defineServices(ServiceDefinitions defs) {
-		defs.add(FandocWriter#)
-		defs.add(PreTextProcessors#)
-		defs.add(LinkResolvers#)
-		defs.add(SyntaxWriter#)
+	static Void defineServices(RegistryBuilder defs) {
+		defs.addService(FandocWriter#)
+		defs.addService(PreTextProcessors#)
+		defs.addService(LinkResolvers#)
+		defs.addService(SyntaxWriter#)
 
-		defs.add(InvalidLinks#)	// shouldn't be here
+		defs.addService(InvalidLinks#)	// shouldn't be here
 	}
 	
 	@Contribute { serviceType=PreTextProcessors# }
 	static Void contributePreTextProcessors(Configuration config) {
-		config["syntax"]	= config.autobuild(SyntaxPreProcessor#)
-		config["table"]		= config.autobuild(TablePreProcessor#)
+		config["syntax"]	= config.build(SyntaxPreProcessor#)
+		config["table"]		= config.build(TablePreProcessor#)
 	}
 	
 	@Contribute { serviceType=LinkResolvers# }
 	static Void contributeLinkResolvers(Configuration config) {
 		config["literal"]	= LiteralLinkResolver()
 		config["anchor"]	= AnchorLinkResolver()
-		config["fantom"]	= config.autobuild(FantomLinkResolver#)
-		config["fandoc"]	= config.autobuild(FandocLinkResolver#)
-		config["pod"]		= config.autobuild(PodLinkResolver#)
-		config["fan"]		= config.autobuild(FanLinkResolver#)
+		config["fantom"]	= config.build(FantomLinkResolver#)
+		config["fandoc"]	= config.build(FandocLinkResolver#)
+		config["pod"]		= config.build(PodLinkResolver#)
+		config["fan"]		= config.build(FanLinkResolver#)
 		config["article"]	= ArticleLinkResolver()
 	}
 }

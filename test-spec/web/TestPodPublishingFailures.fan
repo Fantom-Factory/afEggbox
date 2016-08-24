@@ -16,8 +16,8 @@ using afFancordion
 class TestPodPublishingFailures : WebFixture {
 **  - [Public pods must contain the file '/doc/pod.fandoc'.]`errMsg:missingPublicPodFandoc`
 
-	@Inject private Registry? reg
-	@Inject private FanrRepo? repo
+	@Inject private Scope?		scope
+	@Inject private FanrRepo?	repo
 	
 	Str:Str podMeta := [
 		"pod.name"    : "acmeWidgets",
@@ -32,7 +32,7 @@ class TestPodPublishingFailures : WebFixture {
 	
 	Void podSizeTooBig() {
 		setupFixture
-		repo := (FanrRepo) reg.autobuild(FanrRepo#, null, [FanrRepo#maxPodSize : 100])
+		repo := (FanrRepo) scope.build(FanrRepo#, null, [FanrRepo#maxPodSize : 100])
 		buf  := Buf().writeChars("".padl(100))
 		repo.publish(newUser, buf.flip.in)
 	}

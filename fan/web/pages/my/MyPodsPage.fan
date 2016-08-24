@@ -7,7 +7,7 @@ using afSitemap
 
 const mixin MyPodsPage : PrMyPage, SitemapExempt {
 	
-	@Inject abstract Registry		registry
+	@Inject abstract Scope			scope
 	@Inject abstract FanrRepo		fanrRepo
 	@Inject abstract RepoPodDao		podDao
 	@Inject { type=PodUploadDetails# } 
@@ -54,7 +54,7 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 	}
 
 	private FandocUri fandocUri(RepoPod pod) {
-		registry.autobuild(FandocSummaryUri#, [pod.name, pod.version])
+		scope.build(FandocSummaryUri#, [pod.name, pod.version])
 	}
 	
 	Str uploadUrl() {

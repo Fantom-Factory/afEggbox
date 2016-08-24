@@ -3,7 +3,7 @@ using fandoc
 
 internal const class FandocLinkResolver : LinkResolver {
 
-	@Inject private const Registry	reg
+	@Inject private const Scope	scope
 	
 	new make(|This|in) { in(this) }
 	
@@ -11,7 +11,7 @@ internal const class FandocLinkResolver : LinkResolver {
 		uri := str.toUri
 		if (uri.scheme != "fandoc") return null
 
-		fandocUri := FandocUri.fromUri(reg, uri)
+		fandocUri := FandocUri.fromUri(scope, uri)
 		if (fandocUri == null)
 			return null
 		
@@ -34,7 +34,7 @@ internal const class FandocLinkResolver : LinkResolver {
 
 abstract const class FandocUri {
 	@Inject const FandocWriter	fandocRenderer
-	@Inject const Registry		reg
+	@Inject const Scope			scope
 	@Inject const RepoPodDao	podDao
 	@Inject const CorePods		corePods
 			const Str 			podName
@@ -46,7 +46,7 @@ abstract const class FandocUri {
 		in(this)
 	}
 	
-	static new fromUri(Registry reg, Uri uri) {
+	static new fromUri(Scope scope, Uri uri) {
 		if (uri.auth != null || uri.path.isEmpty)
 			return null
 
@@ -54,10 +54,10 @@ abstract const class FandocUri {
 		podName		:= chomp(path)
 		podVersion	:= Version(uri.query["v"] ?: "", false)
 		
-		return parsePath(reg, uri, podName, podVersion, path)
+		return parsePath(scope, uri, podName, podVersion, path)
 	}
 	
-	static new fromClientUrl(Registry reg, Uri uri) {
+	static new fromClientUrl(Scope scope, Uri uri) {
 		path 		:= uri.pathOnly.path.rw
 		pods		:= chomp(path)
 		podName		:= chomp(path)
@@ -67,15 +67,15 @@ abstract const class FandocUri {
 		if (pods != "pods")
 			return InvalidLinks.add(InvalidLinkMsgs.pathSegmentNotPods(pods))
 
-		return parsePath(reg, uri, podName, podVersion, path)
+		return parsePath(scope, uri, podName, podVersion, path)
 	}
 	
-	private static FandocUri? parsePath(Registry reg, Uri uri, Str? podName, Version? podVersion, Str[] path) {
+	private static FandocUri? parsePath(Scope scope, Uri uri, Str? podName, Version? podVersion, Str[] path) {
 		if (podName == null)
 			return InvalidLinks.add(InvalidLinkMsgs.invalidPodName(podName))
 
 		if (path.isEmpty)
-			return reg.autobuild(FandocSummaryUri#, [podName, podVersion])
+			return scope.build(FandocSummaryUri#, [podName, podVersion])
 
 		section	:= chomp(path)
 		if (section == "api") {
@@ -86,10 +86,10 @@ abstract const class FandocUri {
 				slotName = slotName.toUri.pathStr	// remove any querystring from the frag - happens if frag is written before the query (which is wrong!)
 			}
 			if (path.isEmpty)
-				return reg.autobuild(FandocApiUri#, [podName, podVersion, typeName, slotName])
+				return scope.build(FandocApiUri#, [podName, podVersion, typeName, slotName])
 			src := path.first
 			if (src == "src")
-				return reg.autobuild(FandocSrcUri#, [podName, podVersion, typeName, slotName])
+				return scope.build(FandocSrcUri#, [podName, podVersion, typeName, slotName])
 			return InvalidLinks.add(InvalidLinkMsgs.tooManyPathSegments(path))
 		}
 
@@ -98,7 +98,7 @@ abstract const class FandocUri {
 			if (!path.isEmpty)
 				InvalidLinks.add(InvalidLinkMsgs.tooManyPathSegments(path))
 			slotName := uri.frag
-			return reg.autobuild(FandocSrcUri#, [podName, podVersion, typeName, slotName])
+			return scope.build(FandocSrcUri#, [podName, podVersion, typeName, slotName])
 		}
 
 		if (section == "doc") {
@@ -108,44 +108,45 @@ abstract const class FandocUri {
 			if (docUri.ext == null)
 				docUri = (docUri.toStr + ".fandoc").toUri
 			headingId := uri.frag
-			return reg.autobuild(FandocDocUri#, [podName, podVersion, docUri, headingId])
+			return scope.build(FandocDocUri#, [podName, podVersion, docUri, headingId])
 		}
 
 		return InvalidLinks.add(InvalidLinkMsgs.invalidPathSegment(section))
 	}
 
-	static new fromFantomUri(Registry reg, LinkResolverCtx ctx, Str link) {
+	// TODO this kinds sucks - having to pass in scope everywhere!
+	static new fromFantomUri(Scope scope, LinkResolverCtx ctx, Str link) {
 		uri := link.toUri
 		if (link.contains("::")) {
 			if (link.split(':').size > 3)
 				return InvalidLinks.add(InvalidLinkMsgs.invalidFantomUri)
 			podName		:= link.split(':').first
 			typeName	:= link[podName.size+2..-1]
-			return parseFantomUri(reg, ctx, link, podName, typeName)
+			return parseFantomUri(scope, ctx, link, podName, typeName)
 		}
 		
 		if (uri.scheme == null && !uri.isPathAbs) {
 			if (ctx.pod != null)
-				return parseFantomUri(reg, ctx, link, ctx.pod.name, link)
+				return parseFantomUri(scope, ctx, link, ctx.pod.name, link)
 		}
 		
 		return null
 	}
 	
-	private static FandocUri? parseFantomUri(Registry reg, LinkResolverCtx ctx, Str str, Str podName, Str typeName) {
+	private static FandocUri? parseFantomUri(Scope scope, LinkResolverCtx ctx, Str str, Str podName, Str typeName) {
 		uri := str.toUri
 		if (typeName == "index" || typeName.isEmpty)
-			return reg.autobuild(FandocSummaryUri#, [podName, null])
+			return scope.build(FandocSummaryUri#, [podName, null])
 		if (typeName == "pod-doc")
-			return reg.autobuild(FandocDocUri#, [podName, null, `/doc/pod.fandoc`, null])
+			return scope.build(FandocDocUri#, [podName, null, `/doc/pod.fandoc`, null])
 
 		if (typeName.startsWith("src-"))
-			return reg.autobuild(FandocSrcUri#, [podName, null, typeName[4..-1], null])
+			return scope.build(FandocSrcUri#, [podName, null, typeName[4..-1], null])
 		
 		
-		podDao 		:= (RepoPodDao)		reg.serviceById(RepoPodDao#.qname)
-		podApiDao	:= (RepoPodApiDao)	reg.serviceById(RepoPodApiDao#.qname)
-		corePods	:= (CorePods) 		reg.serviceById(CorePods#.qname)
+		podDao 		:= (RepoPodDao)		scope.serviceById(RepoPodDao#.qname)
+		podApiDao	:= (RepoPodApiDao)	scope.serviceById(RepoPodApiDao#.qname)
+		corePods	:= (CorePods) 		scope.serviceById(CorePods#.qname)
 		
 		// if the context has the same pod name, use the same pod version too 
 		pod 		:= (podName == ctx.pod?.name) ? ctx.pod : podDao.findPod(podName)
@@ -156,14 +157,14 @@ abstract const class FandocUri {
 				if (docUri.ext == null)
 					docUri = `${docUri}.fandoc`
 				headingId := uri.frag
-				return reg.autobuild(FandocDocUri#, [podName, null, docUri, headingId])
+				return scope.build(FandocDocUri#, [podName, null, docUri, headingId])
 			}
 			slotName := (Str?) null
 			if (typeName.contains(".") && typeName.split('.').size == 2 && typeName[0].isUpper) {
 				slotName = typeName.split('.').getSafe(1)
 				typeName = typeName.split('.').getSafe(0)
 			}
-			return reg.autobuild(FandocApiUri#, [podName, null, typeName, slotName])
+			return scope.build(FandocApiUri#, [podName, null, typeName, slotName])
 		}
 
 		if (pod == null)
@@ -180,18 +181,18 @@ abstract const class FandocUri {
 					typeName = typeName.split('.').getSafe(0)
 				}
 			}
-			return reg.autobuild(FandocApiUri#, [pod.name, pod.version, typeName, slotName])
+			return scope.build(FandocApiUri#, [pod.name, pod.version, typeName, slotName])
 		}
 
 		if (ctx.type != null && podApi != null && podApi.hasType(ctx.type))
 			if (podApi[ctx.type].slot(typeName, false) != null)
-				return reg.autobuild(FandocApiUri#, [pod.name, pod.version, ctx.type, typeName])
+				return scope.build(FandocApiUri#, [pod.name, pod.version, ctx.type, typeName])
 		
 		docUri := `/doc/` + typeName.toUri.pathOnly
 		if (docUri.ext == null)
 			docUri = `${docUri}.fandoc`
 		headingId := uri.frag
-		return reg.autobuild(FandocDocUri#, [pod.name, pod.version, docUri, headingId])
+		return scope.build(FandocDocUri#, [pod.name, pod.version, docUri, headingId])
 	}
 	
 	private Uri summaryUrl(RepoPod pod) {
@@ -218,19 +219,19 @@ abstract const class FandocUri {
 	FandocSummaryUri toSummaryUri() {
 		this is FandocSummaryUri
 			? this
-			: reg.autobuild(FandocSummaryUri#, [podName, podVersion])
+			: scope.build(FandocSummaryUri#, [podName, podVersion])
 	}
 
 	FandocApiUri toApiUri(Str? typeName := null, Str? slotName := null) {
-		reg.autobuild(FandocApiUri#, [podName, podVersion, typeName, slotName])
+		scope.build(FandocApiUri#, [podName, podVersion, typeName, slotName])
 	}
 
 	FandocSrcUri toSrcUri(Str typeName, Str? slotName := null) {
-		reg.autobuild(FandocSrcUri#, [podName, podVersion, typeName, slotName])
+		scope.build(FandocSrcUri#, [podName, podVersion, typeName, slotName])
 	}
 
 	FandocDocUri toDocUri(Uri fileUri := `/doc/pod.fandoc`, Str? headingId := null) {
-		reg.autobuild(FandocDocUri#, [podName, podVersion, fileUri, headingId])
+		scope.build(FandocDocUri#, [podName, podVersion, fileUri, headingId])
 	}
 	
 	Uri toAtomFeedUrl() {
@@ -299,7 +300,7 @@ const class FandocSummaryUri : FandocUri {
 	}
 
 	override FandocUri toLatest() {
-		reg.autobuild(FandocSummaryUri#, [podName, null])
+		scope.build(FandocSummaryUri#, [podName, null])
 	}
 
 	override FandocUri? toParentUri() {
@@ -328,7 +329,7 @@ const class FandocApiUri : FandocUri {
 	}
 	
 	override FandocUri toLatest() {
-		reg.autobuild(FandocApiUri#, [podName, null, typeName, slotName])
+		scope.build(FandocApiUri#, [podName, null, typeName, slotName])
 	}
 
 	DocType type() {
@@ -364,11 +365,11 @@ const class FandocApiUri : FandocUri {
 	}
 
 	FandocSrcUri toTypeSrcUri() {
-		reg.autobuild(FandocSrcUri#, [podName, podVersion, typeName, null])
+		scope.build(FandocSrcUri#, [podName, podVersion, typeName, null])
 	}
 	
 	FandocSrcUri toSlotSrcUri() {
-		reg.autobuild(FandocSrcUri#, [podName, podVersion, typeName, slotName])
+		scope.build(FandocSrcUri#, [podName, podVersion, typeName, slotName])
 	}
 	
 	Str typeFirstSentenceHtml() {
@@ -465,7 +466,7 @@ const class FandocSrcUri : FandocUri {
 	}
 
 	override FandocUri toLatest() {
-		reg.autobuild(FandocSrcUri#, [podName, null, typeName, slotName])
+		scope.build(FandocSrcUri#, [podName, null, typeName, slotName])
 	}
 
 	Str qname() {
@@ -561,7 +562,7 @@ const class FandocDocUri : FandocUri {
 	}
 	
 	override FandocUri toLatest() {
-		reg.autobuild(FandocDocUri#, [podName, null, fileUri, headingId])
+		scope.build(FandocDocUri#, [podName, null, fileUri, headingId])
 	}
 
 	Bool isAsset() {
@@ -569,7 +570,7 @@ const class FandocDocUri : FandocUri {
 	}
 	
 	FandocDocAsset toAsset() {
-		reg.autobuild(FandocDocAsset#, [this])
+		scope.build(FandocDocAsset#, [this])
 	}
 	
 	Bool exists() {

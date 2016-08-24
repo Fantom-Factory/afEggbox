@@ -6,7 +6,7 @@ using afFormBean
 
 const mixin SignupPage : PrPage {
 
-	@Inject abstract Registry		registry
+	@Inject abstract Scope			scope
 	@Inject abstract RepoUserDao	userDao
 	@Inject	abstract HttpSession	httpSession
 	@Inject { type=SignUpDetails# } 
@@ -51,7 +51,7 @@ const mixin SignupPage : PrPage {
 			user.screenName = orig + " " + Int.random(0..9999).toStr
 		}
 
-		registry.injectIntoFields(user)
+		scope.inject(user)
 		user.populateFromGravatar
 		userDao.create(user)
 		userSession.loginAs(user)

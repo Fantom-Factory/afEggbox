@@ -2,7 +2,7 @@ using afIoc
 
 internal const class PodLinkResolver : LinkResolver {
 
-	@Inject private const Registry	reg
+	@Inject private const Scope	scope
 	
 	new make(|This|in) { in(this) }
 	
@@ -10,7 +10,7 @@ internal const class PodLinkResolver : LinkResolver {
 		uri := str.toUri
 		if (uri.scheme != "pod") return null
 
-		fandocUri := FandocUri.fromUri(reg, `fandoc:/${uri.pathStr}`)
+		fandocUri := FandocUri.fromUri(scope, `fandoc:/${uri.pathStr}`)
 		if (fandocUri == null)
 			return null
 		
