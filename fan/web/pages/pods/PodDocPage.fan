@@ -3,6 +3,7 @@ using afBedSheet
 using afEfanXtra
 using afPillow
 using fandoc
+using afGoogleAnalytics::GoogleAnalytics
 
 @Page { disableRouting = true }
 const mixin PodDocPage : PrPage {

@@ -2,6 +2,7 @@ using afIocEnv
 using afBeanUtils
 using email
 
+// FIXME Better Config!
 const class EggboxConfig {
 	private static const Log			log			:= EggboxConfig#.pod.log
 	private static const TypeCoercer	typeCoercer	:= TypeCoercer()

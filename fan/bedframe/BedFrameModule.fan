@@ -4,7 +4,7 @@ using afIocConfig
 using afIocEnv
 using afBedSheet
 using afEfanXtra
-using afSlim
+using afConcurrent::ActorPools
 
 const class BedFrameModule {
 
@@ -12,21 +12,9 @@ const class BedFrameModule {
 		defs.add(ErrEmailer#)
 	}
 
-	@Build { serviceId="slim" }
-	static Slim buildSlim(IocEnv env) {
-		// Go HTML in Prod so I can share on Google+
-		// http://stackoverflow.com/questions/12426591/google-plus-doesnt-show-meta-information-snippet-from-xhtml-documents
-		Slim(TagStyle.html)
-	}
-
 	@Contribute { serviceType=ErrResponses# }
 	static Void contributeErrResponses(Configuration config) {
 		config[Err#] = MethodCall(ErrHandler#process).toImmutableFunc
-	}
-
-	@Contribute { serviceType=TemplateConverters# }
-	static Void contributeTemplateConverters(Configuration config, Slim slim) {
-		config["slim"] = |File file -> Str| { slim.parseFromFile(file) }
 	}
 
 	@Contribute { serviceType=FileHandler# }

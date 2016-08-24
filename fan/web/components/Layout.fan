@@ -5,6 +5,7 @@ using afEfanXtra
 using afBedSheet
 using afPillow
 using afDuvet
+using afGoogleAnalytics::GoogleAnalytics
 
 const mixin Layout : PrComponent {
 	
@@ -35,7 +36,7 @@ const mixin Layout : PrComponent {
 	
 	@AfterRender
 	Void afterRender() {
-		if (googleAnalyticsEnabled && !googleAnalytics.sentPageView)
+		if (googleAnalyticsEnabled && !googleAnalytics.pageViewRendered)
 			googleAnalytics.sendPageView		
 	}
 

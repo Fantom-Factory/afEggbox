@@ -39,9 +39,9 @@ html (xmlns:svg="http://www.w3.org/2000/svg")
 
 	body
 		-- if (loggedIn)
-			-- app.renderTopNavBarPrivate
+			== app.renderTopNavBarPrivate
 		-- else
-			-- app.renderTopNavBarPublic
+			== app.renderTopNavBarPublic
 
 
 		main#${pageId}.container
@@ -51,7 +51,7 @@ html (xmlns:svg="http://www.w3.org/2000/svg")
 						span (aria-hidden="true") &times;
 					span.t-alertMsg	${alert.message}
 
-			-- renderBody
+			== renderBody
 
 		p &nbsp;
-		-- app.renderFatFooter
+		== app.renderFatFooter

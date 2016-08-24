@@ -2,7 +2,7 @@ using afIoc
 using afBedSheet
 using fanr
 
-class FanrModule {
+const class FanrModule {
 
 	static Void defineServices(ServiceDefinitions defs) {
 		defs.add(FanrRepo#)

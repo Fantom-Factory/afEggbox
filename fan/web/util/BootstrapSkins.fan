@@ -6,7 +6,7 @@ const mixin BootstrapSkin : InputSkin {
 	Str renderFormGroup(Str groupCss, SkinCtx skinCtx, |Str->Str| inputStr) {
 		html	:= Str.defVal
 		errCss	:= skinCtx.fieldInvalid ? " has-error" : Str.defVal
-		hint	:= skinCtx.input.hint ?: skinCtx.msg("field.${skinCtx.name}.hint")
+		hint	:= skinCtx.formField.hint ?: skinCtx.msg("field.${skinCtx.name}.hint")
 		attMap	:= ["class":"form-control"]
 		if (hint != null)
 			attMap["aria-describedby"] = "${skinCtx.name}-helpBlock"
@@ -28,7 +28,7 @@ const mixin BootstrapSkin : InputSkin {
 const class BootstrapTextSkin : BootstrapSkin {
 	override Str render(SkinCtx skinCtx) {
 		renderFormGroup("", skinCtx) |attrs| {
-			"""<input ${attrs} type="${skinCtx.input.type}" value="${skinCtx.value}">"""
+			"""<input ${attrs} type="${skinCtx.formField.type}" value="${skinCtx.value}">"""
 		}
 	}
 }
@@ -36,7 +36,7 @@ const class BootstrapTextSkin : BootstrapSkin {
 const class BootstrapHoneyPotSkin : BootstrapSkin {
 	override Str render(SkinCtx skinCtx) {
 		renderFormGroup("passwordAgain", skinCtx) |attrs| {
-			"""<input ${attrs} type="${skinCtx.input.type}" value="${skinCtx.value}">"""
+			"""<input ${attrs} type="${skinCtx.formField.type}" value="${skinCtx.value}">"""
 		}
 	}
 }
@@ -59,7 +59,7 @@ const class BootstrapStaticSkin : BootstrapSkin {
 
 const class BootstrapCheckboxSkin : InputSkin {
 	override Str render(SkinCtx skinCtx) {
-		hint	:= skinCtx.input.hint ?: skinCtx.msg("field.${skinCtx.name}.hint")
+		hint	:= skinCtx.formField.hint ?: skinCtx.msg("field.${skinCtx.name}.hint")
 		checked := (skinCtx.value == "true" || skinCtx.value == "on") ? " checked" : Str.defVal
 		attMap	:= hint == null ? Str:Str[:] : ["aria-describedby" : "${skinCtx.name}-helpBlock"]
 		attrs	:= skinCtx.renderAttributes(attMap)
@@ -87,15 +87,16 @@ const class BootstrapSelectSkin : BootstrapSkin {
 		renderFormGroup("", skinCtx) |attrs| {
 			html	:= "<select ${attrs}>"
 	
-			optionsProvider := skinCtx.formField.optionsProvider ?: optionsProviders.find(skinCtx.field.type)
+			formField := skinCtx.formField
+			optionsProvider := formField.optionsProvider ?: optionsProviders.find(skinCtx.field.type)
 	
-			showBlank := skinCtx.input.showBlank ?: optionsProvider.showBlank  
+			showBlank := formField.showBlank ?: optionsProvider.showBlank(formField) 
 			if (showBlank) {
-				blankLabel := skinCtx.input.blankLabel ?: optionsProvider.blankLabel  
+				blankLabel := formField.blankLabel ?: optionsProvider.blankLabel(formField)
 				html += """<option value="">${blankLabel?.toXml}</option>"""
 			}
 			
-			optionsProvider.options(skinCtx.field).each |value, label| {
+			optionsProvider.options(formField, skinCtx.bean).each |value, label| {
 				optLabel := skinCtx.msg("option.${label}.label") ?: label
 				optValue := skinCtx.toClient(value)
 				optSelec := (optValue.equalsIgnoreCase(skinCtx.value)) ? " selected" : Str.defVal
