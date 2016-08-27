@@ -153,16 +153,17 @@ using afFancordion
 @Fixture { failFast=false }
 class TestFandocUri : RepoFixture {
 	
-	@Inject{}	Scope?		scope
 				Str?		fandocUri
 				Str?		clientUrl
 	
 	override Void setupFixture() {
 		super.setupFixture
 		user := getOrMakeUser("foo@bar.com")
-		fanrRepo.publish(user, `test/res/foo-1.0.pod`.toFile.in)
-		fanrRepo.publish(user, `test/res/foo-2.0.pod`.toFile.in)
-		fanrRepo.publish(user, `test/res/poo-1.0.pod`.toFile.in)
+		scope.registry.activeScope.createChild("request") {
+			fanrRepo.publish(user, `test/res/foo-1.0.pod`.toFile.in)
+			fanrRepo.publish(user, `test/res/foo-2.0.pod`.toFile.in)
+			fanrRepo.publish(user, `test/res/poo-1.0.pod`.toFile.in)
+		}
 	}
 	
 	Void parseFandocUri(Str uri) {

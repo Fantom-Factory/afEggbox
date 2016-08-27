@@ -34,7 +34,9 @@ class TestPrivatePodVersions : WebFixture {
 
 	Void uploadPod(Str podName) {
 		user := userDao.getByEmail(`micky.mouse@disney.com`)
-		fanrRepo.publish(user, `test/res/${podName}`.toFile.in)
+		scope.registry.activeScope.createChild("request") {
+			fanrRepo.publish(user, `test/res/${podName}`.toFile.in)
+		}
 	}
 
 }

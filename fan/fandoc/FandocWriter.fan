@@ -6,6 +6,7 @@ using web
 const class FandocWriter {
 	
 	@Inject	private const |LinkResolverCtx?, HtmlSkin?->HtmlWriter| htmlWriter
+	@Inject	private const Scope scope
 	
 	private new make(|This|in) { in(this) }
 	
