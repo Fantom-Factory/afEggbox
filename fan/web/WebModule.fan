@@ -19,6 +19,12 @@ const class WebModule {
 		defs.addService(SitemapPages#)
 		defs.addService(AtomFeedPages#)
 		defs.addService(AtomFeedGenerator#)
+		
+		defs.decorateService("afPillow::Pages") |Configuration config| {
+			config["dirtyCash"] = |Obj? pages, Scope scope->Obj?| {
+				scope.build(DirtyPages#, [pages])
+			}
+		}
 	}
 
 	@Contribute { serviceType=Routes# }
@@ -85,18 +91,6 @@ const class WebModule {
 		config.remove("fandoc")	// so we can have help fandoc file named after the class
 	}
 
-	// FIXME	DIRTY CASH!
-//	@Advise { serviceId="afPillow::Pages" }
-//	static Void addTransations(MethodAdvisor[] methodAdvisors, DirtyCash dirtyCash) {
-//		methodAdvisors
-//			.find { it.method.name.startsWith("renderPage") }
-//			.addAdvice |invocation -> Obj?| { 
-//				return dirtyCash.cash |->Obj?| { 
-//					return invocation.invoke
-//				}
-//			} 
-//	}
-	
 	@Contribute { serviceType=ApplicationDefaults# }
 	static Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig, IocEnv iocEnv) {
 		
@@ -112,5 +106,43 @@ const class WebModule {
 		config[DuvetConfigIds.requireJsTimeout]				= 8sec
 		
 		config["afEggbox.aboutFandocExists"]				= `about.fandoc`.toFile.exists
+	}
+}
+
+const class DirtyPages : Pages {
+	
+	@Inject
+	private const DirtyCash	dirtyCash
+	private const Pages 	pages
+
+	new make(Pages pages, |This|in) {
+		in(this)
+		this.pages = pages
+	}
+	
+	override Type[] pageTypes() {
+		pages.pageTypes
+	}
+
+	override PageMeta pageMeta(Type pageType, Obj?[]? pageContext := null) {
+		pages.pageMeta(pageType, pageContext)
+	}
+
+	override PageMeta get(Type pageType, Obj?[]? pageContext := null) {
+		pages.get(pageType, pageContext)
+	}
+
+	override Obj renderPage(Type pageType, Obj?[]? pageContext := null) {
+		return dirtyCash.cash |->Obj?| { 
+			pages.renderPage(pageType, pageContext)
+		}
+	}
+
+	override Obj renderPageMeta(PageMeta pageMeta) {
+		pages.renderPageMeta(pageMeta)
+	}
+
+	override Obj callPageEvent(Type pageType, Obj?[]? pageContext, Method eventMethod, Obj?[]? eventContext) {
+		pages.callPageEvent(pageType, pageContext, eventMethod, eventContext)
 	}
 }
