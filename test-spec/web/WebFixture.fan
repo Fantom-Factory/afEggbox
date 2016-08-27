@@ -4,8 +4,8 @@ using afBounce
 
 abstract class WebFixture : RepoFixture {
 	
-	@Inject {}	Pages?			pages
-	@Inject {}	UserSession?	userSession
+	@Inject 	Pages?			pages
+	@Inject 	UserSession?	userSession
 	
 //	override Void setupFixture() {
 //		super.setupFixture

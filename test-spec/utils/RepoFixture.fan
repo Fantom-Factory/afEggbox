@@ -7,13 +7,14 @@ using afIoc
 abstract class RepoFixture : FixtureTest {
     BedClient? client
 
-	@Inject {}	RepoPodDao?			podDao
-	@Inject {}	RepoPodFileDao?		podFileDao
-	@Inject {}	RepoPodDocsDao?		podDocsDao
-	@Inject {}	RepoPodApiDao?		podApiDao
-	@Inject {}	RepoPodSrcDao?		podSrcDao
-	@Inject {}	RepoUserDao?		userDao
-	@Inject {}	FanrRepo?			fanrRepo
+	@Inject 	RepoPodDao?			podDao
+	@Inject 	RepoPodFileDao?		podFileDao
+	@Inject 	RepoPodDocsDao?		podDocsDao
+	@Inject 	RepoPodApiDao?		podApiDao
+	@Inject 	RepoPodSrcDao?		podSrcDao
+	@Inject 	RepoUserDao?		userDao
+	@Inject 	FanrRepo?			fanrRepo
+	@Inject 	Scope?				scope
 	@Autobuild	Indexes?			indexes
 
     virtual Void setupFixture() {

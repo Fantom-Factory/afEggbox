@@ -27,7 +27,9 @@ class TestSmoke : WebFixture {
 	Void uploadPod(Str podName) {
 		// TODO: can't post multi-part forms yet 
 		user := userDao.getByEmail(`micky.mouse@disney.com`)
-		fanrRepo.publish(user, `test/res/${podName}`.toFile.in)
+		scope.registry.activeScope.createChild("request") {
+			fanrRepo.publish(user, `test/res/${podName}`.toFile.in)
+		}
 		showPage("MyPodsPage")
 	}
 	

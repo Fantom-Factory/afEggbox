@@ -7,16 +7,16 @@ const class Alert {
 	Str? success {
 		get { httpSession.flash["flashMsg"] }
 		set {
-			httpSession.flash["flashMsg"] = it
-			httpSession.flash["flashLevel"] = "success"
+			httpSession.flashSet("flashMsg", it)
+			httpSession.flashSet("flashLevel", "success")
 		}
 	}
 
 	Str? error {
 		get { httpSession.flash["flashMsg"] }
 		set {
-			httpSession.flash["flashMsg"] = it
-			httpSession.flash["flashLevel"] = "danger"			
+			httpSession.flashSet("flashMsg", it)
+			httpSession.flashSet("flashLevel", "danger")
 		}
 	}
 	

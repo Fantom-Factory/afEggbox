@@ -16,7 +16,6 @@ using afFancordion
 class TestPodPublishingFailures : WebFixture {
 **  - [Public pods must contain the file '/doc/pod.fandoc'.]`errMsg:missingPublicPodFandoc`
 
-	@Inject private Scope?		scope
 	@Inject private FanrRepo?	repo
 	
 	Str:Str podMeta := [
@@ -34,80 +33,92 @@ class TestPodPublishingFailures : WebFixture {
 		setupFixture
 		repo := (FanrRepo) scope.build(FanrRepo#, null, [FanrRepo#maxPodSize : 100])
 		buf  := Buf().writeChars("".padl(100))
-		repo.publish(newUser, buf.flip.in)
+		scope.registry.activeScope.createChild("request") {
+			repo.publish(newUser, buf.flip.in)
+		}
 	}
 
 	Void podNameTakenBySomeoneElse() {
 		setupFixture
 		// an old private pod
-		repo.publish(getOrMakeUser("stevie@abc.com"), makePod(podMeta.setAll([
-			"pod.name"    : "acmeWidgets",
-			"pod.version" : "0.0.5",
-			"pod.summary" : "Widgets for me!"
-		])).in)
+		scope.registry.activeScope.createChild("request") {
+			repo.publish(getOrMakeUser("stevie@abc.com"), makePod(podMeta.setAll([
+				"pod.name"    : "acmeWidgets",
+				"pod.version" : "0.0.5",
+				"pod.summary" : "Widgets for me!"
+			])).in)
 
-		// a new public pod
-		repo.publish(getOrMakeUser("steveo@abc.com"), makePod(podMeta.setAll([
-			"pod.name"    : "acmeWidgets",
-			"pod.version" : "0.0.2",
-			"pod.summary" : "Widgets for everyone!"
-		])).in)
+			// a new public pod
+			repo.publish(getOrMakeUser("steveo@abc.com"), makePod(podMeta.setAll([
+				"pod.name"    : "acmeWidgets",
+				"pod.version" : "0.0.2",
+				"pod.summary" : "Widgets for everyone!"
+			])).in)
+		}
 	}
 
 	Void podVersionTooSmall() {
 		setupFixture
-		repo.publish(newUser, makePod(podMeta.setAll([
-			"pod.version" : "0.1.2",
-		])).in)
-		repo.publish(newUser, makePod(podMeta.setAll([
-			"pod.version" : "1.2.3",
-		])).in)
-		repo.publish(newUser, makePod(podMeta.setAll([
-			"pod.version" : "2.3.4",
-		])).in)
-
-		repo.publish(newUser, makePod(podMeta.setAll([
-			"pod.version" : "1.1.1",
-		])).in)
+		scope.registry.activeScope.createChild("request") {
+			repo.publish(newUser, makePod(podMeta.setAll([
+				"pod.version" : "0.1.2",
+			])).in)
+			repo.publish(newUser, makePod(podMeta.setAll([
+				"pod.version" : "1.2.3",
+			])).in)
+			repo.publish(newUser, makePod(podMeta.setAll([
+				"pod.version" : "2.3.4",
+			])).in)
+	
+			repo.publish(newUser, makePod(podMeta.setAll([
+				"pod.version" : "1.1.1",
+			])).in)
+		}
 	}
 
 	Void missingPodMeta() {
 		setupFixture
-		repo.publish(newUser, makePod([
-			"pod.name"    : "acmeWidgets",
-			"pod.version" : "0.0.5",
-			"pod.depends" : "sys 1.0",
-			"build.ts"	  : "2006-06-06T06:06:00Z UTC",
-			"private"	  : "true"
-		]).in)
+		scope.registry.activeScope.createChild("request") {
+			repo.publish(newUser, makePod([
+				"pod.name"    : "acmeWidgets",
+				"pod.version" : "0.0.5",
+				"pod.depends" : "sys 1.0",
+				"build.ts"	  : "2006-06-06T06:06:00Z UTC",
+				"private"	  : "true"
+			]).in)
+		}
 	}
 
 	Void missingPublicPodMeta() {
 		setupFixture
-		repo.publish(newUser, makePod([
-			"pod.name"    : "acmeWidgets",
-			"pod.version" : "0.0.5",
-			"pod.depends" : "sys 1.0",
-			"pod.summary" : "Widgets for everyone!",
-			"build.ts"	  : "2006-06-06T06:06:00Z UTC",
-			"repo.public"  : "true"
-		], |Zip zip| {
-			zip.writeNext(`/doc/pod.fandoc`)
-		}).in)
+		scope.registry.activeScope.createChild("request") {
+			repo.publish(newUser, makePod([
+				"pod.name"    : "acmeWidgets",
+				"pod.version" : "0.0.5",
+				"pod.depends" : "sys 1.0",
+				"pod.summary" : "Widgets for everyone!",
+				"build.ts"	  : "2006-06-06T06:06:00Z UTC",
+				"repo.public"  : "true"
+			], |Zip zip| {
+				zip.writeNext(`/doc/pod.fandoc`)
+			}).in)
+		}
 	}
 
 	Void missingPublicPodFandoc() {
 		setupFixture
-		repo.publish(newUser, makePod([
-			"pod.name"    : "acmeWidgets",
-			"pod.version" : "0.0.5",
-			"pod.depends" : "sys 1.0",
-			"pod.summary" : "Widgets for everyone!",
-			"build.ts"	  : "2006-06-06T06:06:00Z UTC",
-			"repo.public"  : "true",
-			"license.name": "pfft",
-			"vcs.uri"	  : "pfft",
-		]).in)
+		scope.registry.activeScope.createChild("request") {
+			repo.publish(newUser, makePod([
+				"pod.name"    : "acmeWidgets",
+				"pod.version" : "0.0.5",
+				"pod.depends" : "sys 1.0",
+				"pod.summary" : "Widgets for everyone!",
+				"build.ts"	  : "2006-06-06T06:06:00Z UTC",
+				"repo.public"  : "true",
+				"license.name": "pfft",
+				"vcs.uri"	  : "pfft",
+			]).in)
+		}
 	}
 	
 	Buf makePod(Str:Str meta, |Zip|? f := null) {	
