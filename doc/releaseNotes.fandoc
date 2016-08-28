@@ -1,9 +1,10 @@
 Versions
 ********
-v0.0.8
+v0.1.0
 ======
  - New: Dependency graph force layout on pod summary page.
- 
+ - Chg: Updated to Fantom 1.0.69 & IoC v3.
+
 v0.0.6
 ======
  - New: Added Pod search forms on the Index and Pods pages.

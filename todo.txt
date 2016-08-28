@@ -1,8 +1,4 @@
 
-
-email reza
-****
-
 TODO
 ====
 install MongoDB on VM
@@ -34,7 +30,7 @@ make web-app work in non-root ctx, .e.g. localhost/*repo*/pods/etc - see docAsse
 
 Delete user account
 
-404 / 500 page
+500 page
 
 MongoDB text search
 
