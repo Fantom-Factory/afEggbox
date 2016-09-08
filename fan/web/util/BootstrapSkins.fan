@@ -52,7 +52,7 @@ const class BootstrapTextAreaSkin : BootstrapSkin {
 const class BootstrapStaticSkin : BootstrapSkin {
 	override Str render(SkinCtx skinCtx) {
 		renderFormGroup("", skinCtx) |attrs| {
-			"""<p ${attrs}>${skinCtx.value.toXml}</p>"""
+			"""<p ${attrs}>${skinCtx.value.toXml}</p><input name="${skinCtx.name}" type="hidden" value="${skinCtx.value}">"""
 		}
 	}
 }
