@@ -6,7 +6,7 @@ using afMorphia
 @SubModule { modules=[FanrModule#, WebModule#] }
 const class CoreModule {
 	
-	static Void defineServices(RegistryBuilder defs) {
+	Void defineServices(RegistryBuilder defs) {
 		
 		defs.addService(UserSession#)
 		
@@ -24,17 +24,17 @@ const class CoreModule {
 	}
 
 	@Build
-	static EggboxConfig buildEggboxConfig(IocEnv iocEnv) {
+	EggboxConfig buildEggboxConfig(IocEnv iocEnv) {
 		EggboxConfig(iocEnv)
 	}
 
 	@Contribute { serviceType=Converters# }
-	static Void contributeConverters(Configuration config) {		
+	Void contributeConverters(Configuration config) {		
 		config[RepoPodMeta#] 	= config.build(RepoPodMetaConverter#)
 		config[FandocUri#] 		= config.build(FandocUriConverter#)
 	}
 
-	internal static Void onRegistryStartup(Configuration config) {
+	internal Void onRegistryStartup(Configuration config) {
 		config.set("afEggbox.ensureIndexes", |->| {
 			indexes := (Indexes) config.build(Indexes#)
 			indexes.ensureIndexes
@@ -42,7 +42,7 @@ const class CoreModule {
 	}
 	
 	@Contribute { serviceType=ApplicationDefaults# }
-	static Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig) {
+	Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig) {
 		config[MorphiaConfigIds.mongoUrl]	= eggboxConfig.mongoDbUrl
 	}
 }
