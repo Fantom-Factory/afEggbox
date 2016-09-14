@@ -33,8 +33,6 @@ const mixin PodsIndexPage : PrPage {
 			allPods = allPods.sortr(RepoPodDao.byBuildDate)
 		allTags = allPods.map { it.meta.tags }.flatten.unique.sort
 		
-		countPublicPods		= podDao.countPods(null)
-		
 		injector.injectRequireModule("podFiltering")
 		
 		// with all the params flying around on this page, ensure Google only indexes the main version
