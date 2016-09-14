@@ -91,7 +91,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	
 	override Int countVersions(RepoUser? user := null) {
 		query := user == null ? allPods : allPods.field("ownerId").eq(user._id)
-		return datastore.query(allPods).findCount
+		return datastore.query(query).findCount
 	}
 
 	override Int countPods(RepoUser? user := null) {
@@ -145,7 +145,6 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		if (query == null)
 			options.remove("query")
 		output 	:= datastore.collection.mapReduce(mapFunc, reduceFunc, options)
-//		echo(Buf().writeObj(output, ["indent":0]).flip.readAllStr)
 		vals 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
 		pods	:= (RepoPod[]) vals .map { datastore.fromMongoDoc(it) }
 
@@ -156,7 +155,6 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 				// I just happen to know this is the latest!
 				dirtyCache.put(RepoPod#, "${it.name}-null", it)			
 			}
-//		echo("### $pods.size :: $pods")
 		return pods
 	}
 
