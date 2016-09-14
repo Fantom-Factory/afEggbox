@@ -26,7 +26,7 @@ const mixin PodList : PrComponent {
 	}
 	
 	Str tagCss(RepoPod pod) {
-		pod.meta.tags.join(" ") { "tag-${it.fromDisplayName}" }
+		pod.meta.tags.join(" ") { "tag-${it.fromDisplayName}" }.trimToNull ?: "tag-none"
 	}
 	
 	Str editUrl(RepoPod pod) {
