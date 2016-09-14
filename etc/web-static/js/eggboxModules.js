@@ -180,7 +180,7 @@ define("podFiltering", ["jquery", "tinysort", "debounce"], function($, tinysort,
 		var $tags   		= $("#tags");
 		var $searchBox 		= $("#searchBox");
 		var $searchGo		= $("#searchGo");
-		var allTags 		= $tags.attr("data-allTags").split(" ");
+		var allTags 		= ($tags.attr("data-allTags") + " tag-none-active").trim().split(" ");
 
 		function encodeUrl(all, none) {
 			var query = "";
@@ -246,20 +246,18 @@ define("podFiltering", ["jquery", "tinysort", "debounce"], function($, tinysort,
 				sortByName();
 			if (params["sortByDate"] === "true")
 				sortByDate();
-			if (params["tags"]) {
-				if (params["tags"] === "all") {
-					$.each(allTags, function(i, tag) {
-						$tags.addClass(tag);
+			if (!params["tags"] || params["tags"] === "all") {
+				$.each(allTags, function(i, tag) {
+					$tags.addClass(tag);
+				});
+			} else {
+				$.each(allTags, function(i, tag) {
+					$tags.removeClass(tag);
+				});
+				if (params["tags"] !== "none") {
+					$.each(params["tags"].split(","), function (i, val) {
+						$tags.addClass("tag-" + val + "-active");
 					});
-				} else {
-					$.each(allTags, function(i, tag) {
-						$tags.removeClass(tag);
-					});
-					if (params["tags"] !== "none") {
-						$.each(params["tags"].split(","), function (i, val) {
-							$tags.addClass("tag-" + val + "-active");
-						});
-					}
 				}
 			}
 			if (params["q"]) {

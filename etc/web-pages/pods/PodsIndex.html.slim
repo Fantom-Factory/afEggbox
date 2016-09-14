@@ -1,7 +1,7 @@
 == app.renderLayout(true, "All Pods" + (allPods.size == 0 ? "" : " (${allPods.size})"))
 
 	style
-		-- allTags.each |tag|
+		-- allTags.dup.add("none").each |tag|
 			|
 				#podsIndexPage .tag-${tag}-active .tag.label.tag-${tag} {
 					background-color:	#5cb85c;
@@ -10,9 +10,10 @@
 					display:			block;
 				}
 				
-		| #podsIndexPage .search-active .podList .media.search-notFound {
-			display:	none;
-		}
+		|
+			#podsIndexPage .search-active .podList .media.search-notFound {
+				display:	none;
+			}
 
 	ol.breadcrumb
 		li.active	Pods
