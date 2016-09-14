@@ -120,13 +120,15 @@ class PodEditDetails {
 		this.pod = pod
 	}
 
-	@HtmlInput { type="text"; attributes="autocomplete=\"off\""; minLength=3; maxLength=128 }
+	// TODO I dunno why these fields need to be non-nullable?
+	
+	@HtmlInput { type="text"; attributes="autocomplete=\"off\""; minLength=3; maxLength=128; required=false }
 	Str projectName {
 		get { pod.meta.projectName }
 		set { pod.meta.projectName  = it }
 	}
 
-	@HtmlInput { type="url"; minLength=3; maxLength=512 }
+	@HtmlInput { type="url"; minLength=3; maxLength=512; required=false }
 	Uri projectUrl {
 		get { pod.meta.projectUrl ?: `` }
 		set { pod.meta.projectUrl  = it }
@@ -156,37 +158,37 @@ class PodEditDetails {
 		set { pod.meta.isInternal = it }
 	}
 
-	@HtmlInput { type="text"; minLength=3; maxLength=256 }
+	@HtmlInput { type="text"; minLength=3; maxLength=256; required=false }
 	Str organisationName {
 		get { pod.meta.orgName ?: "" }
 		set { pod.meta.orgName  = it }
 	}
 
-	@HtmlInput { type="url"; minLength=3; maxLength=512 }
+	@HtmlInput { type="url"; minLength=3; maxLength=512; required=false }
 	Uri organisationUrl {
 		get { pod.meta.orgUrl ?: `` }
 		set { pod.meta.orgUrl  = it }
 	}
 
-	@HtmlInput { type="text"; minLength=3; maxLength=128 }
+	@HtmlInput { type="text"; minLength=3; maxLength=128; required=false }
 	Str licenceName {
 		get { pod.meta.licenceName ?: "" }
 		set { pod.meta.licenceName  = it }
 	}
 
-	@HtmlInput { type="text"; minLength=3; maxLength=128 }
+	@HtmlInput { type="text"; minLength=3; maxLength=128; required=false }
 	Str sourceCodeManagement {
 		get { pod.meta.vcsName ?: "" }
 		set { pod.meta.vcsName  = it }
 	}
 
-	@HtmlInput { type="url"; minLength=3; maxLength=512 }
+	@HtmlInput { type="url"; minLength=3; maxLength=512; required=false }
 	Uri sourceCodeManagementUrl {
 		get { pod.meta.vcsUrl ?: `` }
 		set { pod.meta.vcsUrl  = it }
 	}	
 
-	@HtmlInput { type="text"; minLength=3; maxLength=256 }
+	@HtmlInput { type="text"; minLength=3; maxLength=256; required=false }
 	Str tags {
 		get { pod.meta.tags.join(", ") }
 		set { pod.meta.tags = it.split(',') }

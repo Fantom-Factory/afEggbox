@@ -3,6 +3,7 @@ Versions
 v0.1.2
 ======
  - Bug: Saving user details would give error message "Email is required" even though the field is read only. (Reported by Andy Frank - Thanks!)
+ - Bug: Pod edit page marked many fields as required, even though they weren't. (Reported by Andy Frank - Thanks!)
 
 v0.1.0
 ======
