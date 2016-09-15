@@ -12,9 +12,9 @@ using afBounce
 ** 1. Click [Sign Up]`exe:click(#TEXT)`
 ** 1. Goto [My Pods Page]`exe:showPage(#TEXT)` 
 ** 1. Upload [poo-1.0.pod]`exe:uploadPod(#TEXT)`
-** 1. [Poo]`eq:myPodsEntry` is in the My Pods table
+** 1. [poo]`eq:myPodsEntry` is in the My Pods table
 ** 1. Goto the [Pods Index Page]`exe:showPage(#TEXT)`
-** 1. [Poo 1.0 by Micky Mouse]`eq:allPodsEntry` is in the All Pods table
+** 1. [poo 1.0 by Micky Mouse]`eq:allPodsEntry` is in the All Pods table
 ** 1. View [/pods/poo/]`exe:gotoUrl(#TEXT)`
 ** 1. View [/pods/poo/api/]`exe:gotoUrl(#TEXT)`
 ** 1. View [/pods/poo/api/Bar]`exe:gotoUrl(#TEXT)`

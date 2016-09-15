@@ -96,7 +96,7 @@ const class AppBuilder {
 	** such as copying over surplus files.
 	Void build(|AppBuilder|? extra := null) {
 		pod  := Pod.find(podName)
-		name := (pod.meta["proj.name"] ?: podName) + " ${pod.version}"
+		name := ((pod.meta["pod.displayName"] ?: pod.meta["proj.name"]) ?: podName) + " ${pod.version}"
 		log
 		log("Packaging ${name}")
 		log("".padl(name.size+10, '='))

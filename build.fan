@@ -10,10 +10,10 @@ class Build : BuildPod {
 		version = Version("0.1.1")
 
 		meta = [
-			"proj.name"		: "Eggbox",
-			"afIoc.module"	: "afEggbox::CoreModule",
-			"repo.tags"		: "app",
-			"repo.public"	: "false"			
+			"pod.displayName"	: "Eggbox",
+			"afIoc.module"		: "afEggbox::CoreModule",
+			"repo.tags"			: "app",
+			"repo.public"		: "false"
 		]
 
 		depends = [
