@@ -1,8 +1,8 @@
 
+** > fpm run AppBuilder
 class BuildEggbox {
 	static Void main() {
 		AppBuilder("afEggbox") {
-			it.useEnv = true
 			it.scriptArgs = "afEggbox 8069"
 		}.build |bob| {
 			bob.copyFile(`fan://afEggbox/licence.txt`.get,		`./`)
