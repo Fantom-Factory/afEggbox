@@ -94,7 +94,7 @@ abstract class FanrFixture : RepoFixture {
 	
 	private Void convPodData([Str:Obj?]? map) {
 		if (map == null) return
-		map.remove("pod.displayName")
+		map.remove("pod.dis")
 		map.remove("repo.public")
 		map.remove("repo.deprecated")
 		map.remove("licence.name")

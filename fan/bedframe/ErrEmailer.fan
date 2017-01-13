@@ -45,7 +45,7 @@ const class ErrEmailer {
 			startTime	:= DateTime.nowTicks
 	
 			podName := bedServer.appPod ?: "unknown"
-			appName	:= bedServer.appPod?.meta?.get("pod.displayName") ?: "Unknown"
+			appName	:= bedServer.appPod?.meta?.get("pod.dis") ?: "Unknown"
 			to		:= eggboxConfig.errorEmailsSendTo?.toStr ?: "null"
 			from	:= "${podName}@${bedServer.host.host}"
 
