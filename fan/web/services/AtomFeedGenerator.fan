@@ -88,8 +88,8 @@ class AtomPodWrapper : AtomEntryWrapper {
 				it.uri	= pod.meta.orgUrl ?: `/users/${pod.owner.screenName}`
 			})
 		
-		if (pod.meta.projectUrl != null)
-			entry.links.add(Link(pod.meta.projectUrl, "alternate") {
+		if (pod.meta.podUrl != null)
+			entry.links.add(Link(pod.meta.podUrl, "alternate") {
 				it.title	= pod.projectName
 				it.type		= MimeType("text/html")
 			})

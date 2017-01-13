@@ -107,32 +107,33 @@ The Pod Repository makes us of the following optional [pod meta data]`docLang::P
 
 pre>
 table:
---------------     -------
-'license.name'     The project license; either 'Commercial' or a name defined by the [Open Source Initiative]`http://opensource.org/licenses/alphabetical`
-'org.name'         The organization who developed the pod
-'org.uri'          A web site URL for the organization
-'pod.displayName'  A readable *humanised* name for the pod
-'proj.uri'         The web site URL of the project
-'vcs.name'         The name of the Version Control System, e.g. Mercurial, Git, Subversion
-'vcs.uri'          The URL of the public version control repository
+--------------  -------
+'pod.dis'       A readable *humanised* name for the pod
+'pod.uri'       A web site URL for the pod (why not use the pod's Eggbox summary page!?)
+'org.name'      The organization who developed the pod
+'org.uri'       A web site URL for the organization
+'vcs.name'      The name of the Version Control System, e.g. Mercurial, Git, Subversion, ...
+'vcs.uri'       The URL of the public version control repository
+'license.name'  The project license; either 'Commercial' or a name defined by the [Open Source Initiative]`http://opensource.org/licenses/alphabetical`
 <pre
 
-> Tip: Define 'pod.displayName' to give your pod a readable name in pod listings.
+> Tip: Define 'pod.dis' to give your pod a readable name in pod listings.
+
+Note the Fantom docs mention 'proj.name' and 'proj.uri'; these are reserved for logical groupings of multiple pods. For example, all the Fantom core pods ('sys', 'concurrent', 'util', ...) come under the one project, *Fantom Core*.
 
 A more complete set of pod meta data would look like this:
 
 pre>
 syntax: fantom
 meta = [
-    "pod.displayName" : "Foo Bar",
-    "proj.name"       : "Foo",
-    "proj.uri"        : "http://.wotever.com/foo",
-    "org.name"        : "Wotever",
-    "org.uri"         : "http://wotever.com",
-    "vcs.name"        : "Mercurial",
-    "vcs.uri"         : "https://bitbucket.org/Wotever/foobar",
-    "licence.name"    : "ISC License (ISC)",
-    "repo.public"     : "true"
+    "pod.dis"      : "Foo Bar",
+    "pod.uri"      : "http://.wotever.com/foo",
+    "org.name"     : "Wotever",
+    "org.uri"      : "http://wotever.com",
+    "vcs.name"     : "Mercurial",
+    "vcs.uri"      : "https://bitbucket.org/Wotever/foobar",
+    "licence.name" : "ISC License (ISC)",
+    "repo.public"  : "true"
 ]
 <pre
 

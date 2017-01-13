@@ -129,9 +129,9 @@ class PodEditDetails {
 	}
 
 	@HtmlInput { type="url"; minLength=3; maxLength=512; required=false }
-	Uri projectUrl {
-		get { pod.meta.projectUrl ?: `` }
-		set { pod.meta.projectUrl  = it }
+	Uri podUrl {
+		get { pod.meta.podUrl ?: `` }
+		set { pod.meta.podUrl  = it }
 	}
 
 	@HtmlInput { type="textarea"; attributes="rows=\"3\""; minLength=3; maxLength=1024 }

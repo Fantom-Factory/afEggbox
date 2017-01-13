@@ -208,9 +208,9 @@ class RepoPodMeta {
 		metaOrig.keys.exclude { specialKeys.contains(it) }.sort.each { meta[it] = metaOrig[it] }
 
 		// FIXME we shouldn't alter the pod meta, but instead keep our own copy
-		// pod-meta is only used for (unsupported) fanr searching - so we could kill it
+		// pod-meta is only used for (unsupported) fanr searching - so we could kill it and
 		// default project name to pod name (if not supplied)
-		if (get("pod.displayName") == null)
+		if (get("pod.dis") == null)
 			projectName = name
 
 		// convert private to public
@@ -242,8 +242,8 @@ class RepoPodMeta {
 				meta[key] = meta[key].toStr.toBool	
 		}
 
-		try parseTest := projectUrl
-		catch projectUrl = null
+		try parseTest := podUrl
+		catch podUrl = null
 
 		try parseTest := orgUrl
 		catch orgUrl = null
@@ -287,23 +287,23 @@ class RepoPodMeta {
 		private set { /* read only */	}
 	}
 	
-	// TODO rename projectName this to displayName - check slim templates
+	// TODO rename projectName this to dis - check slim templates
 	Str projectName {
 		get {
-			nom := get("pod.displayName")
+			nom := get("pod.dis")
 			// small hack so I don't have to update all 55 of my public pods!
 			if (nom == null && orgName == "Alien-Factory")
 				return get("proj.name")
 			return nom ?: name
 		}
-		set { set("pod.displayName", it)	}
+		set { set("pod.dis", it)	}
 	}
 
-	Uri? projectUrl {
-		get { get("proj.uri")?.toStr?.toUri	}
-		set { set("proj.uri", it?.toStr)	}
+	Uri? podUrl {
+		get { get("pod.uri")?.toStr?.toUri ?: get("proj.uri")?.toStr?.toUri }
+		set { set("pod.uri", it?.toStr)	}
 	}
-	
+
 	Str? licenceName {
 		get { get("licence.name")		}
 		set { set("licence.name", it)	}
