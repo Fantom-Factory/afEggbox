@@ -6,6 +6,9 @@ using afGoogleAnalytics::GoogleAnalytics
 
 @Page { disableRouting = true }
 const mixin PodsIndexPage : PrPage {
+		// TODO move this out to AppConfig
+		// limit the potentially massive list of tags to just those wanted ones
+		const static Str[] 				coreTags := "app database misc system templating testing web".split
 
 	@Inject abstract Registry			registry
 	@Inject abstract RepoPodDao			podDao
