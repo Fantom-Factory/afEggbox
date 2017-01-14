@@ -293,7 +293,7 @@ class RepoPodMeta {
 			nom := get("pod.dis")
 			// small hack so I don't have to update all 55 of my public pods!
 			if (nom == null && orgName == "Alien-Factory")
-				return get("proj.name")
+				nom = get("proj.name")
 			return nom ?: name
 		}
 		set { set("pod.dis", it)	}

@@ -61,7 +61,6 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 		pageMeta.eventUrl(#onUpload).encode
 	}
 
-	
 	@PageEvent { httpMethod="POST" }
 	Redirect? onUpload() {
 		try {
