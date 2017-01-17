@@ -365,9 +365,9 @@ class RepoPodMeta {
 }
 
 const class InvalidLink {
-	@Property{} const FandocUri	where
-	@Property{}	const Str		link
-	@Property{}	const Str		msg
+	@Property	const FandocUri	where
+	@Property	const Str		link
+	@Property	const Str		msg
 
 	new make(|This|in) { in(this) }
 	
