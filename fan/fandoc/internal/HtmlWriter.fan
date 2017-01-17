@@ -71,7 +71,11 @@ internal class HtmlWriter : DocWriter {
 			case DocNodeId.link:
 				link := elem as Link
 				href := linkResolvers.resolve(link.uri, ctx)
-				skin.a(href == null ? link.uri.toUri : href, href == null)
+				url  := href
+				if (url == null)
+					try   url = link.uri.toUri
+					catch url = `ERROR`  
+				skin.a(url, href == null)
 
 			case DocNodeId.image:
 				img := elem as Image

@@ -3,7 +3,8 @@ Versions
 v0.1.4
 ======
  - Chg: A pod's display name is now taken from the meta 'pod.dis'.
- - Bug: General fandoc errors caused 'ParseErrs' when scanning for Invalid Links.
+ - Bug: General fandoc errors caused NPEs when scanning for Invalid Links.
+ - Bug: Invalid URIs caused ParseErrs when writing HTML.
 
 v0.1.2
 ======
