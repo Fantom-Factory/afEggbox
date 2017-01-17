@@ -37,7 +37,7 @@ const class InvalidLinks {
 							fandoc.writeStrToHtml(slot.doc.text, linkCtx)
 						}
 					}
-		}
+			}
 		}
 	}
 	
@@ -53,7 +53,7 @@ const class InvalidLinks {
 	static Obj? add(Str msg) {
 		invalidLinks?.add(InvalidLink {
 			it.where	= Actor.locals["afEggbox.whereLinkIsFound"]
-			it.link		= Actor.locals["afEggbox.linkBeingResolved"]
+			it.link		= Actor.locals["afEggbox.linkBeingResolved"] ?: ""	// FandocErrs aren't causes by links, see FandocWriter
 			it.msg		= msg
 		})
 		return null
