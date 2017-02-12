@@ -34,7 +34,3 @@ Delete user account
 
 MongoDB text search
 
-
-
-
-
