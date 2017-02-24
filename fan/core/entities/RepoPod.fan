@@ -210,12 +210,8 @@ class RepoPodMeta {
 		// FIXME we shouldn't alter the pod meta, but instead keep our own copy
 		// pod-meta is only used for (unsupported) fanr searching - so we could kill it and
 		// default project name to pod name (if not supplied)
-		if (get("pod.dis") == null) {
-			if (get("pod.displayName") != null)
-				projectName = get("pod.displayName")
-			else
-				projectName = name
-		}
+		if (get("pod.dis") == null)
+			projectName = name
 
 		// convert private to public
 		if (metaOrig.containsKey("repo.private")) {
@@ -297,7 +293,7 @@ class RepoPodMeta {
 			nom := get("pod.dis")
 			// small hack so I don't have to update all 55 of my public pods!
 			if (nom == null && orgName == "Alien-Factory")
-				nom = get("proj.name")
+				nom = get("proj.displayName") ?: get("proj.name")
 			return nom ?: name
 		}
 		set { set("pod.dis", it)	}
