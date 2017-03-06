@@ -5,14 +5,15 @@ using afPillow
 using afGoogleAnalytics::GoogleAnalytics
 using afConcurrent::AtomicMap
 using gfx::Size
-using [java] fan.sys::SysInStream				as JSysInStream
-using [java] org.eclipse.swt.graphics::Image	as JImage
-using [java] org.eclipse.swt.widgets::Display	as JDisplay
+using [java] fanx.interop::Interop								as JInterop
+using [java] javax.imageio::ImageIO								as JImageIO
+using [java] javax.imageio::ImageReader							as JImageReader
+using [java] javax.imageio.stream::MemoryCacheImageInputStream	as JImageInputStream
 
 @Page { disableRouting = true }
 const mixin PodSummaryPage : PrPage {
-	private static const Unit	bytes	:= Unit("byte")
-	private static const Unit[] units 	:= ["petabyte", "terabyte", "gigabyte", "megabyte", "kilobyte", "byte"].map { Unit(it) }
+	private static const Unit	bytes		:= Unit("byte")
+	private static const Unit[] units 		:= ["petabyte", "terabyte", "gigabyte", "megabyte", "kilobyte", "byte"].map { Unit(it) }
 
 	private static const AtomicMap ogimageSizeCache	:= AtomicMap() { it.keyType=Uri#; it.valType=Size?#; }
 	
@@ -101,25 +102,10 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
 		
 		// Facebook and Reddit want the ogimage size up front, so...
-		ogsize := ogimageSizeCache.getOrAdd(ogimage) |->Size?| {
-			try {
-				// note I'm passing a clientUri here, not a localUri 
-				oguri := ogimage.toStr.startsWith("/coldFeet") ? `/` + ogimage[2..-1] : ogimage // remove cold feet prefix
-				file  := assetCache.getAndUpdateOrProduce(oguri)?.in?.readAllBuf?.toFile(oguri)
-
-				if (file != null) {
-					// it's much easier to use Java directly than to mess about with FWT thread locals
-					rect := JImage(JDisplay(), JSysInStream.java(file.in)).getBounds
-					size := Size(rect.width, rect.height)			
-					return size
-				}
-			} catch (Err err) {
-				err.trace
-			}
-			return null
-		} as Size
-		
-		if (ogsize != null) {
+		ogsize := ogimageSizeCache.getOrAdd(ogimage) |->Size?| { getSize(ogimage) } as Size
+		if (ogsize == null)
+			ogimageSizeCache.remove(ogimage)
+		else {
 			injector.injectMeta.withProperty("og:image:width"	).withContent(ogsize.w.toStr)
 			injector.injectMeta.withProperty("og:image:height"	).withContent(ogsize.h.toStr)
 		}
@@ -128,6 +114,36 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectMeta.withName("description").withContent(metaDesc)
 	}
 
+	** Not an easy task!
+	**  - it's near impossible to mess with FWT ThreadLocals
+	**  - calling the swt code direct requires we deploy 64-bit linux libs
+	**  - when then throws exceptions 'cos its the wrong, unsupported, linux type!
+	**  - standard AWT Java toolkit either requires a running Frame or returns -1 for width and height
+	** 
+	** So we're using ImageIO.
+	** See http://stackoverflow.com/questions/672916/how-to-get-image-height-and-width-using-java#answer-2911772
+	Size? getSize(Uri ogimage) {
+		// note I'm passing a clientUri here, not a localUri - should be fine if were the root mod 
+		oguri := ogimage.toStr.startsWith("/coldFeet") ? `/` + ogimage[2..-1] : ogimage // remove cold feet prefix
+		idata := assetCache.getAndUpdateOrProduce(oguri)?.in?.readAllBuf
+
+		if (idata != null) {
+			iter := JImageIO.getImageReadersBySuffix(ogimage.ext)
+			
+			while (iter.hasNext) {
+				try {
+					reader := (JImageReader) iter.next
+					reader.setInput(JImageInputStream(JInterop.toJava(idata.in)))
+					width := reader.getWidth(reader.getMinIndex)
+					height := reader.getHeight(reader.getMinIndex)
+					reader.dispose
+					return Size(width, height)
+				} catch { }
+			}
+		}
+		return null
+	}
+	
 	Str installPodName() {
 		fandocUri.isLatest ? pod.name : "\"${pod.name} ${pod.version}\""
 	}
