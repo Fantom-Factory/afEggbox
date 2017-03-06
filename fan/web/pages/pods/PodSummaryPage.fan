@@ -3,18 +3,26 @@ using afBedSheet
 using afEfanXtra
 using afPillow
 using afGoogleAnalytics::GoogleAnalytics
+using afConcurrent::AtomicMap
+using gfx::Size
+using [java] fan.sys::SysInStream				as JSysInStream
+using [java] org.eclipse.swt.graphics::Image	as JImage
+using [java] org.eclipse.swt.widgets::Display	as JDisplay
 
 @Page { disableRouting = true }
 const mixin PodSummaryPage : PrPage {
 	private static const Unit	bytes	:= Unit("byte")
 	private static const Unit[] units 	:= ["petabyte", "terabyte", "gigabyte", "megabyte", "kilobyte", "byte"].map { Unit(it) }
 
+	private static const AtomicMap ogimageSizeCache	:= AtomicMap() { it.keyType=Uri#; it.valType=Size?#; }
+	
 	@Inject			abstract Scope				scope
 	@Inject			abstract RepoPodDao			podDao
 	@Inject			abstract SyntaxWriter		syntaxWriter
 	@Inject			abstract EggboxConfig		eggboxConfig
 	@Inject			abstract GoogleAnalytics	googleAnalytics
 	@Inject			abstract CorePods			corePods
+	@Inject			abstract ClientAssetCache	assetCache
 	@PageContext	abstract FandocSummaryUri	fandocUri
 					abstract RepoPod[][]		podVersions
 					abstract RepoPod[]			referencedBy
@@ -74,8 +82,8 @@ const mixin PodSummaryPage : PrPage {
 	** Need to wait until *after* layout has rendered to find the HTML tag.
 	@AfterRender
 	Void afterRender(StrBuf buf) {
-		ogasset		:= fandocUri.toDocUri(`/doc/ogimage.png`)
-		ogasset		 = ogasset.exists ? ogasset : fandocUri.toDocUri(`/doc/ogimage.jpg`)
+		ogasset		:= fandocUri.toDocUri(`/doc/ogimage.png`)	// first lookg for PNG
+		ogasset		 = ogasset.exists ? ogasset : fandocUri.toDocUri(`/doc/ogimage.jpg`)	// then look for JPG
 		ogimage		:= ogasset.exists ? ogasset.toAsset.clientUrl : fileHandler.fromLocalUrl(`/images/defaultPodOgimage.png`).clientUrl
 		htmlIndex	:= buf.toStr.index("<html ") + "<html ".size
 		absPageUrl	:= bedServer.toAbsoluteUrl(fandocUri.toClientUrl)
@@ -91,6 +99,30 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectMeta.withProperty("og:description"	).withContent(fandocUri.pod.meta.summary)
 		injector.injectMeta.withProperty("og:locale"		).withContent("en_GB")
 		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
+		
+		// Facebook and Reddit want the ogimage size up front, so...
+		ogsize := ogimageSizeCache.getOrAdd(ogimage) |->Size?| {
+			try {
+				// note I'm passing a clientUri here, not a localUri 
+				oguri := ogimage.toStr.startsWith("/coldFeet") ? `/` + ogimage[2..-1] : ogimage // remove cold feet prefix
+				file  := assetCache.getAndUpdateOrProduce(oguri)?.in?.readAllBuf?.toFile(oguri)
+
+				if (file != null) {
+					// it's much easier to use Java directly than to mess about with FWT thread locals
+					rect := JImage(JDisplay(), JSysInStream.java(file.in)).getBounds
+					size := Size(rect.width, rect.height)			
+					return size
+				}
+			} catch (Err err) {
+				err.trace
+			}
+			return null
+		} as Size
+		
+		if (ogsize != null) {
+			injector.injectMeta.withProperty("og:image:width"	).withContent(ogsize.w.toStr)
+			injector.injectMeta.withProperty("og:image:height"	).withContent(ogsize.h.toStr)
+		}
 		
 		metaDesc := "${pod.projectName} by ${pod.meta.orgName ?: pod.owner.screenName} :: ${pod.meta.summary}"
 		injector.injectMeta.withName("description").withContent(metaDesc)
