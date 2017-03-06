@@ -22,6 +22,7 @@ class Build : BuildPod {
 			"fanr         1.0.69 - 1.0",
 			"fandoc       1.0.69 - 1.0",
 			"email        1.0.69 - 1.0",
+			"gfx          1.0.69 - 1.0",
 
 			// ---- Core ------------------------
 			"afBeanUtils  1.0.8  - 1.0", 
