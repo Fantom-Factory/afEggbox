@@ -96,11 +96,6 @@ const mixin PodSummaryPage : PrPage {
 		injector.injectMeta.withProperty("og:url"	).withContent(absPageUrl.encode)
 		injector.injectMeta.withProperty("og:image"	).withContent(bedServer.toAbsoluteUrl(ogimage).encode)
 		
-		// ---- Open Graph Meta ---- Optional
-		injector.injectMeta.withProperty("og:description"	).withContent(fandocUri.pod.meta.summary)
-		injector.injectMeta.withProperty("og:locale"		).withContent("en_GB")
-		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
-		
 		// Facebook and Reddit want the ogimage size up front, so...
 		ogsize := ogimageSizeCache.getOrAdd(ogimage) |->Size?| { getSize(ogimage) } as Size
 		if (ogsize == null)
@@ -109,6 +104,11 @@ const mixin PodSummaryPage : PrPage {
 			injector.injectMeta.withProperty("og:image:width"	).withContent(ogsize.w.toStr)
 			injector.injectMeta.withProperty("og:image:height"	).withContent(ogsize.h.toStr)
 		}
+
+		// ---- Open Graph Meta ---- Optional
+		injector.injectMeta.withProperty("og:description"	).withContent(fandocUri.pod.meta.summary)
+		injector.injectMeta.withProperty("og:locale"		).withContent("en_GB")
+		injector.injectMeta.withProperty("og:site_name"		).withContent("Fantom Pod Repository")
 		
 		metaDesc := "${pod.projectName} by ${pod.meta.orgName ?: pod.owner.screenName} :: ${pod.meta.summary}"
 		injector.injectMeta.withName("description").withContent(metaDesc)
