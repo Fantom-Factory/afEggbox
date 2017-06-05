@@ -65,10 +65,27 @@ const mixin HelpToc : PrComponent {
 
 			id  := h.anchorId ?: Utils.fromDisplayName(h.title)
 
-			html.add("<li><a href=\"#${id.toUri.encode}\">${h.title}</a></li>")
+			html.add("<li><a href=\"#${id.toUri.encode}\">${title(h)}</a></li>")
 			i++
 		}
 		html.add("</ul>")
 		return i
+	}
+	
+	// TODO revert to heading.title() in Fantom 1.0.70 
+	static Str title(Heading heading) {
+		heading.children.size == 1
+			? heading.children.first.toStr
+			: findTextNodes(heading, Str[,]).join
+	}
+	
+	static private Str[] findTextNodes(DocElem elem, Str[] texts) {
+		elem.children.each {
+			if (it is DocText)
+				texts.add(((DocText) it).str)
+			if (it is DocElem)
+				findTextNodes(it, texts)
+		}
+		return texts
 	}
 }
