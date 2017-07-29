@@ -50,11 +50,12 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		           }
 		           return a.length - b.length;
 		       };
-		       printjson(pods);
-		       return asc ? pods.sort(sortByVersion)[pods.length-1] : pods.sort(sortByVersion)[0];
+		       var pod = asc ? pods.sort(sortByVersion)[pods.length-1] : pods.sort(sortByVersion)[0];
+
+		       // if we don't access the _id, or printjson(pod._id), then the resultant obj has no _id!? == ERROR!
+		       pod._id;
+		       return pod;
 		   }"""
-		   	// FIXME MongoDB 3.2 needs the printjson to work!??
-//		       printjson(pods);
 	
 	new make(|This| in) { in(this) }
 	
