@@ -33,7 +33,7 @@ class Build : BuildPod {
 			
 			// ---- Database --------------------
 			"afBson       1.1.0  - 1.1",
-			"afMongo      1.1.0  - 1.1",
+			"afMongo      1.1.2  - 1.1",
 			"afMorphia    1.2.0  - 1.2",
 			
 			// ---- Web -------------------------
