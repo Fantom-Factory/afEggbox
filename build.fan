@@ -7,7 +7,7 @@ class Build : BuildPod {
 	new make() {
 		podName = "afEggbox"
 		summary = "A website for uploading, viewing, and downloading Fantom pods. Host your very own Pod Repository!"
-		version = Version("0.1.3")
+		version = Version("0.1.3.2")
 
 		meta = [
 			"pod.dis"		: "Eggbox",
@@ -32,9 +32,9 @@ class Build : BuildPod {
 			"afIocEnv     1.1.0  - 1.1", 
 			
 			// ---- Database --------------------
-			"afBson       1.0.0  - 1.0",
-			"afMongo      1.0.8  - 1.0",
-			"afMorphia    1.1.0  - 1.1",
+			"afBson       1.1.0  - 1.1",
+			"afMongo      1.1.0  - 1.1",
+			"afMorphia    1.2.0  - 1.2",
 			
 			// ---- Web -------------------------
 			"afBedSheet   1.5.2  - 1.5",
