@@ -11,7 +11,7 @@ class Main : AbstractMain {
 
 	@Opt { help="The environment to start BedSheet in -> dev|test|prod" }
 	private Str? env
-	
+
 	override Int run() {
 		BedSheetBuilder(this.typeof.pod.name).startWisp(port, proxy, env)
 	}
