@@ -55,7 +55,7 @@ class FanrClient {
 		c.headers["Fanr-Ts"]					= (DateTime.nowUtc + tsSkew).toStr
 
 		// compute signature and add header
-		s := toSignatureBody(c.method, c.url, c.headers.map)
+		s := toSignatureBody(c.method, c.url, c.headers.val)
 		c.headers["Fanr-Signature"] = s.hmac("SHA1", secret).toBase64
 	}
 
