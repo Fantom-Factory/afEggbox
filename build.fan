@@ -37,7 +37,7 @@ class Build : BuildPod {
 			"afMorphia    1.2.0  - 1.2",
 			
 			// ---- Web -------------------------
-			"afBedSheet   1.5.2  - 1.5",
+			"afBedSheet   1.5.2  - 1.5.6",	// 1.5.8 doesn't play nice with old FormBean
 			"afEfanXtra   1.2.0  - 1.2",
 			"afPillow     1.1.2  - 1.1",
 			"afDuvet      1.1.2  - 1.1",
@@ -49,7 +49,7 @@ class Build : BuildPod {
 			"afAtom       1.0.2  - 1.0",
 
 			// ---- Other -----------------------
-			"afButter     1.2.2  - 1.2",
+			"afButter     1.2.6  - 1.2",
 			"afPegger     0.1.0  - 0.1",
 			"syntax       1.0.69 - 1.0",
 			"util         1.0.69 - 1.0",
@@ -57,7 +57,7 @@ class Build : BuildPod {
 			"xml          1.0.69 - 1.0",
 
 			// ---- Test ------------------------
-			"afBounce     1.1.2  - 1.1",
+			"afBounce     1.1.6  - 1.1",
 			"afFancordion 1.1.2  - 1.1",
 			"afFancordionBootstrap 1.0.2 - 1.0"
 		]
