@@ -156,7 +156,7 @@ const class FanrHandler {
 			sendUnauthErr("Unsupported signature algorithm: $signAlgorithm")
 
 		// verify signature which in effect is the password verification
-		s := toSignatureBody(req.httpMethod, req.urlAbs, req.headers.map)
+		s := toSignatureBody(req.httpMethod, req.urlAbs, req.headers.val)
 		if (secretAlgorithm != "SALTED-HMAC-SHA1")
 			throw Err("Unexpected secret algorithm: $secretAlgorithm")
 		secret := Buf.fromBase64(user.userSecret)
