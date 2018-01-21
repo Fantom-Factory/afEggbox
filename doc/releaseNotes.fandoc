@@ -2,6 +2,7 @@ Versions
 ********
 v0.1.4
 ======
+ - New: Support for '/doc/icon.svg'.
  - Chg: A pod's display name is now taken from the meta 'pod.dis'.
  - Chg: Added 'og:image:width' and 'og:image:height' meta to the pod summary page; as wanted by facebook and Reddit.
  - Chg: New branding images.

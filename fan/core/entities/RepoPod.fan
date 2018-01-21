@@ -34,10 +34,22 @@ class RepoPod {
 			it.aboutFandoc	= findAboutFandoc(docContents)
 			it.invalidLinks	= InvalidLink#.emptyList
 			it.hasDocs		= docContents.containsKey(`/doc/pod.fandoc`)
-			it.hasIcon		= docContents.containsKey(`/doc/icon.png`)
+			it.hasIcon		= docContents.containsKey(`/doc/icon.png`) || docContents.containsKey(`/doc/icon.svg`)
 			
-			if (it.hasIcon && docContents[`/doc/icon.png`].size < 12*1024)
-				it.iconDataUri	= "data:image/png;base64," + docContents[`/doc/icon.png`].toBase64 
+			if (docContents.containsKey(`/doc/icon.png`)) {
+				it.hasIcon = true
+				if (docContents[`/doc/icon.png`].size < 12*1024)
+					it.iconDataUri	= "data:image/png;base64," + docContents[`/doc/icon.png`].toBase64
+			}
+
+			if (docContents.containsKey(`/doc/icon.svg`))
+				if (docContents[`/doc/icon.svg`].size < 12*1024) {
+					// ALL SVGs must be < 12Kb and rendered inline
+					// Why? Because I can't be arsed chaning the DB property and migrating the data!
+					// Maybe for Eggbox v2...
+					it.hasIcon = true
+					it.iconDataUri	= "data:image/svg+xml;base64," + docContents[`/doc/icon.svg`].toBase64
+				}
 			
 			if (rootFileNames.contains("${meta.name}.js"))
 				it.meta.jsEnabled = true
