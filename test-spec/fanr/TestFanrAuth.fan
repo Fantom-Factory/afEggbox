@@ -15,11 +15,11 @@ using util
 ** 
 **   exe:verifyJson(#TEXT)
 **   {
+**       "secretAlgorithms"    : "SALTED-HMAC-SHA1",
+**       "salt"                : "3d98fe2bc7cd13e02344a76400e1c212",
+**       "signatureAlgorithms" : "HMAC-SHA1",
 **       "username"            : "someone",
 **       "ts"                  : "2011-07-13T14:50:01.865Z UTC",
-**       "secretAlgorithms"    : "SALTED-HMAC-SHA1",
-**       "signatureAlgorithms" : "HMAC-SHA1",
-**       "salt"                : "3d98fe2bc7cd13e02344a76400e1c212"
 **   }
 ** 
 class TestFanrAuth : FanrFixture {

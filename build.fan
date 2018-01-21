@@ -25,31 +25,31 @@ class Build : BuildPod {
 			"gfx          1.0.69 - 1.0",
 
 			// ---- Core ------------------------
-			"afBeanUtils  1.0.8  - 1.0", 
-			"afConcurrent 1.0.14 - 1.0", 
-			"afIoc        3.0.4  - 3.0", 
-			"afIocConfig  1.1.0  - 1.1", 
-			"afIocEnv     1.1.0  - 1.1", 
-			
+			"afBeanUtils  1.0.8  - 1.0",
+			"afConcurrent 1.0.20 - 1.0",
+			"afIoc        3.0.6  - 3.0",
+			"afIocConfig  1.1.0  - 1.1",
+			"afIocEnv     1.1.0  - 1.1",
+
 			// ---- Database --------------------
 			"afBson       1.1.0  - 1.1",
-			"afMongo      1.1.2  - 1.1",
-			"afMorphia    1.2.0  - 1.2",
-			
+			"afMongo      1.1.6  - 1.1",
+			"afMorphia    1.2.2  - 1.2",
+
 			// ---- Web -------------------------
-			"afBedSheet   1.5.2  - 1.5.6",	// 1.5.8 doesn't play nice with old FormBean
+			"afBedSheet   1.5.10 - 1.5",	// 1.5.8 doesn't play nice with old FormBean
 			"afEfanXtra   1.2.0  - 1.2",
-			"afPillow     1.1.2  - 1.1",
-			"afDuvet      1.1.2  - 1.1",
+			"afPillow     1.1.4  - 1.1",
+			"afDuvet      1.1.8  - 1.1",
 			"afSlim       1.2.0  - 1.2",
-			"afFormBean   1.1.4  - 1.1",
+			"afFormBean   1.2.2  - 1.2",
 			"afColdFeet   1.4.0  - 1.4",
 			"afSitemap    1.1.0  - 1.1",
-			"afGoogleAnalytics 0.1.4 - 0.1",
+			"afGoogleAnalytics 0.1.6 - 0.1",
 			"afAtom       1.0.2  - 1.0",
 
 			// ---- Other -----------------------
-			"afButter     1.2.6  - 1.2",
+			"afButter     1.2.8  - 1.2",
 			"afPegger     0.1.0  - 0.1",
 			"syntax       1.0.69 - 1.0",
 			"util         1.0.69 - 1.0",
@@ -57,14 +57,14 @@ class Build : BuildPod {
 			"xml          1.0.69 - 1.0",
 
 			// ---- Test ------------------------
-			"afBounce     1.1.6  - 1.1",
-			"afFancordion 1.1.2  - 1.1",
+			"afBounce     1.1.8  - 1.1",
+			"afFancordion 1.1.4  - 1.1",
 			"afFancordionBootstrap 1.0.2 - 1.0"
 		]
 
 		srcDirs = [`fan/`, `fan/bedframe/`, `fan/core/`, `fan/core/database/`, `fan/core/entities/`, `fan/fanapi/`, `fan/fanapi/model/`, `fan/fandoc/`, `fan/fandoc/internal/`, `fan/fanr/`, `fan/web/`, `fan/web/components/`, `fan/web/components/fandoc/`, `fan/web/pages/`, `fan/web/pages/help/`, `fan/web/pages/my/`, `fan/web/pages/pods/`, `fan/web/services/`, `fan/web/util/`, `test/`, `test/res/`, `test-spec/`, `test-spec/core/`, `test-spec/fanr/`, `test-spec/utils/`, `test-spec/web/`, `test-spec/web/login/`]
 		resDirs = [`doc/`, `res/`, `test/res/`]
-		
+
 		docApi	= false
 		docSrc	= false
 
@@ -81,7 +81,7 @@ class Build : BuildPod {
 		addRecursive(ci.resFiles, `etc/web-pages/`.toFile)
 		addRecursive(ci.resFiles, `etc/web-static/`.toFile)
 	}
-	
+
 	@Target { help = "Heroku pre-compile hook, use to install dependencies" }
 	Void herokuPreCompile() {
 
@@ -99,7 +99,7 @@ class Build : BuildPod {
 			"ttf"	: "application/font-sfnt",
 			"woff"	: "application/font-woff"
 		])
-		
+
 		installFandocSyntaxFile
 	}
 
@@ -118,11 +118,11 @@ class Build : BuildPod {
 	private Void patchMimeTypes(Str:Str extToMimeTypes) {
 		ext2mime := Env.cur.findFile(`etc/sys/ext2mime.props`)
 		mimeTypes := ext2mime.readProps
-		
+
 		toAdd := extToMimeTypes.exclude |mime, ext->Bool| {
 			mimeTypes.containsKey(ext)
 		}
-		
+
 		if (!toAdd.isEmpty) {
 			log.indent
 			exts := toAdd.keys.sort.join(", ")
@@ -137,7 +137,7 @@ class Build : BuildPod {
 			log.unindent
 		}
 	}
-	
+
 	private Void installFandocSyntaxFile() {
 		etcUri	:= `etc/syntax/syntax-fandoc.fog`
 		etcFile := Env.cur.findFile(etcUri, false)
@@ -146,16 +146,16 @@ class Build : BuildPod {
 		if (etcFile == null) {
 			etcFile = (Env.cur.workDir + etcUri).normalize
 			podFile	:= `res/syntax-fandoc.fog`.toFile
-			
+
 			try {
 				podFile.copyTo(etcFile)
 				log.info("Installed fandoc syntax file to: ${etcFile}")
 			} catch (Err err) {
 				log.warn("Could not copy syntax file to: ${etcFile} - ${err.typeof.qname} - ${err.msg}")
-				return	// abandon installation - if the syntax file doesn't exist, don't update ext.props 
+				return	// abandon installation - if the syntax file doesn't exist, don't update ext.props
 			}
 		}
-		
+
 		// update syntax ext.props
 		synUri	:= `etc/syntax/ext.props`
 		synFile := Env.cur.findFile(synUri, false)?.normalize
@@ -178,7 +178,7 @@ class Build : BuildPod {
 			}
 		}
 	}
-	
+
 	private static Void addRecursive(Uri[] resDirs, File dir) {
 		if (!dir.isDir) throw Err("`${dir.normalize}` is not a directory")
 		dir.walk { if (it.isDir) resDirs.add(it.uri) }
