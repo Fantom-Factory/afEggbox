@@ -39,7 +39,7 @@ const mixin PodSummaryPage : PrPage {
 			throw ReProcessErr(Redirect.movedTemporarily(pod.toSummaryUri.toClientUrl))
 
 		podVersions = groupBy(podDao.findPodVersions(pod.name)) |RepoPod item->Version| {
-			return Version([item.version.major, item.version.minor])
+			return Version([item.version.major, item.version.minor].exclude { it == null })
 		}.vals
 		injector.injectRequireModule("anchorJS", null, ["article h2, article h3, article h4"])
 		injector.injectRequireScript(["jquery":"\$", "bootstrap":"bs"], "\$('.sideMenu').affix({ offset: { top: 70, bottom: function () { return (this.bottom = \$('#fatFooter').outerHeight(true)) } } })")
