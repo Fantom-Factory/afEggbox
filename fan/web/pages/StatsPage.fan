@@ -62,7 +62,7 @@ const mixin StatsPage : PrPage, SitemapExempt {
 			]
 		]
 		
-		res := collection.aggregate(pipeline)
+		res := ([Str:Obj?][]?) collection.aggregateCursor(pipeline) |cur| { cur.toList }
 
 		return res.map |r| { 
 			DownloadStat { 
