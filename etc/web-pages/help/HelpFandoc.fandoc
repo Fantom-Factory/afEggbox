@@ -41,18 +41,18 @@ To render a HTML table, use preformatted text with 'table:' as the first line.
 Table parsing is simple, but expressive. The first line to start with a '-' character defines where the column boundaries are. All lines before are table headers, all lines after are table data.
 
 Example:
-pre>
- syntax: fandoc
- pre>
- table:
 
- Full Name    First Name  Last Name
- -----------  ----------  ---------
- John Smith   John        Smith
- Fred Bloggs  Fred        Bloggs
- Steve Eynon  Steve       Eynon
- <pre
-<pre
+  syntax: fandoc
+  pre>
+  table:
+
+  Full Name    First Name  Last Name
+  -----------  ----------  ---------
+  John Smith   John        Smith
+  Fred Bloggs  Fred        Bloggs
+  Steve Eynon  Steve       Eynon
+  < pre
+
 
 Becomes:
 
@@ -68,20 +68,20 @@ Steve Eynon  Steve       Eynon
 
 Note that any lines consisting entirely of '-' or '+' characters are ignored. This means the above table could also be written as:
 
-pre>
- syntax: fandoc
- pre>
- table:
- +-------------+-------+--------+
- |             | First | Last   |
- | Full Name   | Name  | Name   |
-  -------------+-------+--------+
- | John Smith  | John  | Smith  |
- | Steve Eynon | Steve | Eynon  |
- | Fred Bloggs | Fred  | Bloggs |
- +-------------+-------+--------+
- <pre
-<pre
+
+  syntax: fandoc
+  pre>
+  table:
+  +-------------+-------+--------+
+  |             | First | Last   |
+  | Full Name   | Name  | Name   |
+   -------------+-------+--------+
+  | John Smith  | John  | Smith  |
+  | Steve Eynon | Steve | Eynon  |
+  | Fred Bloggs | Fred  | Bloggs |
+  +-------------+-------+--------+
+  <pre
+
 
 
 

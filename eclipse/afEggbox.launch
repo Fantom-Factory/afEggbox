@@ -11,6 +11,9 @@
 <listEntry value="4"/>
 </listAttribute>
 <mapAttribute key="org.eclipse.debug.core.environmentVariables">
+<mapEntry key="FAN_ENV" value="afFpm::FpmEnv"/>
+<mapEntry key="FAN_ENV_PODS" value="C:\Projects-Work\kW-Eng\Danfoss-XML\build\afDanfossApiExt.pod;C:\Projects-Work\kW-Eng\Danfoss-Connector\build\afDanfossConnExt.pod;C:\Projects\Fantom-Factory\Eggbox\build\afEggbox.pod"/>
+<mapEntry key="FPM_ALL_PODS" value="true"/>
 <mapEntry key="FPM_TARGET" value="afEggbox"/>
 </mapAttribute>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">

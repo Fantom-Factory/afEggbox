@@ -117,7 +117,9 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			]
 		]
 
-		return datastore.collection.aggregate(pipeline).first?.get("count") ?: 0
+		return datastore.collection.aggregateCursor(pipeline) |cur| {
+			cur.next(false)?.get("count") ?: 0
+		}
 	}
 
 	override RepoPod[] doQuery(Str? podName, |Cursor->Obj?| f) {
