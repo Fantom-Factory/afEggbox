@@ -11,7 +11,7 @@ const mixin LogoutPage : PrPage, SitemapExempt {
 			alert.success = Msgs.alert_userLoggedOut(user)
 			activityDao.create(RepoActivity(user, LogMsgs.loggedOut))
 		}
-		throw ReProcessErr(Redirect.afterPost(pages[LoginPage#].pageUrl))
+		throw HttpRedirect.afterPostErr(pages[LoginPage#].pageUrl)
 	}
 	
 	override Str renderTemplate() { "" }

@@ -25,7 +25,7 @@ const class FanrModule {
 		
 		base := "/fanr"
 		config.add(Route(`${base}/ping`,	FanrHandler#onPing))
-		config.add(Route(`${base}/find/**`,	FanrHandler#onFind))
+		config.add(Route(`${base}/find/*/*`,FanrHandler#onFind))
 		config.add(Route(`${base}/query`,	FanrHandler#onQuery, "GET POST"))
 		config.add(Route(`${base}/pod/*/*`,	FanrHandler#onPod))
 		config.add(Route(`${base}/publish`,	FanrHandler#onPublish, "POST"))

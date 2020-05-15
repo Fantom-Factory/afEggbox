@@ -34,7 +34,7 @@ const class AuthenticationMiddleware : Middleware {
 				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
 
-			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+			throw HttpRedirect.movedTemporarilyErr(pages[LoginPage#].pageUrl)
 		}
 
 		if (strUrl.startsWith("/my/")) {
@@ -50,7 +50,7 @@ const class AuthenticationMiddleware : Middleware {
 				pipeline.service; return
 			}
 			
-			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+			throw HttpRedirect.movedTemporarilyErr(pages[LoginPage#].pageUrl)
 		}
 		
 		pipeline.service

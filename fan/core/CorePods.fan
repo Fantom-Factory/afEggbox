@@ -14,22 +14,28 @@ const class CorePods {
 		corePodNames.find { it.equalsIgnoreCase(podName) } ?: throw ArgNotFoundErr("Could not find core pod '${podName}'", corePodNames)
 	}
 	
+	// FIXME - we don't deploy with ALL core pods - so maybe generate this dependency list on build?
 	Depend[] depends(Str podName) {
 		coreDepends.getOrAdd(podName) |->Depend[]| {
 			podFile		:= Env.cur.findPodFile(podName)
-			zip			:= Zip.read(podFile.in(4096))
-			metaProps	:= null as Str:Str
-			try {
-				File? entry
-				while (metaProps == null && (entry = zip.readNext) != null) {
-					if (entry.uri == `/meta.props`)
-						metaProps = entry.readProps
+			if (podFile != null) {
+				zip			:= Zip.read(podFile.in(4096))
+				metaProps	:= null as Str:Str
+				try {
+					File? entry
+					while (metaProps == null && (entry = zip.readNext) != null) {
+						if (entry.uri == `/meta.props`)
+							metaProps = entry.readProps
+					}
+				} finally {
+					zip.close
 				}
-			} finally {
-				zip.close
+				// null checks 'cos sys has no dependencies!
+				return metaProps?.get("pod.depends")?.split(';')?.map |d->Depend?| { Depend(d, false) }?.exclude { it == null } ?: Depend#.emptyList
+			} else {
+				CorePods#.pod.log.warn("Core pod $podName does not exist")
+				return Depend#.emptyList
 			}
-			// null checks 'cos sys has no dependencies!
-			return metaProps?.get("pod.depends")?.split(';')?.map |d->Depend?| { Depend(d, false) }?.exclude { it == null } ?: Depend#.emptyList
 		}
 	}
 }

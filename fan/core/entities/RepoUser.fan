@@ -112,6 +112,6 @@ class RepoUser {
 	
 	override Int hash() { _id }
 	override Bool equals(Obj? that) {
-		_id == (that as RepoUser)._id
+		_id == (that as RepoUser)?._id
 	}
 }

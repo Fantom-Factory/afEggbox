@@ -63,7 +63,7 @@ const mixin StatsPage : PrPage, SitemapExempt {
 		]
 		
 		res := ([Str:Obj?][]?) collection.aggregateCursor(pipeline) |cur| { cur.toList }
-
+		
 		return res.map |r| { 
 			DownloadStat { 
 				it.pod	 = r["_id"] ?: "null"; 

@@ -52,7 +52,7 @@ const mixin PodEditPage : PrPage {
 	}
 
 	@PageEvent { httpMethod="POST" }
-	Redirect? onSave() {
+	HttpRedirect? onSave() {
 		if (!podEditFormBean.validateForm(httpRequest.body.form))
 			return null
 
@@ -78,17 +78,17 @@ const mixin PodEditPage : PrPage {
 		logUserPodActivity(pod, LogMsgs.updatedPod, pod._id)
 		
 		alert.success = Msgs.alert_podUpdated(pod)
-		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
+		return HttpRedirect.afterPost(pages[MyPodsPage#].pageUrl)
 	}
 
 	@PageEvent { httpMethod="POST" }
-	Redirect? onValidate() {
+	HttpRedirect? onValidate() {
 		pod.validateDocumentLinks.save
-		return Redirect.afterPost(podSummaryUrl.toClientUrl.plusSlash.plusName("edit"))
+		return HttpRedirect.afterPost(podSummaryUrl.toClientUrl.plusSlash.plusName("edit"))
 	}
 
 	@PageEvent { httpMethod="POST" }
-	Redirect? onDelete() {
+	HttpRedirect? onDelete() {
 		if (!podDeleteFormBean.validateForm(httpRequest.body.form))
 			return null
 
@@ -104,7 +104,7 @@ const mixin PodEditPage : PrPage {
 			logUserPodActivity(pod, LogMsgs.deletedPod, pod._id)
 			
 			alert.success = Msgs.alert_podDeleted(pod)
-			return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
+			return HttpRedirect.afterPost(pages[MyPodsPage#].pageUrl)
 
 		} catch (PodDeleteErr err) {
 			podDeleteFormBean.errorMsgs.add(err.msg)

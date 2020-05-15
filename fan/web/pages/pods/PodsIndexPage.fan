@@ -4,7 +4,7 @@ using afEfanXtra
 using afPillow
 using afGoogleAnalytics::GoogleAnalytics
 
-@Page { disableRouting = true }
+@Page
 const mixin PodsIndexPage : PrPage {
 		// TODO move this out to AppConfig
 		// limit the potentially massive list of tags to just those wanted ones
@@ -19,12 +19,6 @@ const mixin PodsIndexPage : PrPage {
 			abstract Int				countPublicPods
 			abstract Bool				sortByName
 			abstract Str[]				allTags
-
-	@BeforeRender
-	Void beforeRender() {
-		if (httpRequest.url.isDir.not)
-			throw ReProcessErr(Redirect.movedTemporarily(pages[PodsIndexPage#].pageUrl))
-	}
 
 	@InitRender
 	Void initRender() {

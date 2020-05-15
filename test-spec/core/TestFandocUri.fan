@@ -11,22 +11,22 @@ using afFancordion
 ** 
 **   Fandoc URI In                  Fandoc URI Out                 Client URL Out                
 **   -----------------------------  -----------------------------  -------------------------
-**   fandoc:/foo/                   fandoc:/foo/?v=2.0             /pods/foo/            
-**   fandoc:/foo/api/               fandoc:/foo/api/?v=2.0         /pods/foo/api/        
-**   fandoc:/foo/api/Bar            fandoc:/foo/api/Bar?v=2.0      /pods/foo/api/Bar     
-**   fandoc:/foo/api/Bar/src        fandoc:/foo/api/Bar/src?v=2.0  /pods/foo/api/Bar/src 
-**   fandoc:/foo/api/Bar#poo        fandoc:/foo/api/Bar?v=2.0#poo  /pods/foo/api/Bar#poo 
-**   fandoc:/foo/doc/               fandoc:/foo/doc/?v=2.0         /pods/foo/doc/        
-**   fandoc:/foo/doc/foo            fandoc:/foo/doc/foo?v=2.0      /pods/foo/doc/foo 
-**   fandoc:/foo/doc/bar.txt        fandoc:/foo/doc/bar.txt?v=2.0  /pods/foo/doc/bar.txt 
-**   fandoc:/foo/?v=1.0             fandoc:/foo/?v=1.0             /pods/foo/1.0/            
-**   fandoc:/foo/api/?v=1.0         fandoc:/foo/api/?v=1.0         /pods/foo/1.0/api/        
-**   fandoc:/foo/api/Bar?v=1.0      fandoc:/foo/api/Bar?v=1.0      /pods/foo/1.0/api/Bar     
-**   fandoc:/foo/api/Bar/src?v=1.0  fandoc:/foo/api/Bar/src?v=1.0  /pods/foo/1.0/api/Bar/src 
-**   fandoc:/foo/api/Bar#poo?v=1.0  fandoc:/foo/api/Bar?v=1.0#poo  /pods/foo/1.0/api/Bar#poo 
-**   fandoc:/foo/doc/?v=1.0         fandoc:/foo/doc/?v=1.0         /pods/foo/1.0/doc/        
-**   fandoc:/foo/doc/foo?v=1.0      fandoc:/foo/doc/foo?v=1.0      /pods/foo/1.0/doc/foo     
-**   fandoc:/foo/doc/bar.txt?v=1.0  fandoc:/foo/doc/bar.txt?v=1.0  /pods/foo/1.0/doc/bar.txt 
+**   fandoc:/foo/                   fandoc:/foo?v=2.0              /pods/foo
+**   fandoc:/foo/api/               fandoc:/foo/api?v=2.0          /pods/foo/api
+**   fandoc:/foo/api/Bar            fandoc:/foo/api/Bar?v=2.0      /pods/foo/api/Bar
+**   fandoc:/foo/api/Bar/src        fandoc:/foo/api/Bar/src?v=2.0  /pods/foo/api/Bar/src
+**   fandoc:/foo/api/Bar#poo        fandoc:/foo/api/Bar?v=2.0#poo  /pods/foo/api/Bar#poo
+**   fandoc:/foo/doc/               fandoc:/foo/doc?v=2.0          /pods/foo/doc
+**   fandoc:/foo/doc/foo            fandoc:/foo/doc/foo?v=2.0      /pods/foo/doc/foo
+**   fandoc:/foo/doc/bar.txt        fandoc:/foo/doc/bar.txt?v=2.0  /pods/foo/doc/bar.txt
+**   fandoc:/foo/?v=1.0             fandoc:/foo?v=1.0              /pods/foo/1.0
+**   fandoc:/foo/api/?v=1.0         fandoc:/foo/api?v=1.0          /pods/foo/1.0/api
+**   fandoc:/foo/api/Bar?v=1.0      fandoc:/foo/api/Bar?v=1.0      /pods/foo/1.0/api/Bar
+**   fandoc:/foo/api/Bar/src?v=1.0  fandoc:/foo/api/Bar/src?v=1.0  /pods/foo/1.0/api/Bar/src
+**   fandoc:/foo/api/Bar#poo?v=1.0  fandoc:/foo/api/Bar?v=1.0#poo  /pods/foo/1.0/api/Bar#poo
+**   fandoc:/foo/doc/?v=1.0         fandoc:/foo/doc?v=1.0          /pods/foo/1.0/doc
+**   fandoc:/foo/doc/foo?v=1.0      fandoc:/foo/doc/foo?v=1.0      /pods/foo/1.0/doc/foo
+**   fandoc:/foo/doc/bar.txt?v=1.0  fandoc:/foo/doc/bar.txt?v=1.0  /pods/foo/1.0/doc/bar.txt
 ** 
 ** Pod Version at the end, in a query string, in fandoc schemes because linking to a specific version usually is just an afterthought.
 ** 
@@ -36,20 +36,20 @@ using afFancordion
 ** 
 **   Client URL In                  Fandoc URI Out
 **   -----------------------------  ------------------------------
-**   /pods/foo/                     fandoc:/foo/?v=2.0
-**   /pods/foo/api/                 fandoc:/foo/api/?v=2.0
+**   /pods/foo/                     fandoc:/foo?v=2.0
+**   /pods/foo/api/                 fandoc:/foo/api?v=2.0
 **   /pods/foo/api/Bar              fandoc:/foo/api/Bar?v=2.0
 **   /pods/foo/api/Bar/src          fandoc:/foo/api/Bar/src?v=2.0
 **   /pods/foo/api/Bar#poo          fandoc:/foo/api/Bar?v=2.0#poo
-**   /pods/foo/doc/                 fandoc:/foo/doc/?v=2.0
+**   /pods/foo/doc/                 fandoc:/foo/doc?v=2.0
 **   /pods/foo/doc/foo              fandoc:/foo/doc/foo?v=2.0
 **   /pods/foo/doc/bar.txt          fandoc:/foo/doc/bar.txt?v=2.0
-**   /pods/foo/1.0/                 fandoc:/foo/?v=1.0
-**   /pods/foo/1.0/api/             fandoc:/foo/api/?v=1.0
+**   /pods/foo/1.0/                 fandoc:/foo?v=1.0
+**   /pods/foo/1.0/api/             fandoc:/foo/api?v=1.0
 **   /pods/foo/1.0/api/Bar          fandoc:/foo/api/Bar?v=1.0
 **   /pods/foo/1.0/api/Bar/src      fandoc:/foo/api/Bar/src?v=1.0
 **   /pods/foo/1.0/api/Bar#poo      fandoc:/foo/api/Bar?v=1.0#poo
-**   /pods/foo/1.0/doc/             fandoc:/foo/doc/?v=1.0
+**   /pods/foo/1.0/doc/             fandoc:/foo/doc?v=1.0
 **   /pods/foo/1.0/doc/foo          fandoc:/foo/doc/foo?v=1.0
 **   /pods/foo/1.0/doc/bar.txt      fandoc:/foo/doc/bar.txt?v=1.0
 **
@@ -61,8 +61,8 @@ using afFancordion
 ** 
 **   Fantom URI In                  Fandoc URI Out
 **   -----------------------------  ------------------------------
-**   foo::index                     fandoc:/foo/?v=2.0
-**   foo::pod-doc                   fandoc:/foo/doc/?v=2.0
+**   foo::index                     fandoc:/foo?v=2.0
+**   foo::pod-doc                   fandoc:/foo/doc?v=2.0
 **   foo::Bar                       fandoc:/foo/api/Bar?v=2.0
 **   foo::Bar.poo                   fandoc:/foo/api/Bar?v=2.0#poo
 **   foo::foo                       fandoc:/foo/doc/foo?v=2.0
@@ -84,8 +84,8 @@ using afFancordion
 ** 
 **   Fantom URI In                  Fandoc URI Out
 **   -----------------------------  ------------------------------
-**   sys::index                     fandoc:/sys/
-**   sys::pod-doc                   fandoc:/sys/doc/
+**   sys::index                     fandoc:/sys
+**   sys::pod-doc                   fandoc:/sys/doc
 **   sys::Bar                       fandoc:/sys/api/Bar
 **   sys::Bar.poo                   fandoc:/sys/api/Bar#poo
 **   sys::foo                       fandoc:/sys/doc/foo
@@ -100,8 +100,8 @@ using afFancordion
 ** 
 **   Fantom URI In                  Fandoc URI Out
 **   -----------------------------  ------------------------------
-**   foo::index                     fandoc:/foo/?v=2.0
-**   foo::pod-doc                   fandoc:/foo/doc/?v=2.0
+**   foo::index                     fandoc:/foo?v=2.0
+**   foo::pod-doc                   fandoc:/foo/doc?v=2.0
 **   foo::Bar                       fandoc:/foo/api/Bar?v=2.0
 **   foo::Bar.poo                   fandoc:/foo/api/Bar?v=2.0#poo
 **   foo::foo                       fandoc:/foo/doc/foo?v=2.0
@@ -159,7 +159,7 @@ class TestFandocUri : RepoFixture {
 	override Void setupFixture() {
 		super.setupFixture
 		user := getOrMakeUser("foo@bar.com")
-		scope.registry.activeScope.createChild("request") {
+		scope.registry.activeScope.createChild("httpRequest") {
 			fanrRepo.publish(user, `test/res/foo-1.0.pod`.toFile.in)
 			fanrRepo.publish(user, `test/res/foo-2.0.pod`.toFile.in)
 			fanrRepo.publish(user, `test/res/poo-1.0.pod`.toFile.in)

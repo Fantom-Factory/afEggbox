@@ -22,7 +22,7 @@ const mixin MyDetailsPage : PrMyPage, SitemapExempt {
 	}
 	
 	@PageEvent { httpMethod="POST" }
-	Redirect? onSave() {
+	HttpRedirect? onSave() {
 		if (!formBean.validateForm(httpRequest.body.form))
 			return null
 
@@ -42,6 +42,6 @@ const mixin MyDetailsPage : PrMyPage, SitemapExempt {
 		logUserActivity(LogMsgs.updatedUser)
 		
 		alert.success = Msgs.alert_userDetailsSaved(user)
-		return Redirect.afterPost(pages[MyDetailsPage#].pageUrl)
+		return HttpRedirect.afterPost(pages[MyDetailsPage#].pageUrl)
 	}
 }

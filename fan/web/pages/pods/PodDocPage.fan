@@ -16,7 +16,7 @@ const mixin PodDocPage : PrPage {
 	Void beforeRender() {
 		// redirect on dodgy name casing - this keeps GoogleAnalytics happy
 		if (fandocUri.podName != pod.name)
-			throw ReProcessErr(Redirect.movedTemporarily(pod.toDocUri(fandocUri.fileUri).toClientUrl))
+			throw HttpRedirect.movedTemporarilyErr(pod.toDocUri(fandocUri.fileUri).toClientUrl)
 
 		injector.injectRequireModule("anchorJS", null, [".fandoc h2, .fandoc h3, .fandoc h4"])
 

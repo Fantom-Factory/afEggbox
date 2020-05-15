@@ -62,7 +62,7 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 	}
 
 	@PageEvent { httpMethod="POST" }
-	Redirect? onUpload() {
+	HttpRedirect? onUpload() {
 		try {
 			RepoPod? pod
 	        httpRequest.parseMultiPartForm |Str inputName, InStream in, Str:Str headers| {
@@ -74,7 +74,7 @@ const mixin MyPodsPage : PrMyPage, SitemapExempt {
 				logUserPodActivity(pod, LogMsgs.uploadedPod, pod._id)
 				alert.success = Msgs.alert_userUploadedPod(pod)
 			}
-			return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
+			return HttpRedirect.afterPost(pages[MyPodsPage#].pageUrl)
 
 		} catch (PodPublishErr err) {
 			formBean.errorMsgs.add(err.msg)

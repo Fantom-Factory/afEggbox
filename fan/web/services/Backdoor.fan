@@ -23,7 +23,7 @@ const class Backdoor {
 		if (user == null) {
 			alert.error = "Auto login user `${eggboxConfig.autoLoginEmail}` has not been created. Why not do it now?"
 			httpSession.flash["signUp.email"] = eggboxConfig.autoLoginEmail
-			throw ReProcessErr(Redirect.movedTemporarily(pages[SignupPage#].pageUrl))
+			throw HttpRedirect.movedTemporarilyErr(pages[SignupPage#].pageUrl)
 		}
 		log.warn("Auto Logging in `${eggboxConfig.autoLoginEmail}` via backdoor...")
 		userSession.loginAs(user)

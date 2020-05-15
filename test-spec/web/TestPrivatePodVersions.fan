@@ -24,17 +24,17 @@ class TestPrivatePodVersions : WebFixture {
 	
 	Void checkLatestPod() {
 		podLink := Link(".latestPods .podList .media-heading a")[0]
-		podLink.verifyHrefEq(`/pods/foo/`)
+		podLink.verifyHrefEq(`/pods/foo`)
 		podLink.verifyTextEq("Foo 1.0")
 
 		podLink = Link(".latestVersions .podList .media-heading a")[0]
-		podLink.verifyHrefEq(`/pods/foo/`)
+		podLink.verifyHrefEq(`/pods/foo`)
 		podLink.verifyTextEq("Foo 1.0")
 	}
 
 	Void uploadPod(Str podName) {
 		user := userDao.getByEmail(`micky.mouse@disney.com`)
-		scope.registry.activeScope.createChild("request") {
+		scope.registry.activeScope.createChild("httpRequest") {
 			fanrRepo.publish(user, `test/res/${podName}`.toFile.in)
 		}
 	}

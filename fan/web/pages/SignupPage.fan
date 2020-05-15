@@ -58,7 +58,7 @@ const mixin SignupPage : PrPage {
 		logUserActivity(LogMsgs.signedUp)
 		
 		alert.success = Msgs.alert_userSignedUp(user)
-		return Redirect.afterPost(pages[UsersPage#].withContext([user.screenName]).pageUrl)
+		return HttpRedirect.afterPost(pages[UsersPage#].withContext([user.screenName]).pageUrl)
 	}
 }
 

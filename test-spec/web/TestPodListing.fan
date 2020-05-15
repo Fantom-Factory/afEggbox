@@ -72,7 +72,7 @@ class TestPodListing : WebFixture {
 		]), |Zip zip| {
 			zip.writeNext(`/doc/pod.fandoc`)
 		})
-		scope.registry.activeScope.createChild("request") {
+		scope.registry.activeScope.createChild("httpRequest") {
 			fanrRepo.publish(user, pod.in)
 		}
 	}

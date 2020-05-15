@@ -321,7 +321,7 @@ define("podFiltering", ["jquery", "tinysort", "debounce"], function($, tinysort,
 			});
 
 			if (podName != null)
-				window.location.href = "/pods/" + encodeURIComponent(podName) + "/";
+				window.location.href = "/pods/" + encodeURIComponent(podName);
 		}
 
 		$(window).on("popstate", function() {
@@ -439,7 +439,7 @@ define("podSearch", ["jquery", "debounce"], function($, debounce) {
 			});
 
 			if (podName != null)
-				window.location.href = "/pods/" + encodeURIComponent(podName) + "/";
+				window.location.href = "/pods/" + encodeURIComponent(podName);
 			else
 				window.location.href = "/pods/?q=" + encodeURIComponent(searchTerm);
 		}

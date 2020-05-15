@@ -36,7 +36,7 @@ const mixin PodSummaryPage : PrPage {
 
 		// redirect on dodgy name casing - this keeps GoogleAnalytics happy
 		if (fandocUri.podName != pod.name)
-			throw ReProcessErr(Redirect.movedTemporarily(pod.toSummaryUri.toClientUrl))
+			throw HttpRedirect.movedTemporarilyErr(pod.toSummaryUri.toClientUrl)
 
 		podVersions = groupBy(podDao.findPodVersions(pod.name)) |RepoPod item->Version| {
 			return Version([item.version.major, item.version.minor].exclude { it == null })

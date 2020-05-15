@@ -49,7 +49,7 @@ const mixin LoginPage : PrPage {
 		logUserActivity(LogMsgs.loggedIn)
 		
 		alert.success = Msgs.alert_userLoggedIn(user)
-		return Redirect.afterPost(pages[MyPodsPage#].pageUrl)
+		return HttpRedirect.afterPost(pages[MyPodsPage#].pageUrl)
 	}
 }
 

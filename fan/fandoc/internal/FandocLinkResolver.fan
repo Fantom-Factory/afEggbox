@@ -263,7 +263,7 @@ abstract const class FandocUri {
 	
 	virtual Uri toUri() {
 		bse := baseUri
-		uri := bse == null ? `fandoc:/${podName}/` : `fandoc:/${podName}/` + bse
+		uri := bse == null ? `fandoc:/${podName}` : `fandoc:/${podName}/` + bse
 		ver := podVersion != null ? podVersion : podDao.findPod(podName)?.version
 		return ver == null ? uri : uri.plusQuery(["v":ver.toStr])
 	}
@@ -272,9 +272,9 @@ abstract const class FandocUri {
 		url := baseUri
 		latestPod := podDao.findPod(podName)
 		path := (podVersion == null || podVersion == latestPod.version) 
-			? `/pods/${podName}/` 
-			: `/pods/${podName}/${podVersion}/`
-		return (url == null) ? path : path + url
+			? `/pods/${podName}` 
+			: `/pods/${podName}/${podVersion}`
+		return (url == null) ? path : path.plusSlash + url
 	}
 }
 
@@ -417,9 +417,9 @@ const class FandocApiUri : FandocUri {
 	}
 
 	override Uri? baseUri() {
-		uri := `api/`
+		uri := `api`
 		if (typeName != null)
-			uri = uri.plusName(typeName)
+			uri = uri.plusSlash.plusName(typeName)
 		if (slotName != null)
 			// this is wrong - '#' is encoded as part of the name, and is not parsed as a fragment 
 			// uri = uri.plusName("${uri.name}#${slotName}")
@@ -642,7 +642,7 @@ const class FandocDocUri : FandocUri {
 		fileUri := (Uri?) (fileUri == `/doc/pod.fandoc` ? null : fileUri)
 		if (fileUri?.ext == "fandoc")
 			fileUri = fileUri.plusName(fileUri.name[0..<fileUri.name.indexr(".")])
-		uri := fileUri?.relTo(`/`) ?: `doc/`
+		uri := fileUri?.relTo(`/`) ?: `doc`
 		if (headingId != null)
 			uri = `${uri}#${headingId}`
 //			uri = uri.plusName("${uri.name}#line${slot.loc.line}")

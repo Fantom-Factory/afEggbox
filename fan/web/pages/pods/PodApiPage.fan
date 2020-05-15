@@ -15,7 +15,7 @@ const mixin PodApiPage : PrPage {
 	Void beforeRender() {
 		// redirect on dodgy name casing - this keeps GoogleAnalytics happy
 		if (fandocUri.podName != pod.name)
-			throw ReProcessErr(Redirect.movedTemporarily(pod.toApiUri(fandocUri.typeName, fandocUri.slotName).toClientUrl))
+			throw HttpRedirect.movedTemporarilyErr(pod.toApiUri(fandocUri.typeName, fandocUri.slotName).toClientUrl)
 
 		if (eggboxConfig.googleAnalyticsEnabled)
 			googleAnalytics.renderPageView(fandocUri.toSummaryUri.toClientUrl)

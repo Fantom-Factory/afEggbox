@@ -1,10 +1,16 @@
-using afIoc
-using afIocEnv
-using afBedSheet
+using afIoc::Inject
+using afIoc::Scope
+using afIocEnv::IocEnv
+using afBedSheet::ResponseProcessor
+using afBedSheet::HttpRequest
+using afBedSheet::HttpRequestHeaders
+using afBedSheet::HttpResponse
+using afBedSheet::HttpStatus
+using afBedSheet::HttpRedirect
 using afPillow
 using web
 
-const class PodRoutes : Route {
+const class PodPageProcessor : ResponseProcessor {
 	
 	@Inject	private const UserSession	userSession
 	@Inject	private const Pages	 		pages
@@ -12,31 +18,25 @@ const class PodRoutes : Route {
 	@Inject private const Backdoor		backdoor
 	@Inject private const Scope			scope
 	@Inject private const AtomFeedPages	atomPages
-	@Inject private const HttpRequest	httpRequest
-	@Inject private const HttpResponse	httpResponse
+	@Inject private const HttpRequest	httpReq
+	@Inject private const HttpResponse	httpRes
 	@Inject private const DirtyCash		dirtyCash
 	@Inject private const IocEnv		iocEnv
 	@Inject private const RepoPodDownloadDao	podDownloadDao
 
 	new make(|This|in) { in(this) }
 	
-	** Returns a hint at what this route matches on. Used for debugging and in 404 / 500 error pages. 
-	override Str matchHint() { "GET /pods/***" }
-
-	** Returns a hint at what response this route returns. Used for debugging and in 404 / 500 error pages. 
-	override Str responseHint() { "Pod Pages" }
-
-	override Obj? match(HttpRequest httpReq) {
+	override Obj process(Obj response) {
 		reqPath := httpReq.url.pathOnly.path.rw
 		pods	:= chomp(reqPath)
 		if (pods != "pods")
-			return null
+			return HttpStatus(404)
 
 		if (httpReq.httpMethod == "POST")
 			return matchEvents(httpReq, reqPath)
 
 		if (httpReq.httpMethod != "GET")
-			return null
+			return HttpStatus(405)
 
 		podName		:= chomp(reqPath)
 		if (podName == null)
@@ -55,7 +55,7 @@ const class PodRoutes : Route {
 		if (reqPath.size == 1 && podSection == "download" && reqPath.first == "${podName}.pod") {
 			pod := podDao.findPod(podName, podVersion)
 			podDownloadDao.create(RepoPodDownload(pod, "web", userSession.user))
-			httpResponse.saveAsAttachment("${pod.name}.pod")
+			httpRes.saveAsAttachment("${pod.name}.pod")
 			return PodDownloadAsset(pod.podFileDao, pod)
 		}
 
@@ -76,12 +76,12 @@ const class PodRoutes : Route {
 					return pages.renderPage(PodEditPage#, [pod])
 				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
-			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+			throw HttpRedirect.movedTemporarilyErr(pages[LoginPage#].pageUrl)
 		}
 
 		fandocUri := FandocUri.fromClientUrl(scope, httpReq.url)
 		if (fandocUri == null)
-			return null
+			return HttpStatus(404)
 		
 		return dirtyCash.cash |->Obj?| {
 			if (fandocUri.validate == false) 
@@ -91,14 +91,14 @@ const class PodRoutes : Route {
 			if (!userSession.isLoggedIn) {
 
 				// set identity headers
-				httpResponse.headers.eTag 		  = fandocUri.etag
-				httpResponse.headers.lastModified = fandocUri.pod.builtOn.floor(1sec)	// 1 second which is the most precision that HTTP can deal with
+				httpRes.headers.eTag 		  = fandocUri.etag
+				httpRes.headers.lastModified = fandocUri.pod.builtOn.floor(1sec)	// 1 second which is the most precision that HTTP can deal with
 		
 				// check if we can return a 304 Not Modified
-				if (notModified(httpRequest.headers, fandocUri)) {
+				if (notModified(httpReq.headers, fandocUri)) {
 					// hitting CTRL+F5 in dev everytime is *really* annoying!
 					if (!iocEnv.isDev) {
-						httpResponse.statusCode = 304
+						httpRes.statusCode = 304
 						return true
 					}
 				}
@@ -154,7 +154,7 @@ const class PodRoutes : Route {
 					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onSave, null)
 				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
-			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+			throw HttpRedirect.movedTemporarilyErr(pages[LoginPage#].pageUrl)
 		}
 		
 		// --> /pods/afSlim/edit/delete
@@ -165,7 +165,7 @@ const class PodRoutes : Route {
 					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onDelete, null)
 				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
-			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+			throw HttpRedirect.movedTemporarilyErr(pages[LoginPage#].pageUrl)
 		}
 		
 		// --> /pods/afSlim/edit/validate
@@ -176,7 +176,7 @@ const class PodRoutes : Route {
 					return pages.callPageEvent(PodEditPage#, [pod], PodEditPage#onValidate, null)
 				throw HttpStatus.makeErr(401, "Unauthorised")
 			}
-			throw ReProcessErr(Redirect.movedTemporarily(pages[LoginPage#].pageUrl))
+			throw HttpRedirect.movedTemporarilyErr(pages[LoginPage#].pageUrl)
 		}
 		
 		return null
@@ -226,5 +226,11 @@ const class PodRoutes : Route {
 	
 		// gotta do it the hard way
 		return false
+	}
+}
+
+internal const class PodPageResponse {
+	override Str toStr() {
+		"Pod Pages"
 	}
 }

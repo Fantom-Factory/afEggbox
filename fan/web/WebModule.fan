@@ -12,7 +12,7 @@ using afGoogleAnalytics
 @SubModule { modules=[BedFrameModule#, FandocModule#] }
 const class WebModule {
 
-	static Void defineServices(RegistryBuilder defs) {
+	Void defineServices(RegistryBuilder defs) {
 		defs.addService(Alert#)
 		defs.addService(ErrorSkin#, BootstrapErrorSkin#)
 		defs.addService(Backdoor#)
@@ -28,17 +28,22 @@ const class WebModule {
 	}
 
 	@Contribute { serviceType=Routes# }
-	static Void contributeRoutes(Configuration config) {
-		config.add(config.build(PodRoutes#))
+	Void contributeRoutes(Configuration config) {
+		config.add(Route(`/pods/**`, PodPageResponse(), "GET POST"))
+	}
+	
+	@Contribute { serviceType=ResponseProcessors# }
+	Void contributeResponseProcessors(Configuration config) {
+		config[PodPageResponse#]	= config.build(PodPageProcessor#)
 	}
 	
 	@Contribute { serviceType=HttpStatusResponses# }
-	static Void contribute404Response(Configuration config) {
+	Void contribute404Response(Configuration config) {
 		config[404] = MethodCall(Pages#renderPage, [Error404Page#]).toImmutableFunc
 	}
 
 	@Contribute { serviceType=InputSkins# }
-	static Void contributeInputSkins(Configuration config) {
+	Void contributeInputSkins(Configuration config) {
 		config.overrideValue("email",		BootstrapTextSkin())
 		config.overrideValue("text",		BootstrapTextSkin())
 		config.overrideValue("url",			BootstrapTextSkin())
@@ -51,26 +56,26 @@ const class WebModule {
 	}
 	
 	@Contribute { serviceType=MiddlewarePipeline# }
-	static Void contributeBedSheetMiddleware(Configuration config) {
+	Void contributeBedSheetMiddleware(Configuration config) {
 		// needed for Google WebMaster Tools to accept a change of domain
 		//config.set("DomainFilter", config.autobuild(DomainFilter#)).before("AuthMiddleware")
 		config.set("AuthMiddleware", config.build(AuthenticationMiddleware#)).before("afBedSheet.routes")
 	}
 
 	@Contribute { serviceType=ClientAssetProducers# }
-	static Void contributeAssetProducers(Configuration config) {
+	Void contributeAssetProducers(Configuration config) {
 		config["podAssetProducer"] = config.build(PodAssetProducer#)
 	}
 
 	@Contribute { serviceType=ValueEncoders# }
-	static Void contributeValueEncoders(Configuration config) {
+	Void contributeValueEncoders(Configuration config) {
 		config[RepoPod#]	= config.build(PodValueEncoder#)
 		config[RepoUser#]	= config.build(UserValueEncoder#)
 		config[FandocUri#]	= config.build(FandocUriValueEncoder#)
 	}
 	
 	@Contribute { serviceType=ScriptModules# }
-	static Void contributeScriptModules(Configuration config, FileHandler fh) {
+	Void contributeScriptModules(Configuration config, FileHandler fh) {
 		// Internet explorer doesn't like CDN URLs starting with // so http:// is used 
 		config.add(ScriptModule("jquery"		).atUrl(`http://code.jquery.com/jquery-1.11.2.min.js`).fallbackToUrl(fh.fromLocalUrl(`/js/jquery-1.11.2.min.js`).clientUrl))
 		config.add(ScriptModule("bootstrap"		).atUrl(fh.fromLocalUrl(`/js/bootstrap.min.js`).clientUrl).requires("jquery"))
@@ -79,7 +84,7 @@ const class WebModule {
 	}
 	
 	@Contribute { serviceType=RequireJsConfigTweaks# }
-	static Void contributeRequireJsConfigTweaks(Configuration conf) {
+	Void contributeRequireJsConfigTweaks(Configuration conf) {
 		conf["app.bundles"] = |Str:Obj? config| {
 			bundles := (Str:Str[]) config.getOrAdd("bundles") { [Str:Str[]][:] }
 			bundles["eggboxModules"] = "onReveal podGraph fileInput unscramble rowLink anchorJS tinysort podFiltering podSearch tableSort debounce notFound hiveSparks".split
@@ -87,12 +92,12 @@ const class WebModule {
 	}
 	
 	@Contribute { serviceType=TemplateConverters# }
-	internal static Void contributeTemplateConverters(Configuration config) {
+	internal Void contributeTemplateConverters(Configuration config) {
 		config.remove("fandoc")	// so we can have help fandoc file named after the class
 	}
 
 	@Contribute { serviceType=ApplicationDefaults# }
-	static Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig, IocEnv iocEnv) {
+	Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig, IocEnv iocEnv) {
 		
 		if (eggboxConfig.publicUrl != null)
 			config[BedSheetConfigIds.host]					= eggboxConfig.publicUrl
@@ -124,15 +129,15 @@ const class DirtyPages : Pages {
 		pages.pageTypes
 	}
 
-	override PageMeta pageMeta(Type pageType, Obj?[]? pageContext := null) {
+	override PageMeta pageMeta(Type pageType, Obj[]? pageContext := null) {
 		pages.pageMeta(pageType, pageContext)
 	}
 
-	override PageMeta get(Type pageType, Obj?[]? pageContext := null) {
+	override PageMeta get(Type pageType, Obj[]? pageContext := null) {
 		pages.get(pageType, pageContext)
 	}
 
-	override Obj renderPage(Type pageType, Obj?[]? pageContext := null) {
+	override Obj renderPage(Type pageType, Obj[]? pageContext := null) {
 		return dirtyCash.cash |->Obj?| { 
 			pages.renderPage(pageType, pageContext)
 		}
@@ -142,7 +147,7 @@ const class DirtyPages : Pages {
 		pages.renderPageMeta(pageMeta)
 	}
 
-	override Obj callPageEvent(Type pageType, Obj?[]? pageContext, Method eventMethod, Obj?[]? eventContext) {
+	override Obj callPageEvent(Type pageType, Obj[]? pageContext, Method eventMethod, Obj[]? eventContext) {
 		pages.callPageEvent(pageType, pageContext, eventMethod, eventContext)
 	}
 }

@@ -33,7 +33,7 @@ class TestPodPublishingFailures : WebFixture {
 		setupFixture
 		repo := (FanrRepo) scope.build(FanrRepo#, null, [FanrRepo#maxPodSize : 100])
 		buf  := Buf().writeChars("".padl(100))
-		scope.registry.activeScope.createChild("request") {
+		scope.registry.activeScope.createChild("httpRequest") {
 			repo.publish(newUser, buf.flip.in)
 		}
 	}
@@ -41,7 +41,7 @@ class TestPodPublishingFailures : WebFixture {
 	Void podNameTakenBySomeoneElse() {
 		setupFixture
 		// an old private pod
-		scope.registry.activeScope.createChild("request") {
+		scope.registry.activeScope.createChild("httpRequest") {
 			repo.publish(getOrMakeUser("stevie@abc.com"), makePod(podMeta.setAll([
 				"pod.name"    : "acmeWidgets",
 				"pod.version" : "0.0.5",
@@ -59,7 +59,7 @@ class TestPodPublishingFailures : WebFixture {
 
 	Void podVersionTooSmall() {
 		setupFixture
-		scope.registry.activeScope.createChild("request") {
+		scope.registry.activeScope.createChild("httpRequest") {
 			repo.publish(newUser, makePod(podMeta.setAll([
 				"pod.version" : "0.1.2",
 			])).in)
@@ -78,7 +78,7 @@ class TestPodPublishingFailures : WebFixture {
 
 	Void missingPodMeta() {
 		setupFixture
-		scope.registry.activeScope.createChild("request") {
+		scope.registry.activeScope.createChild("httpRequest") {
 			repo.publish(newUser, makePod([
 				"pod.name"    : "acmeWidgets",
 				"pod.version" : "0.0.5",
@@ -91,7 +91,7 @@ class TestPodPublishingFailures : WebFixture {
 
 	Void missingPublicPodMeta() {
 		setupFixture
-		scope.registry.activeScope.createChild("request") {
+		scope.registry.activeScope.createChild("httpRequest") {
 			repo.publish(newUser, makePod([
 				"pod.name"    : "acmeWidgets",
 				"pod.version" : "0.0.5",
@@ -107,7 +107,7 @@ class TestPodPublishingFailures : WebFixture {
 
 	Void missingPublicPodFandoc() {
 		setupFixture
-		scope.registry.activeScope.createChild("request") {
+		scope.registry.activeScope.createChild("httpRequest") {
 			repo.publish(newUser, makePod([
 				"pod.name"    : "acmeWidgets",
 				"pod.version" : "0.0.5",
