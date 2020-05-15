@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<launchConfiguration type="com.xored.fanide.testing.launchConfigurationType">
-    <stringAttribute key="fanMainClass" value="RepoTests"/>
+<launchConfiguration type="com.xored.fanide.launching.FanLaunchConfigurationType">
+    <booleanAttribute key="ATTR_PROJECTS_CUSTOM_SELECTION" value="false"/>
+    <booleanAttribute key="enableBreakOnFirstLine" value="false"/>
+    <booleanAttribute key="enableDbgpLogging" value="false"/>
+    <stringAttribute key="fanMainClass" value="Main"/>
     <stringAttribute key="mainScript" value=""/>
     <stringAttribute key="nature" value="com.xored.fanide.core.nature"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
@@ -9,11 +12,13 @@
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="4"/>
     </listAttribute>
+    <mapAttribute key="org.eclipse.debug.core.environmentVariables">
+        <mapEntry key="FPM_ALL_PODS" value="true"/>
+        <mapEntry key="FPM_TARGET" value="afEggbox"/>
+    </mapAttribute>
     <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
         <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
-        <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
     </listAttribute>
-    <stringAttribute key="org.eclipse.dltk.testing.engineId" value="com.xored.fanide.testing.fantest.testingEngine"/>
-    <stringAttribute key="process_factory_id" value="org.eclipse.dltk.launching.scriptProcessFactory"/>
     <stringAttribute key="project" value="Eggbox"/>
+    <stringAttribute key="scriptArguments" value="8069"/>
 </launchConfiguration>

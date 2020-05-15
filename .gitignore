@@ -1,4 +1,9 @@
-.hg/
-fancordion-results/
-config.properties
-build/
+/.hg/
+/fancordion-results/
+/config.properties
+/build/
+/build-cleverCloud/
+/x-git/
+clevercloud.props
+deploy-to-clevercloud.fish
+

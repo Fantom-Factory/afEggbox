@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="com.xored.fanide.launching.FanLaunchConfigurationType">
+    <booleanAttribute key="ATTR_PROJECTS_CUSTOM_SELECTION" value="false"/>
+    <booleanAttribute key="enableBreakOnFirstLine" value="false"/>
+    <booleanAttribute key="enableDbgpLogging" value="false"/>
+    <stringAttribute key="fanMainClass" value="Main"/>
+    <stringAttribute key="mainScript" value=""/>
+    <stringAttribute key="nature" value="com.xored.fanide.core.nature"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/Eggbox"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="4"/>
+    </listAttribute>
+    <mapAttribute key="org.eclipse.debug.core.environmentVariables">
+        <mapEntry key="FAN_ENV" value="afFpm::FpmEnv"/>
+        <mapEntry key="FAN_ENV_PODS" value="C:\Projects\FantomFactory-OpenSource\efanXtra\build\afEfanXtra.pod;C:\Projects\FantomFactory-Websites\Eggbox\build\afEggbox.pod"/>
+        <mapEntry key="FPM_ALL_PODS" value="true"/>
+        <mapEntry key="FPM_TARGET" value="afEggbox"/>
+    </mapAttribute>
+    <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+        <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+    </listAttribute>
+    <stringAttribute key="project" value="Eggbox"/>
+    <stringAttribute key="scriptArguments" value="8069 -proxy -watchAllPods"/>
+</launchConfiguration>

@@ -1,4 +1,4 @@
-#Eggbox v0.1.2.4
+# Eggbox v0.1.2.4
 ---
 
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom-lang.org/)

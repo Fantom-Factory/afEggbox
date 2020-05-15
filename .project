@@ -20,6 +20,4 @@
 		<nature>com.xored.fanide.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-	</linkedResources>
 </projectDescription>
