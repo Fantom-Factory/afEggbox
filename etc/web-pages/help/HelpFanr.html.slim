@@ -10,7 +10,6 @@
 				span	get started
 				| Using fanr
 		
-			-- echo(host)
 			== printFandoc(`/etc/web-pages/help/HelpFanr.fandoc`).replace("@@fanrUrl@@", host.plusSlash.plusName("fanr").encode)
 
 		nav.col-sm-3.fixedsticky.hidden-xs

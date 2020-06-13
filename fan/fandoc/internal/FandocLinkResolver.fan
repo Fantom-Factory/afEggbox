@@ -292,7 +292,7 @@ const class FandocSummaryUri : FandocUri {
 	}
 	
 	Uri toDownloadUrl() {
-		toClientUrl.plusName("download").plusSlash.plusName("${podName}.pod")
+		toClientUrl.plusSlash.plusName("download").plusSlash.plusName("${podName}.pod")
 	}
 		
 	override Str title() {
