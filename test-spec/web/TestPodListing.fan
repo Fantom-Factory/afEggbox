@@ -6,6 +6,7 @@ using afFancordion
 ** 
 ** Example
 ** -------
+** Given these pods:
 ** 
 **   table:
 **   row+exe:createPod(#COL[0], #COL[1], #COL[2], #COL[3])

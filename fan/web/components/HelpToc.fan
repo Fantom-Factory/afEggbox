@@ -29,7 +29,7 @@ const mixin HelpToc : PrComponent {
 
 		contents.each |title, pageType| { 
 			link  := pages[pageType]
-			// TODO: tidy this tenuous link!
+			// TODO tidy this tenuous link!
 			if (fileName.name.toStr[0..<-7] == pageType.name[0..<-4]) {
 				html.add("<h4 class=\"text-muted\">").add(title).add("</h4>")
 				heads := doc.findHeadings

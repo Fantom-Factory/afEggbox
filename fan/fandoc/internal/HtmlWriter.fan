@@ -80,7 +80,7 @@ internal class HtmlWriter : DocWriter {
 			case DocNodeId.image:
 				img := elem as Image
 				src := linkResolvers.resolve(img.uri, ctx) ?: `/ERROR`
-				// TODO: don't render images that don't resolve
+				// TODO don't render images that don't resolve
 				skin.img(src, img.alt)
 		}
 

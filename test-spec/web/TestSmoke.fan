@@ -25,7 +25,7 @@ using afBounce
 class TestSmoke : WebFixture {
 
 	Void uploadPod(Str podName) {
-		// TODO: can't post multi-part forms yet 
+		// TODO can't post multi-part forms yet 
 		user := userDao.getByEmail(`micky.mouse@disney.com`)
 		scope.registry.activeScope.createChild("httpRequest") {
 			fanrRepo.publish(user, `test/res/${podName}`.toFile.in)

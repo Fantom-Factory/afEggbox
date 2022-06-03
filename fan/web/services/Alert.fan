@@ -23,7 +23,7 @@ const class Alert {
 	new make(|This| in) { in(this) }
 
 	Bool msgExists() {
-		// TODO: use httpSession.flashExists when BedSheet is released 
+		// TODO use httpSession.flashExists when BedSheet is released 
 		httpSession.exists && httpSession.containsKey("afBedSheet.flash") && httpSession.flash["flashMsg"] != null		
 	}
 	

@@ -16,7 +16,7 @@ const class AtomFeedGenerator {
 
 		feed := Feed(host + feedUrl, Text(title), podWrappers.getSafe(0)?.updated ?: DateTime.now)
 		feed.subtitle	= Text(subTitle) 
-//		feed.icon		= `/favicons/favicon-96x96.png`	// TODO: feed icon
+//		feed.icon		= `/favicons/favicon-96x96.png`	// TODO feed icon
 		
 		afAtom := Pod.find("afAtom")
 		feed.generator	= Generator(afAtom.name) {

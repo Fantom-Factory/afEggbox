@@ -19,7 +19,7 @@ const mixin DocTypeRefTemplate : EfanComponent {
 	}
 	
 	Bool resolved() {
-		// TODO: resolve pod version to nearest matching
+		// TODO resolve pod version to nearest matching
 		
 		fandocUri := (FandocApiUri) scope.build(FandocApiUri#, [ref.pod, null, ref.name, null]) 
 		if (fandocUri.validate) {

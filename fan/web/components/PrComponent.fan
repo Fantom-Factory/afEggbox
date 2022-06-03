@@ -33,7 +33,7 @@ const mixin PrComponent : EfanComponent {
 		pageUrl(UsersPage#, [user])
 	}
 	
-	** TODO: we could make this a contributable service
+	** TODO we could make this a contributable service
 	** this is great, because you can't add format methods to Dates and other objs outside of your control
 	Obj format(Obj? obj, Str hint := Str.defVal) {
 		hints := hint.lower.split.exclude { it.isEmpty }

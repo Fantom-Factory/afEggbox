@@ -2,7 +2,7 @@ using afIoc
 using fandoc
 using web
 
-// TODO: make Fandoc lib not IoC
+// TODO make Fandoc lib not IoC
 const class FandocWriter {
 	
 	@Inject	private const |LinkResolverCtx?, HtmlSkin?->HtmlWriter| htmlWriter

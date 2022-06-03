@@ -5,7 +5,7 @@ using afBedSheet
 
 ** My version of fanr::Repo - but with extra method params
 const class FanrRepo {
-	const Int		maxPodSize	:= 10*1024*1024	// TODO: move 10 Mb max pod size to a config
+	const Int		maxPodSize	:= 10*1024*1024	// TODO move 10 Mb max pod size to a config
 
 	@Inject private const RepoUserDao		userDao
 	@Inject private const RepoPodDao		podDao
@@ -94,7 +94,7 @@ const class FanrRepo {
 
 		// speed hacks for globs is tricy, 'cos we still have numVersions to honour
 		// we can't just search the latest pods
-		// TODO: have reduceByVersion() / aggregation return a customisable number of pod versions 
+		// TODO have reduceByVersion() / aggregation return a customisable number of pod versions 
 		
 		q := Query.fromStr(query)
 		
@@ -113,7 +113,7 @@ const class FanrRepo {
 	}
 		
 	Void delete(RepoUser user, RepoPod pod) {
-		// TODO: make deleting public pods configurable
+		// TODO make deleting public pods configurable
 //		if (pod.isPublic)
 //			throw PodDeleteErr(Msgs.podDelete_cannotDeletePublicPods(pod.name))
 
@@ -129,7 +129,7 @@ const class FanrRepo {
 }
 
 class PodContents {
-	Int		maxPodSize	:= 10*1024*1024	// TODO: move 10 Mb max pod size to a config
+	Int		maxPodSize	:= 10*1024*1024	// TODO move 10 Mb max pod size to a config
 
 	Buf?	podBuf
 	Str:Str	metaProps	:= Str:Str[:]
