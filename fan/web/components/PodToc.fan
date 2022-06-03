@@ -87,10 +87,10 @@ const mixin PodToc : PrComponent {
 
 			html.add("<li>")
 			if (page == fandocUri.fileUri)
-				html.add("<a href=\"#${id.toUri.encode}\">${title(h)}</a>")
+				html.add("<a href=\"#${id.toUri.encode}\">${h.title}</a>")
 			else {
 				link := fandocUri.toDocUri(page, id)
-				html.add("<a href=\"${link.toClientUrl.encode}\">${title(h)}</a>")
+				html.add("<a href=\"${link.toClientUrl.encode}\">${h.title}</a>")
 			}
 			html.add("</li>")
 
@@ -98,13 +98,6 @@ const mixin PodToc : PrComponent {
 		}
 		html.add("</ul>")
 		return i
-	}
-	
-	// TODO revert to heading.title() in Fantom 1.0.70 
-	static Str title(Heading heading) {
-		heading.children.size == 1
-			? heading.children.first.toStr
-			: findTextNodes(heading, Str[,]).join
 	}
 	
 	static private Str[] findTextNodes(DocElem elem, Str[] texts) {
