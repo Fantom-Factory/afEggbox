@@ -34,29 +34,6 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	@Inject	const DirtyCash 	dirtyCache
 	@Inject	const UserSession	userSession
 	
-	// see http://stackoverflow.com/questions/7717109/how-can-i-compare-arbitrary-version-numbers/7717160#7717160
-	private const Str	reduceByVersionFunc	:= 
-		"""function (key, pods) { 
-		       function sortByVersion(podA, podB) {
-		           var i, cmp, len, re = /(\\.0)+[^\\.]*\$/;
-		           var a = (podA.meta['pod\\\\u002eversion'] + '').replace(re, '').split('.');
-		           var b = (podB.meta['pod\\\\u002eversion'] + '').replace(re, '').split('.');
-		           len = Math.min(a.length, b.length);
-		           for (i = 0; i < len; i++) {
-		               cmp = parseInt(a[i], 10) - parseInt(b[i], 10);
-		               if (cmp !== 0) {
-		                   return cmp;
-		               }
-		           }
-		           return a.length - b.length;
-		       };
-		       var pod = asc ? pods.sort(sortByVersion)[pods.length-1] : pods.sort(sortByVersion)[0];
-
-		       // if we don't access the _id, or printjson(pod._id), then the resultant obj has no _id!? == ERROR!
-		       pod._id;
-		       return pod;
-		   }"""
-	
 	new make(|This| in) { in(this) }
 	
 	override RepoPod? get(Str id, Bool checked := true) {
@@ -144,24 +121,7 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			.add("podVersion.3", asc ? -1 : 1)
 	}
 	
-	// TODO as map reduce is intended for background queries, should the repo get large, we may have to 
-	// add an array of version Ints to the document and aggregate / group and sort on that.
 	private RepoPod[] reduceByVersion(Query? query, Bool asc) {
-		// need to ensure the collection exists else you get a "Mongo ns does not exist" Err
-		// so just ensure the indexes and job done		
-//		mapFunc 	:= Code("function () { emit(this.meta['pod\\\\u002ename'], this); }")
-//		reduceFunc	:= Code(reduceByVersionFunc, ["asc":asc])
-//		options		:= [
-//			"query"	: query?.toMongo(datastore),
-//			"sort"	: ["_builtOn_" : 1]
-//		]
-//		if (query == null)
-//			options.remove("query")
-//		output 	:= datastore.collection.mapReduce(mapFunc, reduceFunc, options)
-//		vals 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
-//		pods	:= (RepoPod[]) vals .map { datastore.fromMongoDoc(it) }
-		
-		
 		// https://stackoverflow.com/questions/28155546/return-all-fields-mongodb-aggregate
 		// https://stackoverflow.com/questions/21053211/return-whole-document-from-aggregation
 		vals	:= datastore.collection.aggregateCursor([
