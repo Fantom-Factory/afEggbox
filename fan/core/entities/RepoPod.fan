@@ -12,6 +12,8 @@ class RepoPod {
 	@Inject private Scope?			scope
 
 	@Property	Str				_id
+	@Property	Str?			podName
+	@Property	Int[]?			podVersion
 	@Property	RepoPodMeta		meta
 	@Property	Int				fileSize
 	@Property	Int				ownerId
@@ -55,6 +57,10 @@ class RepoPod {
 				it.meta.jsEnabled = true
 			
 			it._id			= "${name}-${version}".lower
+			it.podName		= meta.name
+			it.podVersion	= meta.version.segments.rw
+			while (it.podVersion.size < 4)
+				it.podVersion.add(0)
 		}
 	}
 	

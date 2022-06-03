@@ -135,23 +135,56 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		datastore.insert(entity)
 	}
 	
-	// TODO: as map reduce is intended for background queries, should the repo get large, we may have to 
+	private Str:Obj? verionSortDoc(Bool asc) {
+		Str:Obj?[:] { it.ordered = true }
+			.add("podName", -1)
+			.add("podVersion.0", asc ? -1 : 1)
+			.add("podVersion.1", asc ? -1 : 1)
+			.add("podVersion.2", asc ? -1 : 1)
+			.add("podVersion.3", asc ? -1 : 1)
+	}
+	
+	// TODO as map reduce is intended for background queries, should the repo get large, we may have to 
 	// add an array of version Ints to the document and aggregate / group and sort on that.
 	private RepoPod[] reduceByVersion(Query? query, Bool asc) {
 		// need to ensure the collection exists else you get a "Mongo ns does not exist" Err
 		// so just ensure the indexes and job done		
-		mapFunc 	:= Code("function () { emit(this.meta['pod\\\\u002ename'], this); }")
-		reduceFunc	:= Code(reduceByVersionFunc, ["asc":asc])
-		options		:= [
-			"query"	: query?.toMongo(datastore),
-			"sort"	: ["_builtOn_" : 1]
-		]
-		if (query == null)
-			options.remove("query")
-		output 	:= datastore.collection.mapReduce(mapFunc, reduceFunc, options)
-		vals 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
-		pods	:= (RepoPod[]) vals .map { datastore.fromMongoDoc(it) }
-
+//		mapFunc 	:= Code("function () { emit(this.meta['pod\\\\u002ename'], this); }")
+//		reduceFunc	:= Code(reduceByVersionFunc, ["asc":asc])
+//		options		:= [
+//			"query"	: query?.toMongo(datastore),
+//			"sort"	: ["_builtOn_" : 1]
+//		]
+//		if (query == null)
+//			options.remove("query")
+//		output 	:= datastore.collection.mapReduce(mapFunc, reduceFunc, options)
+//		vals 	:= (([Str:Obj?][]) output["results"]).map { it["value"] }
+//		pods	:= (RepoPod[]) vals .map { datastore.fromMongoDoc(it) }
+		
+		
+		// https://stackoverflow.com/questions/28155546/return-all-fields-mongodb-aggregate
+		// https://stackoverflow.com/questions/21053211/return-whole-document-from-aggregation
+		vals	:= datastore.collection.aggregateCursor([
+			[
+				"\$match"		: query.toMongo(datastore),
+			],[
+				"\$sort"		: verionSortDoc(asc),
+			],[
+				"\$group"		: [
+					"_id"			: "\$podName",
+					"podName"		: ["\$first"	: "\$podName"],
+					"podVersion"	: ["\$first"	: "\$podVersion"],
+					"doc"			: ["\$first"	: "\$\$CURRENT"],
+				],
+			],[
+				"\$replaceRoot"		: ["newRoot"	: "\$doc"],
+			],
+		]) |cur| {
+			return cur.toList
+		} as [Str:Obj?][]
+		
+		pods	:= (RepoPod[]) vals.map { datastore.fromMongoDoc(it) }
+		
 		// dirty cash!
 		if (asc)
 			pods.each { 
