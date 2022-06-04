@@ -1,5 +1,11 @@
 Versions
 ********
+
+v0.2.0
+======
+ - Chg: Updated to latest Mongo / Morphia drivers.
+ - Chg: Replaced a slow, deprecated Map Reduce operation with a speedy Aggregate operation.
+
 v0.1.4
 ======
  - New: Support for '/doc/icon.svg'.

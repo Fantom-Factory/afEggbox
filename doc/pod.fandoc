@@ -2,7 +2,7 @@ Overview
 ********
 Eggbox is a website for uploading, viewing and downloading Fantom pods. Eggbox is [fanr]`docFanr::Tool` compatible and backed by MongoDB.
 
-To see Eggbox in action, visit `http://eggbox.fantomfactory.org/`.
+To see Eggbox in action, visit `https://eggbox.fantomfactory.org/`.
 
 Use Eggbox to host your very own pod repository, be it at home or at work! Eggbox is easy to setup and simple to configure.
 
@@ -68,7 +68,7 @@ a 'config.properties' file. The 'config.properties' should be in the current / s
 
 MongoDB URL
 ===========
-This defines the MongoDB instance Eggbox should connect to. It takes the form of the standard [MongoDB connection URL]`afMongo::ConnectionManagerPooled`:
+This defines the MongoDB instance Eggbox should connect to. It takes the form of the standard [MongoDB connection URL]`afMongo::MongoConnUrl`:
 
   afEggbox.mongoDbUrl = mongodb://db1.example.net:2500/?connectTimeoutMS=30000
 
@@ -190,7 +190,7 @@ Note that all Eggbox properties may be overridden in the same manner.
 
 Sample config.properties
 ************************
-Here is a sample 'config.properties' for you to cut'n'paste. Uncomment / remove the leading '#' symbol, from any line you wish to use.
+Here is a sample 'config.props' for you to cut'n'paste. Uncomment / remove the leading '#' symbol, from any line you wish to use.
 
 pre>
 # config.properties for Eggbox

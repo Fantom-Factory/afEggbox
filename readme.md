@@ -1,86 +1,80 @@
-# Eggbox v0.1.2.4
+# Eggbox v0.2.0
 ---
 
-[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom-lang.org/)
-[![pod: v0.1.2.4](http://img.shields.io/badge/pod-v0.1.2.4-yellow.svg)](http://eggbox.fantomfactory.org/pods/afEggbox)
+[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](https://fantom-lang.org/)
+[![pod: v0.2.0](http://img.shields.io/badge/pod-v0.2.0-yellow.svg)](http://eggbox.fantomfactory.org/pods/afEggbox)
 [![Licence: ISC](http://img.shields.io/badge/licence-ISC-blue.svg)](https://choosealicense.com/licenses/isc/)
 
 ## Overview
 
-Eggbox is a website for uploading, viewing and downloading Fantom pods. Eggbox is [fanr](http://fantom.org/doc/docFanr/Tool.html) compatible and backed by MongoDB.
+Eggbox is a website for uploading, viewing and downloading Fantom pods. Eggbox is [fanr](https://fantom.org/doc/docFanr/Tool.html) compatible and backed by MongoDB.
 
-To see Eggbox in action, visit [http://eggbox.fantomfactory.org/](http://eggbox.fantomfactory.org/).
+To see Eggbox in action, visit [https://eggbox.fantomfactory.org/](https://eggbox.fantomfactory.org/).
 
 Use Eggbox to host your very own pod repository, be it at home or at work! Eggbox is easy to setup and simple to configure.
 
 Eggbox features:
 
-- Editable Pod properties
-- Enhanced Fandoc documentation
-  - syntax highlighting
-  - table support
-  - link to images in pods
-  - broken link reporting
+* Editable Pod properties
+* Enhanced Fandoc documentation    + syntax highlighting
+    + table support
+    + link to images in pods
+    + broken link reporting
 
-- [Atom](http://tools.ietf.org/html/rfc4287) (RSS) feeds for individual pods
-- [Open Graph](http://ogp.me/) markup on pod summary pages
-- [Sitemap](http://www.sitemaps.org/) XML generation
-- Basic [Gravatar](http://en.gravatar.com/) integration
 
-## Install
+* [Atom](http://tools.ietf.org/html/rfc4287) (RSS) feeds for individual pods
+* [Open Graph](http://ogp.me/) markup on pod summary pages
+* [Sitemap](http://www.sitemaps.org/) XML generation
+* Basic [Gravatar](http://en.gravatar.com/) integration
+
+
+## <a name="Install"></a>Install
 
 Install `Eggbox` with the Fantom Pod Manager ( [FPM](http://eggbox.fantomfactory.org/pods/afFpm) ):
 
     C:\> fpm install afEggbox
 
-Or install `Eggbox` with [fanr](http://fantom.org/doc/docFanr/Tool.html#install):
+Or install `Eggbox` with [fanr](https://fantom.org/doc/docFanr/Tool.html#install):
 
     C:\> fanr install -r http://eggbox.fantomfactory.org/fanr/ afEggbox
 
-To use in a [Fantom](http://fantom-lang.org/) project, add a dependency to `build.fan`:
+To use in a [Fantom](https://fantom-lang.org/) project, add a dependency to `build.fan`:
 
-    depends = ["sys 1.0", ..., "afEggbox 0.1"]
+    depends = ["sys 1.0", ..., "afEggbox 0.2"]
 
-## Documentation
+## <a name="documentation"></a>Documentation
 
 Full API & fandocs are available on the [Eggbox](http://eggbox.fantomfactory.org/pods/afEggbox/) - the Fantom Pod Repository.
 
 ## Quick Start
 
-1. Start an instance of MongoDB:
-
-        C:\> mongod
-        
-        MongoDB starting
-        db version v3.0.5
-        waiting for connections on port 27017
+1. Start an instance of MongoDB:    C:\> mongod
+    
+    MongoDB starting
+    db version v3.0.5
+    waiting for connections on port 27017
 
 
-2. If Eggbox was installed as a pod, start the website with:
-
-        C:\>fan afEggbox 8069
-           ___    __                 _____        _
-          / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
-         / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
-        /_/ |_|/_//_/\__|/_//_/   /_/   \_,_/__/\__/____/_/   \_, /
-                 Alien-Factory BedSheet v1.4.12, IoC v2.0.10 /___/
-        
-        IoC Registry built in 303ms and started up in 892ms
-        
-        Bed App 'Eggbox' listening on http://localhost:8069/
+2. If Eggbox was installed as a pod, start the website with:    C:\>fan afEggbox 8069
+       ___    __                 _____        _
+      / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
+     / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
+    /_/ |_|/_//_/\__|/_//_/   /_/   \_,_/__/\__/____/_/   \_, /
+             Alien-Factory BedSheet v1.4.12, IoC v2.0.10 /___/
+    
+    IoC Registry built in 303ms and started up in 892ms
+    
+    Bed App 'Eggbox' listening on http://localhost:8069/
 
 
-
-  Or if using the [Eggbox standalone application](#standaloneApp), just run the script. (Edit the script to change the port.)
-
+    Or if using the [Eggbox standalone application](#standaloneApp), just run the script. (Edit the script to change the port.)
 
 3. Point your browser to [http://localhost:8069/](http://localhost:8069/) and Job Done!
-
-  ![Quickstart Screenshot](http://eggbox.fantomfactory.org/pods/afEggbox/doc/quickstart-screenshot.png)
-
+    ![Quickstart Screenshot](http://eggbox.fantomfactory.org/pods/afEggbox/doc/quickstart-screenshot.png)
 
 
-## Standalone Installation
+
+## <a name="standaloneApp"></a>Standalone Installation
 
 Eggbox may be run as a (portable) standalone application without the need to have Fantom installed. Just download the `.zip` file from [Eggbox Downloads Page](https://bitbucket.org/AlienFactory/afeggbox/downloads), extract, and run the bundled script.
 
@@ -92,7 +86,7 @@ The website is configured with various properties which may be set as environmen
 
 ### MongoDB URL
 
-This defines the MongoDB instance Eggbox should connect to. It takes the form of the standard [MongoDB connection URL](http://eggbox.fantomfactory.org/pods/afMongo/api/ConnectionManagerPooled):
+This defines the MongoDB instance Eggbox should connect to. It takes the form of the standard [MongoDB connection URL](http://eggbox.fantomfactory.org/pods/afMongo/api/MongoConnUrl):
 
     afEggbox.mongoDbUrl = mongodb://db1.example.net:2500/?connectTimeoutMS=30000
 
@@ -170,6 +164,7 @@ Auto login is disabled by default.
 
 > TIP: By setting `afEggbox.adminEmail` and `afEggbox.autoLoginEmail` to the same email address (and having people bookmark a private URL such as `/my/pods`) you create an open pod repository accessible to all.
 
+
 ## About Page
 
 Eggbox may have an optional *About* page. To enable, create an `about.fandoc` file in the current / same directory that the website is started in, next to `config.properties`. Existence of this file enables the *About* link in the top nav bar. The file is rendered as the *About* page.
@@ -194,53 +189,53 @@ Note that all Eggbox properties may be overridden in the same manner.
 
 ## Sample config.properties
 
-Here is a sample `config.properties` for you to cut'n'paste. Uncomment / remove the leading `#` symbol, from any line you wish to use.
+Here is a sample `config.props` for you to cut'n'paste. Uncomment / remove the leading `#` symbol, from any line you wish to use.
 
-```
-# config.properties for Eggbox
-# ****************************
-#
-# See http://eggbox.fantomfactory.org/pods/afEggbox
-#
-
-#afEggbox.mongoDbUrl               = mongodb://localhost:27017/eggbox
-
-#afEggbox.publicUrl                = http://example.com
-
-#afEggbox.contactName              = Micky Mouse
-#afEggbox.contactEmail             = micky.mouse@disney.com
-
-#afEggbox.googleAccNo              = XX-99999999-9
-#afEggbox.googleAccDomain          = //example.com/
-
-#afEggbox.errorEmails.smtpHost     = mail.example.com
-#afEggbox.errorEmails.smtpPort     = 25
-#afEggbox.errorEmails.smtpUsername = micky.mouse
-#afEggbox.errorEmails.smtpPassword = password
-#afEggbox.errorEmails.smtpSsl      = false
-#afEggbox.errorEmails.sendTo       = micky.mouse@disney.com
-
-#afEggbox.logDownloads             = true
-#afEggbox.logActivity              = true
-
-#afEggbox.adminEmail               = micky.mouse@disney.com
-#afEggbox.autoLoginEmail           = micky.mouse@disney.com
-```
+    # config.properties for Eggbox
+    # ****************************
+    #
+    # See http://eggbox.fantomfactory.org/pods/afEggbox
+    #
+    
+    #afEggbox.mongoDbUrl               = mongodb://localhost:27017/eggbox
+    
+    #afEggbox.publicUrl                = http://example.com
+    
+    #afEggbox.contactName              = Micky Mouse
+    #afEggbox.contactEmail             = micky.mouse@disney.com
+    
+    #afEggbox.googleAccNo              = XX-99999999-9
+    #afEggbox.googleAccDomain          = //example.com/
+    
+    #afEggbox.errorEmails.smtpHost     = mail.example.com
+    #afEggbox.errorEmails.smtpPort     = 25
+    #afEggbox.errorEmails.smtpUsername = micky.mouse
+    #afEggbox.errorEmails.smtpPassword = password
+    #afEggbox.errorEmails.smtpSsl      = false
+    #afEggbox.errorEmails.sendTo       = micky.mouse@disney.com
+    
+    #afEggbox.logDownloads             = true
+    #afEggbox.logActivity              = true
+    
+    #afEggbox.adminEmail               = micky.mouse@disney.com
+    #afEggbox.autoLoginEmail           = micky.mouse@disney.com
+    
 
 ## Acknowledgements
 
 The following, non-Fantom, libraries and services are used by Eggbox:
 
-- [AnchorJs](http://bryanbraun.github.io/anchorjs/)
-- [Bootstrap](http://getbootstrap.com/)
-- [D3.js](https://d3js.org/)
-- [Gravatar](http://en.gravatar.com/)
-- [Jasny Bootstrap Row Link](http://jasny.github.io/bootstrap/javascript/#rowlink)
-- [jQuery](https://jquery.com/)
-- [jQuery Throttle / Debounce](http://benalman.com/projects/jquery-throttle-debounce-plugin/)
-- [RequireJs](http://requirejs.org/)
-- [Shields.io](http://shields.io/)
-- [Tinysort](http://tinysort.sjeiti.com/)
+* [AnchorJs](http://bryanbraun.github.io/anchorjs/)
+* [Bootstrap](http://getbootstrap.com/)
+* [D3.js](https://d3js.org/)
+* [Gravatar](http://en.gravatar.com/)
+* [Jasny Bootstrap Row Link](http://jasny.github.io/bootstrap/javascript/#rowlink)
+* [jQuery](https://jquery.com/)
+* [jQuery Throttle / Debounce](http://benalman.com/projects/jquery-throttle-debounce-plugin/)
+* [RequireJs](http://requirejs.org/)
+* [Shields.io](http://shields.io/)
+* [Tinysort](http://tinysort.sjeiti.com/)
+
 
 Cheers!
 

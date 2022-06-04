@@ -288,7 +288,7 @@ const class FandocSummaryUri : FandocUri {
 	}
 		
 	Str aboutHtml() {
-		fandocRenderer.writeStrToHtml(pod.aboutFandoc, LinkResolverCtx(pod))
+		fandocRenderer.writeStrToHtml(pod?.aboutFandoc ?: "", LinkResolverCtx(pod))
 	}
 	
 	Uri toDownloadUrl() {

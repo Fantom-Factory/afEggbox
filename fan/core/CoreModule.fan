@@ -7,7 +7,6 @@ using afMorphia::BsonConvs
 const class CoreModule {
 	
 	Void defineServices(RegistryBuilder defs) {
-		
 		defs.addService(UserSession#)
 		
 		defs.addService(RepoUserDao#)
@@ -44,6 +43,6 @@ const class CoreModule {
 	// TODO use config.props
 	@Contribute { serviceType=ApplicationDefaults# }
 	Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig) {
-		config["afMorphia.mongoUrl"]	= eggboxConfig.mongoDbUrl
-	}
+		config["afMorphia.mongoUrl"]		= eggboxConfig.mongoDbUrl
+		config["afMorphia.seqsCollName"]	= "IntSequences" }
 }

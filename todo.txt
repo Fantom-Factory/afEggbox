@@ -1,8 +1,6 @@
 
 TODO
 ====
-install MongoDB on VM
-
 MD5 and SHA1 pods hashes
 
 Future

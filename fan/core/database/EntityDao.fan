@@ -1,5 +1,6 @@
 using afIoc::Inject
 using afMorphia::Datastore
+using afMorphia::Entity
 using afMongo::MongoSeqs
 
 abstract const class EntityDao {
@@ -14,7 +15,8 @@ abstract const class EntityDao {
 		if (idField != null) {
 			id := idField.get(entity)
 			if (id == null || id == 0) {
-				id = intSeqs.nextId(entity.typeof.name)
+				ent := entity.typeof.facet(Entity#) as Entity
+				id = intSeqs.nextId(ent?.name ?: entity.typeof.name)
 				idField.set(entity, id)
 			}
 		}
