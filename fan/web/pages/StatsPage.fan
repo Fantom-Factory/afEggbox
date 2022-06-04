@@ -1,6 +1,6 @@
-using afIoc
-using afEfanXtra
-using afMongo
+using afIoc::Inject
+using afEfanXtra::InitRender
+using afMongo::MongoColl
 using afSitemap::SitemapExempt
 using concurrent
 
@@ -8,10 +8,10 @@ const mixin StatsPage : PrPage, SitemapExempt {
 
 	@Inject	abstract RepoUserDao	userDao
 	@Inject { type=RepoPodDownload# }
-			abstract Collection 	collection
+			abstract MongoColl	 	collection
 
 	@InitRender
-	Void initRender() {
+	Void onInitPage() {
 		injector.injectRequireModule("tableSort", null, ["downloads"])
 	}
 
@@ -62,7 +62,7 @@ const mixin StatsPage : PrPage, SitemapExempt {
 			]
 		]
 		
-		res := ([Str:Obj?][]?) collection.aggregateCursor(pipeline) |cur| { cur.toList }
+		res := collection.aggregate(pipeline).toList
 		
 		return res.map |r| { 
 			DownloadStat { 
@@ -82,24 +82,4 @@ const class DownloadStat {
 	const Int	web
 	const Int	total
 	new make(|This|in) { in(this) }
-}
-
-class Migrate {
-	static Void main() {
-		
-		mongoClient := MongoClient(ActorPool(), `mongodb://heroku:password@ds039331.mongolab.com:39331/podrepo`)
-        collection  := mongoClient.db("podrepo").collection("podDownload")
-		
-		ds := collection.findAll
-		updates := 0
-		ds.each |Str:Obj val| {
-			if (val["pod"].toStr.any { it.isUpper }) {
-				updates++
-				val["pod"] = val["pod"].toStr.lower
-				collection.update(["_id" : val["_id"]], val)
-			}
-		}
-		
-		echo("updated $updates")
-	}
 }

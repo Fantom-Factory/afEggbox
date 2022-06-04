@@ -1,7 +1,7 @@
 using afIoc
-using afIocEnv
+using afIocEnv::IocEnv
 using afIocConfig
-using afMorphia
+using afMorphia::BsonConvs
 
 @SubModule { modules=[FanrModule#, WebModule#] }
 const class CoreModule {
@@ -28,9 +28,9 @@ const class CoreModule {
 		EggboxConfig(iocEnv)
 	}
 
-	@Contribute { serviceType=Converters# }
+	@Contribute { serviceType=BsonConvs# }
 	Void contributeConverters(Configuration config) {		
-		config[RepoPodMeta#] 	= config.build(RepoPodMetaConverter#)
+		config[RepoPodMeta#] 	= RepoPodMetaConverter()
 		config[FandocUri#] 		= config.build(FandocUriConverter#)
 	}
 
@@ -38,11 +38,12 @@ const class CoreModule {
 		config.set("afEggbox.ensureIndexes", |->| {
 			indexes := (Indexes) config.build(Indexes#)
 			indexes.ensureIndexes
-		}).after("afMorphia.testConnection")
+		})
 	}
 	
+	// TODO use config.props
 	@Contribute { serviceType=ApplicationDefaults# }
 	Void contributeApplicationDefaults(Configuration config, EggboxConfig eggboxConfig) {
-		config[MorphiaConfigIds.mongoUrl]	= eggboxConfig.mongoDbUrl
+		config["afMorphia.mongoUrl"]	= eggboxConfig.mongoDbUrl
 	}
 }

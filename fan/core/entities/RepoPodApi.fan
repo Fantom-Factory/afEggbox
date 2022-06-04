@@ -1,11 +1,11 @@
-using afIoc
-using afMorphia
+using afMorphia::Entity
+using afMorphia::BsonProp
 
 @Entity { name = "podApi" }
 class RepoPodApi {
-	@Property	private const Str		_id
-	@Property	private const Str		podName
-	@Property	private const Str:Str	api
+	@BsonProp	private const Str		_id
+	@BsonProp	private const Str		podName
+	@BsonProp	private const Str:Str	api
 				private 	Str:DocType	docTypes	:= Str:DocType[:]
 	
 	new make(|This|f) { f(this) }

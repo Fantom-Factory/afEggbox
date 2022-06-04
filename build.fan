@@ -17,12 +17,12 @@ class Build : BuildPod {
 		]
 
 		depends = [
-			"sys          1.0.74 - 1.0",
-			"concurrent   1.0.74 - 1.0",
-			"fanr         1.0.74 - 1.0",
-			"fandoc       1.0.74 - 1.0",
-			"email        1.0.74 - 1.0",
-			"gfx          1.0.74 - 1.0",
+			"sys          1.0.77 - 1.0",
+			"concurrent   1.0.77 - 1.0",
+			"fanr         1.0.77 - 1.0",
+			"fandoc       1.0.77 - 1.0",
+			"email        1.0.77 - 1.0",
+			"gfx          1.0.77 - 1.0",
 
 			// ---- Core ------------------------
 			"afBeanUtils  1.0.10 - 1.0",
@@ -32,9 +32,10 @@ class Build : BuildPod {
 			"afIocEnv     1.1.0  - 1.1",
 
 			// ---- Database --------------------
-			"afBson       1.1.0  - 1.1",
-			"afMongo      1.1.8  - 1.1",
-			"afMorphia    1.2.6  - 1.2",
+			"afBson       2.0.2  - 2.0",
+			"afMongo      2.1.0  - 2.1",
+			"afMorphia    2.0.2  - 2.0",
+			"afMorphiaIoc 1.0.2  - 1.0",
 
 			// ---- Web -------------------------
 			"afBedSheet   1.5.16 - 1.5",
@@ -49,12 +50,12 @@ class Build : BuildPod {
 			"afAtom       1.0.2  - 1.0",
 
 			// ---- Other -----------------------
-			"afButter     1.2.12 - 1.2",
-			"afPegger     1.1.2  - 1.1",
-			"syntax       1.0.74 - 1.0",
-			"util         1.0.74 - 1.0",
-			"web          1.0.74 - 1.0",
-			"xml          1.0.74 - 1.0",
+			"afButter     1.2.14 - 1.2",
+			"afPegger     1.1.4  - 1.1",
+			"syntax       1.0.77 - 1.0",
+			"util         1.0.77 - 1.0",
+			"web          1.0.77 - 1.0",
+			"xml          1.0.77 - 1.0",
 
 			// ---- Test ------------------------
 			"afBounce     1.1.12 - 1.1",

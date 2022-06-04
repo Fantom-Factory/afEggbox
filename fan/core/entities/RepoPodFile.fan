@@ -1,10 +1,10 @@
-using afIoc
-using afMorphia
+using afMorphia::Entity
+using afMorphia::BsonProp
 
 @Entity { name = "podFile" }
 class RepoPodFile {
-	@Property	Str		_id
-	@Property	Buf		data
+	@BsonProp	Str		_id
+	@BsonProp	Buf		data
 	
 	new make(|This|f) { f(this) }
 	

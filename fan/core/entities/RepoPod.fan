@@ -1,7 +1,13 @@
-using afIoc
-using afMorphia
-using fandoc
-using fanr
+using afIoc::Inject
+using afIoc::Scope
+using afMorphia::Entity
+using afMorphia::BsonProp
+using fanr::PodSpec
+using fandoc::FandocParser
+using fandoc::Heading
+using fandoc::DocElem
+using fandoc::DocNodeId
+using fandoc::FandocDocWriter
 
 @Entity { name = "pod" }
 class RepoPod {
@@ -11,20 +17,20 @@ class RepoPod {
 	@Inject private InvalidLinks?	invalidLinkFinder
 	@Inject private Scope?			scope
 
-	@Property	Str				_id
-	@Property	Str?			podName
-	@Property	Int[]?			podVersion
-	@Property	RepoPodMeta		meta
-	@Property	Int				fileSize
-	@Property	Int				ownerId
-	@Property	Str				aboutFandoc
-	@Property	InvalidLink[]	invalidLinks
-	@Property	DateTime?		linksValidatedOn
+	@BsonProp	Str				_id
+	@BsonProp	Str?			podName
+	@BsonProp	Int[]?			podVersion
+	@BsonProp	RepoPodMeta		meta
+	@BsonProp	Int				fileSize
+	@BsonProp	Int				ownerId
+	@BsonProp	Str				aboutFandoc
+	@BsonProp	InvalidLink[]	invalidLinks
+	@BsonProp	DateTime?		linksValidatedOn
 
-	@Property	Bool			hasApi
-	@Property	Bool			hasDocs
-	@Property	Bool			hasIcon
-	@Property	Str?			iconDataUri
+	@BsonProp	Bool			hasApi
+	@BsonProp	Bool			hasDocs
+	@BsonProp	Bool			hasIcon
+	@BsonProp	Str?			iconDataUri
 
 	new make(|This|f) { f(this) }
 
@@ -383,9 +389,9 @@ class RepoPodMeta {
 }
 
 const class InvalidLink {
-	@Property	const FandocUri	where
-	@Property	const Str		link
-	@Property	const Str		msg
+	@BsonProp	const FandocUri	where
+	@BsonProp	const Str		link
+	@BsonProp	const Str		msg
 
 	new make(|This|in) { in(this) }
 	

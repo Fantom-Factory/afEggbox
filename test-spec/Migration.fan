@@ -15,8 +15,7 @@ class Migration {
 	
 	Void go() {
 		echo("GOGOGO!!!")
-		q := Query()
-		podDao.query(q).findAll.each |RepoPod pod| {
+		podDao.findAll.each |RepoPod pod| {
 			vers := pod.meta.version.segments.rw
 			while (vers.size < 4)
 				vers.add(0)

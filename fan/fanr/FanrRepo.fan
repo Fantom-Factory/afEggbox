@@ -1,4 +1,5 @@
-using afIoc
+using afIoc::Inject
+using afIoc::Scope
 using fanr
 using fandoc
 using afBedSheet
@@ -99,9 +100,9 @@ const class FanrRepo {
 		q := Query.fromStr(query)
 		
 		return podDao.doQuery(podName) |c| {
-			c.hint = "_builtOn_"
+//			c.hint = "_builtOn_"	// FIXME do we need this?
 			pods := Str:RepoPod[][:] 
-			while (c.hasNext) {
+			while (c.isAlive) {
 				pod := podDao.toPod(c.next)
 				if ((pods[pod.name]?.size ?: 0) < numVersions)
 					if (pod.isPublic || (user != null && user.owns(pod)))

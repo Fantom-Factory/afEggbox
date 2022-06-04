@@ -1,38 +1,41 @@
-using afIoc
-using afMorphia
+using afIoc::Inject
+using afMorphia::Entity
+using afMorphia::BsonProp
 using afFormBean::HtmlInput
-using afButter
+using afButter::Butter
+using afButter::ButterDish
+using afButter::ButterRequest
 
 @Entity { name = "user" }
 class RepoUser {
 
-	@Property{}	Int		_id
+	@BsonProp	Int		_id
 	
 	@HtmlInput { type="static" }
-	@Property{}	Uri		email
+	@BsonProp	Uri		email
 	
 	@HtmlInput { type="text"; required=true; minLength=3; maxLength=128 }
-	@Property{}	Str		screenName
+	@BsonProp	Str		screenName
 
 	@HtmlInput { type="email"; minLength=3; maxLength=128 }
-	@Property{}	Uri?	gravatarEmail
+	@BsonProp	Uri?	gravatarEmail
 	
 	@HtmlInput { type="text"; minLength=3; maxLength=128 }
-	@Property{}	Str?	realName {
+	@BsonProp	Str?	realName {
 		set { &realName = it?.trimToNull }
 	}
 
 	@HtmlInput { type="textarea"; minLength=3; maxLength=2048 }
-	@Property{}	Str?	aboutMe {
+	@BsonProp	Str?	aboutMe {
 		set { &aboutMe = it?.trimToNull }
 	}
 
-	@Property{}	Str		userSalt
-	@Property{}	Str		userSecret
+	@BsonProp	Str		userSalt
+	@BsonProp	Str		userSecret
 
-	@Inject{} FandocWriter?		fandocRenderer
-	@Inject{} EggboxConfig?		eggboxConfig
-	@Inject{} RepoActivityDao?	activityDao
+	@Inject FandocWriter?		fandocRenderer
+	@Inject EggboxConfig?		eggboxConfig
+	@Inject RepoActivityDao?	activityDao
 	
 	new make(|This| in) { in(this) }
 	

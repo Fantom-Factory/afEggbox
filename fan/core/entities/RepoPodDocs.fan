@@ -1,12 +1,11 @@
-using afIoc
-using afMorphia
-using fandoc
+using afMorphia::Entity
+using afMorphia::BsonProp
 
 @Entity { name = "podDocs" }
 class RepoPodDocs {
-	@Property private Str			_id
-	@Property private [Uri:Str]?	txt
-	@Property private [Uri:Buf]?	bin
+	@BsonProp private Str			_id
+	@BsonProp private [Uri:Str]?	txt
+	@BsonProp private [Uri:Buf]?	bin
 	
 	new make(|This|f) { f(this) }
 	

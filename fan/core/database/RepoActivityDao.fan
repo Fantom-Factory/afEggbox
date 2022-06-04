@@ -1,34 +1,33 @@
-using afIoc
-using afMorphia
+using afIoc::Inject
+using afMorphia::Datastore
+using afMongo::MongoSeqs
 
-const mixin RepoActivityDao : EntityDao {
+const abstract class RepoActivityDao : EntityDao {
 	@Operator
 	abstract RepoActivity?	get(Int id, Bool checked := true)
 	abstract Void warn (Str msg, Err err, Bool logErr)
 	abstract Void error(Str msg, Err err, Bool logErr)
+	
+	new make(|This| fn) : super(fn) { }
 }
 
 internal const class RepoActivityDaoImpl : RepoActivityDao {
 
 	@Inject { type=RepoActivity# }
-	override const Datastore datastore
-	
-	@Inject
-	override const IntSequences	intSeqs
-	
+	override 		const Datastore		datastore
 	@Inject	private const Log			log
 	@Inject	private const EggboxConfig	eggboxConfig
 
-	new make(|This| in) { in(this) }
+	new make(|This| fn) : super(fn) { }
 	
 	override RepoActivity create(Obj entity) {
 		eggboxConfig.logActivityEnabled
-			? EntityDao.super.create(entity)
+			? super.create(entity)
 			: entity
 	}
 	
 	override RepoActivity? get(Int id, Bool checked := true) {
-		datastore.query(field("_id").eq(id)).findOne(checked)
+		datastore.findOne(checked) { eq("_id", id) }
 	}
 	
 	override Void warn(Str msg, Err err, Bool logErr) {

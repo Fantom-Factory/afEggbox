@@ -1,9 +1,9 @@
-using afIoc
-using afBson
-using afMongo
-using afMorphia
+using afIoc::Inject
+using afMongo::MongoCur
+using afMongo::MongoQ as Q
+using afMorphia::Datastore
 
-const mixin RepoPodDao : EntityDao {
+const abstract class RepoPodDao : EntityDao {
 	const static Func byProjName  := |RepoPod p1, RepoPod p2 -> Int| { p1.projectName.compareIgnoreCase(p2.projectName) }
 	const static Func byBuildDate := |RepoPod p1, RepoPod p2 -> Int| { p1.builtOn.compare(p2.builtOn) }
 
@@ -18,9 +18,11 @@ const mixin RepoPodDao : EntityDao {
 	abstract Int			countVersions(RepoUser? user := null)		// for All Pods and User page
 
 	** used for fanr queries
-	abstract RepoPod[] 		doQuery(Str? podName, |Cursor->Obj?| f)
+	abstract RepoPod[] 		doQuery(Str? podName, |MongoCur->Obj?| f)
 
 	abstract RepoPod 		toPod(Obj doc)	
+	
+	new make(|This| fn) : super(fn) { }
 }
 
 internal const class RepoPodDaoImpl : RepoPodDao {
@@ -28,34 +30,38 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	@Inject { type=RepoPod# }
 	override const Datastore datastore
 
-	@Inject
-	override const IntSequences	intSeqs
-
 	@Inject	const DirtyCash 	dirtyCache
 	@Inject	const UserSession	userSession
 	
-	new make(|This| in) { in(this) }
+	new make(|This| fn) : super(fn) { }
 	
 	override RepoPod? get(Str id, Bool checked := true) {
 		// no cache as it's only used by testing
-		datastore.query(allPods.field("_id").eq(id.lower)).findOne(checked)
+		datastore.findOne(checked) {
+			and(allPods, eq("_id", id.lower))
+		}
 	}
 
 	override RepoPod? findPod(Str name, Version? version := null) {
 		dirtyCache.get(RepoPod#, _id(name, version)) |->Obj?| {
 			version != null
 				? get(_id(name, version), false)
-				: reduceByVersion(allPods.field("meta.pod\\u002ename").eqIgnoreCase(name), true).first
+				: reduceByVersion(
+					Q().and(allPods, Q().eqIgnoreCase("meta.pod\\u002ename", name)),
+					true
+				).first
 		}
 	}
 
 	override RepoPod[] findPodVersions(Str name, Int? limit := null) {
-		query := allPods.field("meta.pod\\u002ename").eq(name)
-		return datastore.query(query).orderByIndex("_builtOn_").limit(limit).findAll
+		// FIXME use limit - update Morphia???
+		datastore.findAll("_builtOn_") {
+			eq("meta.pod\\u002ename", name)
+		}
 	}
 	
 	override RepoPod[] findLatestPods(RepoUser? user := null) {
-		query := user == null ? allPods : allPods.field("ownerId").eq(user._id)		
+		query := user == null ? allPods : Q().and(allPods, Q().eq("ownerId", user._id))
 		return reduceByVersion(query, true).sort(byProjName)
 	}
 
@@ -65,47 +71,54 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	
 	override RepoPod[] findLatestVersions(Int limit) {
 		// cheat by using 'builtOn' index and not the actual version
-		return datastore.query(allPods).orderByIndex("_builtOn_").limit(limit).findAll
+		// FIXME use limit - update Morphia???
+		// FIXME does this query work!? do I not have to use the passed MongQ?
+		datastore.findAll("_builtOn_") { allPods }
 	}
 	
 	override Int countVersions(RepoUser? user := null) {
-		query := user == null ? allPods : allPods.field("ownerId").eq(user._id)
-		return datastore.query(query).findCount
+		return 0
+		throw UnsupportedErr()
+//		query := user == null ? allPods : allPods.field("ownerId").eq(user._id)
+//		return datastore.query(query).findCount
 	}
 
 	override Int countPods(RepoUser? user := null) {
-		query	 := user == null ? allPods : allPods.field("ownerId").eq(user._id)
-		pipeline := [
-			[
-				"\$match" : query.toMongo(datastore)
-			],
-			[
-				"\$group" : [
-					"_id" : "\$meta.pod\\u002ename"
-				] 
-			],
-			[
-				"\$group" : [
-					"_id": 1, 
-					"count": [
-						"\$sum" : 1
-					]
-				]
-			]
-		]
-
-		return datastore.collection.aggregateCursor(pipeline) |cur| {
-			cur.next(false)?.get("count") ?: 0
-		}
+		return 0
+		throw UnsupportedErr()
+//		query	 := user == null ? allPods : allPods.field("ownerId").eq(user._id)
+//		pipeline := [
+//			[
+//				"\$match" : query.toMongo(datastore)
+//			],
+//			[
+//				"\$group" : [
+//					"_id" : "\$meta.pod\\u002ename"
+//				] 
+//			],
+//			[
+//				"\$group" : [
+//					"_id": 1, 
+//					"count": [
+//						"\$sum" : 1
+//					]
+//				]
+//			]
+//		]
+//
+//		return datastore.collection.aggregateCursor(pipeline) |cur| {
+//			cur.next(false)?.get("count") ?: 0
+//		}
 	}
 
-	override RepoPod[] doQuery(Str? podName, |Cursor->Obj?| f) {
-		query := (Query) (podName == null ? allPods : allPods.field("meta.pod\\u002ename").eq(podName))
-		return datastore.collection.find(query.toMongo(datastore), f)
+	override RepoPod[] doQuery(Str? podName, |MongoCur->Obj?| f) {
+		throw UnsupportedErr()
+//		query := (Query) (podName == null ? allPods : allPods.field("meta.pod\\u002ename").eq(podName))
+//		return datastore.collection.find(query.toMongo(datastore), f)
 	}
 	
 	override RepoPod toPod(Obj doc) {
-		datastore.fromMongoDoc(doc)
+		datastore.fromBsonDoc(doc)
 	}
 
 	override RepoPod create(Obj entity) {
@@ -121,12 +134,12 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			.add("podVersion.3", asc ? -1 : 1)
 	}
 	
-	private RepoPod[] reduceByVersion(Query? query, Bool asc) {
+	private RepoPod[] reduceByVersion(Q? query, Bool asc) {
 		// https://stackoverflow.com/questions/28155546/return-all-fields-mongodb-aggregate
 		// https://stackoverflow.com/questions/21053211/return-whole-document-from-aggregation
-		vals	:= datastore.collection.aggregateCursor([
+		vals	:= datastore.collection.aggregate([
 			[
-				"\$match"		: query.toMongo(datastore),
+				"\$match"		: query.query,
 			],[
 				"\$sort"		: verionSortDoc(asc),
 			],[
@@ -139,11 +152,9 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			],[
 				"\$replaceRoot"		: ["newRoot"	: "\$doc"],
 			],
-		]) |cur| {
-			return cur.toList
-		} as [Str:Obj?][]
-		
-		pods	:= (RepoPod[]) vals.map { datastore.fromMongoDoc(it) }
+		], null).toList
+	
+		pods	:= (RepoPod[]) vals.map { datastore.fromBsonDoc(it) }
 		
 		// dirty cash!
 		if (asc)
@@ -159,12 +170,12 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		"${name}-${version}".lower
 	}
 	
-	private Query allPods() {
+	private Q allPods() {
 		userSession.isLoggedIn
-			? Query().or([
-				field("meta.repo\\u002epublic").eq(true), 
-				field("ownerId").eq(userSession.user._id)
-			])
-			: Query().field("meta.repo\\u002epublic").eq(true)
+			? Q().or(
+				Q().eq("meta.repo\\u002epublic", true), 
+				Q().eq("ownerId", userSession.user._id)
+			)
+			: Q().eq("meta.repo\\u002epublic", true)
 	}
 }

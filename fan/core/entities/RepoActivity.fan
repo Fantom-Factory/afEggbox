@@ -1,14 +1,14 @@
-using afIoc
-using afMorphia
+using afMorphia::BsonProp
+using afMorphia::Entity
 
 @Entity { name = "activity" }
 class RepoActivity {
-	@Property 		Int			_id
-	@Property const Int?		userId
-	@Property const Str?		podId
-	@Property const DateTime	when
-	@Property const Str			what
-	@Property const Str?		detail
+	@BsonProp 		Int			_id
+	@BsonProp const Int?		userId
+	@BsonProp const Str?		podId
+	@BsonProp const DateTime	when
+	@BsonProp const Str			what
+	@BsonProp const Str?		detail
 
 	new makeViaIoc(|This|f) { f(this) }
 

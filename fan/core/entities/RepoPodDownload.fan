@@ -1,14 +1,14 @@
-using afIoc
-using afMorphia
+using afMorphia::Entity
+using afMorphia::BsonProp
 
 @Entity { name = "podDownload" }
 class RepoPodDownload {
-	@Property 		Int			_id
-	@Property const Str			pod
-	@Property const Str			ver
-	@Property const Int?		userId
-	@Property const DateTime	when
-	@Property const Str			how
+	@BsonProp 		Int			_id
+	@BsonProp const Str			pod
+	@BsonProp const Str			ver
+	@BsonProp const Int?		userId
+	@BsonProp const DateTime	when
+	@BsonProp const Str			how
 
 	new makeViaIoc(|This|f) { f(this) }
 

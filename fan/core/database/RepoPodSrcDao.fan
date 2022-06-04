@@ -1,12 +1,13 @@
 using afIoc
 using afMorphia
 
-const mixin RepoPodSrcDao : EntityDao {
+const abstract class RepoPodSrcDao : EntityDao {
 
 	@Operator
 	abstract RepoPodSrc?	get(Str _id, Bool checked := true)
 	abstract RepoPodSrc? 	find(Str name, Version version, Bool checked := true)
 
+	new make(|This| fn) : super(fn) { }
 }
 
 internal const class RepoPodSrcDaoImpl : RepoPodSrcDao {
@@ -14,16 +15,13 @@ internal const class RepoPodSrcDaoImpl : RepoPodSrcDao {
 	@Inject { type=RepoPodSrc# }
 	override const Datastore datastore
 	
-	@Inject
-	override const IntSequences	intSeqs
-
 	@Inject	const DirtyCash dirtyCache
 
-	new make(|This| in) { in(this) }
+	new make(|This| fn) : super(fn) { }
 	
-	override RepoPodSrc? get(Str _id, Bool checked := true) {
-		dirtyCache.get(RepoPodSrc#, _id.lower) |->Obj?| {
-			datastore.query(field("_id").eq(_id)).findOne(checked)
+	override RepoPodSrc? get(Str id, Bool checked := true) {
+		dirtyCache.get(RepoPodSrc#, id.lower) |->Obj?| {
+			datastore.findOne(checked) { eq("_id", id) }
 		}
 	}
 

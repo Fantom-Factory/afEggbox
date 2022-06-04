@@ -1,16 +1,20 @@
-using afMorphia
+using afIoc::Inject
+using afMorphia::Datastore
+using afMongo::MongoSeqs
 
-const mixin EntityDao {
+abstract const class EntityDao {
 
-	abstract Datastore 		datastore()
-	abstract IntSequences	intSeqs()
+			abstract		Datastore	datastore()
+	@Inject private	const	MongoSeqs	intSeqs
+	
+	new make(|This| fn) { fn(this) }
 	
 	virtual Obj create(Obj entity) {
 		idField := entity.typeof.field("_id", false) 
 		if (idField != null) {
 			id := idField.get(entity)
 			if (id == null || id == 0) {
-				id = intSeqs.nextId(entity.typeof)
+				id = intSeqs.nextId(entity.typeof.name)
 				idField.set(entity, id)
 			}
 		}
@@ -32,9 +36,5 @@ const mixin EntityDao {
 
 	virtual Void dropAll() {
 		datastore.drop(false)
-	}
-
-	protected virtual QueryCriterion field(Str fieldName) {
-		Query().field(fieldName)
 	}
 }

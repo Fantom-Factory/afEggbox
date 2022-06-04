@@ -1,23 +1,20 @@
-using afIoc
-using afMorphia
+using afIoc::Inject
+using afMorphia::BsonConv
+using afMorphia::BsonConvCtx
 
-const class RepoPodMetaConverter : Converter {
+const class RepoPodMetaConverter : BsonConv {
 
-	@Inject private const |->Converters| converters
-	
-	new make(|This|in) { in(this) }
-	
-	override Obj? toFantom(Type type, Obj? mongoObj) {
-		if (mongoObj == null) return null
+	override Obj? fromBsonVal(Obj? bsonVal, BsonConvCtx ctx) {
+		if (bsonVal == null) return null
 		
-		meta := converters().toFantom([Str:Str]#, mongoObj)
+		meta := ctx.converters.fromBsonVal(bsonVal, [Str:Str]#)
 		return RepoPodMeta { it.meta = meta }
 	}
 
-	override Obj? toMongo(Type fantomType, Obj? fantomObj) {
+	override Obj? toBsonVal(Obj? fantomObj, BsonConvCtx ctx) {
 		if (fantomObj == null) return null
 
-		meta := ((RepoPodMeta) fantomObj).meta
-		return converters().toMongo(meta.typeof, meta)
+		meta := (RepoPodMeta) fantomObj
+		return ctx.converters.toBsonVal(meta.meta)
 	}
 }

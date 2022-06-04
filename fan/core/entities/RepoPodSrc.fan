@@ -1,10 +1,10 @@
-using afIoc
-using afMorphia
+using afMorphia::Entity
+using afMorphia::BsonProp
 
 @Entity { name = "podSrc" }
 const class RepoPodSrc {
-	@Property private const Str		_id
-	@Property private const Str:Str	src
+	@BsonProp private const Str		_id
+	@BsonProp private const Str:Str	src
 	
 	new make(|This|f) { f(this) }
 	

@@ -1,18 +1,20 @@
-using afIoc
-using afMorphia
+using afIoc::Inject
+using afIoc::Scope
+using afMorphia::BsonConv
+using afMorphia::BsonConvCtx
 
-const class FandocUriConverter : Converter {
+const class FandocUriConverter : BsonConv {
 
 	@Inject private const Scope scope
 	
 	new make(|This|in) { in(this) }
 	
-	override Obj? toFantom(Type type, Obj? mongoObj) {
-		if (mongoObj == null) return null
-		return FandocUri.fromUri(scope, mongoObj.toStr.toUri)
+	override Obj? fromBsonVal(Obj? bsonVal, BsonConvCtx ctx) {
+		if (bsonVal == null) return null
+		return FandocUri.fromUri(scope, bsonVal.toStr.toUri)
 	}
 
-	override Obj? toMongo(Type fantomType, Obj? fantomObj) {
+	override Obj? toBsonVal(Obj? fantomObj, BsonConvCtx ctx) {
 		if (fantomObj == null) return null
 		
 		return ((FandocUri) fantomObj).toUri.toStr

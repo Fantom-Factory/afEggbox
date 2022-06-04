@@ -1,12 +1,14 @@
-using afIoc
-using afMorphia
+using afIoc::Inject
+using afMorphia::Datastore
 
-const mixin RepoUserDao : EntityDao {
+const abstract class RepoUserDao : EntityDao {
 	@Operator
 	abstract RepoUser?		get(Int id, Bool checked := true)
 	abstract RepoUser?		getByEmail(Uri email, Bool checked := true)
 	abstract RepoUser?		getByScreenName(Str screenName, Bool checked := true)
 	abstract RepoUser[]		findAll()
+	
+	new make(|This| fn) : super(fn) { }
 }
 
 internal const class RepoUserDaoImpl : RepoUserDao {
@@ -14,24 +16,22 @@ internal const class RepoUserDaoImpl : RepoUserDao {
 	@Inject { type=RepoUser# }
 	override const Datastore datastore
 	
-	@Inject
-	override const IntSequences	intSeqs
-
-	new make(|This| in) { in(this) }
+	new make(|This| fn) : super(fn) { }
 	
 	override RepoUser? get(Int id, Bool checked := true) {
-		datastore.query(field("_id").eq(id)).findOne(checked)
+		datastore.findOne(checked) { eq("_id", id) }
 	}
 
 	override RepoUser? getByEmail(Uri email, Bool checked := true) {
-		datastore.query(field("email").eqIgnoreCase(email.toStr)).findOne(checked)
+		// FIXME emails are Strings
+		datastore.findOne(checked) { eqIgnoreCase("email", email.toStr) }
 	}
 
 	override RepoUser? getByScreenName(Str screenName, Bool checked := true) {
-		datastore.query(field("screenName").eqIgnoreCase(screenName)).findOne(checked)
+		datastore.findOne(checked) { eqIgnoreCase("screenName", screenName) }
 	}
 
 	override RepoUser[] findAll() {
-		datastore.query.orderBy("email").findAll
+		datastore.findAll("email")
 	}
 }
