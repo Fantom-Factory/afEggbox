@@ -53,7 +53,7 @@ const class UserSession {
 
 @Serializable
 const class UserSessionState {
-	const Uri? email
+	const Str? email
 	
 	new make(|This|in) { in(this) }
 }

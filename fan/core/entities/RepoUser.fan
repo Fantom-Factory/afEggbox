@@ -12,13 +12,13 @@ class RepoUser {
 	@BsonProp	Int		_id
 	
 	@HtmlInput { type="static" }
-	@BsonProp	Uri		email
+	@BsonProp	Str		email
 	
 	@HtmlInput { type="text"; required=true; minLength=3; maxLength=128 }
 	@BsonProp	Str		screenName
 
 	@HtmlInput { type="email"; minLength=3; maxLength=128 }
-	@BsonProp	Uri?	gravatarEmail
+	@BsonProp	Str?	gravatarEmail
 	
 	@HtmlInput { type="text"; minLength=3; maxLength=128 }
 	@BsonProp	Str?	realName {
@@ -39,7 +39,7 @@ class RepoUser {
 	
 	new make(|This| in) { in(this) }
 	
-	new makeNewUser(Uri email, Str password, |This|? f := null) {
+	new makeNewUser(Str email, Str password, |This|? f := null) {
 		this.email 		= email
 		this.userSalt	= Buf.random(16).toHex
 		this.userSecret	= generateSecret(password)
@@ -74,7 +74,7 @@ class RepoUser {
 	}
 
 	Str gravatarHash() {
-		(gravatarEmail ?: email).encode.trim.lower.toBuf.toDigest("MD5").toHex
+		(gravatarEmail ?: email).trim.lower.toBuf.toDigest("MD5").toHex
 	}
 	
 	This populateFromGravatar() {

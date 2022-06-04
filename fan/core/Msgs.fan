@@ -55,7 +55,7 @@ mixin Msgs {
 		"Incorrect password"
 	}
 	
-	static Str signup_emailTaken(Uri email) {
+	static Str signup_emailTaken(Str email) {
 		"Email address `${email}` is already taken."
 	}
 

@@ -7,7 +7,7 @@ class Build : BuildPod {
 	new make() {
 		podName = "afEggbox"
 		summary = "A website for uploading, viewing, and downloading Fantom pods. Host your very own Pod Repository!"
-		version = Version("0.1.4")
+		version = Version("0.2.0")
 
 		meta = [
 			"pod.dis"		: "Eggbox",
@@ -25,10 +25,10 @@ class Build : BuildPod {
 			"gfx          1.0.77 - 1.0",
 
 			// ---- Core ------------------------
-			"afBeanUtils  1.0.10 - 1.0",
+			"afBeanUtils  1.0.12 - 1.0",
 			"afConcurrent 1.0.26 - 1.0",
 			"afIoc        3.0.8  - 3.0",
-			"afIocConfig  1.1.0  - 1.1",
+			"afIocConfig  1.1.2  - 1.1",
 			"afIocEnv     1.1.0  - 1.1",
 
 			// ---- Database --------------------
@@ -39,14 +39,14 @@ class Build : BuildPod {
 
 			// ---- Web -------------------------
 			"afBedSheet   1.5.16 - 1.5",
-			"afEfanXtra   2.0.4  - 2.0",
+			"afEfanXtra   2.0.6  - 2.0",
 			"afPillow     1.2.2  - 1.2",
-			"afDuvet      1.1.10 - 1.1",
-			"afSlim       1.3.2  - 1.3",
-			"afFormBean   1.2.6  - 1.2",
+			"afDuvet      1.1.12 - 1.1",
+			"afSlim       1.4.0  - 1.4",
+			"afFormBean   1.2.8  - 1.2",
 			"afColdFeet   1.4.0  - 1.4",
 			"afSitemap    1.1.2  - 1.1",
-			"afGoogleAnalytics 0.1.8 - 0.1",
+			"afGoogleAnalytics 0.1.10 - 0.1",
 			"afAtom       1.0.2  - 1.0",
 
 			// ---- Other -----------------------

@@ -13,7 +13,7 @@ abstract class WebFixture : RepoFixture {
 	
     // Other common / reusable methods such as :
 	
-	Void loginAs(Uri email) {
+	Void loginAs(Str email) {
 		user := userDao.getByEmail(email)	// assert user exists
 		client.webSession(true)[UserSession#.qname] = UserSessionState { it.email = email }
 	}

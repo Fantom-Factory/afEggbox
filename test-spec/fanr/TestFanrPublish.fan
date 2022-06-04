@@ -50,7 +50,7 @@ using util
 class TestFanrPublish : FanrFixture {
 	
 	Void createUser() {
-		username = `steve.eynon`
+		username = "steve.eynon"
 		password = "password"
 	}
 	

@@ -4,7 +4,7 @@ using afButter
 ** A simple fanr client for testing the WebMod
 ** Shamelessly ripped and adapted from fanr::WebRepo
 class FanrClient {
-			Uri?		username		// actually an email
+			Str?		username		// actually an email
 			Str?		password		:= "password"
 			ButterDish	client
 

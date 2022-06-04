@@ -34,13 +34,13 @@ abstract class RepoFixture : FixtureTest {
         RepoRunner()
     }
 
-	RepoUser newUser(Uri email := `Wotever`, Str password := "password") {
+	RepoUser newUser(Str email := "Wotever", Str password := "password") {
 		RepoUser(email, password)
 	}
 	
 	RepoUser getOrMakeUser(Str email) {
-		existing := userDao.getByEmail(email.toUri, false)
-		return (existing != null) ? existing : userDao.create(newUser(email.toUri))
+		existing := userDao.getByEmail(email, false)
+		return (existing != null) ? existing : userDao.create(newUser(email))
 	}
 
 	// TODO kill me an use something else

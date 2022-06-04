@@ -20,7 +20,7 @@
 ** then I should be taken to the [My Pods Page]`eq:renderedPageName`.
 class TestLoginSuccess : WebFixture {
 
-	Uri? email
+	Str? email
 	Str? password {
 		set { createOrUpdateUser(RepoUser(email, it)) }
 	}

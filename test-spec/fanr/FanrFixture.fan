@@ -9,7 +9,7 @@ abstract class FanrFixture : RepoFixture {
 	Buf?		resBody
 	Str?		httpStatus
 	
-	Uri username {
+	Str username {
 		get { fanrClient.username }
 		set { fanrClient.username = it
 			createOrUpdateUser(newUser(it, fanrClient.password))

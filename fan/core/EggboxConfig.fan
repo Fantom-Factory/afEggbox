@@ -17,8 +17,8 @@ const class EggboxConfig {
 	const Str?		errorEmailsSmtpPassword
 	const Bool		errorEmailsSmtpSsl
 	const Uri?		errorEmailsSendTo
-	const Uri?		autoLoginEmail
-	const Uri?		adminEmail
+	const Str?		autoLoginEmail
+	const Str?		adminEmail
 	const Str?		contactName
 	const Uri?		contactEmail
 	const Bool		logDownloads

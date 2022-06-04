@@ -25,7 +25,7 @@ using afBounce
 ** 
 class TestLoginFail : WebFixture {
 
-	Uri? email
+	Str? email
 	Str? password {
 		set { createOrUpdateUser(RepoUser(email, it)) }
 	}

@@ -14,7 +14,7 @@ using afBounce
 class TestPrivatePodVersions : WebFixture {
 
 	Void script1() {
-		userDao.create(newUser(`micky.mouse@disney.com`, "password"))
+		userDao.create(newUser("micky.mouse@disney.com", "password"))
 		uploadPod("foo-1.0.pod")
 		uploadPod("foo-2.0.pod")
 		pod := podDao.get("foo-2.0")
@@ -33,7 +33,7 @@ class TestPrivatePodVersions : WebFixture {
 	}
 
 	Void uploadPod(Str podName) {
-		user := userDao.getByEmail(`micky.mouse@disney.com`)
+		user := userDao.getByEmail("micky.mouse@disney.com")
 		scope.registry.activeScope.createChild("httpRequest") {
 			fanrRepo.publish(user, `test/res/${podName}`.toFile.in)
 		}

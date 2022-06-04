@@ -4,7 +4,7 @@ using afMorphia::Datastore
 const abstract class RepoUserDao : EntityDao {
 	@Operator
 	abstract RepoUser?		get(Int id, Bool checked := true)
-	abstract RepoUser?		getByEmail(Uri email, Bool checked := true)
+	abstract RepoUser?		getByEmail(Str email, Bool checked := true)
 	abstract RepoUser?		getByScreenName(Str screenName, Bool checked := true)
 	abstract RepoUser[]		findAll()
 	
@@ -22,8 +22,7 @@ internal const class RepoUserDaoImpl : RepoUserDao {
 		datastore.findOne(checked) { eq("_id", id) }
 	}
 
-	override RepoUser? getByEmail(Uri email, Bool checked := true) {
-		// FIXME emails are Strings
+	override RepoUser? getByEmail(Str email, Bool checked := true) {
 		datastore.findOne(checked) { eqIgnoreCase("email", email.toStr) }
 	}
 
