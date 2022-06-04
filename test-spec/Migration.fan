@@ -1,38 +1,29 @@
-using afIoc
-using afIocEnv
-using afBounce
-using afFancordion
-using afMorphia
+using afMongo
 
 class Migration {
 
-	BedServer? server
-	
-	@Inject { type=RepoPod# } Datastore? podDao
-	
-	new make(|This| f) { f(this) }
-
-	
 	Void go() {
 		echo("GOGOGO!!!")
-		podDao.findAll.each |RepoPod pod| {
-			vers := pod.meta.version.segments.rw
+		echo
+		
+		uri := `mongodb://localhost:27017/eggbox`
+		client := MongoClient.makeFromUri(uri)
+		
+		col := client.db["pod"]
+		col.find(null).each |pod| {
+			vers := Version(pod["meta"]->get("pod\\u002eversion").toStr).segments.rw
 			while (vers.size < 4)
 				vers.add(0)
-			pod.podName = pod.meta.name
-			pod.podVersion	= vers
-			echo(pod._id)
-			pod.save
+			name := pod["meta"]->get("pod\\u002ename")
+			echo("$name $vers")
+			col.findAndUpdate(["_id":pod["_id"]], ["\$set": ["podName":name, "podVersion":vers]])
 		}
 		
+		echo
+		echo("Done.")
 	}
 	
-	
 	static Void main(Str[] args) {
-		server		:= BedServer("afEggbox").addModule(WebTestModule#).startup	
-		migration	:= (Migration) server.build(Migration#)
-		migration.server = server
-		migration.go
-		server.shutdown
+		Migration().go
 	}
 }
