@@ -7,7 +7,7 @@ class Build : BuildPod {
 	new make() {
 		podName = "afEggbox"
 		summary = "A website for uploading, viewing, and downloading Fantom pods. Host your very own Pod Repository!"
-		version = Version("0.2.0")
+		version = Version("0.2.1")
 
 		meta = [
 			"pod.dis"		: "Eggbox",
