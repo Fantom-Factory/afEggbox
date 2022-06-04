@@ -97,20 +97,18 @@ const class FanrRepo {
 		// we can't just search the latest pods
 		// TODO have reduceByVersion() / aggregation return a customisable number of pod versions 
 		
+		c := podDao.doQuery(podName)
 		q := Query.fromStr(query)
 		
-		return podDao.doQuery(podName) |c| {
-//			c.hint = "_builtOn_"	// FIXME do we need this?
-			pods := Str:RepoPod[][:] 
-			while (c.isAlive) {
-				pod := podDao.toPod(c.next)
-				if ((pods[pod.name]?.size ?: 0) < numVersions)
-					if (pod.isPublic || (user != null && user.owns(pod)))
-						if (q.include(pod.toPodSpec))
-							pods.getOrAdd(pod.name) { RepoPod[,] }.add(pod)
-			}
-			return pods.vals.flatten
+		pods := Str:RepoPod[][:] 
+		while (c.isAlive) {
+			pod := podDao.toPod(c.next)
+			if ((pods[pod.name]?.size ?: 0) < numVersions)
+				if (pod.isPublic || (user != null && user.owns(pod)))
+					if (q.include(pod.toPodSpec))
+						pods.getOrAdd(pod.name) { RepoPod[,] }.add(pod)
 		}
+		return pods.vals.flatten
 	}
 		
 	Void delete(RepoUser user, RepoPod pod) {

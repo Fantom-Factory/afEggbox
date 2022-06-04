@@ -32,6 +32,6 @@ internal const class RepoUserDaoImpl : RepoUserDao {
 	}
 
 	override RepoUser[] findAll() {
-		datastore.findAll("email")
+		datastore.findAll("_email_")
 	}
 }

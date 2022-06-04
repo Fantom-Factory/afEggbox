@@ -82,7 +82,7 @@ class TestFanrQueryLimit : FanrFixture {
 		meta["pod.summary"]	= summary
 		meta["build.ts"]	= DateTime.now.toStr
 		super.createPod
-		Actor.sleep(1sec)
+		Actor.sleep(600ms)	// ts has 1 sec resolution, and we need to sort on it
 	}
 	
 	override Void queryRepo(Str url) {

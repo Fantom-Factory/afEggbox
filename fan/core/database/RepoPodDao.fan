@@ -18,7 +18,7 @@ const abstract class RepoPodDao : EntityDao {
 	abstract Int			countVersions(RepoUser? user := null)		// for All Pods and User page
 
 	** used for fanr queries
-	abstract RepoPod[] 		doQuery(Str? podName, |MongoCur->Obj?| f)
+	abstract MongoCur 		doQuery(Str? podName)
 
 	abstract RepoPod 		toPod(Obj doc)	
 	
@@ -47,17 +47,17 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 			version != null
 				? get(_id(name, version), false)
 				: reduceByVersion(
-					Q().and(allPods, Q().eqIgnoreCase("meta.pod\\u002ename", name)),
+					Q().and(allPods, Q().eqIgnoreCase("podName", name)),
 					true
 				).first
 		}
 	}
 
 	override RepoPod[] findPodVersions(Str name, Int? limit := null) {
-		// FIXME use limit - update Morphia???
-		datastore.findAll("_builtOn_") {
-			eq("meta.pod\\u002ename", name)
-		}
+		datastore.find(Q().eq("podName", name).query) {
+			it->hint	= "_builtOn_"
+			it->limit	= limit
+		}.toList
 	}
 	
 	override RepoPod[] findLatestPods(RepoUser? user := null) {
@@ -71,50 +71,47 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 	
 	override RepoPod[] findLatestVersions(Int limit) {
 		// cheat by using 'builtOn' index and not the actual version
-		// FIXME use limit - update Morphia???
-		// FIXME does this query work!? do I not have to use the passed MongQ?
-		datastore.findAll("_builtOn_") { allPods }
+		// just used by atom feed to get the latest uploads 
+		return datastore.find(allPods.query) {
+			it->hint	= "_builtOn_"
+			it->limit	= limit
+		}.toList
 	}
 	
 	override Int countVersions(RepoUser? user := null) {
-		return 0
-		throw UnsupportedErr()
-//		query := user == null ? allPods : allPods.field("ownerId").eq(user._id)
-//		return datastore.query(query).findCount
+		return datastore.count {
+			meh := user == null ? allPods(it) : it.and(allPods, eq("ownerId", user._id))
+		}
 	}
 
 	override Int countPods(RepoUser? user := null) {
-		return 0
-		throw UnsupportedErr()
-//		query	 := user == null ? allPods : allPods.field("ownerId").eq(user._id)
-//		pipeline := [
-//			[
-//				"\$match" : query.toMongo(datastore)
-//			],
-//			[
-//				"\$group" : [
-//					"_id" : "\$meta.pod\\u002ename"
-//				] 
-//			],
-//			[
-//				"\$group" : [
-//					"_id": 1, 
-//					"count": [
-//						"\$sum" : 1
-//					]
-//				]
-//			]
-//		]
-//
-//		return datastore.collection.aggregateCursor(pipeline) |cur| {
-//			cur.next(false)?.get("count") ?: 0
-//		}
+		query	 := user == null ? allPods : Q().and(allPods, Q().eq("ownerId", user._id))
+		pipeline := [
+			[
+				"\$match" : query.query
+			],
+			[
+				"\$group" : [
+					"_id" : "\$meta.pod\\u002ename"
+				] 
+			],
+			[
+				"\$group" : [
+					"_id": 1, 
+					"count": [
+						"\$sum" : 1
+					]
+				]
+			]
+		]
+		return datastore.collection.aggregate(pipeline).toList.first?.get("count") ?: 0
 	}
 
-	override RepoPod[] doQuery(Str? podName, |MongoCur->Obj?| f) {
-		throw UnsupportedErr()
-//		query := (Query) (podName == null ? allPods : allPods.field("meta.pod\\u002ename").eq(podName))
-//		return datastore.collection.find(query.toMongo(datastore), f)
+	override MongoCur doQuery(Str? podName) {
+		query := (Q) (podName == null ? allPods : Q().and(allPods, Q().eq("podName", podName)))
+		return datastore.collection.find(query.query) {
+			it->hint = "_builtOn_"
+		}
 	}
 	
 	override RepoPod toPod(Obj doc) {
@@ -170,12 +167,13 @@ internal const class RepoPodDaoImpl : RepoPodDao {
 		"${name}-${version}".lower
 	}
 	
-	private Q allPods() {
-		userSession.isLoggedIn
-			? Q().or(
+	private Q allPods(Q? q := null) {
+		q = q ?: Q()
+		return userSession.isLoggedIn
+			? q.or(
 				Q().eq("meta.repo\\u002epublic", true), 
 				Q().eq("ownerId", userSession.user._id)
 			)
-			: Q().eq("meta.repo\\u002epublic", true)
+			: q.eq("meta.repo\\u002epublic", true)
 	}
 }
