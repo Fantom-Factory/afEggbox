@@ -7,13 +7,14 @@ abstract const class DocSlot
   ** Constructor
   internal new make(DocAttrs attrs, DocTypeRef parent, Str name)
   {
-    this.loc    = attrs.loc
-    this.parent = parent
-    this.name   = name
-    this.qname  = parent.qname + "." + name
-    this.flags  = attrs.flags
-    this.doc    = attrs.doc
-    this.facets = attrs.facets
+    this.loc     = attrs.loc
+    this.parent  = parent
+    this.name    = name
+    this.qname   = parent.qname + "." + name
+    this.flags   = attrs.flags
+    this.doc     = attrs.doc
+    this.facets  = attrs.facets
+    this.isNoDoc = hasFacet("sys::NoDoc")
   }
 
   ** Source code location of this slot
@@ -31,6 +32,12 @@ abstract const class DocSlot
   ** Flags mask - see `DocFlags`
   const Int flags
 
+  ** Is this a DocField
+  abstract Bool isField()
+
+  ** Is this a DocMethod
+  abstract Bool isMethod()
+
   ** Display name is Type.name
   Str dis() { parent.name + "." + name }
 
@@ -41,7 +48,7 @@ abstract const class DocSlot
   const DocFacet[] facets
 
   ** Return given facet
-  DocFacet? facet2(Str qname, Bool checked := true)
+  DocFacet? facet(Str qname, Bool checked := true)
   {
     f := facets.find |f| { f.type.qname == qname }
     if (f != null) return f
@@ -51,6 +58,9 @@ abstract const class DocSlot
 
   ** Return if given facet is defined on slot
   Bool hasFacet(Str qname) { facets.any |f| { f.type.qname == qname } }
+
+  ** Return true if annotated as NoDoc
+  const Bool isNoDoc
 }
 
 **************************************************************************
@@ -81,6 +91,12 @@ const class DocField : DocSlot
   ** Flags for setting method if different from overall field level
   ** flags, otherwise null.
   const Int? setterFlags
+
+  ** Return true
+  override Bool isField() { true }
+
+  ** Return false
+  override Bool isMethod() { false }
 }
 
 **************************************************************************
@@ -106,6 +122,12 @@ const class DocMethod : DocSlot
 
   ** Parameters of the method
   const DocParam[] params
+
+  ** Return false
+  override Bool isField() { false }
+
+  ** Return true
+  override Bool isMethod() { true }
 }
 
 **************************************************************************

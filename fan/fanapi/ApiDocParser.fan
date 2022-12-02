@@ -131,6 +131,7 @@ internal class ApiDocParser
 
     // attrs, facets, and doc
     attrs  := parseAttrs
+    attrs.flags = attrs.flags.and(DocFlags.Const.not)
     return DocMethod(attrs, typeRef, name, returns, params)
   }
 

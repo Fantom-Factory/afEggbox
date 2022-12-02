@@ -2,7 +2,7 @@
 **
 ** DocType models the documentation of a `sys::Type`.
 **
-const class DocType 
+const class DocType
 {
 
   ** Constructor
@@ -17,6 +17,7 @@ const class DocType
     this.mixins  = attrs.mixins
     this.slotMap = slotMap
     this.isErr   = base.find {it.qname=="sys::Err"} != null
+    this.isNoDoc = hasFacet("sys::NoDoc")
 
     // create sorted list
     list := slotMap.vals.sort|a, b| { a.name <=> b.name }
@@ -25,7 +26,7 @@ const class DocType
     // but leave them in the map for lookup
     list = list.exclude |s|
     {
-      s.hasFacet("sys::NoDoc")     ||
+      s.isNoDoc ||
       DocFlags.isInternal(s.flags) ||
       DocFlags.isPrivate(s.flags)  ||
       DocFlags.isSynthetic(s.flags)
@@ -44,6 +45,9 @@ const class DocType
 
   ** Title of the document is the qualified name
   Str title() { qname }
+
+  ** Return true if annotated as NoDoc
+  const Bool isNoDoc
 
   ** Source code location of this type definition
   const DocLoc loc
@@ -71,7 +75,7 @@ const class DocType
   ** Is this a subclass of 'sys::Err'
   const Bool isErr
 
-  ** List of the public, documented slots in this type.
+  ** List of the public, documented slots in this type. 
   const DocSlot[] slots
 
   ** Get slot by name.  If not found return null or raise UknownSlotErr
