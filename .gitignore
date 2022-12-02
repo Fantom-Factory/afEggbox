@@ -5,7 +5,6 @@
 /build-cleverCloud/
 /x-git/
 clevercloud.props
+clevercloud.trio
+clevercloud-ver.props
 deploy-to-clevercloud.fish
-
-/build-cleverCloud/
-

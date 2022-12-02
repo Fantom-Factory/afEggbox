@@ -1,6 +1,11 @@
 Versions
 ********
 
+v0.2.2
+======
+ - Chg: Updates the API parsing to the latest Fantom code.
+ - Bug: Fixed an NPE when parsing Fandoc summaries.
+
 v0.2.0
 ======
  - Chg: Updated to latest Mongo / Morphia drivers.
