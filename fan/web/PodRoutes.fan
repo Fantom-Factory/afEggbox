@@ -33,7 +33,7 @@ const class PodPageProcessor : ResponseProcessor {
 			return HttpStatus(404)
 
 		if (httpReq.httpMethod == "POST")
-			return matchEvents(httpReq, reqPath)
+			return matchEvents(httpReq, reqPath) ?: HttpStatus(404)
 
 		if (httpReq.httpMethod != "GET")
 			return HttpStatus(405)
