@@ -46,13 +46,13 @@ const class ErrEmailer {
 	
 			podName := bedServer.appPod ?: "unknown"
 			appName	:= bedServer.appPod?.meta?.get("pod.dis") ?: "Unknown"
-			to		:= eggboxConfig.errorEmailsSendTo?.toStr ?: "null"
+			to		:= eggboxConfig.errorEmailsSendTo
 			from	:= "${podName}@${bedServer.host.host}"
 
 			log.info("Sending error email to ${to} from ${from} ...")
 			
 			email := Email {
-				it.to		= [to]
+				it.to		= to
 				it.from		= from
 				it.subject	= "${appName} Error :: $err.msg"
 				it.body		= TextPart { text = emailBody }
