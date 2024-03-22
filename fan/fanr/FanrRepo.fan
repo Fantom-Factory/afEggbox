@@ -101,13 +101,16 @@ const class FanrRepo {
 		q := Query.fromStr(query)
 		
 		pods := Str:RepoPod[][:] 
-		while (c.isAlive) {
-			pod := podDao.toPod(c.next)
+		try while (c.isAlive) {
+			doc := c.next
+			if (doc == null) break
+			pod := podDao.toPod(doc)
 			if ((pods[pod.name]?.size ?: 0) < numVersions)
 				if (pod.isPublic || (user != null && user.owns(pod)))
 					if (q.include(pod.toPodSpec))
 						pods.getOrAdd(pod.name) { RepoPod[,] }.add(pod)
 		}
+		finally c.kill
 		return pods.vals.flatten
 	}
 		
