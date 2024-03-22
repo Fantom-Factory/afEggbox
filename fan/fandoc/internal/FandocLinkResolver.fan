@@ -604,7 +604,7 @@ const class FandocDocUri : FandocUri {
 	}
 	
 	Buf? content() {
-		podDocDao[pod._id]?.get(fileUri)
+		podDocDao.get(pod?._id ?: "not-a-pod", false)?.get(fileUri)
 	}
 	
 	Heading[] findHeadings() {
